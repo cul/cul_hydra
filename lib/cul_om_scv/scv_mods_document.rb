@@ -36,6 +36,14 @@ module CulOmScv
       }
       t.project_text(:proxy=>[:project_host, :title_info, :project_text])
       t.project_facet(:proxy=>[:project_host, :title_info, :project_facet])
+      t.collection_host(:path=>"relatedItem", :attributes=>{:type=>"host", :displayLabel=>"Collection"}){
+        t.title_info(:ref=>[:title_info]){
+          t.collection_facet(:path=>"title",:index_as=>[:facetable])
+          t.collection_text(:path=>"title")
+        }
+      }
+      t.collection_text(:proxy=>[:collection_host, :title_info, :collection_text])
+      t.collection_facet(:proxy=>[:collection_host, :title_info, :collection_facet])
       t.note(:path=>"note")
       t.use_and_reproduction(:path=>"accessCondition", :attributes=>{:type=>"useAndReproduction"})
       t.record_info(:path=>"recordInfo") {
