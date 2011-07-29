@@ -51,9 +51,21 @@ module CulOmScv
         t.record_content_source(:path=>"recordContentSource",:attributes=>{:authority=>"marcorg"})
         t.language_of_cataloging(:path=>"languageOfCataloging"){
           t.language_term(:path=>"languageTerm")
+          t.language_code(:path=>"languageTerm",:attributes=>{:type=>'code',:authority=>"iso639-2b"})
         }
         t.record_origin(:path=>"recordOrigin")
       }
+      t.language_code(:proxy=>[:record_info,:language_of_cataloging, :language_code])
+
+      t.origin_info(:path=>"originInfo"){
+        t.date(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf'})
+        t.key_date(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes'})
+        t.start_date(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes',:point=>'start'})
+        t.end_date(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:point=>'end'})
+      }
+      t.key_date(:proxy=>[:origin_info,:key_date])
+      t.start_date(:proxy=>[:origin_info, :start_date])
+      t.end_date(:proxy=>[:origin_info,:end_date])
     end
   
     def self.xml_template
@@ -61,25 +73,25 @@ module CulOmScv
         xml.mods(:version=>"3.4", 
            "xmlns"=>"http://www.loc.gov/mods/v3",
            "xmlns:xsi"=>"http://www.w3.org/2001/XMLSchema-instance"){
-          xml.identifier(:type=>"local")
-          xml.titleInfo {
-             xml.title
-          }
-          xml.accessCondition(:type=>"useAndReproduction")
-          xml.location {
-            xml.physicalLocation(:authority=>"marcorg")
-            xml.physicalLocation
-          }
-          xml.recordInfo {
-            xml.recordCreationDate(:encoding=>"w3cdtf")
-            xml.recordContentSource(:authority=>"marcorg")
-            xml.languageOfCataloging {
-              xml.languageTerm(:type=>'code', :authority=>'iso639-2b') {
-                "eng"
-              }
-            }
-            xml.recordOrigin
-          }
+      #    xml.identifier(:type=>"local")
+      #    xml.titleInfo {
+      #       xml.title
+      #    }
+      #    xml.accessCondition(:type=>"useAndReproduction")
+      #    xml.location {
+      #      xml.physicalLocation(:authority=>"marcorg")
+      #      xml.physicalLocation
+      #    }
+      #    xml.recordInfo {
+      #      xml.recordCreationDate(:encoding=>"w3cdtf")
+      #      xml.recordContentSource(:authority=>"marcorg")
+      #      xml.languageOfCataloging {
+      #        xml.languageTerm(:type=>'code', :authority=>'iso639-2b') {
+      #          "eng"
+      #        }
+      #      }
+      #      xml.recordOrigin
+      #    }
         }
       end
       builder.doc.encoding = 'UTF-8'
@@ -93,11 +105,16 @@ module CulOmScv
         query = true
         _mname = _mname[0,_mname.length-1]
       end
-      _r = find_by_terms(_mname.to_sym, *args)
-      if query
-        return !( _r.nil? || _r.size()==0)
-      else
-        return _r
+      _msym = _mname.to_sym
+      begin
+        _r = find_by_terms(_msym, *args)
+        if query
+          return !( _r.nil? || _r.size()==0)
+        else
+          return _r
+        end
+      rescue
+        super
       end
     end
   end
