@@ -8,3 +8,8 @@ test:
     url: http://fedoraAdmin:fedoraAdmin@127.0.0.1:8983/fedora
   solr:
     url: http://127.0.0.1:8983/solr/test
+default:
+  fedora:
+    url: http://fedoraAdmin:fedoraAdmin@127.0.0.1:8983/fedora
+  solr:
+    url: http://127.0.0.1:8983/solr/test

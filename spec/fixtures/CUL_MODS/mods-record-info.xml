@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<mods xmlns='http://www.loc.gov/mods/v3' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd' version='3.4'>
+<recordInfo><recordCreationDate encoding='w3cdtf'>2010-07-12</recordCreationDate><recordContentSource authority='marcorg'>NNC</recordContentSource><languageOfCataloging><languageTerm type='code' authority='iso639-2b'>eng</languageTerm></languageOfCataloging><recordOrigin>From PRD customer order database, edited to conform to the DLF Implementation Guidelines for Shareable MODS Records, Version 1.1.</recordOrigin></recordInfo>
+</mods>

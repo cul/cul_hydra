@@ -1,6 +1,8 @@
 require 'active-fedora'
-module CulOmScv
-  class ScvModsDocument < ActiveFedora::NokogiriDatastream
+module Cul
+module Om
+module Scv
+  class ModsDocument < ActiveFedora::NokogiriDatastream
     include OM::XML::Document
   
     set_terminology do |t|
@@ -117,5 +119,11 @@ module CulOmScv
         super
       end
     end
+    def update_values(params)
+      super
+      self.dirty = true
+    end
   end
+end
+end
 end
