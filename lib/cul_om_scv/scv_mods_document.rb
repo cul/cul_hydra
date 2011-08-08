@@ -109,7 +109,9 @@ module Scv
       end
       _msym = _mname.to_sym
       begin
-        _r = find_by_terms(_msym, *args)
+        has_term = self.class.terminology.has_term?(_msym)
+
+        _r = (has_term)? find_by_terms(_msym, *args) : nil
         if query
           return !( _r.nil? || _r.size()==0)
         else

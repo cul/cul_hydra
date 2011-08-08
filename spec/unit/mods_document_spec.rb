@@ -68,7 +68,7 @@ describe "Cul::Om::Scv::ModsDocument" do
     it "should use Nokogiri to retrieve a NodeSet corresponding to the combination of term pointers and array/nodeset indexes" do
       @mods_item.find_by_terms( :use_and_reproduction ).length.should == 1
       @mods_item.find_by_terms( {:use_and_reproduction=>0} ).first.text.should == @mods_part.ng_xml.xpath('//oxns:accessCondition[@type="useAndReproduction"][1]', "oxns"=>"http://www.loc.gov/mods/v3").first.text
-      CulOmScv::ModsDocument.terminology.xpath_with_indexes( {:title_info=>0}, :title ).should == '//oxns:titleInfo[1]/oxns:title'
+      Cul::Om::Scv::ModsDocument.terminology.xpath_with_indexes( {:title_info=>0}, :title ).should == '//oxns:titleInfo[1]/oxns:title'
       # Nokogiri behaves unexpectedly
       #@mods_item.find_by_terms( {:title_info=>0}, :title ).length.should == 1
       @mods_item.find_by_terms( {:title_info=>0}, :title ).class.should == Nokogiri::XML::NodeSet

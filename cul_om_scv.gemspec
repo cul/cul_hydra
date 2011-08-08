@@ -6,7 +6,7 @@ require 'cul_om_scv/version'
 
 Gem::Specification.new do |s|
   s.name = "cul_om_scv"
-  s.version = CulOmScv::VERSION
+  s.version = Cul::Om::VERSION
   s.platform = Gem::Platform::RUBY
   s.authors = ["Benjamin Armintor"]
   s.email = %q{armintor@gmail.com}
