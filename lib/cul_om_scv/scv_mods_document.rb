@@ -15,6 +15,10 @@ module Scv
         t.title(:path=>"title")
       }
       t.main_title(:proxy=>[:title_info, :title])
+      t.abstract
+      t.subject {
+        t.topic
+      }
       t.type_of_resource(:path=>"typeOfResource")
       t.physical_description(:path=>"physicalDescription"){
         t.form_marc(:path=>"form", :attributes=>{:authority=>"marcform"})

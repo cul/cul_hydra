@@ -23,7 +23,7 @@ module Om
       t.source(:path=>"source", :namespace_prefix=>"dc")
       t.subject(:path=>"subject", :namespace_prefix=>"dc")
       t.title(:path=>"title", :namespace_prefix=>"dc")
-      t.type_(:path=>"type", :namespace_prefix=>"dc")
+      t.dc_type(:path=>"type", :namespace_prefix=>"dc")
     end
   
     def self.xml_template
