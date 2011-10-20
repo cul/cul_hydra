@@ -1,7 +1,8 @@
 require 'active-fedora'
 module Cul
-module Om
 module Scv
+module Hydra
+module Om
   class ModsDocument < ActiveFedora::NokogiriDatastream
     include OM::XML::Document
   
@@ -130,6 +131,7 @@ module Scv
       self.dirty = true
     end
   end
+end
 end
 end
 end

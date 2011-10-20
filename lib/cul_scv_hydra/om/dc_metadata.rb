@@ -1,5 +1,7 @@
 require 'active-fedora'
 module Cul
+module Scv
+module Hydra
 module Om
   class DCMetadata < ActiveFedora::NokogiriDatastream
     include OM::XML::Document
@@ -67,5 +69,7 @@ module Om
       self.dirty = true
     end
   end
+end
+end
 end
 end

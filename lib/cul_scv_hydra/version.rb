@@ -1,8 +1,10 @@
 module Cul
-module Om
-  VERSION = 0.1
-  def self.version
-    VERSION
+  module Scv
+    module Hydra
+        VERSION = 0.1
+        def self.version
+          VERSION
+        end
+    end
   end
-end
 end

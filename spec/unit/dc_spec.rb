@@ -1,13 +1,13 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe "Cul::Om::DCMetadata" do
+describe "Cul::Scv::Hydra::Om::DCMetadata" do
   
   before(:all) do
         
   end
   
   before(:each) do
-    @fixture = Cul::Om::DCMetadata.from_xml( fixture( File.join("CUL_DC", "dc.xml") ) )
+    @fixture = Cul::Scv::Hydra::Om::DCMetadata.from_xml( fixture( File.join("CUL_DC", "dc.xml") ) )
   end
   
   after(:all) do
@@ -15,9 +15,9 @@ describe "Cul::Om::DCMetadata" do
   end
   
   it "should automatically include the necessary modules" do
-    Cul::Om::DCMetadata.included_modules.should include(OM::XML::Container)
-    Cul::Om::DCMetadata.included_modules.should include(OM::XML::TermValueOperators)
-    Cul::Om::DCMetadata.included_modules.should include(OM::XML::Validation)
+    Cul::Scv::Hydra::Om::DCMetadata.included_modules.should include(OM::XML::Container)
+    Cul::Scv::Hydra::Om::DCMetadata.included_modules.should include(OM::XML::TermValueOperators)
+    Cul::Scv::Hydra::Om::DCMetadata.included_modules.should include(OM::XML::Validation)
   end
   
   describe ".ox_namespaces" do
@@ -63,8 +63,8 @@ describe "Cul::Om::DCMetadata" do
     it "should be able to update or add values by pointer" do
       @fixture.update_values([:title]=>"With Billy Burroughs, image")
       @fixture.find_by_terms(:title).first.text.should == "With Billy Burroughs, image"
-      puts "XPATH: " + Cul::Om::DCMetadata.terminology.retrieve_term(:dc_type).xpath_relative
-      puts "TEMPLATE: " + Cul::Om::DCMetadata.terminology.retrieve_term(:dc_type).xml_builder_template
+      puts "XPATH: " + Cul::Scv::Hydra::Om::DCMetadata.terminology.retrieve_term(:dc_type).xpath_relative
+      puts "TEMPLATE: " + Cul::Scv::Hydra::Om::DCMetadata.terminology.retrieve_term(:dc_type).xml_builder_template
       @fixture.update_indexed_attributes([:dc_type=>0]=>"Text")
       puts @fixture.ng_xml.to_xml
       @fixture.find_by_terms(:dc_type).first.text.should == "Text"
@@ -75,7 +75,7 @@ describe "Cul::Om::DCMetadata" do
       @fixture.find_by_terms( {:foo=>20}, :bar ).should == nil
     end
     it "should identify presence or absence of terms with shortcut methods" do
-      built  = Cul::Om::DCMetadata.from_xml(nil)
+      built  = Cul::Scv::Hydra::Om::DCMetadata.from_xml(nil)
       built.update_values({[:title]=>'foo'})
       built.title?.should == true
       built.clio_id?.should == false
@@ -83,10 +83,10 @@ describe "Cul::Om::DCMetadata" do
   end
   describe ".xml_serialization" do
     it "should serialize new documents to xml" do
-      Cul::Om::DCMetadata.new.to_xml
+      Cul::Scv::Hydra::Om::DCMetadata.new.to_xml
     end
     it "should parse and build namespaces identically" do
-      doc = Cul::Om::DCMetadata.from_xml(nil).ng_xml
+      doc = Cul::Scv::Hydra::Om::DCMetadata.from_xml(nil).ng_xml
       # namespaced attributes must be added after root node construction for namespace to be handled correctly
       dc_ns = Nokogiri::XML::Document.parse(<<-src
 <oai_dc:dc
@@ -120,7 +120,7 @@ src
 
     it "should produce equivalent xml when built up programatically" do
       pending "none attribute problem"
-      built = Cul::Om::DCMetadata.new
+      built = Cul::Scv::Hydra::Om::DCMetadata.new
       built.update_values({[:identifier] => "prd.custord.070103a"})
       built.update_values({[:title] => "With William Burroughs, image"})
       built.update_values({[:type] => "Collection"})

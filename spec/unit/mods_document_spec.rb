@@ -1,19 +1,19 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe "Cul::Om::Scv::ModsDocument" do
+describe "Cul::Scv::Hydra::Om::ModsDocument" do
   
   before(:all) do
         
   end
   
   before(:each) do
-    @fixturemods = Cul::Om::Scv::ModsDocument.from_xml( fixture( File.join("CUL_MODS", "mods-item.xml") ) )
+    @fixturemods = Cul::Scv::Hydra::Om::ModsDocument.from_xml( fixture( File.join("CUL_MODS", "mods-item.xml") ) )
     item_xml = fixture( File.join("CUL_MODS", "mods-item.xml") )
-    @mods_item = Cul::Om::Scv::ModsDocument.from_xml(item_xml)
+    @mods_item = Cul::Scv::Hydra::Om::ModsDocument.from_xml(item_xml)
     @mods_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-item.xml")))
     @mods_ns = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-ns.xml")))
     part_xml = fixture( File.join("CUL_MODS", "mods-part.xml") )
-    @mods_part = Cul::Om::Scv::ModsDocument.from_xml(part_xml)
+    @mods_part = Cul::Scv::Hydra::Om::ModsDocument.from_xml(part_xml)
   end
   
   after(:all) do
@@ -21,9 +21,9 @@ describe "Cul::Om::Scv::ModsDocument" do
   end
   
   it "should automatically include the necessary modules" do
-    Cul::Om::Scv::ModsDocument.included_modules.should include(OM::XML::Container)
-    Cul::Om::Scv::ModsDocument.included_modules.should include(OM::XML::TermValueOperators)
-    Cul::Om::Scv::ModsDocument.included_modules.should include(OM::XML::Validation)
+    Cul::Scv::Hydra::Om::ModsDocument.included_modules.should include(OM::XML::Container)
+    Cul::Scv::Hydra::Om::ModsDocument.included_modules.should include(OM::XML::TermValueOperators)
+    Cul::Scv::Hydra::Om::ModsDocument.included_modules.should include(OM::XML::Validation)
   end
   
   describe ".ox_namespaces" do
@@ -68,7 +68,7 @@ describe "Cul::Om::Scv::ModsDocument" do
     it "should use Nokogiri to retrieve a NodeSet corresponding to the combination of term pointers and array/nodeset indexes" do
       @mods_item.find_by_terms( :use_and_reproduction ).length.should == 1
       @mods_item.find_by_terms( {:use_and_reproduction=>0} ).first.text.should == @mods_part.ng_xml.xpath('//oxns:accessCondition[@type="useAndReproduction"][1]', "oxns"=>"http://www.loc.gov/mods/v3").first.text
-      Cul::Om::Scv::ModsDocument.terminology.xpath_with_indexes( {:title_info=>0}, :title ).should == '//oxns:titleInfo[1]/oxns:title'
+      Cul::Scv::Hydra::Om::ModsDocument.terminology.xpath_with_indexes( {:title_info=>0}, :title ).should == '//oxns:titleInfo[1]/oxns:title'
       # Nokogiri behaves unexpectedly
       #@mods_item.find_by_terms( {:title_info=>0}, :title ).length.should == 1
       @mods_item.find_by_terms( {:title_info=>0}, :title ).class.should == Nokogiri::XML::NodeSet
@@ -87,7 +87,7 @@ describe "Cul::Om::Scv::ModsDocument" do
       @mods_item.find_by_terms( {:foo=>20}, :bar ).should == nil
     end
     it "should identify presence or absence of terms with shortcut methods" do
-      built  = Cul::Om::Scv::ModsDocument.new
+      built  = Cul::Scv::Hydra::Om::ModsDocument.new
       built.update_values({[:main_title]=>'foo'})
       built.main_title?.should == true
       built.clio_id?.should == false
@@ -95,7 +95,7 @@ describe "Cul::Om::Scv::ModsDocument" do
   end
   describe ".xml_serialization" do
     it "should serialize new documents to xml" do
-      Cul::Om::Scv::ModsDocument.new.to_xml
+      Cul::Scv::Hydra::Om::ModsDocument.new.to_xml
     end
     it "should parse and build namespaces identically" do
       builder = Nokogiri::XML::Builder.new do |xml|
@@ -135,7 +135,7 @@ src
     end
     it "should produce equivalent xml when built up programatically" do
       pending "none attribute problem"
-      built = Cul::Om::Scv::ModsDocument.new
+      built = Cul::Scv::Hydra::Om::ModsDocument.new
       built.update_values({[:local_id] => "prd.custord.040148"})
       built.update_values({[:main_title] => "Manuscript, unidentified"})
       built.update_values({[:type_of_resource] => "text"})
@@ -161,7 +161,7 @@ ml
       built.ng_xml.should be_equivalent_to(@mods_item.ng_xml)
     end
     it "should produce equivalent xml for recordInfo" do
-      built = Cul::Om::Scv::ModsDocument.new
+      built = Cul::Scv::Hydra::Om::ModsDocument.new
       built.update_values({[:record_info, :record_creation_date] => "2010-07-12"})
       built.update_values({[:language_code] => "eng"})
       built.update_values({[:record_info,:record_content_source]=> "NNC"})
@@ -174,14 +174,14 @@ ml
     end
     it "should produce equivalent xml for physical location" do
       pending "none attribute problem"
-      built = Cul::Om::Scv::ModsDocument.new
+      built = Cul::Scv::Hydra::Om::ModsDocument.new
       built.update_values({[:repo_facet] => "NNC-RB"})
       built.update_values({[:repo_text] => "Rare Book and Manuscript Library, Columbia University"})
       parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-physical-location.xml")))
       built.ng_xml.should be_equivalent_to(parsed)
     end
     it "should produce equivalent xml for date ranges" do
-      built = Cul::Om::Scv::ModsDocument.new
+      built = Cul::Scv::Hydra::Om::ModsDocument.new
       built.update_values({[:start_date]=>"1900"})
       built.update_values({[:end_date]=>"1905"})
       parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-date-range.xml")))

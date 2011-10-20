@@ -4,7 +4,7 @@ RAILS_ENV = ENV["RAILS_ENV"]
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 #require 'om'
-require 'cul_om_scv'
+require 'cul_scv_hydra'
 require 'spec'
 require 'spec/autorun'
 require 'equivalent-xml/rspec_matchers'
