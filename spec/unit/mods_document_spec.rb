@@ -48,16 +48,16 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
       @mods_item.find_by_terms_and_value(:nobody_home).should == []
     end
     it "should use Nokogiri to retrieve a NodeSet corresponding to the term pointers" do
-      @mods_item.find_by_terms_and_value( :project_text ).length.should == 1
+      @mods_item.find_by_terms_and_value( :lib_project).length.should == 1
     end
 
     it "should allow you to search by term pointer" do
       @mods_item.ng_xml.expects(:xpath).with('//oxns:location/oxns:physicalLocation[@authority="marcorg"]', @mods_item.ox_namespaces)
-      @mods_item.find_by_terms_and_value(:repo_facet)
+      @mods_item.find_by_terms_and_value(:location, :repo_code)
     end
     it "should allow you to constrain your searches" do
       @mods_item.ng_xml.expects(:xpath).with('//oxns:location/oxns:physicalLocation[@authority="marcorg" and contains(., "NNC-RB")]', @mods_item.ox_namespaces)
-      @mods_item.find_by_terms_and_value(:repo_facet, "NNC-RB")
+      @mods_item.find_by_terms_and_value(:location,:repo_code, "NNC-RB")
     end
     it "should allow you to use complex constraints" do
       @mods_item.ng_xml.expects(:xpath).with('//oxns:recordInfo/oxns:recordCreationDate[@encoding="w3cdtf" and contains(., "2010-07-12")]', @mods_item.ox_namespaces)
@@ -66,16 +66,16 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
   end
   describe ".find_by_terms" do
     it "should use Nokogiri to retrieve a NodeSet corresponding to the combination of term pointers and array/nodeset indexes" do
-      @mods_item.find_by_terms( :use_and_reproduction ).length.should == 1
-      @mods_item.find_by_terms( {:use_and_reproduction=>0} ).first.text.should == @mods_part.ng_xml.xpath('//oxns:accessCondition[@type="useAndReproduction"][1]', "oxns"=>"http://www.loc.gov/mods/v3").first.text
-      Cul::Scv::Hydra::Om::ModsDocument.terminology.xpath_with_indexes( {:title_info=>0}, :title ).should == '//oxns:titleInfo[1]/oxns:title'
+      @mods_item.find_by_terms( :access_condition ).length.should == 1
+      @mods_item.find_by_terms( {:access_condition=>0} ).first.text.should == @mods_part.ng_xml.xpath('//oxns:accessCondition[@type="useAndReproduction"][1]', "oxns"=>"http://www.loc.gov/mods/v3").first.text
+      Cul::Scv::Hydra::Om::ModsDocument.terminology.xpath_with_indexes( :mods, {:title_info=>0}, :title ).should == '//oxns:mods/oxns:titleInfo[1]/oxns:title'
       # Nokogiri behaves unexpectedly
       #@mods_item.find_by_terms( {:title_info=>0}, :title ).length.should == 1
-      @mods_item.find_by_terms( {:title_info=>0}, :title ).class.should == Nokogiri::XML::NodeSet
-      @mods_item.find_by_terms( {:title_info=>0}, :title ).first.text.should == "Manuscript, unidentified"
+      @mods_item.find_by_terms( :title ).class.should == Nokogiri::XML::NodeSet
+      @mods_item.find_by_terms( :title ).first.text.should == "Manuscript, unidentified"
     end
     it "should find a NodeSet where a terminology attribute has been set to :none" do
-      @mods_item.find_by_terms( :repo_text).first.text.should == "Rare Book and Manuscript Library, Columbia University"
+      @mods_item.find_by_terms(:location, :repo_text).first.text.should == "Rare Book and Manuscript Library, Columbia University"
     end
     
     it "should support xpath queries as the pointer" do
@@ -88,9 +88,9 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
     end
     it "should identify presence or absence of terms with shortcut methods" do
       built  = Cul::Scv::Hydra::Om::ModsDocument.new
-      built.update_values({[:main_title]=>'foo'})
-      built.main_title?.should == true
-      built.clio_id?.should == false
+      built.update_values({[:title]=>'foo'})
+      built.title?.should == true
+      built.clio?.should == false
     end
   end
   describe ".xml_serialization" do
@@ -136,18 +136,18 @@ src
     it "should produce equivalent xml when built up programatically" do
       pending "none attribute problem"
       built = Cul::Scv::Hydra::Om::ModsDocument.new
-      built.update_values({[:local_id] => "prd.custord.040148"})
-      built.update_values({[:main_title] => "Manuscript, unidentified"})
+      built.update_values({[:identifier] => "prd.custord.040148"})
+      built.update_values({[:title] => "Manuscript, unidentified"})
       built.update_values({[:type_of_resource] => "text"})
-      built.update_values({[:use_and_reproduction] => "Columbia Libraries Staff Use Only."})
+      built.update_values({[:access_condition] => "Columbia Libraries Staff Use Only."})
       built.update_values({[:physical_description, :form_marc] => "electronic"})
-      built.update_values({[:physical_description, :form_aat] => "books"})
+      built.update_values({[:physical_description, :form_nomarc] => "books"})
       built.update_values({[:physical_description, :extent] => "4 item(s)"})
       built.update_values({[:physical_description, :reformatting_quality] => "access"})
       built.update_values({[:physical_description, :internet_media_type] => "image/tiff"})
       built.update_values({[:physical_description, :digital_origin] => "reformatted digital"})
-      built.update_values({[:repo_facet] => "NNC-RB"})
-      built.update_values({[:repo_text] => "Rare Book and Manuscript Library, Columbia University"})
+      built.update_values({[:location, :repo_code] => "NNC-RB"})
+      built.update_values({[:location, :repo_text] => "Rare Book and Manuscript Library, Columbia University"})
       built.update_values({[:project_text] => "Customer Order Collection"})
       built.update_values({[:note] => "Original PRD customer order number: 040148"})
       built.update_values({[:record_info, :record_creation_date] => "2010-07-12"})
@@ -163,7 +163,7 @@ ml
     it "should produce equivalent xml for recordInfo" do
       built = Cul::Scv::Hydra::Om::ModsDocument.new
       built.update_values({[:record_info, :record_creation_date] => "2010-07-12"})
-      built.update_values({[:language_code] => "eng"})
+      built.update_values({[:record_info, :language_of_cataloging, :language_code] => "eng"})
       built.update_values({[:record_info,:record_content_source]=> "NNC"})
       built.update_values({[:record_info,:record_origin]=> <<ml
 From PRD customer order database, edited to conform to the DLF Implementation Guidelines for Shareable MODS Records, Version 1.1.
@@ -175,15 +175,15 @@ ml
     it "should produce equivalent xml for physical location" do
       pending "none attribute problem"
       built = Cul::Scv::Hydra::Om::ModsDocument.new
-      built.update_values({[:repo_facet] => "NNC-RB"})
-      built.update_values({[:repo_text] => "Rare Book and Manuscript Library, Columbia University"})
+      built.update_values({[:location, :lib_repo] => "NNC-RB"})
+      built.update_values({[:location, :repo_text] => "Rare Book and Manuscript Library, Columbia University"})
       parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-physical-location.xml")))
       built.ng_xml.should be_equivalent_to(parsed)
     end
     it "should produce equivalent xml for date ranges" do
       built = Cul::Scv::Hydra::Om::ModsDocument.new
-      built.update_values({[:start_date]=>"1900"})
-      built.update_values({[:end_date]=>"1905"})
+      built.update_values({[:origin_info, :start_date]=>"1900"})
+      built.update_values({[:origin_info, :end_date]=>"1905"})
       parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-date-range.xml")))
       #built.ng_xml.should be_equivalent_to(parsed)
       equivalent?(built.ng_xml,parsed)

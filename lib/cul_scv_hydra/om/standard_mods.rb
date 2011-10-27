@@ -5,37 +5,20 @@ module Cul
 module Scv
 module Hydra
 module Om
-  class ModsDocument < ActiveFedora::NokogiriDatastream
+  class StandardMods
     include OM::XML::Document
-    include Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer
-    #include ::Solrizer::XML::TerminologyBasedSolrizer
+    include ::Solrizer::XML::TerminologyBasedSolrizer
   
     set_terminology do |t|
       t.root(:path=>"mods",
              :xmlns=>"http://www.loc.gov/mods/v3",
              :schema=>"http://www.loc.gov/standards/mods/v3/mods-3-4.xsd")
-# position definitions
-      t.title_info(:path=>'titleInfo', :index_as=>[:not_searchable]){
-        t.title(:path=>'title', :index_as=>[:displayable,:sortable])
-      }
-      t.project(:path=>"relatedItem", :attributes=>{:type=>"host", :displayLabel=>"Project"}, :index_as=>[:not_searchable]){
-        t.title_info(:path=>'titleInfo', :index_as=>[:not_searchable]){
-          t.title(:path=>'title', :index_as=>[:searchable, :displayable])
-          t.title_facet(:path=>'title', :index_as=>[:facetable, :not_searchable], :variant_of=>{:field_base=>'lib_project',:map=>:project_facet})
-        }
-      }
-      t.collection(:path=>"relatedItem", :attributes=>{:type=>"host", :displayLabel=>"Collection"}, :index_as=>[:not_searchable]){
-        t.title_info(:path=>'titleInfo', :index_as=>[:not_searchable]){
-          t.title(:path=>'title', :index_as=>[:displayable,:facetable])
-        }
-      }
-# position matches
-      t.title(:proxy=>[:mods,:title_info, :title], :index_as=>[:searchable,:displayable, :sortable])
-      t.lib_project(:proxy=>[:project,:title_info,:title])
-      t.lib_collection(:proxy=>[:collection,:title_info,:title])
-# pattern matches
       t.identifier(:path=>"identifier", :attributes=>{:type=>"local"}, :data_type=>:symbol)
       t.clio(:path=>"identifier", :attributes=>{:type=>"CLIO"}, :data_type=>:symbol)
+      t.title_info(:path=>"titleInfo", :index_as=>[:not_searchable]) {
+        t.main_title(:path=>"title", :index_as=>[:not_searchable])
+      }
+      t.title(:path=>'mods/oxns:titleInfo/oxns:title', :index_as=>[:searchable,:displayable, :sortable])
       t.abstract
       t.subject {
         t.topic
@@ -53,17 +36,18 @@ module Om
       t.location(:path=>"location", :index_as=>[:not_searchable]){
         t.repo_text(:path=>"physicalLocation",:attributes=>{:authority=>:none},  :index_as=>[:not_searchable])
         t.repo_code(:path=>"physicalLocation",:attributes=>{:authority=>"marcorg"}, :index_as=>[:not_searchable])
-        t.map_facet(:path=>"physicalLocation",:attributes=>{:authority=>"marcorg"}, :index_as=>[:facetable], :variant_of=>{:field_base=>'lib_repo',:map=>:marc_to_facet})
-        t.map_display(:path=>"physicalLocation",:attributes=>{:authority=>"marcorg"}, :index_as=>[:displayable, :not_searchable], :variant_of=>{:field_base=>'lib_repo',:map=>:marc_to_display})
       }
-      t.name_personal(:path=>'name',:attributes=>{:type=>'personal'}, :index_as=>[:not_searchable]){
-        t.name_part(:path=>'namePart', :index_as=>[:facetable, :displayable, :searchable], :variant_of=>{:field_base=>:lib_name})
+      t.lib_repo_text(:ref=>[:location, :repo_text], :label=>"lib_repo", :index_as=>[:searchable])
+      t.lib_repo(:ref=>[:location, :repo_code], :index_as=>[:not_searchable,:facetable, :displayable])
+      t.project_host(:path=>"relatedItem", :attributes=>{:type=>"host", :displayLabel=>"Project"}, :index_as=>[:not_searchable]){
+        t.p_title(:path=>'titleInfo',:index_as=>[:not_searchable])
       }
-      t.name_corporate(:path=>'name',:attributes=>{:type=>'corporate'}, :index_as=>[:not_searchable]){
-        t.name_part(:path=>'namePart', :index_as=>[:facetable, :displayable, :searchable], :variant_of=>{:field_base=>:lib_name})
+      t.lib_project(:proxy=>[:project_host, :p_title],:index_as=>[:facetable,:displayable, :not_searchable])
+      t.collection_host(:path=>"relatedItem", :attributes=>{:type=>"host", :displayLabel=>"Collection"}, :index_as=>[:not_searchable]){
+        t.c_title(:path=>'titleInfo',:index_as=>[:not_searchable])
       }
-      #t.lib_name_personal(:ref=>[:name_personal, :name_part], :index_as=>[:facetable, :displayable, :searchable], :variant_of=>{:field_base=>:lib_name})
-      #t.lib_name_corporate(:ref=>[:name_corporate, :name_part], :index_as=>[:facetable, :displayable, :searchable], :variant_of=>{:field_base=>:lib_name})
+      t.lib_project(:path=>"mods/oxns:relatedItem[@type='host'][@displayLabel='Project']/oxns:titleInfo/oxns:title",:index_as=>[:facetable,:displayable, :not_searchable])
+      t.lib_collection(:path=>"mods/oxns:relatedItem[@type='host'][@displayLabel='Collection']/oxns:titleInfo/oxns:title",:index_as=>[:facetable,:displayable, :not_searchable])
       t.note(:path=>"note")
       t.access_condition(:path=>"accessCondition", :attributes=>{:type=>"useAndReproduction"}, :index_as => [:searchable], :data_type => :symbol)
       t.record_info(:path=>"recordInfo", :index_as=>[:not_searchable]) {

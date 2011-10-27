@@ -1,0 +1,21 @@
+<mods xmlns='http://www.loc.gov/mods/v3' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd'>
+<identifier type='local'>prd.custord.070017</identifier>
+<titleInfo><title xml:lang="eng">Photographs</title></titleInfo>
+<name type='personal'><namePart>Kennerly, David</namePart></name>
+<typeOfResource>still image</typeOfResource>
+<physicalDescription><form authority='marcform'>electronic</form>
+<form authority='aat'>photographs</form>
+<extent>2 items</extent>
+<reformattingQuality>access</reformattingQuality>
+<internetMediaType>image/tiff</internetMediaType>
+<digitalOrigin>reformatted digital</digitalOrigin>
+</physicalDescription>
+<location><physicalLocation authority='marcorg'>NNC-RB</physicalLocation>
+<physicalLocation>Rare Book and Manuscript Library, Columbia University</physicalLocation>
+<shelfLocator>Box 8, JP2 Feature Photography</shelfLocator>
+</location>
+<relatedItem type='host' displayLabel='Collection'><titleInfo><title xml:lang="eng">Pulitzer Prizes</title></titleInfo></relatedItem>
+<relatedItem type='host' displayLabel='Project'><titleInfo><title xml:lang="eng">Customer Order Collection</title></titleInfo></relatedItem>
+<note>Original PRD customer order number: 070017</note>
+<accessCondition type='useAndReproduction'>Columbia Libraries Staff Use Only</accessCondition>
+<recordInfo><recordCreationDate encoding='w3cdtf'>2010-09-16</recordCreationDate><recordContentSource authority='marcorg'>NNC</recordContentSource><languageOfCataloging><languageTerm type='code' authority='iso639-2b'>eng</languageTerm></languageOfCataloging><recordOrigin>From PRD customer order database, edited to conform to the DLF Implementation Guidelines for Shareable MODS Records, Version 1.1.</recordOrigin></recordInfo> </mods>
