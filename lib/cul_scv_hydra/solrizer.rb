@@ -8,3 +8,4 @@ module Cul
 end
 require "cul_scv_hydra/solrizer/extractor"
 require "cul_scv_hydra/solrizer/terminology_based_solrizer"
+require "cul_scv_hydra/solrizer/value_mapper"

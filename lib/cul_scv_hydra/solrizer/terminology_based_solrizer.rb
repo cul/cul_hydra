@@ -3,29 +3,14 @@ module Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer
 # copied from Solrizer::XML::TerminologyBasedSolrizer
   def self.default_field_mapper
     @@default_field_mapper ||= ::Solrizer::FieldMapper::Default.new
-    #@@default_field_mapper ||= Cul::Scv::Hydra::Solrizer::FieldMapper.new
   end
 
   def self.default_extractor
     @@default_extractor ||= Cul::Scv::Hydra::Solrizer::Extractor.new
   end
 
-  def self.load_value_maps(config_path=nil)
-    if config_path.nil?
-      if defined?(Rails.root) && !Rails.root.nil?
-        config_path = File.join(Rails.root, "config", "solr_value_maps.yml")
-      end
-      # Default to using the config file within the gem
-      if !File.exist?(config_path.to_s)
-        config_path = File.join(File.dirname(__FILE__), "..", "..", "..", "config", "solr_value_maps.yml")
-      end
-    end
-    logger.info("FieldMapper: loading field value maps from #{File.expand_path(config_path)}")
-    YAML::load(File.open(config_path))
-  end
-
-  def self.default_value_maps
-    @@value_maps ||= self.load_value_maps
+  def self.default_value_mapper
+    @@value_mapper ||= Cul::Scv::Hydra::Solrizer::ValueMapper.new
   end
 
   
@@ -50,6 +35,7 @@ module Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer
   # @param [OM::XML::Document] doc xml document to extract values from
   # @param [OM::XML::Term] term corresponding to desired xml values
   # @param [Hash] (optional) solr_doc (values hash) to populate
+  # @param [Solrizer::FieldMapper] (optional) object that maps a term and its index options to solr field names
   def self.solrize_term(doc, term, solr_doc = Hash.new, field_mapper = nil, opts={})
     terminology = doc.class.terminology
     parents = opts.fetch(:parents, [])
@@ -96,17 +82,14 @@ module Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer
     end
     solr_doc
   end
+
   def self.insert_field_value(solr_doc, term, field_base_name, field_value, data_type, index_as, field_mapper=nil , unique=false)
     field_mapper = self.default_field_mapper if field_mapper.nil?
     field_mapper.solr_names_and_values(field_base_name, field_value, data_type, index_as).each { |field_name, field_value|
         unless field_value.join("").strip.empty?
           if term.variant_of and term.variant_of[:map]
-            map = default_value_maps[term.variant_of[:map]]
-            if map
-              field_value.collect! {|val| map.fetch(val, val)}
-            end
+            field_value = default_value_mapper.solr_value(term.variant_of[:map], field_value)
           end
-          # collected values must be unique
           self.default_extractor.insert_solr_field_value(solr_doc, field_name, field_value, unique)
         end
     }
