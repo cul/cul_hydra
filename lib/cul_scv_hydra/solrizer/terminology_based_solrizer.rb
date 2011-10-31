@@ -2,7 +2,7 @@ require 'solrizer'
 module Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer
 # copied from Solrizer::XML::TerminologyBasedSolrizer
   def self.default_field_mapper
-    @@default_field_mapper ||= ::Solrizer::FieldMapper::Default.new
+    @@default_field_mapper ||= Cul::Scv::Hydra::Solrizer::FieldMapper.default
   end
 
   def self.default_extractor
@@ -90,7 +90,7 @@ module Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer
           if term.variant_of and term.variant_of[:map]
             field_value = default_value_mapper.solr_value(term.variant_of[:map], field_value)
           end
-          self.default_extractor.insert_solr_field_value(solr_doc, field_name, field_value, unique)
+          self.default_extractor.insert_solr_field_value(solr_doc, field_name, field_value, (unique || (field_name == 'text')))
         end
     }
   end

@@ -35,6 +35,7 @@ module Om
       t.lib_collection(:proxy=>[:collection,:title_info,:title])
 # pattern matches
       t.identifier(:path=>"identifier", :attributes=>{:type=>"local"}, :data_type=>:symbol)
+      t.identifier_text(:ref=>:identifier, :variant_of=>{:field_base=>'text'}, :index_as=>[:not_searchable, :textable])
       t.clio(:path=>"identifier", :attributes=>{:type=>"CLIO"}, :data_type=>:symbol)
       t.abstract
       t.subject {
@@ -55,6 +56,7 @@ module Om
         t.repo_code(:path=>"physicalLocation",:attributes=>{:authority=>"marcorg"}, :index_as=>[:not_searchable])
         t.map_facet(:path=>"physicalLocation",:attributes=>{:authority=>"marcorg"}, :index_as=>[:facetable], :variant_of=>{:field_base=>'lib_repo',:map=>:marc_to_facet})
         t.map_display(:path=>"physicalLocation",:attributes=>{:authority=>"marcorg"}, :index_as=>[:displayable, :not_searchable], :variant_of=>{:field_base=>'lib_repo',:map=>:marc_to_display})
+        t.shelf_locator(:path=>"shelfLocator", :index_as=>[:not_searchable, :textable], :variant_of=>{:field_base=>'text'})
       }
       t.name_personal(:path=>'name',:attributes=>{:type=>'personal'}, :index_as=>[:not_searchable]){
         t.name_part(:path=>'namePart', :index_as=>[:facetable, :displayable, :searchable], :variant_of=>{:field_base=>:lib_name})
@@ -64,7 +66,7 @@ module Om
       }
       #t.lib_name_personal(:ref=>[:name_personal, :name_part], :index_as=>[:facetable, :displayable, :searchable], :variant_of=>{:field_base=>:lib_name})
       #t.lib_name_corporate(:ref=>[:name_corporate, :name_part], :index_as=>[:facetable, :displayable, :searchable], :variant_of=>{:field_base=>:lib_name})
-      t.note(:path=>"note")
+      t.note(:path=>"note", :index_as=>[:not_searchable, :textable], :variant_of=>{:field_base=>'text'})
       t.access_condition(:path=>"accessCondition", :attributes=>{:type=>"useAndReproduction"}, :index_as => [:searchable], :data_type => :symbol)
       t.record_info(:path=>"recordInfo", :index_as=>[:not_searchable]) {
         t.record_creation_date(:path=>"recordCreationDate",:attributes=>{:encoding=>"w3cdtf"}, :index_as=>[:not_searchable])

@@ -3,6 +3,7 @@
 #  example:  t.my_term(:index_as=>[:searchable, :displayable])
 #    implies that the Solr document will have fields my_term_t and my_term_display
 #    if there is a value for the OM term  :my_term  in an object.
+# :textable is a dummy; the field named returned will be 'text'
 id: id
 default: searchable
 searchable: 
@@ -19,4 +20,7 @@ searchable:
 displayable: _display
 facetable: _facet
 sortable: _sort
+textable:
+# this is a dummy value, all values will be mapped to a field called 'text'
+  default: _t
 unstemmed_searchable: _unstem_search

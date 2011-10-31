@@ -29,8 +29,8 @@ describe "Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer" do
       puts debug.inspect
       fails = []
       @solr_fixture.each { |key, value_array|
-        puts "BAD MATCH: #{key}" if solr[key] != value_array
-        fails << key if solr[key] != value_array
+        puts "BAD MATCH: #{key}" if solr[key].sort != value_array.sort
+        fails << key if solr[key].sort != value_array.sort
         #solr[key].should == value_array
       }
       fails.should == []

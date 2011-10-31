@@ -1,6 +1,6 @@
 #format: ['multipartitem']
 identifier_s: ['prd.custord.070017']
-#text: ['prd.custord.070017', 'Original PRD customer order number: 070017', 'Box 8, JP2 Feature Photography']
+text: ['prd.custord.070017', 'Original PRD customer order number: 070017', 'Box 8, JP2 Feature Photography']
 lib_collection_facet: ['Pulitzer Prizes']
 lib_collection_display: ['Pulitzer Prizes']
 lib_project_facet: ['Pres Orders']
