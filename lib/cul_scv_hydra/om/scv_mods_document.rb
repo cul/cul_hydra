@@ -9,7 +9,7 @@ module Om
     include OM::XML::Document
     include Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer
     #include ::Solrizer::XML::TerminologyBasedSolrizer
-  
+    after_save :action_after_save
     set_terminology do |t|
       t.root(:path=>"mods",
              :xmlns=>"http://www.loc.gov/mods/v3",
@@ -35,7 +35,7 @@ module Om
       t.lib_collection(:proxy=>[:collection,:title_info,:title])
 # pattern matches
       t.identifier(:path=>"identifier", :attributes=>{:type=>"local"}, :data_type=>:symbol)
-      t.identifier_text(:ref=>:identifier, :variant_of=>{:field_base=>'text'}, :index_as=>[:not_searchable, :textable])
+      t.identifier_text(:ref=>:identifier, :index_as=>[:not_searchable, :textable])
       t.clio(:path=>"identifier", :attributes=>{:type=>"CLIO"}, :data_type=>:symbol)
       t.abstract
       t.subject {
@@ -56,7 +56,7 @@ module Om
         t.repo_code(:path=>"physicalLocation",:attributes=>{:authority=>"marcorg"}, :index_as=>[:not_searchable])
         t.map_facet(:path=>"physicalLocation",:attributes=>{:authority=>"marcorg"}, :index_as=>[:facetable], :variant_of=>{:field_base=>'lib_repo',:map=>:marc_to_facet})
         t.map_display(:path=>"physicalLocation",:attributes=>{:authority=>"marcorg"}, :index_as=>[:displayable, :not_searchable], :variant_of=>{:field_base=>'lib_repo',:map=>:marc_to_display})
-        t.shelf_locator(:path=>"shelfLocator", :index_as=>[:not_searchable, :textable], :variant_of=>{:field_base=>'text'})
+        t.shelf_locator(:path=>"shelfLocator", :index_as=>[:not_searchable, :textable])
       }
       t.name_personal(:path=>'name',:attributes=>{:type=>'personal'}, :index_as=>[:not_searchable]){
         t.name_part(:path=>'namePart', :index_as=>[:facetable, :displayable, :searchable], :variant_of=>{:field_base=>:lib_name})
@@ -66,7 +66,7 @@ module Om
       }
       #t.lib_name_personal(:ref=>[:name_personal, :name_part], :index_as=>[:facetable, :displayable, :searchable], :variant_of=>{:field_base=>:lib_name})
       #t.lib_name_corporate(:ref=>[:name_corporate, :name_part], :index_as=>[:facetable, :displayable, :searchable], :variant_of=>{:field_base=>:lib_name})
-      t.note(:path=>"note", :index_as=>[:not_searchable, :textable], :variant_of=>{:field_base=>'text'})
+      t.note(:path=>"note", :index_as=>[:not_searchable, :textable])
       t.access_condition(:path=>"accessCondition", :attributes=>{:type=>"useAndReproduction"}, :index_as => [:searchable], :data_type => :symbol)
       t.record_info(:path=>"recordInfo", :index_as=>[:not_searchable]) {
         t.record_creation_date(:path=>"recordCreationDate",:attributes=>{:encoding=>"w3cdtf"}, :index_as=>[:not_searchable])
@@ -90,12 +90,17 @@ module Om
       builder = Nokogiri::XML::Builder.new do |xml|
         xml.mods(:version=>"3.4", 
            "xmlns"=>"http://www.loc.gov/mods/v3",
+           "xmlns:xlink"=>"http://www.w3.org/1999/xlink",
            "xmlns:xsi"=>"http://www.w3.org/2001/XMLSchema-instance"){
         }
       end
       builder.doc.encoding = 'UTF-8'
+      # for some reason, this is the only way to get an equivalent nokogiri root node; the attribute can't be in the original builder call
       builder.doc.root["xsi:schemaLocation"] = 'http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd'
       return builder.doc
+    end
+    def action_after_save
+      self.dirty= false
     end
     def method_missing method, *args
       query = false
@@ -105,22 +110,14 @@ module Om
         _mname = _mname[0,_mname.length-1]
       end
       _msym = _mname.to_sym
-      begin
-        has_term = self.class.terminology.has_term?(_msym)
-
-        _r = (has_term)? find_by_terms(_msym, *args) : nil
-        if query
-          return !( _r.nil? || _r.size()==0)
-        else
-          return _r
-        end
-      rescue
-        super
+      has_term = self.class.terminology.has_term?(_msym)
+      return false if query and not has_term
+      _r = super(_mname.to_sym, *args)
+      if query
+        _r.length > 0
+      else
+        _r
       end
-    end
-    def update_values(params)
-      super
-      self.dirty = true
     end
   end
 end

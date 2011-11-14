@@ -3,7 +3,11 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe "Cul::Scv::Hydra::Om::DCMetadata" do
   
   before(:all) do
-        
+    @mock_inner = mock('inner object')
+    @mock_repo = mock('repository')
+    @mock_repo.stubs(:datastream_dissemination=>'My Content')
+    @mock_inner.stubs(:repository).returns(@mock_repo)
+    @mock_inner.stubs(:pid)
   end
   
   before(:each) do
@@ -51,6 +55,19 @@ describe "Cul::Scv::Hydra::Om::DCMetadata" do
     end
 
   end
+  describe ".update_values" do
+    it "should mark the datastream as dirty" do
+      @fixture.update_values([:title]=>"With Billy Burroughs, image")
+      @fixture.dirty?.should == true
+    end
+  end
+  describe ".update_indexed_attributes" do
+    it "should mark the datastream as dirty" do
+      @fixture.update_indexed_attributes([:dc_type=>0]=>"UnlikelyType")
+      @fixture.dirty?.should == true
+      @fixture.find_by_terms(:dc_type).first.text.should == "UnlikelyType"
+    end
+  end
   describe ".find_by_terms" do
     it "should use Nokogiri to retrieve a NodeSet corresponding to the combination of term pointers and array/nodeset indexes" do
       @fixture.find_by_terms(:identifier).first.text.should == "prd.custord.070103a"
@@ -59,7 +76,7 @@ describe "Cul::Scv::Hydra::Om::DCMetadata" do
     it "should support xpath queries as the pointer" do
       @fixture.find_by_terms('//dc:title').first.text.should == "With William Burroughs, image"
     end
-    
+
     it "should be able to update or add values by pointer" do
       @fixture.update_values([:title]=>"With Billy Burroughs, image")
       @fixture.find_by_terms(:title).first.text.should == "With Billy Burroughs, image"
@@ -83,7 +100,7 @@ describe "Cul::Scv::Hydra::Om::DCMetadata" do
   end
   describe ".xml_serialization" do
     it "should serialize new documents to xml" do
-      Cul::Scv::Hydra::Om::DCMetadata.new.to_xml
+      Cul::Scv::Hydra::Om::DCMetadata.new(@mock_inner,'DC').to_xml
     end
     it "should parse and build namespaces identically" do
       doc = Cul::Scv::Hydra::Om::DCMetadata.from_xml(nil).ng_xml
@@ -120,7 +137,7 @@ src
 
     it "should produce equivalent xml when built up programatically" do
       pending "none attribute problem"
-      built = Cul::Scv::Hydra::Om::DCMetadata.new
+      built = Cul::Scv::Hydra::Om::DCMetadata.new(@mock_inner,'DC')
       built.update_values({[:identifier] => "prd.custord.070103a"})
       built.update_values({[:title] => "With William Burroughs, image"})
       built.update_values({[:type] => "Collection"})

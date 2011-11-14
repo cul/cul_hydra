@@ -1,6 +1,6 @@
 require 'solrizer'
 module Cul::Scv::Hydra::Solrizer
-class FieldMapper < Solrizer::FieldMapper
+class FieldMapper < ::Solrizer::FieldMapper::Default
   alias_method(:orig_solr_name_and_mappings, :solr_name_and_mappings)
 
   def self.default

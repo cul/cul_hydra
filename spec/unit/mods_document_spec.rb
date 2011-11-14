@@ -7,6 +7,11 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
   end
   
   before(:each) do
+    @mock_inner = mock('inner object')
+    @mock_repo = mock('repository')
+    @mock_repo.stubs(:datastream_dissemination=>'My Content')
+    @mock_inner.stubs(:repository).returns(@mock_repo)
+    @mock_inner.stubs(:pid)
     @fixturemods = Cul::Scv::Hydra::Om::ModsDocument.from_xml( fixture( File.join("CUL_MODS", "mods-item.xml") ) )
     item_xml = fixture( File.join("CUL_MODS", "mods-item.xml") )
     @mods_item = Cul::Scv::Hydra::Om::ModsDocument.from_xml(item_xml)
@@ -87,15 +92,16 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
       @mods_item.find_by_terms( {:foo=>20}, :bar ).should == nil
     end
     it "should identify presence or absence of terms with shortcut methods" do
-      built  = Cul::Scv::Hydra::Om::ModsDocument.new
+      built  = Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner, 'descMetadata')
+      built.ng_xml = Cul::Scv::Hydra::Om::ModsDocument.xml_template
       built.update_values({[:title]=>'foo'})
-      built.title?.should == true
-      built.clio?.should == false
+      built.title?.should be_true
+      built.clio?.should be_false
     end
   end
   describe ".xml_serialization" do
     it "should serialize new documents to xml" do
-      Cul::Scv::Hydra::Om::ModsDocument.new.to_xml
+      Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner,'descMetadata').to_xml
     end
     it "should parse and build namespaces identically" do
       builder = Nokogiri::XML::Builder.new do |xml|
@@ -108,6 +114,7 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
       mods_ns = Nokogiri::XML::Document.parse(<<-src
 <mods version='3.4'
       xmlns='http://www.loc.gov/mods/v3'
+      xmlns:xlink='http://www.w3.org/1999/xlink'
       xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
       xsi:schemaLocation='http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd'></mods>
 src
@@ -118,14 +125,14 @@ src
           parsed = node.namespace.href == 'http://www.w3.org/2001/XMLSchema-instance'
         end
       }
-      parsed.should == true
+      parsed.should be_true
       built = false
       builder.doc.root.attribute_nodes.each { |node|
         if node.name == 'schemaLocation'
           built = node.namespace.href == 'http://www.w3.org/2001/XMLSchema-instance'
         end
       }
-      built.should == true
+      built.should be_true
       opts = { :element_order => false, :normalize_whitespace => true }
       passed = EquivalentXml.equivalent?(builder.doc, mods_ns, opts){ |n1, n2, result|
         unless result
@@ -135,7 +142,8 @@ src
     end
     it "should produce equivalent xml when built up programatically" do
       pending "none attribute problem"
-      built = Cul::Scv::Hydra::Om::ModsDocument.new
+      built = Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner,'descMetadata')
+      built.ng_xml = Cul::Scv::Hydra::Om::ModsDocument.xml_template
       built.update_values({[:identifier] => "prd.custord.040148"})
       built.update_values({[:title] => "Manuscript, unidentified"})
       built.update_values({[:type_of_resource] => "text"})
@@ -161,7 +169,8 @@ ml
       built.ng_xml.should be_equivalent_to(@mods_item.ng_xml)
     end
     it "should produce equivalent xml for recordInfo" do
-      built = Cul::Scv::Hydra::Om::ModsDocument.new
+      built = Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner, 'descMetadata')
+      built.ng_xml = Cul::Scv::Hydra::Om::ModsDocument.xml_template
       built.update_values({[:record_info, :record_creation_date] => "2010-07-12"})
       built.update_values({[:record_info, :language_of_cataloging, :language_code] => "eng"})
       built.update_values({[:record_info,:record_content_source]=> "NNC"})
@@ -174,14 +183,16 @@ ml
     end
     it "should produce equivalent xml for physical location" do
       pending "none attribute problem"
-      built = Cul::Scv::Hydra::Om::ModsDocument.new
+      built = Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner, 'descMetadata')
+      built.ng_xml = Cul::Scv::Hydra::Om::ModsDocument.xml_template
       built.update_values({[:location, :lib_repo] => "NNC-RB"})
       built.update_values({[:location, :repo_text] => "Rare Book and Manuscript Library, Columbia University"})
       parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-physical-location.xml")))
       built.ng_xml.should be_equivalent_to(parsed)
     end
     it "should produce equivalent xml for date ranges" do
-      built = Cul::Scv::Hydra::Om::ModsDocument.new
+      built = Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner, 'descMetadata')
+      built.ng_xml = Cul::Scv::Hydra::Om::ModsDocument.xml_template
       built.update_values({[:origin_info, :start_date]=>"1900"})
       built.update_values({[:origin_info, :end_date]=>"1905"})
       parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-date-range.xml")))
@@ -189,5 +200,10 @@ ml
       equivalent?(built.ng_xml,parsed)
     end
   end
-   
+  describe ".update_values" do
+    it "should mark the datastream as dirty" do
+      @mods_item.update_values({[:record_info,:record_content_source]=> "NNC"})
+      @mods_item.dirty?.should be_true
+    end
+  end
 end

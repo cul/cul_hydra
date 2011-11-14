@@ -10,7 +10,7 @@ require 'spec/autorun'
 require 'equivalent-xml/rspec_matchers'
 require 'ruby-debug'
 
-ActiveFedora.init(File.join(File.dirname(__FILE__), "..", "config", "fedora.yml"))
+ActiveFedora.init(:fedora_config_path=>File.join(File.dirname(__FILE__), "..", "config", "fedora.yml"))
 
 Spec::Runner.configure do |config|
   config.mock_with :mocha
@@ -150,7 +150,7 @@ end
       local_set_1.each do |search_node|
         found_node = local_set_2.find { |test_node| equivalent?(search_node,test_node,opts,&block) }
         if found_node.nil?
-          logger.error search_node.name + " = " + search_node.value
+          logger.error "missing " + search_node.name + " = " + search_node.content
           return false
         else
           if search_node.is_a?(Nokogiri::XML::Element) and opts[:element_order]
@@ -161,7 +161,7 @@ end
           local_set_2.delete(found_node)
         end
       end
-      local_set_2.each {|node| logger.error node.name + " = " + node.value}
+      local_set_2.each {|node| logger.error "extra " + node.name + " = " + node.content}
       return local_set_2.length == 0
     end
 

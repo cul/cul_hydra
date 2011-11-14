@@ -5,7 +5,7 @@ module Hydra
 module Om
   class DCMetadata < ActiveFedora::NokogiriDatastream
     include OM::XML::Document
-  
+    after_save :action_after_save
     set_terminology do |t|
       t.root(:path=>"dc", :namespace_prefix=>"oai_dc",
              "xmlns:oai_dc"=>"http://www.openarchives.org/OAI/2.0/oai_dc/",
@@ -43,6 +43,9 @@ module Om
       builder.doc.root["xsi:schemaLocation"] = 'http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd'
       return builder.doc
     end
+    def action_after_save
+      self.dirty= false
+    end
     def method_missing method, *args
       query = false
       _mname = method.id2name
@@ -51,22 +54,14 @@ module Om
         _mname = _mname[0,_mname.length-1]
       end
       _msym = _mname.to_sym
-      begin
-        has_term = self.class.terminology.has_term?(_msym)
-       
-        _r = (has_term)? find_by_terms(_msym, *args) : nil
-        if query
-          return !( _r.nil? || _r.size()==0)
-        else
-          return _r
-        end
-      rescue
-        super
+      has_term = self.class.terminology.has_term?(_msym)
+      return false if query and not has_term
+      _r = super(_mname.to_sym, *args)
+      if query
+        _r.length > 0
+      else
+        _r
       end
-    end
-    def update_values(*args)
-      super
-      self.dirty = true
     end
   end
 end
