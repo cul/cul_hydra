@@ -1,9 +1,13 @@
-require 'bundler'
-Bundler::GemHelper.install_tasks
+require 'rubygems'
+begin
+  require 'bundler'
+rescue LoadError
+  puts 'You must `gem install bundler` and `bundle install` to run rake tasks'
+end
+require File.expand_path('../config/application', __FILE__)
+require 'rake'
 
-# adding tasks defined in lib/tasks
-Dir.glob('lib/tasks/*.rake').each { |r| import r }
-
+CulScvHydra::Application.load_tasks
 
 require 'spec/rake/spectask'
 Spec::Rake::SpecTask.new(:spec) do |spec|
@@ -16,8 +20,6 @@ Spec::Rake::SpecTask.new(:rcov) do |spec|
   spec.pattern = 'spec/**/*_spec.rb'
   spec.rcov = true
 end
-
-# task :spec => :check_dependencies
 
 task :default => :spec
 

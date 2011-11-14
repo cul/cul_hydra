@@ -3,7 +3,7 @@ module Cul
 module Scv
 module Hydra
 module Om
-  class DCMetadata < ActiveFedora::NokogiriDatastream
+  class DCMetadata < ::ActiveFedora::NokogiriDatastream
     include OM::XML::Document
     after_save :action_after_save
     set_terminology do |t|

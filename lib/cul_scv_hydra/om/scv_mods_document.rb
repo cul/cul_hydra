@@ -5,7 +5,7 @@ module Cul
 module Scv
 module Hydra
 module Om
-  class ModsDocument < ActiveFedora::NokogiriDatastream
+  class ModsDocument < ::ActiveFedora::NokogiriDatastream
     include OM::XML::Document
     include Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer
     #include ::Solrizer::XML::TerminologyBasedSolrizer
@@ -15,12 +15,17 @@ module Om
              :xmlns=>"http://www.loc.gov/mods/v3",
              :schema=>"http://www.loc.gov/standards/mods/v3/mods-3-4.xsd")
 # position definitions
-      t.title_info(:path=>'titleInfo', :index_as=>[:not_searchable]){
-        t.title(:path=>'title', :index_as=>[:displayable,:sortable])
+      t.mods {
+      t.main_title_info(:path=>'titleInfo', :index_as=>[:not_searchable], :attributes=>{:type=>:none}){
+        t.main_title(:path=>'title', :index_as=>[:displayable,:sortable])
+      }
+      }
+      t.search_title_info(:path=>'titleInfo', :index_as=>[:not_searchable]){
+        t.search_title(:path=>'title', :index_as=>[:searchable])
       }
       t.project(:path=>"relatedItem", :attributes=>{:type=>"host", :displayLabel=>"Project"}, :index_as=>[:not_searchable]){
         t.title_info(:path=>'titleInfo', :index_as=>[:not_searchable]){
-          t.title(:path=>'title', :index_as=>[:searchable, :displayable])
+          t.title(:path=>'title', :index_as=>[:searchable])
           t.title_facet(:path=>'title', :index_as=>[:facetable, :not_searchable], :variant_of=>{:field_base=>'lib_project',:map=>:project_facet})
         }
       }
@@ -30,7 +35,8 @@ module Om
         }
       }
 # position matches
-      t.title(:proxy=>[:mods,:title_info, :title], :index_as=>[:searchable,:displayable, :sortable])
+      t.title(:proxy=>[:mods,:main_title_info, :main_title], :index_as=>[:displayable, :sortable])
+      #t.title(:proxy=>[:mods,:search_title_info, :search_title], :index_as=>[:searchable])
       t.lib_project(:proxy=>[:project,:title_info,:title])
       t.lib_collection(:proxy=>[:collection,:title_info,:title])
 # pattern matches
