@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<foxml:digitalObject VERSION="1.1" PID="test:thumb_image" xmlns:foxml="info:fedora/fedora-system:def/foxml#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+  <foxml:objectProperties>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE=""/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="fedoraAdmin"/>
+  </foxml:objectProperties>
+  <foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+    <foxml:datastreamVersion ID="DC1.0" LABEL="Dublin Core Record for this object" CREATED="2011-07-14T06:52:39.149Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="336">
+      <foxml:xmlContent>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:identifier>test:thumb_image</dc:identifier>
+          <dc:description>A test Resource object</dc:description>
+        </oai_dc:dc>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+    <foxml:datastreamVersion ID="RELS-EXT.0" LABEL="" CREATED="2011-07-14T06:52:39.708Z" MIMETYPE="text/xml" SIZE="270">
+      <foxml:xmlContent>
+        <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+          <rdf:Description rdf:about="info:fedora/test:thumb_image">
+            <hasModel xmlns="info:fedora/fedora-system:def/model#" rdf:resource="info:fedora/ldpd:Resource"/>
+            <imageWidth xmlns="http://purl.oclc.org/NET/CUL/RESOURCE/STILLIMAGE/BASIC/" >72</imageWidth>
+          </rdf:Description>
+        </rdf:RDF>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="rightsMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+    <foxml:datastreamVersion ID="rightsMetadata.1" LABEL="" CREATED="2011-07-14T05:27:43.247Z" MIMETYPE="text/xml" SIZE="812">
+      <foxml:xmlContent>
+        <rightsMetadata xmlns="http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1" version="0.1">
+          <copyright>
+            <human/>
+            <machine>
+              <uvalicense>no</uvalicense>
+            </machine>
+          </copyright>
+          <access type="discover">
+            <human/>
+            <machine/>
+          </access>
+          <access type="read">
+            <human/>
+            <machine>
+              <group>researcher</group>
+              <group>admin_policy_object_editor</group>
+              <group>patron</group>
+              <group>donor</group>
+              <group>public</group>
+            </machine>
+          </access>
+          <access type="edit">
+            <human/>
+            <machine>
+              <person>archivist1</person>
+              <group>archivist</group>
+            </machine>
+          </access>
+          <embargo>
+            <human/>
+            <machine/>
+          </embargo>
+        </rightsMetadata>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="CONTENT" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
+    <foxml:datastreamVersion ID="CONTENT.0" LABEL="" MIMETYPE="image/jpeg" SIZE="2281">
+      <foxml:binaryContent> /9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwg JC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIy MjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCABPAGQDASIAAhEBAxEB/8QA
+        HwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIh MUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVW V1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXG
+        x8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQF BgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAV YnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOE
+        hYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq 8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD3+iiigApMc0tFACdqZnnmnnpWbqdnNdxKIJmiIPOKV3bQcbXs xb/VrXT1HnNluu0dT+FZp8U2bOFMqqp7g5x9fSqOoaHbxqZbm9lmkI+VcDJ9hWTceIvD+kxxRTFbifGV
+        jQAn8a5JVpXtsd9HDwlH3U2zqY9fsXbAvME9iBxV1buMoG+2BlJ4OBXmMs2ua8wisdIWzVufMOenrWfc 6GLVit9rMomDbWjgbdzUfW5LodKy+DSbnr26ntSyhkDLgj1NOVwehzXiVvb+IbJ/N0eW9mi/6aLn/Gux 8JeM5Lm6/svV0MN8vA3DG41pDFp6SRzVcBKEXJO53ny/SihSCOaK6OWm9TzveJKKbyB16d6z73XNO066
+        gtby8ihnuOIkY8t9KsZpUmaaGyMjmjJ68UWExeoqGaRYEZ2PQZyalOa5LxDoGr6xfJEmoNHp7f6xB1/l UTk0vdNacIuV5M4vUNa1XxN4iawspWNlI2z5B0H1rsH0bRfC2nC5+zq9xjgvyWb8an0u+8NaTLNpdnc2 /wBstl3SRD749z+dZt2s/jC8VYVMVjHw0p6t9K5lCSu3qz0HWjNqMdIr8SlYy33ie7CWTrbxRcsw611W
+        m+FNNsfmMXmzdGkfkk1d0jRrXR7cRWyYJ+8x6k+taQGBj0q6FHl1kctbENyap6IiEMaDYiKoHYCuA+Im jJDDHrVsuyeBgWdeOK9DBG7pXMePZkj8JXoY43KAPfkVVZLlvYWEnKFZW6mh4e1P+0tCtLtsbpEBb2NF ZXgmJ4/CdlkYymcUUoybWw6sEptHWghhnsa8V+Ls0Nr8RPClxcELFEjO5yeAHFewX19b2MBmuJVijHVm
+        rxf4h3lrrfj3wdKqb7aQOpLegcDNb8yObkfLc6uD4y+HP7QisZFniU4Xz3GE/wAa25vH+nQeLbfw+9vM JrkAxS8bXzjGPzriPjTaWsHhvT/LhjU+aqgquD0NO+JlkdOtfD3imBCZLJI0OPTGc/pTJV7XO78Q+NtP 8O6rY6XcRSzXd6f3UceMkdM1X8UfEHSPCwihuBJPdyjKWsHMmPx4rh/Cgfxr8T59dkzJZafEFgJ7PhT/
+        AI1W8IIl98bdcuNT/wBYqHyVlxgH5elGg0ip4Cvl1z4y61qYtpbdJsMIpcblGFGD2rttS+K/hzQdb1DS J4Zkms/vBQMMeOB781zvhl1b46+IERVKqwHy9BwvNUdH0my1X486+byISLFOJFDDgnaooaQ7taI7u1+K Oiz+Gm12WO4t4fM8pIZF+d2xnAx7VDoXxY0bWtbj0lrS6srmXiIXAA3/AEwaZ8RPEWneDdMtY4NMgubq
+        ebEELDgNj7xrz28XWJfiToba0lpDdSx7lSIH5AQw5pbbBBa6nt194k0nT9y3N7GjAZ255Nee6trE3jnV rbTNOidLWOTc8p6EVLF8Lru4vmnvL9fLY5wmc4/EV3mh+H7LQ7YQ2qj/AGnYctXEvaVrqWiPSUsNh/fg 7yLdrbJY2kVrEn7uNdq0VbC4HWiu2KSSR5ck27uRwniQrrHi3TtInOLXaZXH94gjj9a09V8B6Tq2oade
+        SeZE9gpEIjxjrmpNe8NvqTw3lpP5N7b/AOrYdD7Gq0eteIbJdl1oz3GBjfCyjP5msItrc7GlOKUGXfE3 hDT/ABPZwW19JKscBDLsx1Fcl8SfEmgW/g660Z7oS3oQRRQKMtuxx2ropPFl8oG/w5eHP+2tcrLp+gTa +dZvPDFybvcGJfBAP4VbrRW5CwtbsdF8MPD39g+EYA67J7n97Ivp6fpUPiP4bWms6uNWtLqaxvWOZHiI
+        GT69Otatt4z0xysTCaHAwAY2/LpW7b39rdqGhmVvbPNXGSlsZTpTjujidA+GNt4e8QJqttqFzJMR++aQ j979eK3LTwXp1n4puvEEUkv2q5OXXI29v8K6IEGnZGKog5Hxr4FtfGEVszymC4tn3JIv8v1rn4/hRL/a NrqNxrlzcXkL5LyEEbfQcV6b1HqKO3HFAb7kax4QAnLYwSKkCcdaXOR60o6dMUB0sIBiilooAbjmjvRi
+        lIzQ9RLQbjmjFOx0oxSslsMikjWRSGAIPUVkyeG7DeZLZDaynkyQfKT9a2yMikxScE9ylOS2MRJ7zS3C 3pE1ueFlUcr9fWteNlKgo24H9ac8SyAhhkHtUVpa/ZUKBsoPuj0FJK2iBu+5Zo70UVZIUUUUAFFFFAH/ 2Q== </foxml:binaryContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+</foxml:digitalObject>

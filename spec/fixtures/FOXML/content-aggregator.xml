@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<foxml:digitalObject VERSION="1.1" PID="test:c_agg"
+xmlns:foxml="info:fedora/fedora-system:def/foxml#"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd"> 
+<foxml:objectProperties> 
+<foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/> 
+<foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="With William Burroughs: a report from the bunker: Burroughs comes across a variety of the yage vine in the jungle..., p. 113, image"/> 
+<foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="fedoraAdmin"/> 
+</foxml:objectProperties> 
+<foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true"> 
+<foxml:datastreamVersion ID="DC1.0" LABEL="Dublin Core Record for this object" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/"> 
+<foxml:xmlContent> 
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd"> 
+  <dc:identifier>prd.custord.070103a</dc:identifier> 
+  <dc:type>Collection</dc:type> 
+  <dc:title>With William Burroughs: a report from the bunker: Burroughs comes across a variety of the yage vine in the jungle..., p. 113, image</dc:title> 
+</oai_dc:dc> 
+</foxml:xmlContent> 
+</foxml:datastreamVersion> 
+</foxml:datastream> 
+<foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true"> 
+<foxml:datastreamVersion ID="RELS-EXT1.0" LABEL="RDF Statements about this object" MIMETYPE="application/rdf+xml" FORMAT_URI="info:fedora/fedora-system:FedoraRELSExt-1.0"> 
+<foxml:xmlContent> 
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"> 
+ 
+<rdf:Description rdf:about="info:fedora/test:c_agg"> 
+	<rdf:type rdf:resource="http://purl.oclc.org/NET/CUL/Aggregator"></rdf:type> 
+	<hasModel xmlns="info:fedora/fedora-system:def/model#" rdf:resource="info:fedora/ldpd:ContentAggregator"></hasModel> 
+	<memberOf xmlns="http://purl.oclc.org/NET/CUL/" rdf:resource="info:fedora/ldpd:101479"></memberOf> 
+</rdf:Description> 
+ 
+</rdf:RDF> 
+</foxml:xmlContent> 
+</foxml:datastreamVersion> 
+</foxml:datastream> 
+<foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true"> 
+<foxml:datastreamVersion ID="descMetadata.0" LABEL="" MIMETYPE="text/xml">
+<foxml:xmlContent>
+<mods xmlns='http://www.loc.gov/mods/v3' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd'>
+<identifier type='local'>prd.custord.070103a</identifier>
+<titleInfo><title>With William Burroughs: a report from the bunker: Burroughs comes across a variety of the yage vine in the jungle..., p. 113, image</title></titleInfo>
+<name type='personal'><namePart>Bockris, Victor</namePart></name>
+<name type='personal'><namePart>Burroughs, William</namePart></name>
+<typeOfResource>still image</typeOfResource>
+<physicalDescription><form authority='marcform'>electronic</form>
+<form authority='aat'>photographs</form>
+<extent>1 item</extent>
+<reformattingQuality>access</reformattingQuality>
+<internetMediaType>image/tiff</internetMediaType>
+<digitalOrigin>reformatted digital</digitalOrigin>
+</physicalDescription>
+<originInfo><dateIssued keyDate='yes'>1996</dateIssued></originInfo>
+<location><physicalLocation authority='marcorg'>NNC</physicalLocation>
+<physicalLocation>General Collections, Columbia University Libraries</physicalLocation>
+</location>
+<relatedItem type='host' displayLabel='Project'><titleInfo><title>Customer Order Collection</title></titleInfo></relatedItem>
+<note>Original PRD customer order number: 070103</note>
+<accessCondition type='useAndReproduction'>Columbia Libraries Staff Use Only</accessCondition>
+<recordInfo><recordCreationDate encoding='w3cdtf'>2010-09-16</recordCreationDate><recordContentSource authority='marcorg'>NNC</recordContentSource><languageOfCataloging><languageTerm type='code' authority='iso639-2b'>eng</languageTerm></languageOfCataloging><recordOrigin>From PRD customer order database, edited to conform to the DLF Implementation Guidelines for Shareable MODS Records, Version 1.1.</recordOrigin></recordInfo> </mods>
+</foxml:xmlContent> 
+</foxml:datastreamVersion> 
+</foxml:datastream> 
+</foxml:digitalObject>
