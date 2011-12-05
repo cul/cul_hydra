@@ -1,12 +1,11 @@
 require "active-fedora"
 require "hydra"
-class StaticAudioAggregator < ::ActiveFedora::Base
+class GenericObject < ::ActiveFedora::Base
   extend ActiveModel::Callbacks
   include ::Hydra::ModelMethods
   include Cul::Scv::Hydra::ActiveFedora::ModelMethods
   include Cul::Scv::Hydra::ActiveFedora::Model::Aggregator::ModelMethods
   define_model_callbacks :create
-  after_create :aggregator!
 
   alias :file_objects :resources
   def create
@@ -15,9 +14,6 @@ class StaticAudioAggregator < ::ActiveFedora::Base
     end
   end
   def route_as
-    "audio"
-  end
-  def index_type_label
-    "PART"
+    "multipartitem"
   end
 end

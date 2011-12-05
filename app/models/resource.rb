@@ -20,4 +20,14 @@ class Resource < ::ActiveFedora::Base
   def route_as
     "resource"
   end
+  def index_type_label
+    "FILE RESOURCE"
+  end
+  def to_solr(solr_doc = Hash.new, opts={})
+    sdoc = super
+    unless sdoc["extent_s"]
+      sdoc["extent_s"] << self.datastreams["CONTENT"].size
+    end
+    sdoc
+  end
 end

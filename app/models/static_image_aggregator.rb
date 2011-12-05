@@ -17,4 +17,7 @@ class StaticImageAggregator < ::ActiveFedora::Base
   def route_as
     "image"
   end
+  def index_type_label
+    "PART"
+  end
 end
