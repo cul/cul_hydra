@@ -18,9 +18,24 @@ class JP2ImageAggregator < ::ActiveFedora::Base
     end
   end
   def route_as
-    "image/zooming"
+    "zoomingimage"
   end
   def index_type_label
     "PART"
+  end
+  def to_solr(solr_doc = Hash.new, opts={})
+    solr_doc = super
+    source = self.datastreams["SOURCE"]
+    source.profile
+    if source.controlGroup == 'E'
+      solr_doc["rft_id"] = source.dsLocation
+    else
+      rc = ActiveFedora::RubydoraConnection.instance.connection
+      url = rc.config["url"]
+      uri = URI::parse(url)
+      url = "#{uri.scheme}://#{uri.host}:#{uri.port}/fedora/objects/#{pid}/datastreams/#{SOURCE}/content"
+      solr_doc["rft_id"] = url
+    end
+    solr_doc
   end
 end
