@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency('activemodel', "~> 3.0.10")
   s.add_dependency('activeresource', "~> 3.0.10")
   s.add_dependency('activesupport', "~> 3.0.10")
-  s.add_dependency('active-fedora', "~> 3.1.4")
+  s.add_dependency('active-fedora', "~> 3.2.2")
   s.add_dependency('cul_image_props')
   s.add_dependency('rubydora', '>=0.2.6')
   s.add_dependency('hydra-head')
