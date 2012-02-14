@@ -49,6 +49,7 @@ module Cul
     module Scv
     end
   end
+  require 'cul/access_controls_enforcement'
   require 'cul/active_fedora_helper'
   require 'cul/aggregator'
   require 'cul/aggregator_controller_helper'
