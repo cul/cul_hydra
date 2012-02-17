@@ -12,7 +12,7 @@ module AggregatorControllerHelper
       the_model = DcDocument
     end
 
-    @document_fedora = the_model.load_instance(af_base.pid)
+    @document_fedora = af_base.adapt_to the_model
     @resources = @document_fedora.resources(:response_format=>:solr)
   end
 end

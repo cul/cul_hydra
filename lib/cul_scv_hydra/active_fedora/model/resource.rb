@@ -1,10 +1,6 @@
-module Cul
-module Scv
-module Hydra
-module ActiveFedora
-module Model
+module Cul::Scv::Hydra::ActiveFedora::Model
 module Resource
-module ModelMethods
+    extend ActiveSupport::Concern
 # constants #
   IMAGE_MIME_TYPES = [
     'image/bmp',
@@ -14,17 +10,17 @@ module ModelMethods
     'image/tiff'
   ]
 
-  def self.included(mod)
-    if mod.respond_to? :has_relationship
-      mod.has_relationship "image_width", :image_width
-      mod.has_relationship "image_length", :image_length
-      mod.has_relationship "x_sampling", :x_sampling
-      mod.has_relationship "y_sampling", :y_sampling
-      mod.has_relationship "sampling_unit", :sampling_unit
-      mod.has_relationship "extent", :extent
+  included do
+    if self.respond_to? :has_relationship
+      has_relationship "image_width", :image_width
+      has_relationship "image_length", :image_length
+      has_relationship "x_sampling", :x_sampling
+      has_relationship "y_sampling", :y_sampling
+      has_relationship "sampling_unit", :sampling_unit
+      has_relationship "extent", :extent
     end
-    if mod.respond_to? :has_relationship
-      mod.has_datastream :name => "CONTENT", :type=>::ActiveFedora::Datastream
+    if self.respond_to? :has_datastream
+      has_datastream :name => "CONTENT", :type=>::ActiveFedora::Datastream
     end
   end
 
@@ -74,10 +70,5 @@ module ModelMethods
     mime_types = MIME::Types.of(file_name)
     mime_type = mime_types.empty? ? "application/octet-stream" : mime_types.first.content_type
   end
-end
-end
-end
-end
-end
 end
 end

@@ -3,7 +3,8 @@ require 'net/http'
 require 'open-uri'
 require 'tempfile'
 require 'uri'
-module Cul::ResourcesHelper
+module Cul::Scv::Hydra::Controllers::Helpers
+module ResourcesHelperBehavior
   IMAGE_MIME_TYPES = [
     'image/bmp',
     'image/gif',
@@ -132,4 +133,5 @@ module Cul::ResourcesHelper
     mime_type = mime_types.empty? ? "application/octet-stream" : mime_types.first.content_type
   end
   
+end
 end

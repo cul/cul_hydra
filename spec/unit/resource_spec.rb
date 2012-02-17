@@ -6,7 +6,7 @@ describe "Resource" do
     ingest("ldpd:ContentAggregator", fixture( File.join("FOXML", "content-cmodel.xml")), true)
     ingest("ldpd:StaticImageAggregator", fixture( File.join("FOXML", "image-cmodel.xml")), true)
     @parentobj = ingest("test:c_agg", fixture( File.join("FOXML", "content-aggregator.xml")), true)
-    @parentobj.update_index
+    @parentobj.send :update_index
     ingest("ldpd:StaticImageAggregator", fixture( File.join("FOXML", "image-cmodel.xml")), true)
   end
   
@@ -15,7 +15,7 @@ describe "Resource" do
     ingest("test:si_agg", fixture( File.join("FOXML", "static-image-aggregator.xml")), true)
     ingest("test:thumb_image",fixture( File.join("FOXML", "resource-thumb.xml")), true)
     @containerobj = StaticImageAggregator.load_instance( "test:si_agg")
-    @containerobj.update_index
+    @containerobj.send :update_index
     @fixtureobj = Resource.load_instance("test:thumb_image")
   end
   

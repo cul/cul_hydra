@@ -5,9 +5,10 @@ require "mime/types"
 require "uri"
 class Resource < ::ActiveFedora::Base
   extend ActiveModel::Callbacks
+  include ::ActiveFedora::Relationships
   include ::Hydra::ModelMethods
-  include Cul::Scv::Hydra::ActiveFedora::ModelMethods
-  include Cul::Scv::Hydra::ActiveFedora::Model::Resource::ModelMethods
+  include Cul::Scv::Hydra::ActiveFedora::Model
+  include Cul::Scv::Hydra::ActiveFedora::Model::Resource
   define_model_callbacks :create
   after_create :resource!
 
@@ -25,7 +26,7 @@ class Resource < ::ActiveFedora::Base
   end
   def to_solr(solr_doc = Hash.new, opts={})
     sdoc = super
-    unless sdoc["extent_s"]
+    unless sdoc["extent_s"] || self.datastreams["CONTENT"].nil?
       sdoc["extent_s"] << self.datastreams["CONTENT"].size
     end
     sdoc

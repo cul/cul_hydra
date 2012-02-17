@@ -15,17 +15,16 @@ module Om
              :xmlns=>"http://www.loc.gov/mods/v3",
              :schema=>"http://www.loc.gov/standards/mods/v3/mods-3-4.xsd")
 # position definitions
-      t.mods {
       t.main_title_info(:path=>'titleInfo', :index_as=>[:not_searchable], :attributes=>{:type=>:none}){
         t.main_title(:path=>'title', :index_as=>[:displayable,:sortable])
       }
-      }
+      
       t.search_title_info(:path=>'titleInfo', :index_as=>[:not_searchable]){
         t.search_title(:path=>'title', :index_as=>[:searchable])
       }
       t.project(:path=>"relatedItem", :attributes=>{:type=>"host", :displayLabel=>"Project"}, :index_as=>[:not_searchable]){
         t.title_info(:path=>'titleInfo', :index_as=>[:not_searchable]){
-          t.title(:path=>'title', :index_as=>[:searchable])
+          t.title(:path=>'title', :index_as=>[:searchable, :displayable])
           t.title_facet(:path=>'title', :index_as=>[:facetable, :not_searchable], :variant_of=>{:field_base=>'lib_project',:map=>:project_facet})
         }
       }

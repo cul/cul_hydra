@@ -28,8 +28,8 @@ describe "Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer" do
       debug.delete_if { |k, v| k.to_s =~ /^top_.*/ }
       fails = []
       @solr_fixture.each { |key, value_array|
-        puts "BAD MATCH: #{key}" if solr[key].sort != value_array.sort
-        fails << key if solr[key].sort != value_array.sort
+        puts "BAD MATCH: #{key} solr: #{solr[key].inspect} value: #{value_array.inspect}" if !solr[key] or solr[key].sort != value_array.sort
+        fails << key if !solr[key] or solr[key].sort != value_array.sort
         #solr[key].should == value_array
       }
       fails.should == []

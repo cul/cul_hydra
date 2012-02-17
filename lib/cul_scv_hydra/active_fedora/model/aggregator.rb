@@ -1,10 +1,5 @@
-module Cul
-module Scv
-module Hydra
-module ActiveFedora
-module Model
+module Cul::Scv::Hydra::ActiveFedora::Model
 module Aggregator
-module ModelMethods
   def self.included(mod)
     if mod.respond_to? :has_relationship
       mod.has_relationship "parts", :cul_member_of, :inbound => true
@@ -36,10 +31,5 @@ module ModelMethods
     member.datastreams["RELS-EXT"].dirty = true
     member.save
   end
-end
-end
-end
-end
-end
 end
 end

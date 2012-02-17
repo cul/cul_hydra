@@ -1,13 +1,15 @@
-ENV["environment"] ||= 'development'
-ENV["RAILS_ENV"] ||= 'development'
-require File.expand_path("config/environment", ENV['RAILS_ROOT'] || File.expand_path("../..", __FILE__))
-#require 'rspec/rails'
+ENV["environment"] ||= 'test'
+ENV["RAILS_ENV"] ||= 'test'
+require 'rails'
+require 'rails/all'
+require 'cul_scv_hydra'
+Dir.glob("app/models/*.rb").each {|model| require model}
+require 'rspec/rails'
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 #require 'om'
-require 'cul_scv_hydra'
-require 'spec'
-require 'spec/autorun'
+require 'rspec'
+require 'rspec/autorun'
 require 'equivalent-xml/rspec_matchers'
 require 'ruby-debug'
 
@@ -156,7 +158,6 @@ def compare_nodesets(nodeset_1, nodeset_2, opts, &block)
     else
       if search_node.is_a?(Nokogiri::XML::Element) and opts[:element_order]
         if search_node.parent.elements.index(search_node) != found_node.parent.elements.index(found_node)
->>>>>>> ActiveFedora 3 upgrade
           return false
         end
       end

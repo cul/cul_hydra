@@ -2,9 +2,10 @@ require "active-fedora"
 require "hydra"
 class GenericObject < ::ActiveFedora::Base
   extend ActiveModel::Callbacks
+  include ::ActiveFedora::Relationships
   include ::Hydra::ModelMethods
-  include Cul::Scv::Hydra::ActiveFedora::ModelMethods
-  include Cul::Scv::Hydra::ActiveFedora::Model::Aggregator::ModelMethods
+  include Cul::Scv::Hydra::ActiveFedora::Model
+  include Cul::Scv::Hydra::ActiveFedora::Model::Aggregator
   define_model_callbacks :create
 
   alias :file_objects :resources

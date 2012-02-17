@@ -5,7 +5,7 @@ describe "StaticImageAggregator" do
   before(:all) do
     ingest("ldpd:ContentAggregator", fixture( File.join("FOXML", "content-cmodel.xml")), true)
     @parentobj = ingest("test:c_agg", fixture( File.join("FOXML", "content-aggregator.xml")), true)
-    @parentobj.update_index
+    @parentobj.send :update_index
     ingest("ldpd:StaticImageAggregator", fixture( File.join("FOXML", "image-cmodel.xml")), true)
     @cmodel = ingest("ldpd:StaticImageAggregator", fixture( File.join("FOXML", "image-cmodel.xml")), true)
   end
@@ -17,10 +17,10 @@ describe "StaticImageAggregator" do
     ingest("test:screen_image", fixture( File.join("FOXML", "resource-screen.xml")), true)
     ingest("test:max_image", fixture( File.join("FOXML", "resource-max.xml")), true)
     @fixtureobj = StaticImageAggregator.load_instance( "test:si_agg")
-    @fixtureobj.update_index
-    Resource.load_instance("test:thumb_image").update_index
-    Resource.load_instance("test:screen_image").update_index
-    Resource.load_instance("test:max_image").update_index
+    @fixtureobj.send :update_index
+    Resource.load_instance("test:thumb_image").send :update_index
+    Resource.load_instance("test:screen_image").send :update_index
+    Resource.load_instance("test:max_image").send :update_index
   end
   
   after(:each) do

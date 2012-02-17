@@ -1,10 +1,9 @@
-require 'cul'
 module Cul::Scv::Hydra::Controllers
 module StaticImageAggregators
   extend ActiveSupport::Concern
   
   include Hydra::AssetsControllerHelper
-  include Cul::ResourcesHelper  
+  include Cul::Scv::Hydra::Controllers::Helpers::ResourcesHelperBehavior  
   include Hydra::RepositoryController  
   include MediaShelf::ActiveFedoraHelper
   include Blacklight::SolrHelper

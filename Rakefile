@@ -1,22 +1,22 @@
 require 'rubygems'
+require 'rspec'
+require 'rake/testtask'
+require 'cul_scv_hydra'
 begin
   require 'bundler'
 rescue LoadError
   puts 'You must `gem install bundler` and `bundle install` to run rake tasks'
 end
-require File.expand_path('../config/application', __FILE__)
 require 'rake'
 
-CulScvHydra::Application.load_tasks
-
-require 'spec/rake/spectask'
+# require 'spec/rake/spectask'
 Spec::Rake::SpecTask.new(:spec) do |spec|
-  spec.libs << 'lib' << 'spec'
-  spec.spec_files = FileList['spec/**/*_spec.rb']
+  #spec.libs << 'lib' << 'spec'
+  spec.pattern = 'spec/**/*_spec.rb'
 end
 
 Spec::Rake::SpecTask.new(:rcov) do |spec|
-  spec.libs << 'lib' << 'spec'
+  #spec.libs << 'lib' << 'spec'
   spec.pattern = 'spec/**/*_spec.rb'
   spec.rcov = true
 end

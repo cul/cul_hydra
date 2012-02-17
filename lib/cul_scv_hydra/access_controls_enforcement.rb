@@ -1,4 +1,4 @@
-module Cul::AccessControlsEnforcement
+module Cul::Scv::Hydra::AccessControlsEnforcement
 
   private
 

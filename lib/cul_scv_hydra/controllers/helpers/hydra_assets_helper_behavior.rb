@@ -18,7 +18,7 @@ module Cul::Scv::Hydra::Helpers::HydraAssetsHelperBehavior
     if obj.nil? || obj.file_objects.empty?
       return ""
     else
-       fobj = Cul::Model::Core::Resource.load_instance_from_solr(obj.file_objects.first.pid)
+       fobj = Resource.load_instance_from_solr(obj.file_objects.first.pid)
        fad = ""
        unless fobj.nil?
          unless fobj.datastreams["descMetadata"].nil?

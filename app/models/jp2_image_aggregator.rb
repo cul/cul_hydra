@@ -2,9 +2,10 @@ require "active-fedora"
 require "hydra"
 class JP2ImageAggregator < ::ActiveFedora::Base
   extend ActiveModel::Callbacks
+  include ::ActiveFedora::Relationships
   include ::Hydra::ModelMethods
-  include Cul::Scv::Hydra::ActiveFedora::ModelMethods
-  include Cul::Scv::Hydra::ActiveFedora::Model::Aggregator::ModelMethods
+  include Cul::Scv::Hydra::ActiveFedora::Model
+  include Cul::Scv::Hydra::ActiveFedora::Model::Aggregator
 
   has_datastream :name => "SOURCE", :type=>::ActiveFedora::Datastream, :mimeType=>"image/jp2", :controlGroup=>'E'
 

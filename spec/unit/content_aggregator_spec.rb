@@ -4,14 +4,14 @@ describe "ContentAggregator" do
   
   before(:all) do
     @memberobj = ingest("test:si_agg", fixture( File.join("FOXML", "static-image-aggregator.xml")), true)
-    @memberobj.update_index
+    @memberobj.send :update_index
   end
   
   before(:each) do
     @foxml = fixture( File.join("FOXML", "content-aggregator.xml"))
     ingest("test:c_agg", fixture( File.join("FOXML", "content-aggregator.xml")), true)
     @fixtureobj = ContentAggregator.load_instance( "test:c_agg")
-    @fixtureobj.update_index
+    @fixtureobj.send :update_index
   end
   
   after(:each) do

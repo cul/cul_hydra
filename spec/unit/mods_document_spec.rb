@@ -9,6 +9,8 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
   before(:each) do
     @mock_inner = mock('inner object')
     @mock_repo = mock('repository')
+    @mock_ds = mock('datastream')
+    @mock_repo.stubs(:datastream).returns(@mock_datastream)
     @mock_repo.stubs(:datastream_dissemination=>'My Content')
     @mock_inner.stubs(:repository).returns(@mock_repo)
     @mock_inner.stubs(:pid)
@@ -73,7 +75,7 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
     it "should use Nokogiri to retrieve a NodeSet corresponding to the combination of term pointers and array/nodeset indexes" do
       @mods_item.find_by_terms( :access_condition ).length.should == 1
       @mods_item.find_by_terms( {:access_condition=>0} ).first.text.should == @mods_part.ng_xml.xpath('//oxns:accessCondition[@type="useAndReproduction"][1]', "oxns"=>"http://www.loc.gov/mods/v3").first.text
-      Cul::Scv::Hydra::Om::ModsDocument.terminology.xpath_with_indexes( :mods, {:title_info=>0}, :title ).should == '//oxns:mods/oxns:titleInfo[1]/oxns:title'
+      Cul::Scv::Hydra::Om::ModsDocument.terminology.xpath_with_indexes( :mods, {:main_title_info=>0}, :main_title ).should == '//oxns:mods/oxns:titleInfo[not(@type)][1]/oxns:title'
       # Nokogiri behaves unexpectedly
       #@mods_item.find_by_terms( {:title_info=>0}, :title ).length.should == 1
       @mods_item.find_by_terms( :title ).class.should == Nokogiri::XML::NodeSet
