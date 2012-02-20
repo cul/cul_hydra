@@ -75,39 +75,33 @@ describe "Resource" do
 
     it "should have a datastream called CONTENT" do
       test = Resource.load_instance(@newobj.pid)
-      test.datastreams['CONTENT'].nil?.should == false
-      (test.datastreams['CONTENT'].is_a? ActiveFedora::Datastream).should == true
+      test.datastreams['CONTENT'].nil?.should be_false
+      (test.datastreams['CONTENT'].is_a? ActiveFedora::Datastream).should be_true
     end
 
     it "should be able to find its sampling type" do
-      pred = @newobj.find_graph_predicate(:sampling_unit)
+      pred = ActiveFedora::Predicates.find_graph_predicate(:sampling_unit)
       found = 0
       query = RDF::Query.new({:subject=>{RDF::URI(pred) => :object }})
-      query.execute(@newobj.relationships).each { |stmt|
+      @newobj.relationships(RDF::URI(pred)).each { |object|
         found += 1
-        stmt[:object].should == RDF::URI('http://purl.oclc.org/NET/CUL/RESOURCE/STILLIMAGE/ASSESSMENT/NoAbsoluteSampling')
+        object.should == RDF::URI('http://purl.oclc.org/NET/CUL/RESOURCE/STILLIMAGE/ASSESSMENT/NoAbsoluteSampling')
       }
       found.should == 1
     end
 
     it "should be able to find its width" do
-      old_rel = false
-      @newobj.relationships.each_statement { |statement|
-        if statement.predicate == RDF::URI("http://purl.oclc.org/NET/CUL/RESOURCE/STILLIMAGE/BASIC/imageWidth")
-          old_rel = true
-        end
-      }
-      old_rel.should == true
+      @newobj.relationships(RDF::URI("http://purl.oclc.org/NET/CUL/RESOURCE/STILLIMAGE/BASIC/imageWidth")).length.should == 1
     end
 
     it "should be able to find its extent" do
-      pred = @newobj.find_graph_predicate(:extent)
+      pred = ActiveFedora::Predicates.find_graph_predicate(:extent)
       query = RDF::Query.new({:subject=>{pred => :object }})
-      preds = query.execute(@newobj.relationships)
+      values = @newobj.relationships(pred)
       found = 0
-      preds.each { |val|
+      values.each { |value|
         found += 1
-        val[:object].to_s.should == '15138'
+        value.to_s.should == '15138'
       }
       found.should == 1
     end

@@ -99,7 +99,7 @@ module Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer
   attr_accessor :field_mapper
   
   def to_solr(solr_doc = Hash.new, field_mapper = self.field_mapper) # :nodoc:
-    Solrizer::XML::TerminologyBasedSolrizer.solrize(self, solr_doc, field_mapper)
+    ::Solrizer::XML::TerminologyBasedSolrizer.solrize(self, solr_doc, field_mapper)
   end
   
   def solrize_term(term, solr_doc = Hash.new, field_mapper = self.field_mapper, opts={})

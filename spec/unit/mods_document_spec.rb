@@ -143,23 +143,22 @@ src
       passed.should == true
     end
     it "should produce equivalent xml when built up programatically" do
-      pending "none attribute problem"
       built = Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner,'descMetadata')
       built.ng_xml = Cul::Scv::Hydra::Om::ModsDocument.xml_template
       built.update_values({[:identifier] => "prd.custord.040148"})
       built.update_values({[:title] => "Manuscript, unidentified"})
       built.update_values({[:type_of_resource] => "text"})
-      built.update_values({[:access_condition] => "Columbia Libraries Staff Use Only."})
       built.update_values({[:physical_description, :form_marc] => "electronic"})
-      built.update_values({[:physical_description, :form_nomarc] => "books"})
+      built.update_values({[:physical_description, :form_aat] => "books"})
       built.update_values({[:physical_description, :extent] => "4 item(s)"})
       built.update_values({[:physical_description, :reformatting_quality] => "access"})
       built.update_values({[:physical_description, :internet_media_type] => "image/tiff"})
       built.update_values({[:physical_description, :digital_origin] => "reformatted digital"})
       built.update_values({[:location, :repo_code] => "NNC-RB"})
       built.update_values({[:location, :repo_text] => "Rare Book and Manuscript Library, Columbia University"})
-      built.update_values({[:project_text] => "Customer Order Collection"})
+      built.update_values({[:lib_project] => "Customer Order Collection"})
       built.update_values({[:note] => "Original PRD customer order number: 040148"})
+      built.update_values({[:access_condition] => "Columbia Libraries Staff Use Only."})
       built.update_values({[:record_info, :record_creation_date] => "2010-07-12"})
       built.update_values({[:language_code] => "eng"})
       built.update_values({[:record_info,:record_content_source]=> "NNC"})
@@ -184,10 +183,9 @@ ml
       built.ng_xml.should be_equivalent_to(parsed)
     end
     it "should produce equivalent xml for physical location" do
-      pending "none attribute problem"
       built = Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner, 'descMetadata')
       built.ng_xml = Cul::Scv::Hydra::Om::ModsDocument.xml_template
-      built.update_values({[:location, :lib_repo] => "NNC-RB"})
+      built.update_values({[:location, :repo_code] => "NNC-RB"})
       built.update_values({[:location, :repo_text] => "Rare Book and Manuscript Library, Columbia University"})
       parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-physical-location.xml")))
       built.ng_xml.should be_equivalent_to(parsed)

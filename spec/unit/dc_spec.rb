@@ -6,6 +6,7 @@ describe "Cul::Scv::Hydra::Om::DCMetadata" do
     @mock_inner = mock('inner object')
     @mock_repo = mock('repository')
     @mock_repo.stubs(:datastream_dissemination=>'My Content')
+    @mock_repo.stubs(:datastream=>'My Datastream')
     @mock_inner.stubs(:repository).returns(@mock_repo)
     @mock_inner.stubs(:pid)
   end

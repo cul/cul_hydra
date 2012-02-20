@@ -45,15 +45,11 @@ module Resource
         subject = RDF::URI(internal_uri)
         predicate = RDF::URI("#{node.namespace.href}#{node.name}")
         query = RDF::Query.new({ :subject => {predicate => :object}})
-        ptr = query.execute(relationships)
-        ptr.each { |stmt|
-          if is_literal
-            relationships.delete RDF::Statement.new(subject, predicate, RDF::Literal(stmt[:object]))
-          else
-            relationships.delete RDF::Statement.new(subject, predicate, RDF::URI(stmt[:object]))
-          end
+        relationships(predicate).dup.each { |stmt|
+          relationships.delete(stmt)
         }
-        self.relationships.insert RDF::Statement.new(subject, predicate,object)
+        add_relationship(predicate,object, is_literal)
+        relationships_are_dirty=true
       }
       # add mimetype to DC:format values
       self.datastreams['DC'].update_values({[:format] => mime})

@@ -60,8 +60,7 @@ module Model
     klass.pid_namespace + ":" + klass.name.split("::")[-1]
   end
   
-  def to_solr(solr_doc = Hash.new, opts={})
-    sdoc = super
+  def has_desc?
     has_desc = false
     begin
       has_desc = self.datastreams.include? "descMetadata"
@@ -70,10 +69,15 @@ module Model
     rescue
       has_desc = false
     end
-    if has_desc
-      sdoc["descriptor"] = ["mods"]
+    has_desc
+  end
+  
+  def to_solr(solr_doc = Hash.new, opts={})
+    sdoc = super
+    if has_desc?
+      sdoc["descriptor_s"] = ["mods"]
     else
-      sdoc["descriptor"] = ["dublin core"]
+      sdoc["descriptor_s"] = ["dublin core"]
     end
     # if no mods, pull some values from DC
     if not (sdoc["title_display"] and sdoc["title_display"].length > 0)
