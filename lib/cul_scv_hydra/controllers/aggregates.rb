@@ -1,10 +1,11 @@
-require 'cul'
+require 'cul_scv_hydra/controllers/aggregator_controller_helper'
+require 'cul_scv_hydra/controllers/helpers/resources_helper_behavior'
 module Cul::Scv::Hydra::Controllers
 module Aggregates
   extend ActiveSupport::Concern
   include Hydra::AssetsControllerHelper
-  include Cul::AggregatorControllerHelper
-  include Cul::ResourcesHelper  
+  include Cul::Scv::Hydra::Controllers::AggregatorControllerHelper
+  include Cul::Scv::Hydra::Controllers::Helpers::ResourcesHelperBehavior  
   include Hydra::RepositoryController  
   include MediaShelf::ActiveFedoraHelper
   include Blacklight::SolrHelper

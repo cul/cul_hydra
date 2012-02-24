@@ -3,6 +3,7 @@ require "cul_scv_hydra/active_fedora"
 require "hydra"
 module Cul::Scv::Hydra::ActiveFedora::Model
 class DcDocument < ::ActiveFedora::Base
+  include ::ActiveFedora::Relationships
   include ::Hydra::ModelMethods
   include Cul::Scv::Hydra::ActiveFedora::Model::Common
   include Cul::Scv::Hydra::ActiveFedora::Model

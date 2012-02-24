@@ -1,8 +1,9 @@
-require 'cul'
+require 'cul_scv_hydra/controllers/aggregator_controller_helper'
+require 'cul_scv_hydra/controllers/helpers/active_fedora_helper_behavior'
 module Cul::Scv::Hydra
 module Catalog
-  include Cul::AggregatorControllerHelper
-  include Cul::ActiveFedoraHelper
+  include Cul::Scv::Hydra::Controllers::AggregatorControllerHelper
+  include Cul::Scv::Hydra::Controllers::Helpers::ActiveFedoraHelperBehavior
   before_filter :require_solr, :require_fedora, :only=>[:show, :edit, :index, :delete]
   before_filter :load_resources, :only=>[:show, :edit]
   def edit

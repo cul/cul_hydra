@@ -1,5 +1,5 @@
 require 'active-fedora'
-module Cul
+module Cul::Scv::Hydra::Controllers
 module AggregatorControllerHelper
   def load_resources
     if params.has_key? :asset_id

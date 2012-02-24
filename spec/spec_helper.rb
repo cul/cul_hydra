@@ -1,21 +1,25 @@
 ENV["environment"] ||= 'test'
 ENV["RAILS_ENV"] ||= 'test'
-require 'rails'
-require 'rails/all'
-require 'cul_scv_hydra'
-Dir.glob("app/models/*.rb").each {|model| require model}
-require 'rspec/rails'
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'app','models'))
+libs = File.expand_path(File.dirname(__FILE__) + '/../lib/*.rb')
+Dir.glob(libs).each {|lib| require lib}
+models = File.expand_path(File.dirname(__FILE__) + '/../app/models/*.rb')
+Dir.glob(models).each {|model| require model}
 #require 'om'
+require 'rails'
+require 'rails/all'
 require 'rspec'
 require 'rspec/autorun'
+require 'rspec/rails'
 require 'equivalent-xml/rspec_matchers'
-require 'ruby-debug'
+#require 'ruby-debug'
+require 'cul_scv_hydra'
 
 ActiveFedora.init(:fedora_config_path=>File.join(File.dirname(__FILE__), "..", "config", "fedora.yml"))
 
-Spec::Runner.configure do |config|
+RSpec::Runner.configure do |config|
   config.mock_with :mocha
 end
 

@@ -2,6 +2,7 @@ require "active-fedora"
 require "hydra"
 class GenericObject < ::ActiveFedora::Base
   extend ActiveModel::Callbacks
+  include ::ActiveFedora::DatastreamCollections
   include ::ActiveFedora::Relationships
   include ::Hydra::ModelMethods
   include Cul::Scv::Hydra::ActiveFedora::Model

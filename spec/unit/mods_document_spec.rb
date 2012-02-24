@@ -10,6 +10,7 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
     @mock_inner = mock('inner object')
     @mock_repo = mock('repository')
     @mock_ds = mock('datastream')
+    @mock_repo.stubs(:config)
     @mock_repo.stubs(:datastream).returns(@mock_datastream)
     @mock_repo.stubs(:datastream_dissemination=>'My Content')
     @mock_inner.stubs(:repository).returns(@mock_repo)
