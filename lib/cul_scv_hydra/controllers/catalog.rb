@@ -15,3 +15,4 @@ module Catalog
     enforce_edit_permissions
   end
 end
+end
