@@ -1,6 +1,6 @@
 require 'mediashelf/active_fedora_helper'
 
-module Cul::Scv::Hydra::Helpers::HydraAssetsHelperBehavior
+module Cul::Scv::Hydra::Controllers::Helpers::HydraAssetsHelperBehavior
   include MediaShelf::ActiveFedoraHelper
 
   def link_to_create_asset(link_label, content_type, container_id=nil)

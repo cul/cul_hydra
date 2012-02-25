@@ -1,7 +1,8 @@
+require 'cul_scv_hydra/controllers/helpers/application_helper_behavior'
 module Cul::Scv::Hydra::Controllers
   module Datastreams
   extend ActiveSupport::Concern
-  include ApplicationHelper
+  include Cul::Scv::Hydra::Controllers::Helpers::ApplicationHelperBehavior
   include Hydra::AssetsControllerHelper
   include Hydra::AssetsControllerHelper
   include Hydra::FileAssetsHelper  

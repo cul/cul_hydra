@@ -1,10 +1,9 @@
-require 'cul'
+require 'cul_scv_hydra'
 require 'json'
 module Cul::Scv::Hydra::Controllers
 module Terms
   extend ActiveSupport::Concern
   include Blacklight::SolrHelper
-  include Stanford::SolrHelper
   include MediaShelf::ActiveFedoraHelper
   included do
     self.before_filter :require_solr, :only=>[:index]

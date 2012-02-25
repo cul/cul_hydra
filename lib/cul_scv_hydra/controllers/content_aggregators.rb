@@ -1,5 +1,6 @@
-require 'cul_Scv_hydra/controllers/helpers/resources_helper_behavior'
-module Cul::Scv:Hydra::Controllers
+require 'hydra'
+require 'cul_scv_hydra/controllers/helpers/resources_helper_behavior'
+module Cul::Scv::Hydra::Controllers
  module ContentAggregators
   extend ActiveSupport::Concern
   include Hydra::AssetsControllerHelper
