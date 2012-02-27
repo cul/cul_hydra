@@ -10,7 +10,6 @@ module Aggregates
   include MediaShelf::ActiveFedoraHelper
   include Blacklight::SolrHelper
   included do
-    before_filter :require_fedora
     before_filter :require_solr, :only=>[:index, :create, :show, :destroy]
     before_filter :load_resources, :only=>[:index]
     prepend_before_filter :sanitize_update_params

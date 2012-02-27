@@ -6,7 +6,7 @@ module Catalog
   include Cul::Scv::Hydra::Controllers::AggregatorControllerHelper
   include Cul::Scv::Hydra::Controllers::Helpers::ActiveFedoraHelperBehavior
   included do
-    before_filter :require_solr, :require_fedora, :only=>[:show, :edit, :index, :delete]
+    before_filter :require_solr, :only=>[:show, :edit, :index, :delete]
     before_filter :load_resources, :only=>[:show, :edit]
   end
   def edit

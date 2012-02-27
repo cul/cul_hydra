@@ -9,9 +9,8 @@ module Cul::Scv::Hydra::Controllers
   include MediaShelf::ActiveFedoraHelper
   include Blacklight::SolrHelper
   included do
-    self.before_filter :require_fedora
-    self.before_filter :require_solr, :only=>[:index, :new, :create, :edit, :show, :destroy]
-    self.prepend_before_filter :sanitize_update_params
+    before_filter :require_solr, :only=>[:index, :new, :create, :edit, :show, :destroy]
+    prepend_before_filter :sanitize_update_params
   end
   
   def index
