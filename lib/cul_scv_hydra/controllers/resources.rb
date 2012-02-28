@@ -7,7 +7,6 @@ module Resources
   include MediaShelf::ActiveFedoraHelper
   include Blacklight::SolrHelper
   included do
-    before_filter :require_fedora
     before_filter :require_solr, :only=>[:index, :create, :show, :destroy]
     prepend_before_filter :sanitize_update_params
   end
@@ -37,11 +36,6 @@ module Resources
   end
   
   def new
-=begin
-From resources/_new.html.haml
-=render :partial=>"fluid_infusion/uploader"
-=render :partial=>"fluid_infusion/uploader_js"
-=end
     render :partial=>"new", :layout=>false
   end
   
@@ -51,21 +45,7 @@ From resources/_new.html.haml
   # * the method will redirect to the container object's edit view after saving
   def create
     if params.has_key?(:Filedata) or params.has_key?(:Fileurl)
-      @resource = create_and_save_resource_from_params
-      apply_depositor_metadata(@resource)
-      @resource.save
-      flash[:notice] = "The file #{params[:Filename]} has been saved in <a href=\"#{asset_url(@resource.pid)}\">#{@resource.pid}</a>."
-            
-      if !params[:container_id].nil?
-        associate_resource_with_container
-      end
-    
-      ## Apply any posted file metadata
-      unless params[:asset].nil?
-        logger.debug("applying submitted file metadata: #{@sanitized_params.inspect}")
-        apply_posted_file_metadata
-      end
-      @resource.save
+      flash[:notice] = process_files # "The file #{params[:Filename]} has been saved in <a href=\"#{asset_url(@resource.pid)}\">#{@resource.pid}</a>."
     else
       flash[:notice] = "You must specify a file to upload."
     end
@@ -79,6 +59,24 @@ From resources/_new.html.haml
     redirect_to redirect_params
   end
   
+  def process_files
+    @resources = create_and_save_resources_from_params
+    notice = []
+    @resources.each do |resource|
+      apply_depositor_metadata(resource)
+      notice << "The file #{resource.label} has been saved in <a href=\"#{asset_url(resource.pid)}\">#{resource.pid}</a>."
+      if !params[:container_id].nil?
+        associate_resource_with_container(resource,params[:container_id])
+      end
+      ## Apply any posted file metadata
+      unless params[:asset].nil?
+        logger.debug("applying submitted file metadata: #{@sanitized_params.inspect}")
+        apply_posted_file_metadata(resource)
+      end
+      resource.save
+      logger.debug("Created #{resource.pid}.")
+    end
+  end
   # Common destroy method for all AssetsControllers 
   def destroy
     # The correct implementation, with garbage collection:

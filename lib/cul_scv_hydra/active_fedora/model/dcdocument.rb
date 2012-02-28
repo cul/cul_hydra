@@ -6,20 +6,11 @@ class DcDocument < ::ActiveFedora::Base
   include ::ActiveFedora::Relationships
   include ::Hydra::ModelMethods
   include Cul::Scv::Hydra::ActiveFedora::Model::Common
-  include Cul::Scv::Hydra::ActiveFedora::Model
   alias :file_objects :resources
 
-  # metadata #
-  has_metadata :name => "DC", :type=>Cul::Scv::Hydra::Om::DCMetadata
-  has_metadata :name => "descMetadata", :type=>Cul::Scv::Hydra::Om::ModsDocument
-  has_metadata :name => "rightsMetadata", :type=>Hydra::RightsMetadata
   # relationships #
   has_relationship "containers", :cul_member_of
   has_relationship "parts", :cul_member_of, :inbound => true
-
-  def self.pid_namespace
-    "ldpd"
-  end
 
   def self.load_instance_from_solr(pid,solr_doc=nil)
     if solr_doc.nil?
@@ -48,14 +39,5 @@ class DcDocument < ::ActiveFedora::Base
     obj
   end
   
-
-    def resources(opts={})
-      if self.respond_to? :parts
-        parts(opts)
-      else
-        logger.warn "parts not defined; was this a SemanticNode?"
-        []
-      end
-    end
 end
 end

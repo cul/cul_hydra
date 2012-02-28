@@ -5,33 +5,31 @@ require "mime/types"
 require "uri"
 class Resource < ::ActiveFedora::Base
   extend ActiveModel::Callbacks
+  
   include ::ActiveFedora::DatastreamCollections
   include ::ActiveFedora::Relationships
   include ::Hydra::ModelMethods
-  include Cul::Scv::Hydra::ActiveFedora::Model
+  include Cul::Scv::Hydra::ActiveFedora::Model::Common
   include Cul::Scv::Hydra::ActiveFedora::Model::Resource
-  define_model_callbacks :create
-  after_create :resource!
 
   alias :file_objects :resources
-  def create
-    run_callbacks :create do
-      super
-    end
-  end
+
   def route_as
     "resource"
   end
+
   def index_type_label
     "FILE RESOURCE"
   end
+
   def to_solr(solr_doc = Hash.new, opts={})
-    sdoc = super
-    unless sdoc["extent_s"] || self.datastreams["CONTENT"].nil?
-      sdoc["extent_s"] = [self.datastreams["CONTENT"].size]
+    super
+    unless solr_doc["extent_s"] || self.datastreams["CONTENT"].nil?
+      solr_doc["extent_s"] = [self.datastreams["CONTENT"].size]
     end
-    sdoc
+    solr_doc
   end
+
   def set_title_and_label(new_title, opts={})
       if opts[:only_if_blank]
         if self.label.nil? || self.label.empty?

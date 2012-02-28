@@ -9,13 +9,5 @@ module Catalog
     before_filter :require_solr, :only=>[:show, :edit, :index, :delete]
     before_filter :load_resources, :only=>[:show, :edit]
   end
-  def edit
-    if session[:scripts].blank?
-      session[:scripts] = params[:combined] == "true"
-    end 
-    show_without_customizations
-    remove_unapi
-    enforce_edit_permissions
-  end
 end
 end

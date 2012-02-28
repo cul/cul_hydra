@@ -1,7 +1,7 @@
 require 'active-fedora'
 module Cul::Scv::Hydra::Controllers
 module AggregatorControllerHelper
-  def load_resources
+  def load_fedora_document
     if params.has_key? :asset_id
       af_base = ActiveFedora::Base.load_instance(params[:asset_id])
     else
@@ -13,7 +13,15 @@ module AggregatorControllerHelper
     end
 
     @document_fedora = af_base.adapt_to the_model
-    @resources = @document_fedora.resources(:response_format=>:solr)
+  end
+  def load_resources
+    @document_fedora ||= load_fedora_document
+    if @document_fedora.is_a? Cul::Scv::Hydra::ActiveFedora::Model::Aggregator
+      @resources = @document_fedora.resources
+    else
+      logger.debug "Only aggregators have parts!"
+    end
+    @resources
   end
 end
 end

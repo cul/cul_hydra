@@ -18,10 +18,18 @@ module Resource
       has_relationship "y_sampling", :y_sampling
       has_relationship "sampling_unit", :sampling_unit
       has_relationship "extent", :extent
+      
+      after_create :resource!      
     end
     if self.respond_to? :has_datastream
       has_datastream :name => "CONTENT", :type=>::ActiveFedora::Datastream
     end
+  end
+  
+  def resource!
+    add_relationship(:rdf_type, Cul::Scv::Hydra::ActiveFedora::RESOURCE_TYPE.to_s)
+    @metadata_is_dirty = true
+    update
   end
 
   def add_content_blob(blob, opts)

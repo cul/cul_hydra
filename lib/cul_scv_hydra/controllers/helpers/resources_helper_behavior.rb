@@ -16,7 +16,7 @@ module ResourcesHelperBehavior
   # Creates a Resource, adding the posted blob to the Resource's datastreams and saves the Resource
   #
   # @return [Resource] the Resource  
-  def create_and_save_resource_from_params
+  def create_and_save_resources_from_params
     if params.has_key?(:Fileurl)
       # parse url for file name, default to index.html
       file_url = params[:Fileurl]
@@ -38,28 +38,29 @@ module ResourcesHelperBehavior
         end
       end
       # add filename and resource to params
-      params[:Filedata] = blob
-      params[:Filename] = file_name
+      params[:Filedata] = ActionDispatch::Http::UploadedFile.new(:tempfile=>blob,:filename=>file_name,:type=>mime_type(file_name))
     end
     if params.has_key?(:Filedata)
-      @resource = create_resource_from_params
-      @resource.save
-      @resource.refresh
-      add_posted_blob_to_resource
-      @resource.save
-      associate_resource_with_container
-      @resource.save
-      @resource.update_index
-      return @resource
+      @resources = []
+      params[:Filedata].each do |file|
+        file.content_type = mime_type(file.original_filename) unless file.content_type
+        @resource = create_resource_from_file(file)
+        @resource.save
+        @resources << @resource
+        @resource.refresh
+        add_posted_blob_to_resource(file, @resource)
+        @resource.save
+      end
     else
       render :text => "400 Bad Request", :status => 400
     end
+    @resources
   end
 
-  def create_resource_from_params
-    file_name = filename_from_params
+  def create_resource_from_file(file)
+    file_name = filename_for(file)
     resource = Resource.new
-    resource.datastreams["rightsMetadata"].content = Hydra::RightsMetadata.xml_template
+    resource.datastreams["rightsMetadata"].ng_xml = Hydra::RightsMetadata.xml_template
     resource.label = file_name
     resource.datastreams["DC"].update_values([:source]=>[file_name])
     resource
@@ -70,22 +71,17 @@ module ResourcesHelperBehavior
   #
   # @param [Resource] the Resource to add the blob to
   # @return [Resource] the Resource  
-  def add_posted_blob_to_resource(resource=@resource)
-    file_name = filename_from_params
-    _mime = mime_type(file_name)
-    resource.add_content_blob(posted_file, :file_name=>file_name, :mime_type=>_mime)
+  def add_posted_blob_to_resource(file, resource=@resource)
+    resource.add_content_blob(file.tempfile, :file_name=>file.original_filename, :mime_type=>file.content_type)
   end
   
   # Associate the new file resource with its container
-  def associate_resource_with_container(resource=nil, container_id=nil)
+  def associate_resource_with_container(resource=@resource, container_id=nil)
     if container_id.nil?
       container_id = params[:container_id]
     end
-    if resource.nil?
-      resource = @resource
-    end
+    container_id = "info:fedora/#{container_id}" unless container_id =~ /info:fedora\/.+/
     resource.containers_append(container_id)
-    #resource.add_relationship(:cul_member_of, container_id)
     resource.datastreams["RELS-EXT"].dirty = true
   end
   
@@ -102,26 +98,15 @@ module ResourcesHelperBehavior
   end
   
   # Apply any posted file metadata to the file asset
-  def apply_posted_file_metadata         
-    @metadata_update_response = update_document(@resource, @sanitized_params)
+  def apply_posted_file_metadata(resource=@resource)         
+    @metadata_update_response = update_document(resource, @sanitized_params)
   end
   
   
-  # The posted File 
-  # @return [File] the posted file.  Defaults to nil if no file was posted.
-  def posted_file
-    params[:Filedata]
-  end
-  
-  # A best-guess filename based on POST params
+  # A best-guess filename
   # If Filename was submitted, it uses that.  Otherwise, it calls +original_filename+ on the posted file
-  def filename_from_params
-    if !params[:Filename].nil?
-      file_name = params[:Filename]      
-    else
-      file_name = posted_file.original_filename
-      params[:Filename] = file_name
-    end
+  def filename_for(file)
+    file.instance_variable_get(:@original_filename) || file.original_filename
   end
   
   private
