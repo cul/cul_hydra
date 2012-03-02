@@ -138,11 +138,10 @@ src
     end
 
     it "should produce equivalent xml when built up programatically" do
-      pending "none attribute problem"
       built = Cul::Scv::Hydra::Om::DCMetadata.new(@mock_inner,'DC')
       built.update_values({[:identifier] => "prd.custord.070103a"})
       built.update_values({[:title] => "With William Burroughs, image"})
-      built.update_values({[:type] => "Collection"})
+      built.update_values({[:dc_type] => "Collection"})
       opts = { :element_order => false, :normalize_whitespace => true }
       built.ng_xml.should be_equivalent_to(@fixture.ng_xml)
     end

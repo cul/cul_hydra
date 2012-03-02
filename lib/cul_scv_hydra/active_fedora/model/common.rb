@@ -18,6 +18,12 @@ module Cul::Scv::Hydra::ActiveFedora::Model
       def pid_namespace
         "ldpd"
       end
+    end  
+    
+    def initialize(attrs = nil)
+      attrs = {} if attrs.nil?
+      attrs[:namespace] = self.class.pid_namespace unless attrs[:namespace]
+      super
     end
     
     def create
@@ -25,7 +31,7 @@ module Cul::Scv::Hydra::ActiveFedora::Model
         super
       end
     end
-    
+
     def resources(opts={})
       if self.respond_to? :parts # aggregator
         opts = {:rows=>25,:response_format=>:solr}.merge(opts)
@@ -53,6 +59,16 @@ module Cul::Scv::Hydra::ActiveFedora::Model
         []
       end
     end
+
+    def members(opts={})
+      resources(opts)
+    end
+    
+    def members_ids(opts={})
+      opts = opts.merge({:response_format=>:id_array})
+      resources(opts)
+    end
+    
     
     def cmodel_pid(klass)
       klass.pid_namespace + ":" + klass.name.split("::")[-1]
