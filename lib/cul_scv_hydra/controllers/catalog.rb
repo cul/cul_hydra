@@ -3,9 +3,9 @@ require 'cul_scv_hydra/controllers/helpers/active_fedora_helper_behavior'
 module Cul::Scv::Hydra::Controllers
 module Catalog
   extend ActiveSupport::Concern
-  include Cul::Scv::Hydra::Controllers::AggregatorControllerHelper
-  include Cul::Scv::Hydra::Controllers::Helpers::ActiveFedoraHelperBehavior
   included do
+    include Cul::Scv::Hydra::Controllers::AggregatorControllerHelper
+    include Cul::Scv::Hydra::Controllers::Helpers::ActiveFedoraHelperBehavior
     before_filter :require_solr, :only=>[:show, :edit, :index, :delete]
     before_filter :load_resources, :only=>[:show, :edit]
   end

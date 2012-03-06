@@ -38,7 +38,7 @@ module ResourcesHelperBehavior
         end
       end
       # add filename and resource to params
-      params[:Filedata] = ActionDispatch::Http::UploadedFile.new(:tempfile=>blob,:filename=>file_name,:type=>mime_type(file_name))
+      params[:Filedata] = [ActionDispatch::Http::UploadedFile.new(:tempfile=>blob,:filename=>file_name,:type=>mime_type(file_name))]
     end
     if params.has_key?(:Filedata)
       @resources = []
@@ -56,14 +56,52 @@ module ResourcesHelperBehavior
     end
     @resources
   end
-
-  def create_resource_from_file(file)
+  
+  def update_resource_from_params
+    if params.has_key?(:Fileurl)
+      # parse url for file name, default to index.html
+      file_url = params[:Fileurl]
+      file_url = URI.parse(file_url) unless file_url.nil?
+      file_name = 'index.html'
+      if file_url.scheme
+        file_name = file_url.path[1...file_url.path.length]
+      end
+      # download resource; override file name with header value if present
+      blob = Tempfile.new('temp')
+      blob.binmode
+      # download header? buffered writing?
+      response = Net::HTTP.get_response(file_url)
+      blob.write response.body
+      if response['Content-Disposition']
+        header = response['Content-Disposition']
+        if header =~ /filename=\"?(\w+)\"?/
+          file_name = $1
+        end
+      end
+      # add filename and resource to params
+      params[:Filedata] = ActionDispatch::Http::UploadedFile.new(:tempfile=>blob,:filename=>file_name,:type=>mime_type(file_name))
+    end
+    if params.has_key?(:Filedata)
+      file = params[:Filedata]
+      file.content_type = mime_type(file.original_filename) unless file.content_type
+      update_resource_from_file(@document_fedora,file)
+      add_posted_blob_to_resource(file, @document_fedora)
+      @document_fedora.save
+    else
+      render :text => "400 Bad Request", :status => 400
+    end
+    @document_fedora
+  end
+  def update_resource_from_file(resource,file)
     file_name = filename_for(file)
+    resource.label = file_name
+    resource.datastreams["DC"].update_values([:source=>0]=>[file_name])
+    resource
+  end
+  def create_resource_from_file(file)
     resource = Resource.new
     resource.datastreams["rightsMetadata"].ng_xml = Hydra::RightsMetadata.xml_template
-    resource.label = file_name
-    resource.datastreams["DC"].update_values([:source]=>[file_name])
-    resource
+    update_resource_from_file(resource,file)
   end
   
   # Puts the contents of params[:Filedata] (posted blob) into a datastream within the given @resource

@@ -3,10 +3,10 @@ require 'json'
 module Cul::Scv::Hydra::Controllers
 module Terms
   extend ActiveSupport::Concern
-  include Blacklight::SolrHelper
-  include MediaShelf::ActiveFedoraHelper
   included do
-    self.before_filter :require_solr, :only=>[:index]
+    include Blacklight::SolrHelper
+    include MediaShelf::ActiveFedoraHelper
+    before_filter :require_solr, :only=>[:index]
   end
 
   def index

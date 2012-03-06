@@ -2,15 +2,15 @@ require 'cul_scv_hydra/controllers/helpers/application_helper_behavior'
 module Cul::Scv::Hydra::Controllers
   module Datastreams
   extend ActiveSupport::Concern
-  include Cul::Scv::Hydra::Controllers::Helpers::ApplicationHelperBehavior
-  include Hydra::AssetsControllerHelper
-  include Hydra::AssetsControllerHelper
-  include Hydra::FileAssetsHelper  
-  include Hydra::RepositoryController  
-  include MediaShelf::ActiveFedoraHelper
-  include Blacklight::SolrHelper
 
   included do
+    include Cul::Scv::Hydra::Controllers::Helpers::ApplicationHelperBehavior
+    include Hydra::AssetsControllerHelper
+    include Hydra::AssetsControllerHelper
+    include Hydra::FileAssetsHelper  
+    include Hydra::RepositoryController  
+    include MediaShelf::ActiveFedoraHelper
+    include Blacklight::SolrHelper
     before_filter :require_solr, :only=>[:index, :create, :show, :destroy]
     prepend_before_filter :sanitize_update_params
   end

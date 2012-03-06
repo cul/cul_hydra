@@ -1,13 +1,16 @@
 module Cul::Scv::Hydra::Controllers
 module Resources
   extend ActiveSupport::Concern
-  include Hydra::AssetsControllerHelper
-  include Cul::Scv::Hydra::Controllers::Helpers::ResourcesHelperBehavior
-  include Hydra::RepositoryController  
-  include MediaShelf::ActiveFedoraHelper
-  include Blacklight::SolrHelper
+
   included do
+    include Hydra::AssetsControllerHelper
+    include Cul::Scv::Hydra::Controllers::Helpers::ResourcesHelperBehavior
+    include Hydra::Controller  
+    include Hydra::RepositoryController  
+    include MediaShelf::ActiveFedoraHelper
+    include Blacklight::SolrHelper
     before_filter :require_solr, :only=>[:index, :create, :show, :destroy]
+    before_filter :load_fedora_document, :only=>[:update]
     prepend_before_filter :sanitize_update_params
   end
 
@@ -59,6 +62,21 @@ module Resources
     redirect_to redirect_params
   end
   
+  def update
+    if params.has_key?(:Filedata) or params.has_key?(:Fileurl)
+      flash[:notice] = update_file # "The file #{params[:Filename]} has been saved in <a href=\"#{asset_url(@resource.pid)}\">#{@resource.pid}</a>."
+    else
+      flash[:notice] = "You must specify a file to upload."
+    end
+    if !params[:id].nil?
+      redirect_params = {:controller=>"catalog", :id=>params[:id], :action=>:edit}
+    end
+    
+    redirect_params ||= {:action=>:index}
+    
+    redirect_to redirect_params
+  end
+    
   def process_files
     @resources = create_and_save_resources_from_params
     notice = []
@@ -76,6 +94,18 @@ module Resources
       resource.save
       logger.debug("Created #{resource.pid}.")
     end
+  end
+  
+  def update_file
+    update_resource_from_params
+    apply_depositor_metadata(@document_fedora)
+    notice << "The file #{@document_fedora.label} has been saved in <a href=\"#{asset_url(@document_fedora.pid)}\">#{@document_fedora.pid}</a>."
+    unless params[:asset].nil?
+      logger.debug("applying submitted file metadata: #{@sanitized_params.inspect}")
+      apply_posted_file_metadata(@document_fedora)
+    end
+    @document_fedora.save
+    logger.debug("Created #{@document_fedora.pid}.")
   end
   # Common destroy method for all AssetsControllers 
   def destroy
