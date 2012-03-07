@@ -22,7 +22,7 @@ module Resource
       after_create :resource!      
     end
     if self.respond_to? :has_datastream
-      has_datastream :name => "CONTENT", :type=>::ActiveFedora::Datastream
+      has_datastream :name => "CONTENT", :type=>::ActiveFedora::Datastream, :versionable => true
     end
   end
   module InstanceMethods

@@ -9,9 +9,9 @@ module Cul::Scv::Hydra::ActiveFedora::Model
 
       has_relationship "containers", :cul_member_of
       has_relationship "rdf_type", :rdf_type
-      has_metadata :name => "DC", :type=>Cul::Scv::Hydra::Om::DCMetadata
-      has_metadata :name => "descMetadata", :type=>Cul::Scv::Hydra::Om::ModsDocument
-      has_metadata :name => "rightsMetadata", :type=>::Hydra::RightsMetadata
+      has_metadata :name => "DC", :type=>Cul::Scv::Hydra::Om::DCMetadata, :versionable => true
+      has_metadata :name => "descMetadata", :type=>Cul::Scv::Hydra::Om::ModsDocument, :versionable => true
+      has_metadata :name => "rightsMetadata", :type=>::Hydra::RightsMetadata, :versionable => true
     end
     
     module ClassMethods
