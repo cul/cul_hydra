@@ -17,7 +17,7 @@ module Om
              :schema=>"http://www.loc.gov/standards/mods/v3/mods-3-4.xsd")
       
       t.main_title_info(:path=>'titleInfo', :index_as=>[:not_searchable], :attributes=>{:type=>:none}){
-        t.main_title(:path=>"title", :index_as=>[:displayable,:searchable, :sortable])
+        t.main_title(:path=>"title", :index_as=>[:displayable,:searchable])
       }
       
       t.search_title_info(:path=>'titleInfo', :index_as=>[:not_searchable]){
