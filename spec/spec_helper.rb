@@ -207,17 +207,22 @@ def as_node(data)
 end
 
 def ingest(pid, foxml, force=false)
- instance = ActiveFedora::RubydoraConnection.instance
- obj = instance.connection.find(pid)
+  @configs ||= YAML::load(File.open('config/fedora.yml'))
+  env = ENV['RAILS_ENV'] || 'test'
+  opts = @configs[env]
+  puts opts.inspect
+  @rubydora_conn ||= ActiveFedora::RubydoraConnection.new(opts)
+  puts @rubydora_conn.connection.profile
+  obj = @rubydora_conn.connection.find(pid)
   if obj.new?
-    instance.connection.ingest(:pid=>pid, :file=>foxml)
-    return ActiveFedora::Base.load_instance(pid)
+    @rubydora_conn.connection.ingest(:pid=>pid, :file=>foxml)
+    return ActiveFedora::Base.find(pid)
   else
-    base = ActiveFedora::Base.load_instance(pid)
+    base = ActiveFedora::Base.find(pid)
     if force
       base.delete
-      instance.connection.ingest(:pid=>pid, :file=>foxml)
-      return ActiveFedora::Base.load_instance(pid)
+      @rubydora_conn.connection.ingest(:pid=>pid, :file=>foxml)
+      return ActiveFedora::Base.find(pid)
     else
       return base
     end

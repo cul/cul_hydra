@@ -16,12 +16,15 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
     @mock_inner.stubs(:repository).returns(@mock_repo)
     @mock_inner.stubs(:pid)
     @fixturemods = Cul::Scv::Hydra::Om::ModsDocument.from_xml( fixture( File.join("CUL_MODS", "mods-item.xml") ) )
+    @fixturemods.digital_object= @mock_inner
     item_xml = fixture( File.join("CUL_MODS", "mods-item.xml") )
     @mods_item = Cul::Scv::Hydra::Om::ModsDocument.from_xml(item_xml)
+    @mods_item.digital_object= @mock_inner
     @mods_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-item.xml")))
     @mods_ns = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-ns.xml")))
     part_xml = fixture( File.join("CUL_MODS", "mods-part.xml") )
     @mods_part = Cul::Scv::Hydra::Om::ModsDocument.from_xml(part_xml)
+    @mods_part.digital_object= @mock_inner
   end
   
   after(:all) do

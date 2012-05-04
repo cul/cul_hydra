@@ -1,19 +1,21 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'rubydora'
 
 describe "Cul::Scv::Hydra::Om::DCMetadata" do
   
   before(:all) do
-    @mock_inner = mock('inner object')
-    @mock_repo = mock('repository')
-    @mock_repo.stubs(:config)
+    @mock_inner = mock('Rubydora::DigitalObject')
+    @mock_repo = mock('Rubydora::Repository', :config=>{})
+    @mock_repo.stubs(:config).returns({})
     @mock_repo.stubs(:datastream_dissemination=>'My Content')
     @mock_repo.stubs(:datastream=>'My Datastream')
     @mock_inner.stubs(:repository).returns(@mock_repo)
-    @mock_inner.stubs(:pid)
+    @mock_inner.stubs(:pid).returns('pid:do_not_use')
   end
   
   before(:each) do
     @fixture = Cul::Scv::Hydra::Om::DCMetadata.from_xml( fixture( File.join("CUL_DC", "dc.xml") ) )
+    @fixture.digital_object = @mock_inner
   end
   
   after(:all) do

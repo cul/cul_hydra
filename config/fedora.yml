@@ -1,6 +1,12 @@
 development:
-  url: http://fedoraAdmin:fedoraAdmin@127.0.0.1:8983/fedora
+  :url: http://127.0.0.1:8983/fedora
+  :user: fedoraAdmin
+  :password: fedoraAdmin
 test:
-  url: http://fedoraAdmin:fedoraAdmin@127.0.0.1:8983/fedora
+  :url: http://127.0.0.1:8983/fedora
+  :user: fedoraAdmin
+  :password: fedoraAdmin
 default:
-  url: http://fedoraAdmin:fedoraAdmin@127.0.0.1:8983/fedora
+  :url: http://127.0.0.1:8983/fedora
+  :user: fedoraAdmin
+  :password: fedoraAdmin
