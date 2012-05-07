@@ -5,7 +5,7 @@ describe "Cul::Scv::Hydra::Om::DCMetadata" do
   
   before(:all) do
     @mock_inner = mock('Rubydora::DigitalObject')
-    @mock_repo = mock('Rubydora::Repository', :config=>{})
+    @mock_repo = mock('Rubydora::Repository')
     @mock_repo.stubs(:config).returns({})
     @mock_repo.stubs(:datastream_dissemination=>'My Content')
     @mock_repo.stubs(:datastream=>'My Datastream')
