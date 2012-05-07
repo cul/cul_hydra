@@ -71,19 +71,38 @@ module Terms
 #   end
 #  end
 
-  def field_key_from(field_name, terminology)
-    # this is a hack, but necessary until/unless OM generates names differently
-   candidates = field_name.split('__')
+  def field_key_from(hier_field_name, t)
+   candidates = hier_field_name.split('_')
    field_key = []
-   candidates.each_with_index { |candidate, ix|
-     if (candidates[ix + 1] and candidates[ix + 1].match(/\d+/))
-       field_key << {OM.destringify(candidate) => Integer(candidates.delete_at(ix + 1))}
-     else
-       field_key << OM.destringify(candidate)
-     end
-   }
+   candidates.inject(field_key) {|ptrs, term| ptrs.push ( (term =~ /\d+/)? {ptrs.pop=>term.to_i} : ( ptrs.empty? ? term.to_sym : (ptrs.pop.to_s + "_" + term).to_sym ) ) }
    logger.debug field_key.inspect
-   field_key
+   return field_key if t.has_term? field_key
+   # pointers are probably from ambiguous underscores
+   amb = field_key.dup
+   field_key = []
+   amb.each do |candidate|
+     key = (candidate.is_a? Hash) ? candidate.keys.first : candidate
+     parts = key.to_s.split('_')
+     while !t.has_term?(parts.first) and parts.length > 1
+       np = (parts[0].to_s + '_' + parts[1].to_s ).to_sym
+       if t.has_term? [np]
+         field_key.push(np)
+       else
+         parts[1] = np
+         parts = parts[1,parts.length - 1]
+       end
+     end
+     if candidate.is_a? Hash
+       field_key.push({ parts[0] => candidate[candidate.keys.first] })
+     else
+       field_key.push parts[0]
+     end
+     if t.has_term? field_key
+       return field_key
+     else
+       raise "Couldn't generate pointer from term name going forward"
+     end
+   end
   end
 
   # ** largely copied from ActiveFedora::NokogiriDatastream.get_values **
