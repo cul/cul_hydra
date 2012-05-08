@@ -48,7 +48,6 @@ module Terms
       solr_params['terms.sort'] = params.fetch(:sort,'count')
       solr_params['terms.limit'] = -1
     end
-    logger.debug solr_params.inspect
     solr_response = Blacklight.solr.get 'terms', {:params => solr_params}
     result = []
     hash = {}
@@ -58,7 +57,6 @@ module Terms
         result << [_t[jx], _t[jx + 1]]
       }
     }
-    logger.debug result.inspect
     return result
   end
 
@@ -74,35 +72,70 @@ module Terms
   def field_key_from(hier_field_name, t)
    candidates = hier_field_name.split('_')
    field_key = []
-   candidates.inject(field_key) {|ptrs, term| ptrs.push ( (term =~ /\d+/)? {ptrs.pop=>term.to_i} : ( ptrs.empty? ? term.to_sym : (ptrs.pop.to_s + "_" + term).to_sym ) ) }
-   logger.debug field_key.inspect
-   return field_key if t.has_term? field_key
+   candidates.inject(field_key) { |ptrs, term|
+     if term =~ /\d+/
+       ptr = {ptrs.pop=>term.to_i}
+     else
+       ptr = (ptrs.empty? or ptrs.last.is_a? Hash) ? term.to_sym : (ptrs.pop.to_s + "_" + term).to_sym
+     end
+     ptrs.push ptr   
+   }
+   return field_key if t.has_term? *field_key
    # pointers are probably from ambiguous underscores
    amb = field_key.dup
    field_key = []
    amb.each do |candidate|
-     key = (candidate.is_a? Hash) ? candidate.keys.first : candidate
+     key = (candidate.is_a? Hash) ? candidate.keys.first : candidate # no indexes should be included
      parts = key.to_s.split('_')
-     while !t.has_term?(parts.first) and parts.length > 1
-       np = (parts[0].to_s + '_' + parts[1].to_s ).to_sym
-       if t.has_term? [np]
-         field_key.push(np)
-       else
-         parts[1] = np
-         parts = parts[1,parts.length - 1]
+     ptrs = parts_to_terms(parts, t, field_key)
+     if ptrs.nil? or !t.has_term? *ptrs
+       raise "Couldn't generate pointer from term name going forward for \"" + hier_field_name + "\" (no matched term sequence)"
+     else 
+       if candidate.is_a? Hash
+         ptr_key = ptrs.pop
+         ptrs.push({ptr_key => candidate[candidate.keys.first] })
        end
-     end
-     if candidate.is_a? Hash
-       field_key.push({ parts[0] => candidate[candidate.keys.first] })
-     else
-       field_key.push parts[0]
-     end
-     if t.has_term? field_key
-       return field_key
-     else
-       raise "Couldn't generate pointer from term name going forward"
+       field_key = ptrs
      end
    end
+   return field_key if t.has_term? *field_key
+   raise "Couldn't generate pointer from term name going forward for \"" + hier_field_name + "\", tried " + field_key.inspect
+  end
+  
+  def parts_to_terms(parts, t, prefix=[])
+    return nil if parts.length == 0 # this should be short-circuited in the loop below rather than recurring
+    if parts.length == 1
+      new_term_ptr = prefix.dup.push parts[0].to_sym
+      if t.has_term? *new_term_ptr
+        return new_term_ptr 
+      else
+        return nil
+      end
+    end
+
+    results = []
+    parts.each_index do |ix|
+      term_ptr = prefix.dup.push parts[0...(parts.length - ix)].join('_').to_sym
+
+      if t.has_term? *term_ptr
+        case ix
+        when 0
+          results.push term_ptr
+        when 1
+          new_term_ptr = term_ptr.concat [parts.last.to_sym]
+          results.push new_term_ptr if t.has_term? *new_term_ptr
+        else
+          new_term_ptr = parts_to_terms(parts[parts.length - ix, ix], t, term_ptr)
+          results.push new_term_ptr if !new_term_ptr.nil?
+        end
+      end
+    end
+
+    if results.length == 1
+      return results[0]
+    else
+      return nil
+    end
   end
 
   # ** largely copied from ActiveFedora::NokogiriDatastream.get_values **

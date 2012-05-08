@@ -9,7 +9,7 @@ class TermsHarness < ControllerHarness
   include Cul::Scv::Hydra::Controllers::Terms
   
   def initialize(field_name)
-    @solr_name = field_name || "title_0_t"
+    @field_name = field_name
   end
   
   def params
@@ -17,7 +17,7 @@ class TermsHarness < ControllerHarness
   end
   
   def field_key
-    field_key_from(@solr_name, Cul::Scv::Hydra::Om::ModsDocument.terminology)
+    field_key_from(@field_name, TestTerms.terminology)
   end
   
   # this is copied directly from Hydra::HydraFedoraMetadataHelperBehavior
@@ -27,6 +27,23 @@ class TermsHarness < ControllerHarness
     else
       return field_key.to_s
     end
+  end
+end
+
+class TestTerms < ActiveFedora::NokogiriDatastream
+  set_terminology do |t|
+    t.root(:path=>"root")
+    
+    t.title_info(:path=>'titleInfo'){
+      t.title_info_title(:path=>"title")
+    }
+    
+    t.container(:path=>"container"){
+      t.container_title_info(:path=>'titleInfo'){
+        t.container_title(:path=>'title')
+      }
+    }
+    t.title(:proxy=>[:root,:title_info,:title])
   end
 end
 
@@ -44,24 +61,28 @@ describe "Cul::Scv::Hydra::Controllers::Terms" do
   end
   
   it "should round-trip term name to pointer array" do
-    pointerses = [[:title]]
-    pointerses.each do |pointers|
-      fixture = TermsHarness.new(TermsHarness.field_name_for(pointers))
-      fixture.field_key.should == pointers
-    end
+    pointers = [:title]
+    fixture = TermsHarness.new(TermsHarness.field_name_for(pointers))
+    fixture.field_key.should == pointers
   end
   it "should round-trip term names with underscores to pointer array" do
-    pointerses = [[:main_title_info,:main_title]]
-    pointerses.each do |pointers|
-      fixture = TermsHarness.new(TermsHarness.field_name_for(pointers))
-      fixture.field_key.should == pointers
-    end
+    pointers = [:title_info,:title_info_title]
+    fixture = TermsHarness.new(TermsHarness.field_name_for(pointers))
+    fixture.field_key.should == pointers
   end
   it "should round-trip indexed term names to pointer array" do
-    pointerses = [[{:title=>0}]]
-    pointerses.each do |pointers|
-      fixture = TermsHarness.new(TermsHarness.field_name_for(pointers))
-      fixture.field_key.should == pointers
-    end
+    pointers = [{:title=>0}]
+    fixture = TermsHarness.new(TermsHarness.field_name_for(pointers))
+    fixture.field_key.should == pointers
+  end
+  it "should round-trip indexed term names with underscores to pointer array" do
+    pointers = [{:container=>0},{:container_title_info=>0},:container_title]
+    fixture = TermsHarness.new(TermsHarness.field_name_for(pointers))
+    fixture.field_key.should == pointers
+  end
+  it "should round-trip unevenly indexed term names with underscores to pointer array" do
+    pointers = [:container,{:container_title_info=>0},:container_title]
+    fixture = TermsHarness.new(TermsHarness.field_name_for(pointers))
+    fixture.field_key.should == pointers
   end
 end
