@@ -22,6 +22,7 @@ module Terms
     render :action=>params[:action], :layout=>layout
   end
 
+  # this method should be overridden to use the appropriate terminology
   def solr_name(term_id)
     if term_id.nil?
       raise "Cannot provide suggestions without a term name"
