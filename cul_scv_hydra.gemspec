@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.summary = "ActiveFedora, OM, and Solrizer implementations for CUL Staff Collection Viewer"
 
   s.add_dependency('cul_image_props')
-  s.add_dependency("blacklight", "~> 3.4.1")
+  s.add_dependency("blacklight", "~> 3.3")
   s.add_dependency('rails', "~> 3.2")
   s.add_dependency('active-fedora', "~> 4.0")
   #s.add_dependency('mediashelf-loggable', ">=0.4.7")
