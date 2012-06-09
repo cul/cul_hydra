@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.add_dependency('active-fedora', "~> 4.0")
   #s.add_dependency('mediashelf-loggable', ">=0.4.7")
   s.add_dependency('rubydora', '~>0.5.8')
+  s.add_dependency('hydra-mods', ">= 0.0.4")
   s.add_dependency('hydra-head', "~> 4.0")
   s.add_dependency('nokogiri', ">= 1.4.2")
   s.add_dependency('om', "~>1.6.0")

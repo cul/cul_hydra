@@ -1,4 +1,3 @@
-require 'hydra'
 require 'net/http'
 require 'open-uri'
 require 'tempfile'

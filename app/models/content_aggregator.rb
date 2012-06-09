@@ -1,5 +1,4 @@
 require "active-fedora"
-require "hydra"
 class ContentAggregator < ::ActiveFedora::Base
   extend ActiveModel::Callbacks
   include ::ActiveFedora::DatastreamCollections

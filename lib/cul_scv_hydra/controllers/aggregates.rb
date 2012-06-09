@@ -1,20 +1,20 @@
 require 'cul_scv_hydra/controllers/aggregator_controller_helper'
 require 'cul_scv_hydra/controllers/helpers/resources_helper_behavior'
 module Cul::Scv::Hydra::Controllers
-module Aggregates
-  extend ActiveSupport::Concern
-  included do
-    include Hydra::AssetsControllerHelper
-    include Cul::Scv::Hydra::Controllers::AggregatorControllerHelper
-    include Cul::Scv::Hydra::Controllers::Helpers::ResourcesHelperBehavior  
-    include Hydra::RepositoryController  
-    include MediaShelf::ActiveFedoraHelper
-    include Blacklight::SolrHelper
-    before_filter :require_solr, :only=>[:index, :create, :show, :destroy]
-    before_filter :load_resources, :only=>[:index]
-    prepend_before_filter :sanitize_update_params
-  end
-  module InstanceMethods
+  module Aggregates
+    extend ActiveSupport::Concern
+    included do
+      include Hydra::AssetsControllerHelper
+      include Cul::Scv::Hydra::Controllers::AggregatorControllerHelper
+      include Cul::Scv::Hydra::Controllers::Helpers::ResourcesHelperBehavior  
+      include Hydra::RepositoryController  
+      include MediaShelf::ActiveFedoraHelper
+      include Blacklight::SolrHelper
+      before_filter :require_solr, :only=>[:index, :create, :show, :destroy]
+      before_filter :load_resources, :only=>[:index]
+      prepend_before_filter :sanitize_update_params
+    end
+
     def index
 
       if params[:layout] == "false"
@@ -91,5 +91,4 @@ module Aggregates
       redirect_to redirect_params
     end
   end
-end
 end

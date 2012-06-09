@@ -1,5 +1,4 @@
 require "active-fedora"
-require "hydra"
 class JP2ImageAggregator < ::ActiveFedora::Base
   extend ActiveModel::Callbacks
   include ::ActiveFedora::DatastreamCollections

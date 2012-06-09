@@ -1,5 +1,4 @@
 require "active-fedora"
-require "hydra"
 class StaticAudioAggregator < ::ActiveFedora::Base
   extend ActiveModel::Callbacks
 

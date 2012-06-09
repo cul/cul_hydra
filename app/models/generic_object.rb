@@ -1,5 +1,4 @@
 require "active-fedora"
-require "hydra"
 class GenericObject < ::ActiveFedora::Base
   extend ActiveModel::Callbacks
   include ::ActiveFedora::DatastreamCollections

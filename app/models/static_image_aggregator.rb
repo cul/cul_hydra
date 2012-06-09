@@ -1,5 +1,4 @@
 require "active-fedora"
-require "hydra"
 class StaticImageAggregator < ::ActiveFedora::Base
   extend ActiveModel::Callbacks
 

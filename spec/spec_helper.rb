@@ -4,9 +4,6 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'app','models'))
 libs = File.expand_path(File.dirname(__FILE__) + '/../lib/*.rb')
-Dir.glob(libs).each {|lib| require lib}
-models = File.expand_path(File.dirname(__FILE__) + '/../app/models/*.rb')
-Dir.glob(models).each {|model| require model}
 #require 'om'
 require 'rails'
 require 'rails/all'
@@ -16,6 +13,9 @@ require 'rspec/rails'
 require 'equivalent-xml/rspec_matchers'
 #require 'ruby-debug'
 require 'cul_scv_hydra'
+Dir.glob(libs).each {|lib| require lib}
+models = File.expand_path(File.dirname(__FILE__) + '/../app/models/*.rb')
+Dir.glob(models).each {|model| require model}
 
 ActiveFedora.init(:fedora_config_path=>File.join(File.dirname(__FILE__), "..", "config", "fedora.yml"))
 

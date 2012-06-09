@@ -1,6 +1,5 @@
 require "active-fedora"
 require "cul_image_props"
-require "hydra"
 require "mime/types"
 require "uri"
 class Resource < ::ActiveFedora::Base
