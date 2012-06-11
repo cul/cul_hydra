@@ -6,7 +6,6 @@ module Suggestions
   included do
     include Blacklight::SolrHelper
     include MediaShelf::ActiveFedoraHelper
-    before_filter :require_solr, :only=>[:index]
   end
 
   def index

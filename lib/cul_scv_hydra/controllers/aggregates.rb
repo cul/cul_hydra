@@ -10,7 +10,6 @@ module Cul::Scv::Hydra::Controllers
       include Hydra::RepositoryController  
       include MediaShelf::ActiveFedoraHelper
       include Blacklight::SolrHelper
-      before_filter :require_solr, :only=>[:index, :create, :show, :destroy]
       before_filter :load_resources, :only=>[:index]
       prepend_before_filter :sanitize_update_params
     end
