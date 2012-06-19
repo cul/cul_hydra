@@ -16,7 +16,7 @@ describe "Resource" do
     ingest("test:thumb_image",fixture( File.join("FOXML", "resource-thumb.xml")), true)
     @containerobj = StaticImageAggregator.load_instance( "test:si_agg")
     @containerobj.send :update_index
-    @fixtureobj = Resource.load_instance("test:thumb_image")
+    @fixtureobj = Resource.find("test:thumb_image")
   end
   
   after(:each) do
@@ -25,9 +25,9 @@ describe "Resource" do
   end
 
   after(:all) do
-    ActiveFedora::Base.load_instance("test:c_agg").delete
-    ActiveFedora::Base.load_instance("ldpd:StaticImageAggregator").delete
-    ActiveFedora::Base.load_instance("ldpd:ContentAggregator").delete
+    ActiveFedora::Base.find("test:c_agg").delete
+    ActiveFedora::Base.find("ldpd:StaticImageAggregator").delete
+    ActiveFedora::Base.find("ldpd:ContentAggregator").delete
   end
 
   it "should produce the correct CModel PID" do
@@ -46,7 +46,7 @@ describe "Resource" do
       ds.dirty?.should == true
       @fixtureobj.save
       ds.dirty?.should == false
-      updated = Resource.load_instance(@fixtureobj.pid)
+      updated = Resource.find(@fixtureobj.pid)
       found = false
       ds.find_by_terms(:identifier).each { |node|
         found ||= node.text == new_value
@@ -74,7 +74,7 @@ describe "Resource" do
     end
 
     it "should have a datastream called CONTENT" do
-      test = Resource.load_instance(@newobj.pid)
+      test = Resource.find(@newobj.pid)
       test.datastreams['CONTENT'].nil?.should be_false
       (test.datastreams['CONTENT'].is_a? ActiveFedora::Datastream).should be_true
     end

@@ -16,30 +16,30 @@ describe "StaticImageAggregator" do
     ingest("test:thumb_image", fixture( File.join("FOXML", "resource-thumb.xml")), true)
     ingest("test:screen_image", fixture( File.join("FOXML", "resource-screen.xml")), true)
     ingest("test:max_image", fixture( File.join("FOXML", "resource-max.xml")), true)
-    @fixtureobj = StaticImageAggregator.load_instance( "test:si_agg")
+    @fixtureobj = StaticImageAggregator.find( "test:si_agg")
     @fixtureobj.send :update_index
-    Resource.load_instance("test:thumb_image").send :update_index
-    Resource.load_instance("test:screen_image").send :update_index
-    Resource.load_instance("test:max_image").send :update_index
+    Resource.find("test:thumb_image").send :update_index
+    Resource.find("test:screen_image").send :update_index
+    Resource.find("test:max_image").send :update_index
   end
   
   after(:each) do
     @fixtureobj.delete
-    ActiveFedora::Base.load_instance("test:thumb_image").delete
-    ActiveFedora::Base.load_instance("test:screen_image").delete
-    ActiveFedora::Base.load_instance("test:max_image").delete
+    ActiveFedora::Base.find("test:thumb_image").delete
+    ActiveFedora::Base.find("test:screen_image").delete
+    ActiveFedora::Base.find("test:max_image").delete
   end
 
   after(:all) do
-    ActiveFedora::Base.load_instance("test:c_agg").delete
-    ActiveFedora::Base.load_instance("ldpd:StaticImageAggregator").delete
-    ActiveFedora::Base.load_instance("ldpd:ContentAggregator").delete
+    ActiveFedora::Base.find("test:c_agg").delete
+    ActiveFedora::Base.find("ldpd:StaticImageAggregator").delete
+    ActiveFedora::Base.find("ldpd:ContentAggregator").delete
   end
 
   it "should be detectable by ActiveFedora" do
     Kernel.const_get('StaticImageAggregator').is_a?(Class).should == true
     Module.const_get('StaticImageAggregator').is_a?(Class).should == true
-    obj = ActiveFedora::Base.load_instance("test:si_agg")
+    obj = ActiveFedora::Base.find("test:si_agg")
     ActiveFedora::ContentModel.models_asserted_by(obj).each { |m_uri|
       m_class = ActiveFedora::ContentModel.uri_to_model_class(m_uri)
     }
@@ -72,7 +72,8 @@ describe "StaticImageAggregator" do
       ds.dirty?.should be_true
       @fixtureobj.save
       ds.dirty?.should be_false
-      updated = StaticImageAggregator.load_instance(@fixtureobj.pid)
+      updated = StaticImageAggregator.find(
+@fixtureobj.pid)
       found = false
       ds.find_by_terms(:identifier).each { |node|
         found ||= node.text == new_value
@@ -93,7 +94,7 @@ describe "StaticImageAggregator" do
     end
 
     it "should be able to add members/parts" do
-      obj = ActiveFedora::Base.load_instance("test:thumb_image")
+      obj = ActiveFedora::Base.find("test:thumb_image")
       @fixtureobj.add_member(obj)
       @fixtureobj.parts.length.should == 3
     end

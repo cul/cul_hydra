@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency('cul_image_props')
   s.add_dependency("blacklight", "~> 3.3")
-  s.add_dependency('rails', "~> 3.2")
+  s.add_dependency('rails', "= 3.2.5")
   s.add_dependency('active-fedora', "~> 4.0")
   #s.add_dependency('mediashelf-loggable', ">=0.4.7")
   s.add_dependency('rubydora', '~>0.5.8')
@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec-rails", "~>2.10.0"
   s.add_development_dependency "mocha", ">= 0.9.8"
   s.add_development_dependency "equivalent-xml", ">= 0.2.4"
-  s.add_development_dependency "rbx-require-relative", "= 0.0.5"
+  s.add_development_dependency "rbx-require-relative"
 
   s.files = Dir.glob("{bin,lib,app,config}/**/*")
   s.require_path = 'lib'

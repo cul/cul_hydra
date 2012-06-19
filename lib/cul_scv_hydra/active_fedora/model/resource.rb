@@ -40,27 +40,31 @@ module Resource
     if IMAGE_MIME_TYPES.include? mime
       blob.rewind
       # retrieve Nokogiri of image property RDF
-      image_prop_nodes = Cul::Image::Properties.identify(blob).nodeset
-      relsext = datastreams['RELS-EXT']
-      image_prop_nodes.each { |node|
-        if node["resource"]
-          is_literal = false
-          object = RDF::URI.new(node["resource"])
-        else
-          is_literal = true
-          object = RDF::Literal(node.text)
-        end
-        subject = RDF::URI(internal_uri)
-        predicate = RDF::URI("#{node.namespace.href}#{node.name}")
-        query = RDF::Query.new({ :subject => {predicate => :object}})
-        relationships(predicate).dup.each { |stmt|
-          relationships.delete(stmt)
+      image_properties = Cul::Image::Properties.identify(blob)
+      if image_properties
+        image_prop_nodes = image_properties.nodeset
+        puts image_properties.instance_variable_get(:@ng_xml).to_xml
+        relsext = datastreams['RELS-EXT']
+        image_prop_nodes.each { |node|
+          if node["resource"]
+            is_literal = false
+            object = RDF::URI.new(node["resource"])
+          else
+            is_literal = true
+            object = RDF::Literal(node.text)
+          end
+          subject = RDF::URI(internal_uri)
+          predicate = RDF::URI("#{node.namespace.href}#{node.name}")
+          query = RDF::Query.new({ :subject => {predicate => :object}})
+          relationships(predicate).dup.each { |stmt|
+            relationships.delete(stmt)
+          }
+          add_relationship(predicate,object, is_literal)
+          relationships_are_dirty=true
         }
-        add_relationship(predicate,object, is_literal)
-        relationships_are_dirty=true
-      }
-      # add mimetype to DC:format values
-      self.datastreams['DC'].update_values({[:format] => mime})
+        # add mimetype to DC:format values
+        self.datastreams['DC'].update_values({[:format] => mime})
+      end
     end
     blob.rewind
   end

@@ -194,11 +194,10 @@ module Common
     old_values.each_index {|ix| indexed_values[ix.to_s] = old_values[ix] }
     indexed_values.each {|k,v|
       new_val = values.delete(k)
-      puts "old: #{v} new: #{new_val} changed? #{!(v.eql? new_val)}"
       logger.debug "old: #{v} new: #{new_val} changed? #{!(v.eql? new_val)}"
       changed ||= !(v.eql? new_val)
     }
-    puts "remaining values! #{values.inspect}" if values.length > 0
+    logger.debug "remaining values! #{values.inspect}" if values.length > 0
     changed || (values.length > 0)
   end
  

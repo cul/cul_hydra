@@ -15,10 +15,11 @@ module Om
       t.root(:path=>"mods",
              :xmlns=>"http://www.loc.gov/mods/v3",
              :schema=>"http://www.loc.gov/standards/mods/v3/mods-3-4.xsd")
-      
+             
       t.main_title_info(:path=>'titleInfo', :index_as=>[:not_searchable], :attributes=>{:type=>:none}){
-        t.main_title(:path=>"title", :index_as=>[:displayable,:searchable, :sortable])
+        t.main_title(:path=>"title", :index_as=>[:not_searchable])
       }
+      t.title(:proxy=>[:mods, :main_title_info, :main_title], :index_as=>[:displayable, :searchable, :sortable])
       
       t.search_title_info(:path=>'titleInfo', :index_as=>[:not_searchable]){
         t.search_title(:path=>'title', :index_as=>[:searchable])
@@ -34,7 +35,6 @@ module Om
           t.lib_collection(:path=>'title', :index_as=>[:facetable, :displayable])
         }
       }
-      t.title(:proxy=>[:mods,:main_title_info,:main_title], :index_as=>[:displayable,:searchable, :sortable])
       t.lib_project(:proxy=>[:project,:project_title_info, :lib_project])
       t.lib_collection(:proxy=>[:collection,:collection_title_info, :lib_collection])
 # pattern matches

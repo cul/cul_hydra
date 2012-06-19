@@ -1,12 +1,12 @@
 require 'rubygems'
-require 'rspec'
-require 'rake/testtask'
-require 'cul_scv_hydra'
 begin
   require 'bundler'
 rescue LoadError
   puts 'You must `gem install bundler` and `bundle install` to run rake tasks'
 end
+require 'rspec'
+require 'rake/testtask'
+require 'cul_scv_hydra'
 require 'rake'
 
 # require 'spec/rake/spectask'

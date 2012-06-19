@@ -10,16 +10,16 @@ describe "ContentAggregator" do
   before(:each) do
     @foxml = fixture( File.join("FOXML", "content-aggregator.xml"))
     ingest("test:c_agg", fixture( File.join("FOXML", "content-aggregator.xml")), true)
-    @fixtureobj = ContentAggregator.load_instance( "test:c_agg")
+    @fixtureobj = ContentAggregator.find( "test:c_agg")
     @fixtureobj.send :update_index
   end
   
   after(:each) do
-    ActiveFedora::Base.load_instance("test:c_agg").delete
+    ActiveFedora::Base.find("test:c_agg").delete
   end
 
   after(:all) do
-    ActiveFedora::Base.load_instance("test:si_agg").delete
+    ActiveFedora::Base.find("test:si_agg").delete
   end
 
   it "should produce the correct CModel PID" do
@@ -37,7 +37,7 @@ describe "ContentAggregator" do
       ds.update_values({[:identifier] => new_value})
       ds.dirty?.should == true
       @fixtureobj.save
-      updated = ContentAggregator.load_instance(@fixtureobj.pid)
+      updated = ContentAggregator.find(@fixtureobj.pid)
       ds.find_by_terms(:identifier).first.text.should == new_value
       updated.datastreams["descMetadata"].find_by_terms(:identifier).first.text.should == new_value
     end

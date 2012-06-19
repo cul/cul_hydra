@@ -19,12 +19,14 @@ Dir.glob(models).each {|model| require model}
 
 ActiveFedora.init(:fedora_config_path=>File.join(File.dirname(__FILE__), "..", "config", "fedora.yml"))
 
-RSpec::Runner.configure do |config|
+RSpec.configure do |config|
   config.mock_with :mocha
 end
 
 def fixture(file)
-  File.new(File.join(File.dirname(__FILE__), 'fixtures', file))
+  path = File.join(File.dirname(__FILE__), 'fixtures', file)
+  raise "No fixture file at #{path}" unless File.exists? path
+  File.new(path)
 end
 
 def attr_name_info(attr_node)
