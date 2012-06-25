@@ -1,6 +1,8 @@
 require "active-fedora"
+require "active_fedora_finders"
 class BagAggregator < ::ActiveFedora::Base
   extend ActiveModel::Callbacks
+  include ::ActiveFedora::Finders
   include ::ActiveFedora::DatastreamCollections
   include ::ActiveFedora::Relationships
   include ::Hydra::ModelMethods

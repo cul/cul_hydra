@@ -1,7 +1,7 @@
 require "active-fedora"
 class StaticImageAggregator < ::ActiveFedora::Base
   extend ActiveModel::Callbacks
-
+  include ::ActiveFedora::Finders
   include ::ActiveFedora::DatastreamCollections
   include ::ActiveFedora::Relationships
   include ::Hydra::ModelMethods

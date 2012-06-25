@@ -4,7 +4,7 @@ require "mime/types"
 require "uri"
 class Resource < ::ActiveFedora::Base
   extend ActiveModel::Callbacks
-  
+  include ::ActiveFedora::Finders
   include ::ActiveFedora::DatastreamCollections
   include ::ActiveFedora::Relationships
   include ::Hydra::ModelMethods

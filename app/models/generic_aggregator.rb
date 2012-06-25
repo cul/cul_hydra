@@ -1,6 +1,7 @@
 require "active-fedora"
 class GenericAggregator < ::ActiveFedora::Base
   extend ActiveModel::Callbacks
+  include ::ActiveFedora::Finders
   include ::ActiveFedora::DatastreamCollections
   include ::ActiveFedora::Relationships
   include ::Hydra::ModelMethods

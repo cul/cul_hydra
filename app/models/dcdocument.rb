@@ -1,5 +1,6 @@
 require "active-fedora"
 class DcDocument < ActiveFedora::Base
+  include ::ActiveFedora::Finders
   include ::ActiveFedora::DatastreamCollections
   include ::ActiveFedora::Relationships
   include Hydra::ModelMethods
