@@ -212,9 +212,7 @@ def ingest(pid, foxml, force=false)
   @configs ||= YAML::load(File.open('config/fedora.yml'))
   env = ENV['RAILS_ENV'] || 'test'
   opts = @configs[env]
-  puts opts.inspect
   @rubydora_conn ||= ActiveFedora::RubydoraConnection.new(opts)
-  puts @rubydora_conn.connection.profile
   obj = @rubydora_conn.connection.find(pid)
   if obj.new?
     @rubydora_conn.connection.ingest(:pid=>pid, :file=>foxml)

@@ -10,7 +10,7 @@ describe "ContentAggregator" do
   before(:each) do
     @foxml = fixture( File.join("FOXML", "content-aggregator.xml"))
     ingest("test:c_agg", fixture( File.join("FOXML", "content-aggregator.xml")), true)
-    @fixtureobj = ContentAggregator.find( "test:c_agg")
+    @fixtureobj = ContentAggregator.find_by_identifier( "prd.custord.070103a")
     @fixtureobj.send :update_index
   end
   
