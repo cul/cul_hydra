@@ -43,8 +43,13 @@ module Om
       builder.doc.root["xsi:schemaLocation"] = 'http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd'
       return builder.doc
     end
+    # Because FCRepo 3.5+ modifies DC on saves (to ensure that PID is a dc:identifier value),
+    # this datastream's content must be reloaded after saves
     def action_after_save
       self.dirty= false
+      @content = nil
+      @ng_xml = nil
+      self.xml_loaded = false
     end
     def method_missing method, *args
       query = false
