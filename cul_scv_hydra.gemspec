@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency('cul_image_props')
   s.add_dependency("blacklight", "~> 3.3")
-  s.add_dependency('rails', "= 3.2.5")
+  s.add_dependency('rails', "~> 3.2.5")
   s.add_dependency('active-fedora', "~> 4.0")
   s.add_dependency('active_fedora_finders', ">=0.1.3")
   #s.add_dependency('mediashelf-loggable', ">=0.4.7")
