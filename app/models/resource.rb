@@ -13,6 +13,11 @@ class Resource < ::ActiveFedora::Base
 
   alias :file_objects :resources
 
+  CUL_WIDTH = "http://purl.oclc.org/NET/CUL/RESOURCE/STILLIMAGE/BASIC/imageWidth"
+  CUL_LENGTH = "http://purl.oclc.org/NET/CUL/RESOURCE/STILLIMAGE/BASIC/imageLength"
+  FORMAT = "http://purl.org/dc/elements/1.1/format"
+  MEMBER_OF = "http://purl.oclc.org/NET/CUL/memberOf"
+
   def route_as
     "resource"
   end
@@ -54,5 +59,22 @@ class Resource < ::ActiveFedora::Base
           desc_metadata_ds.title = new_title
         end
       end
+    end
+    
+    def thumbnail_info
+      # do the triples indicate this is a thumb? fetch
+      width = object_relations[CUL_WIDTH].first.to_i
+      length = object_relations[CUL_LENGTH].first.to_i
+      if width <= 251 && length <= 251
+        mime = object_relations[FORMAT].first
+        url = {:url=>"#{ActiveFedora.fedora_config[:url]}/objects/#{self.pid}/datastreams/CONTENT/content", :mime=>mime}
+      else
+        if object_relations[MEMBER_OF].blank?
+          return {:url=>image_url("cul_scv_hydra/crystal/file.png"),:mime=>'image/png'}
+        else
+          url = StaticImageAggregator.find(object_relations[MEMBER_OF].first).thumbnail_info
+        end
+      end
+      return url
     end
 end

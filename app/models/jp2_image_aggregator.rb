@@ -35,4 +35,8 @@ class JP2ImageAggregator < ::ActiveFedora::Base
     end
     solr_doc
   end
+  
+  def thumbnail_info
+    {:url => "#{ActiveFedora.fedora_config[:url]}/objects/#{pid}/methods/ldpd:sdef.Image/getView?max=250", :mime => 'image/jpeg'}
+  end
 end

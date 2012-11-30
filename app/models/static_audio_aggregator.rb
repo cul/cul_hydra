@@ -17,4 +17,8 @@ class StaticAudioAggregator < ::ActiveFedora::Base
   def index_type_label
     "PART"
   end
+  
+  def thumbnail_info
+    return {:url=>image_url("cul_scv_hydra/crystal/mp3.png"),:mime=>'image/png'}
+  end
 end

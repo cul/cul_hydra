@@ -11,7 +11,7 @@ module Common
     has_relationship "rdf_type", :rdf_type
     has_metadata :name => "DC", :type=>Cul::Scv::Hydra::Om::DCMetadata, :versionable => true
     has_metadata :name => "descMetadata", :type=>Cul::Scv::Hydra::Om::ModsDocument, :versionable => true
-    has_metadata :name => "rightsMetadata", :type=>::Hydra::RightsMetadata, :versionable => true
+    has_metadata :name => "rightsMetadata", :type=>::Hydra::Datastream::RightsMetadata, :versionable => true
   end
     
   module ClassMethods
@@ -177,6 +177,10 @@ module Common
       end
     end
     return result
+  end
+  
+  def thumbnail_info
+    {:url=>image_url("cul_scv_hydra/crystal/kmultiple.png"),:mime_type=>"image/png"}
   end
 
   private
