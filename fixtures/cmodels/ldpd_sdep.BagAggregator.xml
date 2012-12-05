@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<foxml:digitalObject VERSION="1.1" PID="ldpd:sdep.BagAggregator"
+xmlns:foxml="info:fedora/fedora-system:def/foxml#"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+<foxml:objectProperties>
+<foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="Service Deployment listMembers"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2008-07-09T13:59:55.703Z"/>
+<foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2009-05-21T22:04:23.716Z"/>
+</foxml:objectProperties>
+
+<foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="DC1.0" LABEL="Dublin Core Record for this object" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+xmlns:dc="http://purl.org/dc/elements/1.1/"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:title>Service Deployment Object for listMembers and getSize</dc:title>
+  <dc:identifier>ldpd:sdep.BagAggregator</dc:identifier>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="RELS-EXT1.0" LABEL="RDF Statements about this object" MIMETYPE="application/rdf+xml" FORMAT_URI="info:fedora/fedora-system:FedoraRELSExt-1.0">
+<foxml:xmlContent>
+  <rdf:RDF xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <rdf:Description rdf:about="info:fedora/ldpd:sdep.BagAggregator">
+      <fedora-model:hasModel rdf:resource="info:fedora/fedora-system:ServiceDeployment-3.0"></fedora-model:hasModel>
+      <fedora-model:isDeploymentOf rdf:resource="info:fedora/ldpd:sdef.Aggregator"></fedora-model:isDeploymentOf>
+      <fedora-model:isContractorOf rdf:resource="info:fedora/ldpd:BagAggregator"></fedora-model:isContractorOf>
+      <fedora-model:isContractorOf rdf:resource="info:fedora/ldpd:ContentAggregator"></fedora-model:isContractorOf>
+    </rdf:Description>
+  </rdf:RDF>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="METHODMAP" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="METHODMAP1.0" LABEL="Deployment Method Map" MIMETYPE="text/xml" FORMAT_URI="info:fedora/fedora-system:FedoraSDepMethodMap-1.0">
+<foxml:xmlContent>
+  <fmm:MethodMap xmlns:fmm="http://fedora.comm.nsdlib.org/service/methodmap" bDefPID="ldpd:sdef.Aggregator" name="MethodMap - Basic behaviors for collection objects.">
+    <fmm:Method operationLabel="Returns the number of objects currently in this collection, in Sparql form." operationName="getSize" wsdlMsgName="getSizeRequest" wsdlMsgOutput="getSizeResponse">
+      <fmm:DatastreamInputParm defaultValue="" label="" parmName="NULLBIND" passBy="URL_REF" required="true"></fmm:DatastreamInputParm>
+      <fmm:DefaultInputParm defaultValue="$objuri" label="" parmName="objuri" passBy="VALUE" required="true"></fmm:DefaultInputParm>
+      <fmm:MethodReturnType wsdlMsgName="getSizeResponse" wsdlMsgTOMIME="text/xml"></fmm:MethodReturnType>
+    </fmm:Method>
+    <fmm:Method operationLabel="Returns PIDs for members of this collection, in Sparql form. No more than max PIDs are returned, starting with the number start object in an ordered list." operationName="listMembers" wsdlMsgName="listMembersRequest" wsdlMsgOutput="listMembersResponse">
+      <fmm:DatastreamInputParm defaultValue="" label="" parmName="NULLBIND" passBy="URL_REF" required="true"></fmm:DatastreamInputParm>
+      <fmm:DefaultInputParm defaultValue="$objuri" label="" parmName="objuri" passBy="VALUE" required="true"></fmm:DefaultInputParm>
+      <fmm:UserInputParm defaultValue="0" label="" parmName="start" passBy="VALUE" required="true"></fmm:UserInputParm>
+      <fmm:UserInputParm defaultValue="sparql" label="" parmName="format" passBy="VALUE" required="true"></fmm:UserInputParm>
+      <fmm:UserInputParm defaultValue="" label="" parmName="max" passBy="VALUE" required="true"></fmm:UserInputParm>
+      <fmm:UserInputParm defaultValue="" label="" parmName="callback" passBy="VALUE" required="false"></fmm:UserInputParm>
+      <fmm:UserInputParm defaultValue="" label="" parmName="_" passBy="VALUE" required="false"></fmm:UserInputParm>
+      <fmm:MethodReturnType wsdlMsgName="listMembersResponse" wsdlMsgTOMIME="text/xml"></fmm:MethodReturnType>
+    </fmm:Method>
+  </fmm:MethodMap>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="DSINPUTSPEC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="DSINPUTSPEC1.0" LABEL="Datastream Input Specification for Service" MIMETYPE="text/xml" FORMAT_URI="info:fedora/fedora-system:format/xml.mets.techMD.OTHER.UNSPECIFIED">
+<foxml:xmlContent>
+  <fbs:DSInputSpec xmlns:fbs="http://fedora.comm.nsdlib.org/service/bindspec" label="Datastream Input Specification for Basic behaviors for collection objects.">
+    <fbs:DSInput DSMax="1" DSMin="1" DSOrdinality="false" wsdlMsgPartName="NULLBIND" pid="ldpd:nullbind">
+      <fbs:DSInputLabel>NULLBIND Binding</fbs:DSInputLabel>
+      <fbs:DSMIME>text/xml</fbs:DSMIME>
+      <fbs:DSInputInstruction></fbs:DSInputInstruction>
+    </fbs:DSInput>
+  </fbs:DSInputSpec>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="WSDL" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="WSDL1.0" LABEL="WSDL Bindings" MIMETYPE="text/xml" FORMAT_URI="http://schemas.xmlsoap.org/wsdl/">
+<foxml:xmlContent><wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap" xmlns:soapenc="http://schemas.xmlsoap.org/wsdl/soap/encoding" xmlns:this="members" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="Basic behaviors for collection objects." targetNamespace="members">
+  <wsdl:types>
+    <xsd:schema targetNamespace="members">
+      <xsd:simpleType name="startType">
+        <xsd:restriction base="xsd:string"></xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="formatType">
+        <xsd:restriction base="xsd:string"></xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="NULLBINDType">
+        <xsd:restriction base="xsd:string"></xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="maxType">
+        <xsd:restriction base="xsd:string"></xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="objuriType">
+        <xsd:restriction base="xsd:string"></xsd:restriction>
+      </xsd:simpleType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="getSizeRequest">
+    <wsdl:part name="NULLBIND" type="this:NULLBINDType"></wsdl:part>
+
+    <wsdl:part name="objuri" type="this:objuriType"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listMembersRequest">
+    <wsdl:part name="start" type="this:startType"></wsdl:part>
+    <wsdl:part name="format" type="this:formatType"></wsdl:part>
+    <wsdl:part name="NULLBIND" type="this:NULLBINDType"></wsdl:part>
+    <wsdl:part name="objuri" type="this:objuriType"></wsdl:part>
+    <wsdl:part name="max" type="this:maxType"></wsdl:part>
+  </wsdl:message>
+  
+  <wsdl:message name="listMembersResponse">
+    <wsdl:part name="members" type="xsd:base64Binary"></wsdl:part>
+  </wsdl:message>
+  
+  <wsdl:message name="getSizeResponse">
+    <wsdl:part name="members" type="xsd:base64Binary"></wsdl:part>
+  </wsdl:message>
+  
+  <wsdl:portType name="collectionPortType">
+    <wsdl:operation name="getSize">
+      <wsdl:input message="this:getSizeRequest"></wsdl:input>
+      <wsdl:output message="this:getSizeResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="listMembers">
+      <wsdl:input message="this:listMembersRequest"></wsdl:input>
+      <wsdl:output message="this:listMembersResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <wsdl:service name="collection">
+    <wsdl:port binding="this:collection_http" name="collection_port">
+      <http:address location="LOCAL"></http:address>
+    </wsdl:port>
+  </wsdl:service>
+  <wsdl:binding name="collection_http" type="this:collectionPortType">
+    <http:binding verb="GET"></http:binding>
+    <wsdl:operation name="getSize">
+      <http:operation
+        location="http://local.fedora/server/fedora/risearch?type=tuples&amp;lang=itql&amp;format=count&amp;query=select%20%24member%20from%20%3C%23ri%3E%20where%20%24member%20%3Chttp%3A//purl.oclc.org/NET/CUL/memberOf%3E%20%3C(objuri)%3E"></http:operation>
+      <wsdl:input>
+        <http:urlReplacement></http:urlReplacement>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/xml"></mime:content>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="listMembers">
+      <http:operation location="$php_server$/fedora-svc/aggregator/listMembers/bag-aggregator.php?nullbind=(NULLBIND)&amp;path=fedora&amp;format=(format)&amp;objuri=(objuri)&amp;max=(max)&amp;start=(start)&amp;callback=(callback)"></http:operation>
+      <wsdl:input>
+        <http:urlReplacement></http:urlReplacement>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/xml"></mime:content>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+</wsdl:definitions></foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+</foxml:digitalObject>

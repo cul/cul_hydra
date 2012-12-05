@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<foxml:digitalObject VERSION="1.1" PID="ldpd:htest"
+xmlns:foxml="info:fedora/fedora-system:def/foxml#"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+<foxml:objectProperties>
+<foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="P.Duk.inv. 1001 r "/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2009-04-03T19:23:59.981Z"/>
+<foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2009-04-03T19:23:59.981Z"/>
+</foxml:objectProperties>
+<foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="DC.0" LABEL="Dublin Core Record for this object" CREATED="2009-04-03T19:24:00.063Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="953">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+xmlns:dc="http://purl.org/dc/elements/1.1/"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:title>P.Duk.inv. 1001 r</dc:title>
+  <dc:creator>BATCH</dc:creator>
+  <dc:subject>P.Duk.inv. 1001 r</dc:subject>
+  <dc:description>duke(NcD) APIS images</dc:description>
+  <dc:publisher>APIS/Columbia</dc:publisher>
+  <dc:contributor>NcD</dc:contributor>
+  <dc:type>Image</dc:type>
+  <dc:identifier>ldpd:htest</dc:identifier>
+  <dc:source>orig/Papyrus/tiff/10/1001r-at600.tiff</dc:source>
+  <dc:relation>duke.apis.33002328</dc:relation>
+  <dc:rights>http://www.columbia.edu/cu/lweb/projects/digital/apis/permissions.html</dc:rights>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="RELS-EXT.0" LABEL="RDF Statements about this object" CREATED="2009-04-03T19:24:00.064Z" MIMETYPE="application/rdf+xml" FORMAT_URI="info:fedora/fedora-system:FedoraRELSExt-1.0" SIZE="1093">
+<foxml:xmlContent>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:rel="info:fedora/fedora-system:def/relations-external#" xmlns:myns="http://www.nsdl.org/ontologies/relationships#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/">
+          <rdf:Description rdf:about="info:fedora/ldpd:htest">
+	            <fedora-model:hasModel rdf:resource="info:fedora/ldpd:Resource"></fedora-model:hasModel>
+	            <fedora-model:hasModel rdf:resource="info:fedora/ldpd:Image.Thumbnail"></fedora-model:hasModel>
+	                    <rel:isMemberOf rdf:resource="info:fedora/ldpd:collections.apis"></rel:isMemberOf>
+            <rel:isMemberOf rdf:resource="info:fedora/ldpd:collections.apis.duke"></rel:isMemberOf>
+                                    <rel:HasDescription rdf:resource="info:fedora/ldpd:apis.duke.33002328"></rel:HasDescription>
+                                  </rdf:Description>
+        </rdf:RDF>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="THUMBNAIL" STATE="A" CONTROL_GROUP="E" VERSIONABLE="true">
+<foxml:datastreamVersion ID="THUMBNAIL.0" LABEL="12 dpi" CREATED="2009-04-03T19:24:00.064Z" MIMETYPE="image">
+<foxml:contentLocation TYPE="URL" REF="file:///s2/cul3/ldpd/apis/duke/orig/Papyrus/gifs/thumbnails/1001-1100/1001r-thumb.gif"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+</foxml:digitalObject>
