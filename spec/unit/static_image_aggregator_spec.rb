@@ -1,5 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
-require 'mediashelf/active_fedora_helper'
+#require 'mediashelf/active_fedora_helper'
 
 describe "StaticImageAggregator" do
   before(:all) do

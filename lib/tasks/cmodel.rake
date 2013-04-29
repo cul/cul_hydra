@@ -36,6 +36,7 @@ def do_subs(orig)
 end
 
 def connection
+  # no need to go through AF for this except laziness re: finding the YAML
   @connection ||= (ActiveFedora::Base.fedora_connection[0] ||= ActiveFedora::RubydoraConnection.new(ActiveFedora.config.credentials)).connection
 end
 
@@ -45,7 +46,7 @@ def content_for(pid)
   fcontent = do_subs(fcontent)
 end
 
-def load(content, pid)
+def load_content(content, pid)
   connection.ingest(:file=>StringIO.new(content), :pid=>pid)
 end
 
@@ -56,7 +57,7 @@ end
 def reload(pid)
   fcontent = content_for(pid)
   purge(pid)
-  load(fcontent, pid)
+  load_content(fcontent, pid)
 end
   
 
@@ -69,7 +70,7 @@ namespace :cul_scv_hydra do
 
     task :load => :environment do
       pid = ENV["PID"]
-      load(content_for(pid),pid)
+      load_content(content_for(pid),pid)
     end
 
     task :purge => :environment do

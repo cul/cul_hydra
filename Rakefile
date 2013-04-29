@@ -9,6 +9,8 @@ require 'rake/testtask'
 require 'cul_scv_hydra'
 require 'rake'
 
+Bundler::GemHelper.install_tasks
+load "lib/tasks/cmodel.rake" if defined?(Rake)
 # require 'spec/rake/spectask'
 RSpec::Rake::SpecTask.new(:spec) do |spec|
   #spec.libs << 'lib' << 'spec'

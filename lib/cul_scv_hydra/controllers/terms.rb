@@ -1,11 +1,12 @@
 require 'cul_scv_hydra'
 require 'json'
+require 'blacklight'
 module Cul::Scv::Hydra::Controllers
 module Terms
   extend ActiveSupport::Concern
   included do
-    include Blacklight::SolrHelper
-    include MediaShelf::ActiveFedoraHelper
+    include ::Blacklight::SolrHelper
+    #include MediaShelf::ActiveFedoraHelper
   end
 
   def index

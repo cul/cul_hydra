@@ -7,18 +7,22 @@ module Common
   included do
     define_model_callbacks :create
 
-    has_relationship "containers", :cul_member_of
-    has_relationship "rdf_type", :rdf_type
+    has_and_belongs_to_many :containers, :property=>:cul_member_of
     has_metadata :name => "DC", :type=>Cul::Scv::Hydra::Om::DCMetadata, :versionable => true
     has_metadata :name => "descMetadata", :type=>Cul::Scv::Hydra::Om::ModsDocument, :versionable => true
     has_metadata :name => "rightsMetadata", :type=>::Hydra::Datastream::RightsMetadata, :versionable => true
+    
   end
     
   module ClassMethods
     def pid_namespace
       "ldpd"
     end
-  end  
+  end
+
+  def rdf_type
+    relationships[:rdf_type]
+  end 
     
   def initialize(attrs = nil)
     attrs = {} if attrs.nil?
@@ -100,8 +104,8 @@ module Common
   def index_type_label
     riquery = Cul::Scv::Hydra::ActiveFedora::MEMBER_QUERY.gsub(/%PID%/, self.pid)
     begin
-      docs = ::ActiveFedora::RubydoraConnection.instance.connection.find_by_sparql riquery
-    rescue
+      docs = ::ActiveFedora::Base.connection_for_pid(self.pid).find_by_sparql riquery
+    rescue Exception=>e
       docs = self.parts
     end
     if docs.length == 0
@@ -119,7 +123,7 @@ module Common
     begin
       has_desc = self.datastreams.include? "descMetadata"
       has_desc = has_desc and self.inner_object.datastreams["descMetadata"].content.length > 0
-      has_desc = self.datastreams["descMetadata"].term_values(:identifier).length > 0
+      has_desc = has_desc and self.datastreams["descMetadata"].term_values(:identifier).length > 0
     rescue
       has_desc = false
     end
@@ -134,20 +138,23 @@ module Common
       solr_doc["descriptor_s"] = ["dublin core"]
     end
     # if no mods, pull some values from DC
-    if not (solr_doc["title_display"] and solr_doc["title_display"].length > 0)
-      if self.dc.term_values(:title).first
-        solr_doc["title_display"] = [self.dc.term_values(:title).first]
+    if (solr_doc["title_display"].nil? or solr_doc["title_display"].length == 0)
+      if self.dc.term_values(:dc_title).first
+        solr_doc["title_display"] = [self.dc.term_values(:dc_title).first]
       else
-        solr_doc["title_display"] = [self.dc.term_values(:identifier).first]
+        solr_doc["title_display"] = [self.dc.term_values(:dc_identifier).first]
       end
-      if self.dc.term_values(:relation).first
-        self.dc.term_values(:relation).each {|val|
+      if self.dc.term_values(:dc_relation).first
+        self.dc.term_values(:dc_relation).each {|val|
           if val =~ /clio:/
             solr_doc["clio_s"] ||= []
             solr_doc["clio_s"] << val.split(':')[-1]
           end
         }
       end
+    end
+    if (solr_doc["title_display"].length > 1)
+      solr_doc["title_display"].uniq!
     end
     solr_doc["format"] = [self.route_as]
     solr_doc["index_type_label_s"] = [self.index_type_label]

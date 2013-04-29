@@ -3,7 +3,7 @@ module Aggregator
   extend ActiveSupport::Concern
 
   included do
-    has_relationship "parts", :cul_member_of, :inbound => true
+    has_many :parts, :property => :cul_member_of
     after_create :aggregator!
   end
 

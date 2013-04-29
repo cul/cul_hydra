@@ -1,12 +1,8 @@
-require 'solrizer'
+require 'om'
 module Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer
 # copied from Solrizer::XML::TerminologyBasedSolrizer
   def self.default_field_mapper
     @@default_field_mapper ||= Cul::Scv::Hydra::Solrizer::FieldMapper.default
-  end
-
-  def self.default_extractor
-    @@default_extractor ||= Cul::Scv::Hydra::Solrizer::Extractor.new
   end
 
   def self.default_value_mapper
@@ -71,26 +67,26 @@ module Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer
     end
     generic_field_name_base = OM::XML::Terminology.term_generic_name(*term_pointer)
     
-    self.insert_field_value(solr_doc, term, generic_field_name_base, node_value, term.data_type, term.index_as, field_mapper)
+    self.insert_field_value(solr_doc, term, generic_field_name_base, node_value, field_mapper)
     
     if term_pointer.length > 1
       hierarchical_field_name_base = OM::XML::Terminology.term_hierarchical_name(*term_pointer)
-      self.insert_field_value(solr_doc, term, hierarchical_field_name_base, node_value, term.data_type, term.index_as, field_mapper)
+      self.insert_field_value(solr_doc, term, hierarchical_field_name_base, node_value, field_mapper)
     end
     if term.variant_of and term.variant_of[:field_base]
-      self.insert_field_value(solr_doc, term, term.variant_of[:field_base], node_value, term.data_type, term.index_as, field_mapper, true)
+      self.insert_field_value(solr_doc, term, term.variant_of[:field_base], node_value, field_mapper, true)
     end
     solr_doc
   end
 
-  def self.insert_field_value(solr_doc, term, field_base_name, field_value, data_type, index_as, field_mapper=nil , unique=false)
+  def self.insert_field_value(solr_doc, term, field_base_name, field_value, field_mapper=nil , unique=false)
     field_mapper = self.default_field_mapper if field_mapper.nil?
-    field_mapper.solr_names_and_values(field_base_name, field_value, data_type, index_as).each { |field_name, field_value|
+    field_mapper.solr_names_and_values(field_base_name, field_value, term.type, term.index_as).each { |field_name, field_value|
         unless field_value.join("").strip.empty?
           if term.variant_of and term.variant_of[:map]
             field_value = default_value_mapper.solr_value(term.variant_of[:map], field_value)
           end
-          self.default_extractor.insert_solr_field_value(solr_doc, field_name, field_value, (unique || (field_name == 'text')))
+          Cul::Scv::Hydra::Solrizer::Extractor.insert_solr_field_value(solr_doc, field_name, field_value, (unique || (field_name == 'text')))
         end
     }
   end

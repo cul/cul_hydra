@@ -11,13 +11,21 @@ module Resource
   ]
 
   included do
-    if self.respond_to? :has_relationship
-      has_relationship "image_width", :image_width
-      has_relationship "image_length", :image_length
-      has_relationship "x_sampling", :x_sampling
-      has_relationship "y_sampling", :y_sampling
-      has_relationship "sampling_unit", :sampling_unit
-      has_relationship "extent", :extent
+    if self.is_a? ::ActiveFedora::SemanticNode
+      props = {
+        "image_width" => :image_width,
+        "image_length" => :image_length,
+        "x_sampling" => :x_sampling,
+        "y_sampling" => :y_sampling,
+        "sampling_unit" => :sampling_unit,
+        "extent" => :extent,
+      }
+      props.each { |x, y|
+        class_eval %Q{
+          def #{x}
+            return relationships[:#{y.to_s}]
+        }
+      }
       
       after_create :resource!      
     end

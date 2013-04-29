@@ -6,13 +6,14 @@ module Cul
   end
 end
 # this is a hack to make requiring hydra possible
-module Hydra
-  module Datastream
-    module CommonModsIndexMethods
-    end
-  end
-end
-require 'hydra'
+#module Hydra
+#  module Datastream
+#    module CommonModsIndexMethods
+#    end
+#  end
+#end
+require 'hydra/head'
+require 'active_fedora_relsint'
 require "cul_scv_hydra/access_controls_enforcement"
 require "cul_scv_hydra/active_fedora"
 require "cul_scv_hydra/controllers"

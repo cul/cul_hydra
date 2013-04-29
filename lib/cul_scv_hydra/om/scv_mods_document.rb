@@ -40,21 +40,21 @@ module Om
 # pattern matches
       t.identifier(:path=>"identifier", :attributes=>{:type=>"local"}, :data_type=>:symbol)
       t.identifier_text(:ref=>:identifier, :index_as=>[:not_searchable, :textable])
-      t.clio(:path=>"identifier", :attributes=>{:type=>"CLIO"}, :data_type=>:symbol)
+      t.clio(:path=>"identifier", :attributes=>{:type=>"CLIO"}, :data_type=>:symbol, :index_as=>[:searchable, :displayable])
       t.abstract
       t.subject {
         t.topic
       }
-      t.type_of_resource(:path=>"typeOfResource", :index_as=>[:not_searchable])
+      t.type_of_resource(:path=>"typeOfResource", :index_as=>[:not_searchable,:displayable])
       t.physical_description(:path=>"physicalDescription", :index_as=>[:not_searchable]){
-        t.form_marc(:path=>"form", :attributes=>{:authority=>"marcform"}, :index_as=>[:not_searchable])
-        t.form_aat(:path=>"form", :attributes=>{:authority=>"aat"}, :index_as=>[:not_searchable])
-        t.form(:attributes=>{:authority=>:none}, :index_as=>[:not_searchable])
+        t.form_marc(:path=>"form", :attributes=>{:authority=>"marcform"}, :index_as=>[:not_searchable,:displayable])
+        t.form_aat(:path=>"form", :attributes=>{:authority=>"aat"}, :index_as=>[:not_searchable,:displayable])
+        t.form(:attributes=>{:authority=>:none}, :index_as=>[:not_searchable,:displayable])
         t.form_nomarc(:path=>"form[@authority !='marcform']", :index_as=>[:not_searchable, :displayable, :facetable])
-        t.extent(:path=>"extent", :index_as=>[:not_searchable])
-        t.reformatting_quality(:path=>"reformattingQuality", :index_as=>[:not_searchable])
-        t.internet_media_type(:path=>"internetMediaType", :index_as=>[:not_searchable])
-        t.digital_origin(:path=>"digitalOrigin", :index_as=>[:not_searchable])
+        t.extent(:path=>"extent", :index_as=>[:searchable, :displayable])
+        t.reformatting_quality(:path=>"reformattingQuality", :index_as=>[:not_searchable,:displayable])
+        t.internet_media_type(:path=>"internetMediaType", :index_as=>[:not_searchable,:displayable])
+        t.digital_origin(:path=>"digitalOrigin", :index_as=>[:not_searchable,:displayable])
       }
       t.lib_format(:proxy=>[:physical_description, :form_nomarc])
       t.location(:path=>"location", :index_as=>[:not_searchable]){
