@@ -47,6 +47,7 @@ src
       @ng_xml = nil
       remove_instance_variable(:@ng_xml)
     end
+
     def method_missing method, *args
       query = false
       _mname = method.id2name

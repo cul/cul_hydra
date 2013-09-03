@@ -53,7 +53,8 @@ describe "StaticImageAggregator" do
 
   describe "rightsMetadata" do
     it "should have a rightsMetadata datastream" do
-      @fixtureobj.datastreams["rightsMetadata"].class.name.should == "Hydra::RightsMetadata"
+      @fixtureobj.datastreams["rightsMetadata"].class.name.should ==
+       "Hydra::Datastream::RightsMetadata"
     end
     it "should have a permissions method" do
       @fixtureobj.datastreams["rightsMetadata"].respond_to?(:permissions).should == true

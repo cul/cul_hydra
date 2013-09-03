@@ -55,13 +55,13 @@ describe "Cul::Scv::Hydra::Om::DCMetadata" do
       @fixture.find_by_terms_and_value(:nobody_home).should == []
     end
     it "should use Nokogiri to retrieve a NodeSet corresponding to the term pointers" do
-      @fixture.find_by_terms_and_value( :title ).length.should == 1
+      @fixture.find_by_terms_and_value( :dc_title ).length.should == 1
     end
 
   end
   describe ".update_values" do
     it "should mark the datastream as dirty" do
-      @fixture.update_values([:title]=>"With Billy Burroughs, image")
+      @fixture.update_values([:dc_title]=>"With Billy Burroughs, image")
       @fixture.dirty?.should == true
     end
   end
@@ -74,7 +74,7 @@ describe "Cul::Scv::Hydra::Om::DCMetadata" do
   end
   describe ".find_by_terms" do
     it "should use Nokogiri to retrieve a NodeSet corresponding to the combination of term pointers and array/nodeset indexes" do
-      @fixture.find_by_terms(:identifier).first.text.should == "prd.custord.070103a"
+      @fixture.find_by_terms(:dc_identifier).first.text.should == "prd.custord.070103a"
     end
     
     it "should support xpath queries as the pointer" do
@@ -82,8 +82,8 @@ describe "Cul::Scv::Hydra::Om::DCMetadata" do
     end
 
     it "should be able to update or add values by pointer" do
-      @fixture.update_values([:title]=>"With Billy Burroughs, image")
-      @fixture.find_by_terms(:title).first.text.should == "With Billy Burroughs, image"
+      @fixture.update_values([:dc_title]=>"With Billy Burroughs, image")
+      @fixture.find_by_terms(:dc_title).first.text.should == "With Billy Burroughs, image"
       puts "XPATH: " + Cul::Scv::Hydra::Om::DCMetadata.terminology.retrieve_term(:dc_type).xpath_relative
       puts "TEMPLATE: " + Cul::Scv::Hydra::Om::DCMetadata.terminology.retrieve_term(:dc_type).xml_builder_template
       @fixture.update_indexed_attributes([:dc_type=>0]=>"Text")
@@ -97,13 +97,14 @@ describe "Cul::Scv::Hydra::Om::DCMetadata" do
     end
     it "should identify presence or absence of terms with shortcut methods" do
       built  = Cul::Scv::Hydra::Om::DCMetadata.from_xml(nil)
-      built.update_values({[:title]=>'foo'})
-      built.title?.should == true
+      built.update_values({[:dc_title]=>'foo'})
+      built.dc_title?.should == true
       built.clio_id?.should == false
     end
   end
   describe ".xml_serialization" do
     it "should serialize new documents to xml" do
+      @mock_inner.stubs(:"new?").returns(true)
       Cul::Scv::Hydra::Om::DCMetadata.new(@mock_inner,'DC').to_xml
     end
     it "should parse and build namespaces identically" do
@@ -131,6 +132,7 @@ src
         end
       }
       built.should == true
+      puts doc.to_xml
       opts = { :element_order => false, :normalize_whitespace => true }
       passed = EquivalentXml.equivalent?(doc, dc_ns, opts){ |n1, n2, result|
         unless result
@@ -140,9 +142,10 @@ src
     end
 
     it "should produce equivalent xml when built up programatically" do
+      @mock_inner.stubs(:"new?").returns(false)
       built = Cul::Scv::Hydra::Om::DCMetadata.new(@mock_inner,'DC')
-      built.update_values({[:identifier] => "prd.custord.070103a"})
-      built.update_values({[:title] => "With William Burroughs, image"})
+      built.update_values({[:dc_identifier] => "prd.custord.070103a"})
+      built.update_values({[:dc_title] => "With William Burroughs, image"})
       built.update_values({[:dc_type] => "Collection"})
       opts = { :element_order => false, :normalize_whitespace => true }
       built.ng_xml.should be_equivalent_to(@fixture.ng_xml)

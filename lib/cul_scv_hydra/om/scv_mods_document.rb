@@ -27,7 +27,10 @@ module Om
       t.project(:path=>"relatedItem", :attributes=>{:type=>"host", :displayLabel=>"Project"}, :index_as=>[:not_searchable]){
         t.project_title_info(:path=>'titleInfo', :index_as=>[:not_searchable]){
           t.lib_project(:path=>'title',:index_as=>[:displayable, :searchable])
-          t.lib_project_facet(:path=>'title', :index_as=>[:facetable, :not_searchable],:variant_of=>{:field_base=>'lib_project',:map=>:project_facet})
+          t.lib_project_facet(
+            :path=>'title',
+            :index_as=>[:facetable, :not_searchable],
+            :variant_of=>{:field_base=>'lib_project',:map=>:project_facet})
         }
       }
       t.collection(:path=>"relatedItem", :attributes=>{:type=>"host", :displayLabel=>"Collection"}, :index_as=>[:not_searchable]){
@@ -64,11 +67,19 @@ module Om
         t.map_display(:path=>"physicalLocation",:attributes=>{:authority=>"marcorg"}, :index_as=>[:displayable, :not_searchable], :variant_of=>{:field_base=>'lib_repo',:map=>:marc_to_display})
         t.shelf_locator(:path=>"shelfLocator", :index_as=>[:not_searchable, :textable])
       }
-      t.name_personal(:path=>'name',:attributes=>{:type=>'personal'}, :index_as=>[:not_searchable]){
-        t.name_part(:path=>'namePart', :index_as=>[:facetable, :displayable, :searchable], :variant_of=>{:field_base=>:lib_name})
+      t.name_personal(
+        :path=>'name',:attributes=>{:type=>'personal'},
+        :index_as=>[:facetable, :displayable, :searchable],
+        :variant_of=>{:field_base=>:lib_name}){
+        t.name_part(:path=>'namePart', :index_as=>[:not_searchable])
       }
-      t.name_corporate(:path=>'name',:attributes=>{:type=>'corporate'}, :index_as=>[:not_searchable]){
-        t.name_part(:path=>'namePart', :index_as=>[:facetable, :displayable, :searchable], :variant_of=>{:field_base=>:lib_name})
+      t.name_corporate(
+        :path=>'name',:attributes=>{:type=>'corporate'}, 
+        :index_as=>[:facetable, :displayable, :searchable],
+        :variant_of=>{:field_base=>:lib_name}){
+        t.name_part(
+          :path=>'namePart',
+          :index_as=>[:not_searchable])
       }
       t.note(:path=>"note", :index_as=>[:not_searchable, :textable])
       t.access_condition(:path=>"accessCondition", :attributes=>{:type=>"useAndReproduction"}, :index_as => [:searchable], :data_type => :symbol)

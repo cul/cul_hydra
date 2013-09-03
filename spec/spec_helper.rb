@@ -14,10 +14,12 @@ require 'equivalent-xml/rspec_matchers'
 #require 'ruby-debug'
 require 'cul_scv_hydra'
 Dir.glob(libs).each {|lib| require lib}
+predicate_config_path = File.join(File.dirname(__FILE__), "..", "config", "predicate_mappings.yml")
+puts "PREDICATE CONFIG: #{predicate_config_path}"
+ActiveFedora::Predicates.predicate_config=YAML::load(File.open(predicate_config_path))
 models = File.expand_path(File.dirname(__FILE__) + '/../app/models/*.rb')
 Dir.glob(models).each {|model| require model}
 
-ActiveFedora.init(:fedora_config_path=>File.join(File.dirname(__FILE__), "..", "config", "fedora.yml"))
 
 RSpec.configure do |config|
   config.mock_with :mocha

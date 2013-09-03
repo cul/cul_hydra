@@ -158,6 +158,13 @@ module Common
     end
     solr_doc["format"] = [self.route_as]
     solr_doc["index_type_label_s"] = [self.index_type_label]
+    solr_doc.each_pair {|key, value|
+      if value.is_a? Array
+        value.each {|v| v.strip! unless v.nil? }
+      elsif value.is_a? String
+        value.strip!
+      end
+    }
     solr_doc
   end
   

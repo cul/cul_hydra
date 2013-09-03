@@ -18,6 +18,8 @@
     :cul_has_member: hasMember
     :cul_member_of: memberOf
     :cul_metadata_for: metadataFor
+  http://creativecommons.org/ns#:
+    :cc_license: license
   info:fedora/fedora-system:def/relations-external#: 
     :conforms_to: conformsTo
     :has_annotation: hasAnnotation
@@ -45,22 +47,22 @@
   info:fedora/fedora-system:def/model#:
     :has_model: hasModel
   http://purl.oclc.org/NET/CUL/RESOURCE/STILLIMAGE/BASIC/:
-    :cul_image_width: imageWidth
-    :cul_image_length: imageLength
+    :image_width: imageWidth
+    :image_length: imageLength
   http://purl.oclc.org/NET/CUL/RESOURCE/STILLIMAGE/ASSESSMENT/:
-    :cul_x_resolution: xSamplingFrequency
-    :cul_y_resolution: ySamplingFrequency
-    :cul_resolution_unit: samplingFrequencyUnit
+    :x_sampling: xSamplingFrequency
+    :y_sampling: ySamplingFrequency
+    :sampling_unit: samplingFrequencyUnit
   http://purl.org/dc/terms/:
     :extent: extent
     :format: format
     :format_of: isFormatOf
   http://www.w3.org/2003/12/exif/ns#:
-    :image_width: imageWidth
-    :image_length: imageLength
+    :exif_image_width: imageWidth
+    :exif_image_length: imageLength
     :x_resolution: xResolution
     :y_resolution: yResolution
-    :resolution_unti: resolutionUnit
+    :resolution_unit: resolutionUnit
   http://xmlns.com/foaf/0.1/:
     :foaf_thumbnail: thumbnail
   http://www.w3.org/1999/02/22-rdf-syntax-ns#:

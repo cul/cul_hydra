@@ -14,7 +14,7 @@ describe "Resource" do
     @foxml = fixture( File.join("FOXML", "static-image-aggregator.xml"))
     ingest("test:si_agg", fixture( File.join("FOXML", "static-image-aggregator.xml")), true)
     ingest("test:thumb_image",fixture( File.join("FOXML", "resource-thumb.xml")), true)
-    @containerobj = StaticImageAggregator.load_instance( "test:si_agg")
+    @containerobj = StaticImageAggregator.find( "test:si_agg")
     @containerobj.send :update_index
     @fixtureobj = Resource.find("test:thumb_image")
   end
