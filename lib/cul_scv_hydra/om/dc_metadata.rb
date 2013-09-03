@@ -29,19 +29,15 @@ module Om
     end
   
     def self.xml_template
-      builder = Nokogiri::XML::Builder.new do |xml|
-        xml.dc(
-           "xmlns:oai_dc"=>"http://www.openarchives.org/OAI/2.0/oai_dc/",
-           "xmlns:dc"=>"http://purl.org/dc/elements/1.1/",
-           "xmlns:xsi"=>"http://www.w3.org/2001/XMLSchema-instance"){
-          xml.parent.namespace_definitions.each {|ns|
-            xml.parent.namespace = ns if ns.prefix == 'oai_dc'
-          }
-        }
-      end
-      builder.doc.encoding = 'UTF-8'
-      builder.doc.root["xsi:schemaLocation"] = 'http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd'
-      return builder.doc
+
+      Nokogiri::XML::Document.parse(<<-src
+<oai_dc:dc
+      xmlns:oai_dc='http://www.openarchives.org/OAI/2.0/oai_dc/'
+      xmlns:dc='http://purl.org/dc/elements/1.1/'
+      xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+      xsi:schemaLocation='http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd'></oai_dc:dc>
+src
+)
     end
     # Because FCRepo 3.5+ modifies DC on saves (to ensure that PID is a dc:identifier value),
     # this datastream's content must be reloaded after saves
@@ -49,7 +45,7 @@ module Om
       self.dirty= false
       @content = nil
       @ng_xml = nil
-      self.xml_loaded = false
+      remove_instance_variable(:@ng_xml)
     end
     def method_missing method, *args
       query = false
