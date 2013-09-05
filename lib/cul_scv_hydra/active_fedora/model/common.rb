@@ -1,4 +1,4 @@
-require "active-fedora"
+require 'active-fedora'
 require 'uri'
 module Cul::Scv::Hydra::ActiveFedora::Model
 module Common
@@ -7,7 +7,7 @@ module Common
   included do
     define_model_callbacks :create
 
-    has_and_belongs_to_many :containers, :property=>:cul_member_of
+    has_and_belongs_to_many :containers, :property=>:cul_member_of, :class_name=>'ActiveFedora::Base'
     has_metadata :name => "DC", :type=>Cul::Scv::Hydra::Om::DCMetadata, :versionable => true
     has_metadata :name => "descMetadata", :type=>Cul::Scv::Hydra::Om::ModsDocument, :versionable => true
     has_metadata :name => "rightsMetadata", :type=>::Hydra::Datastream::RightsMetadata, :versionable => true
@@ -16,7 +16,7 @@ module Common
     
   module ClassMethods
     def pid_namespace
-      "ldpd"
+      'ldpd'
     end
   end
 
@@ -59,7 +59,7 @@ module Common
           #  end
           #end
    else
-      logger.warn "parts not defined; was this an Aggregator?"
+      logger.warn 'parts not defined; was this an Aggregator?'
       []
     end
   end
@@ -133,31 +133,32 @@ module Common
   def to_solr(solr_doc = Hash.new, opts={})
     super
     if has_desc?
-      solr_doc["descriptor_s"] = ["mods"]
+      solr_doc["descriptor_ssi"] = ["mods"]
     else
-      solr_doc["descriptor_s"] = ["dublin core"]
+      solr_doc["descriptor_ssi"] = ["dublin core"]
     end
     # if no mods, pull some values from DC
-    if (solr_doc["title_display"].nil? or solr_doc["title_display"].length == 0)
+    if (solr_doc["title_ssm"].nil? or solr_doc["title_ssm"].length == 0)
       if self.dc.term_values(:dc_title).first
-        solr_doc["title_display"] = [self.dc.term_values(:dc_title).first]
+        solr_doc["title_ssm"] = [self.dc.term_values(:dc_title).first]
       else
-        solr_doc["title_display"] = [self.dc.term_values(:dc_identifier).first]
+        solr_doc["title_ssm"] = [self.dc.term_values(:dc_identifier).first]
       end
       if self.dc.term_values(:dc_relation).first
         self.dc.term_values(:dc_relation).each {|val|
           if val =~ /clio:/
-            solr_doc["clio_s"] ||= []
-            solr_doc["clio_s"] << val.split(':')[-1]
+            solr_doc["clio_ssim"] ||= []
+            solr_doc["clio_ssim"] << val.split(':')[-1]
           end
         }
       end
     end
-    if (solr_doc["title_display"].length > 1)
-      solr_doc["title_display"].uniq!
+    if (solr_doc["title_ssm"].length > 1)
+      solr_doc["title_ssm"].uniq!
     end
-    solr_doc["format"] = [self.route_as]
-    solr_doc["index_type_label_s"] = [self.index_type_label]
+    solr_doc["format_ssi"] = [self.route_as]
+    solr_doc["index_type_label_ssi"] = [self.index_type_label]
+    
     solr_doc.each_pair {|key, value|
       if value.is_a? Array
         value.each {|v| v.strip! unless v.nil? }

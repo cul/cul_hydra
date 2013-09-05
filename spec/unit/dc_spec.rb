@@ -62,13 +62,13 @@ describe "Cul::Scv::Hydra::Om::DCMetadata" do
   describe ".update_values" do
     it "should mark the datastream as dirty" do
       @fixture.update_values([:dc_title]=>"With Billy Burroughs, image")
-      @fixture.dirty?.should == true
+      @fixture.changed?.should == true
     end
   end
   describe ".update_indexed_attributes" do
     it "should mark the datastream as dirty" do
       @fixture.update_indexed_attributes([:dc_type=>0]=>"UnlikelyType")
-      @fixture.dirty?.should == true
+      @fixture.changed?.should == true
       @fixture.find_by_terms(:dc_type).first.text.should == "UnlikelyType"
     end
   end
@@ -142,13 +142,26 @@ src
     end
 
     it "should produce equivalent xml when built up programatically" do
-      @mock_inner.stubs(:"new?").returns(false)
+      @mock_inner.stubs(:"new?").returns(true)
       built = Cul::Scv::Hydra::Om::DCMetadata.new(@mock_inner,'DC')
       built.update_values({[:dc_identifier] => "prd.custord.070103a"})
       built.update_values({[:dc_title] => "With William Burroughs, image"})
       built.update_values({[:dc_type] => "Collection"})
       opts = { :element_order => false, :normalize_whitespace => true }
       built.ng_xml.should be_equivalent_to(@fixture.ng_xml)
+    end
+  end
+
+  describe ".to_solr" do
+    it "should create the right map for Solr indexing" do
+      @mock_inner.stubs(:"new?").returns(true)
+      built = Cul::Scv::Hydra::Om::DCMetadata.new(@mock_inner,'DC')
+      built.update_values({[:dc_identifier] => "prd.custord.070103a"})
+      built.update_values({[:dc_title] => "With William Burroughs, image"})
+      built.update_values({[:dc_type] => "Collection"})
+      built.ng_xml_doesnt_change!
+      solr_doc = built.to_solr
+      puts solr_doc.inspect
     end
   end
    

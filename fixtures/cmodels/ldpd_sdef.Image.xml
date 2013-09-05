@@ -40,7 +40,6 @@ xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.opena
           <fmm:Method operationName="getPreservation" />
           <fmm:Method operationName="getView" />
           <fmm:Method operationName="getMetadata" />
-        </fmm:MethodMap>
 </fmm:MethodMap>
 </foxml:xmlContent>
 </foxml:datastreamVersion>

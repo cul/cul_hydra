@@ -69,19 +69,19 @@ describe "StaticImageAggregator" do
     it "should be able to edit and push new data to Fedora" do
       new_value = "new.test.id.value"
       ds = @fixtureobj.datastreams["DC"]
-      ds.update_indexed_attributes({[:identifier] => new_value})
-      ds.dirty?.should be_true
+      ds.update_indexed_attributes({[:dc_identifier] => new_value})
+      ds.changed?.should be_true
       @fixtureobj.save
-      ds.dirty?.should be_false
+      ds.changed?.should be_false
       updated = StaticImageAggregator.find(
 @fixtureobj.pid)
       found = false
-      ds.find_by_terms(:identifier).each { |node|
+      ds.find_by_terms(:dc_identifier).each { |node|
         found ||= node.text == new_value
       }
       found.should be_true
       found = false
-      updated.datastreams["DC"].find_by_terms(:identifier).each { |node|
+      updated.datastreams["DC"].find_by_terms(:dc_identifier).each { |node|
         found ||= node.text == new_value
       }
       found.should be_true

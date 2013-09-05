@@ -215,7 +215,7 @@ def ingest(pid, foxml, force=false)
   env = ENV['RAILS_ENV'] || 'test'
   opts = @configs[env]
   @rubydora_conn ||= ActiveFedora::RubydoraConnection.new(opts)
-  obj = @rubydora_conn.connection.find(pid)
+  obj = @rubydora_conn.connection.find_or_initialize(pid)
   if obj.new?
     @rubydora_conn.connection.ingest(:pid=>pid, :file=>foxml)
     return ActiveFedora::Base.find(pid)

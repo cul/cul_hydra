@@ -3,7 +3,6 @@ class JP2ImageAggregator < ::ActiveFedora::Base
   extend ActiveModel::Callbacks
   include ::ActiveFedora::Finders
   include ::ActiveFedora::DatastreamCollections
-  include ::ActiveFedora::Relationships
   include ::Hydra::ModelMethods
   include Cul::Scv::Hydra::ActiveFedora::Model::Common
   include Cul::Scv::Hydra::ActiveFedora::Model::Aggregator
@@ -25,13 +24,13 @@ class JP2ImageAggregator < ::ActiveFedora::Base
     source = self.datastreams["SOURCE"]
     source.profile
     if source.controlGroup == 'E'
-      solr_doc["rft_id"] = source.dsLocation
+      solr_doc["rft_id_ss"] = source.dsLocation
     else
       rc = ActiveFedora::RubydoraConnection.instance.connection
       url = rc.config["url"]
       uri = URI::parse(url)
       url = "#{uri.scheme}://#{uri.host}:#{uri.port}/fedora/objects/#{pid}/datastreams/SOURCE/content"
-      solr_doc["rft_id"] = url
+      solr_doc["rft_id_ss"] = url
     end
     solr_doc
   end

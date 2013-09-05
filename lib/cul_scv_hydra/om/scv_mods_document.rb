@@ -5,73 +5,72 @@ module Cul
 module Scv
 module Hydra
 module Om
-  class ModsDocument < ::ActiveFedora::NokogiriDatastream
-    include OM::XML::Document
+  class ModsDocument < ::ActiveFedora::OmDatastream
+    include ::OM::XML::TerminologyBasedSolrizer
     include Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer
-
-    after_save :action_after_save
 
     set_terminology do |t|
       t.root(:path=>"mods",
              :xmlns=>"http://www.loc.gov/mods/v3",
-             :schema=>"http://www.loc.gov/standards/mods/v3/mods-3-4.xsd")
-             
-      t.main_title_info(:path=>'titleInfo', :index_as=>[:not_searchable], :attributes=>{:type=>:none}){
-        t.main_title(:path=>"title", :index_as=>[:not_searchable])
+             :schema=>"http://www.loc.gov/standards/mods/v3/mods-3-4.xsd") {
       }
-      t.title(:proxy=>[:mods, :main_title_info, :main_title], :index_as=>[:displayable, :searchable, :sortable])
+
+      t.main_title_info(:path=>'titleInfo', :index_as=>[], :attributes=>{:type=>:none}){
+        t.main_title(:path=>"title", :index_as=>[])
+      }
       
-      t.search_title_info(:path=>'titleInfo', :index_as=>[:not_searchable]){
+      t.title(:proxy=>[:mods, :main_title_info, :main_title],
+       :index_as=>[:displayable, :searchable, :sortable, :textable])
+
+      t.search_title_info(:path=>'titleInfo', :index_as=>[]){
         t.search_title(:path=>'title', :index_as=>[:searchable])
       }
-      t.project(:path=>"relatedItem", :attributes=>{:type=>"host", :displayLabel=>"Project"}, :index_as=>[:not_searchable]){
-        t.project_title_info(:path=>'titleInfo', :index_as=>[:not_searchable]){
-          t.lib_project(:path=>'title',:index_as=>[:displayable, :searchable])
-          t.lib_project_facet(
-            :path=>'title',
-            :index_as=>[:facetable, :not_searchable],
-            :variant_of=>{:field_base=>'lib_project',:map=>:project_facet})
+      t.project(:path=>"relatedItem", :attributes=>{:type=>"host", :displayLabel=>"Project"}, :index_as=>[]){
+        t.project_title_info(:path=>'titleInfo', :index_as=>[]){
+          t.lib_project(:path=>'title',:index_as=>[])
         }
       }
-      t.collection(:path=>"relatedItem", :attributes=>{:type=>"host", :displayLabel=>"Collection"}, :index_as=>[:not_searchable]){
-        t.collection_title_info(:path=>'titleInfo', :index_as=>[:not_searchable]){
+      t.collection(:path=>"relatedItem", :attributes=>{:type=>"host", :displayLabel=>"Collection"}, :index_as=>[]){
+        t.collection_title_info(:path=>'titleInfo', :index_as=>[]){
           t.lib_collection(:path=>'title', :index_as=>[:facetable, :displayable])
         }
       }
-      t.lib_project(:proxy=>[:project,:project_title_info, :lib_project])
+      t.lib_project(:proxy=>[:project,:project_title_info, :lib_project],
+        :index_as=>[:displayable, :searchable, :project_facetable, :textable])
       t.lib_collection(:proxy=>[:collection,:collection_title_info, :lib_collection])
 # pattern matches
-      t.identifier(:path=>"identifier", :attributes=>{:type=>"local"}, :data_type=>:symbol)
-      t.identifier_text(:ref=>:identifier, :index_as=>[:not_searchable, :textable])
+      t.identifier(:path=>"identifier", :attributes=>{:type=>"local"}, :index_as=>[:symbol, :textable])
       t.clio(:path=>"identifier", :attributes=>{:type=>"CLIO"}, :data_type=>:symbol, :index_as=>[:searchable, :displayable])
       t.abstract
       t.subject {
         t.topic
       }
-      t.type_of_resource(:path=>"typeOfResource", :index_as=>[:not_searchable,:displayable])
-      t.physical_description(:path=>"physicalDescription", :index_as=>[:not_searchable]){
-        t.form_marc(:path=>"form", :attributes=>{:authority=>"marcform"}, :index_as=>[:not_searchable,:displayable])
-        t.form_aat(:path=>"form", :attributes=>{:authority=>"aat"}, :index_as=>[:not_searchable,:displayable])
-        t.form(:attributes=>{:authority=>:none}, :index_as=>[:not_searchable,:displayable])
-        t.form_nomarc(:path=>"form[@authority !='marcform']", :index_as=>[:not_searchable, :displayable, :facetable])
+      t.type_of_resource(:path=>"typeOfResource", :index_as=>[:displayable])
+      t.physical_description(:path=>"physicalDescription", :index_as=>[]){
+        t.form_marc(:path=>"form", :attributes=>{:authority=>"marcform"}, :index_as=>[:displayable])
+        t.form_aat(:path=>"form", :attributes=>{:authority=>"aat"}, :index_as=>[:displayable])
+        t.form(:attributes=>{:authority=>:none}, :index_as=>[:displayable])
+        t.form_nomarc(:path=>"form[@authority !='marcform']", :index_as=>[])
         t.extent(:path=>"extent", :index_as=>[:searchable, :displayable])
-        t.reformatting_quality(:path=>"reformattingQuality", :index_as=>[:not_searchable,:displayable])
-        t.internet_media_type(:path=>"internetMediaType", :index_as=>[:not_searchable,:displayable])
-        t.digital_origin(:path=>"digitalOrigin", :index_as=>[:not_searchable,:displayable])
+        t.reformatting_quality(:path=>"reformattingQuality", :index_as=>[:displayable])
+        t.internet_media_type(:path=>"internetMediaType", :index_as=>[:displayable])
+        t.digital_origin(:path=>"digitalOrigin", :index_as=>[:displayable])
       }
-      t.lib_format(:proxy=>[:physical_description, :form_nomarc])
-      t.location(:path=>"location", :index_as=>[:not_searchable]){
-        t.repo_text(:path=>"physicalLocation",:attributes=>{:authority=>:none},  :index_as=>[:not_searchable])
-        t.repo_code(:path=>"physicalLocation",:attributes=>{:authority=>"marcorg"}, :index_as=>[:not_searchable])
-        t.map_facet(:path=>"physicalLocation",:attributes=>{:authority=>"marcorg"}, :index_as=>[:facetable], :variant_of=>{:field_base=>'lib_repo',:map=>:marc_to_facet})
-        t.map_display(:path=>"physicalLocation",:attributes=>{:authority=>"marcorg"}, :index_as=>[:displayable, :not_searchable], :variant_of=>{:field_base=>'lib_repo',:map=>:marc_to_display})
-        t.shelf_locator(:path=>"shelfLocator", :index_as=>[:not_searchable, :textable])
+      t.lib_format(:proxy=>[:physical_description, :form_nomarc], :index_as=>[:displayable, :facetable])
+      t.location(:path=>"location", :index_as=>[]){
+        t.repo_text(:path=>"physicalLocation",:attributes=>{:authority=>:none},  :index_as=>[])
+        t.lib_repo(:path=>"physicalLocation",
+          :attributes=>{:authority=>"marcorg"},
+          :index_as=>[])
+        t.shelf_locator(:path=>"shelfLocator", :index_as=>[:textable])
       }
-      t.name_personal(
+      t.lib_repo(:proxy=>[:location, :lib_repo],
+       :index_as=>[:marc_code_facetable, :marc_code_displayable,
+        :marc_code_textable])
+      t.lib_name(
         :path=>'name',:attributes=>{:type=>'personal'},
-        :index_as=>[:facetable, :displayable, :searchable],
-        :variant_of=>{:field_base=>:lib_name}){
-        t.name_part(:path=>'namePart', :index_as=>[:not_searchable])
+        :index_as=>[:facetable, :displayable, :searchable, :textable]){
+        t.name_part(:path=>'namePart', :index_as=>[])
       }
       t.name_corporate(
         :path=>'name',:attributes=>{:type=>'corporate'}, 
@@ -79,27 +78,29 @@ module Om
         :variant_of=>{:field_base=>:lib_name}){
         t.name_part(
           :path=>'namePart',
-          :index_as=>[:not_searchable])
+          :index_as=>[])
       }
-      t.note(:path=>"note", :index_as=>[:not_searchable, :textable])
-      t.access_condition(:path=>"accessCondition", :attributes=>{:type=>"useAndReproduction"}, :index_as => [:searchable], :data_type => :symbol)
-      t.record_info(:path=>"recordInfo", :index_as=>[:not_searchable]) {
-        t.record_creation_date(:path=>"recordCreationDate",:attributes=>{:encoding=>"w3cdtf"}, :index_as=>[:not_searchable])
-        t.record_content_source(:path=>"recordContentSource",:attributes=>{:authority=>"marcorg"}, :index_as=>[:not_searchable])
-        t.language_of_cataloging(:path=>"languageOfCataloging", :index_as=>[:not_searchable]){
-          t.language_term(:path=>"languageTerm", :index_as=>[:not_searchable], :attributes=>{:type=>:none})
-          t.language_code(:path=>"languageTerm",:attributes=>{:type=>'code',:authority=>"iso639-2b"}, :index_as=>[:not_searchable])
+      t.note(:path=>"note", :index_as=>[:textable])
+      t.access_condition(:path=>"accessCondition",
+       :attributes=>{:type=>"useAndReproduction"},
+       :index_as => [:searchable, :symbol])
+      t.record_info(:path=>"recordInfo", :index_as=>[]) {
+        t.record_creation_date(:path=>"recordCreationDate",:attributes=>{:encoding=>"w3cdtf"}, :index_as=>[])
+        t.record_content_source(:path=>"recordContentSource",:attributes=>{:authority=>"marcorg"}, :index_as=>[])
+        t.language_of_cataloging(:path=>"languageOfCataloging", :index_as=>[]){
+          t.language_term(:path=>"languageTerm", :index_as=>[], :attributes=>{:type=>:none})
+          t.language_code(:path=>"languageTerm",:attributes=>{:type=>'code',:authority=>"iso639-2b"}, :index_as=>[])
         }
-        t.record_origin(:path=>"recordOrigin", :index_as=>[:not_searchable])
+        t.record_origin(:path=>"recordOrigin", :index_as=>[])
       }
       t.language_term(:proxy=>[:record_info, :language_of_cataloging, :language_term])
       t.language_code(:proxy=>[:record_info, :language_of_cataloging, :language_code])
 
-      t.origin_info(:path=>"originInfo", :index_as=>[:not_searchable]){
-        t.date(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf'}, :index_as=>[:not_searchable])
-        t.key_date(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes'}, :index_as=>[:not_searchable])
-        t.start_date(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes',:point=>'start'}, :index_as=>[:not_searchable])
-        t.end_date(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:point=>'end'}, :index_as=>[:not_searchable])
+      t.origin_info(:path=>"originInfo", :index_as=>[]){
+        t.date(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf'}, :index_as=>[])
+        t.key_date(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes'}, :index_as=>[])
+        t.start_date(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes',:point=>'start'}, :index_as=>[])
+        t.end_date(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:point=>'end'}, :index_as=>[])
       }
     end
   
@@ -116,9 +117,7 @@ module Om
       builder.doc.root["xsi:schemaLocation"] = 'http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd'
       return builder.doc
     end
-    def action_after_save
-      self.dirty= false
-    end
+
     def method_missing method, *args
       query = false
       _mname = method.id2name

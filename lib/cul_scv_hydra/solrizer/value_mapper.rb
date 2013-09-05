@@ -1,7 +1,7 @@
 module Cul::Scv::Hydra::Solrizer
 # This class uses a yaml map to translate field values for solr
 class ValueMapper
-def self.load_value_maps(config_path=nil)
+  def self.load_value_maps(config_path=nil)
     if config_path.nil?
       if defined?(Rails.root) && !Rails.root.nil?
         config_path = File.join(Rails.root, "config", "solr_value_maps.yml")

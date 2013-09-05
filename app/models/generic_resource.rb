@@ -7,7 +7,6 @@ class GenericResource < ::ActiveFedora::Base
   extend ActiveModel::Callbacks
   include ::ActiveFedora::Finders
   include ::ActiveFedora::DatastreamCollections
-  include ::ActiveFedora::Relationships
   include ::Hydra::ModelMethods
   include Cul::Scv::Hydra::ActiveFedora::Model::Common
   include ::ActiveFedora::RelsInt
@@ -34,8 +33,8 @@ class GenericResource < ::ActiveFedora::Base
 
   def to_solr(solr_doc = Hash.new, opts={})
     super
-    unless solr_doc["extent_s"] || self.datastreams["content"].nil?
-      solr_doc["extent_s"] = [self.datastreams["content"].size]
+    unless solr_doc["extent_ssi"] || self.datastreams["content"].nil?
+      solr_doc["extent_ssi"] = [self.datastreams["content"].size]
     end
     solr_doc
   end

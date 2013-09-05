@@ -19,7 +19,7 @@ describe "Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer" do
     pending "identification of modules"
     #Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer.included_modules.should include(OM::XML::Validation)
   end
-  
+
   describe ".to_solr" do
     it "should serialize new documents to xml" do
       solr = @mods_fixture.to_solr
@@ -29,7 +29,11 @@ describe "Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer" do
       fails = []
       @solr_fixture.each { |key, value_array|
         puts "BAD MATCH: #{key} got: #{solr[key].inspect} expected: #{value_array.inspect}" if !solr[key] or solr[key].sort != value_array.sort
-        fails << key if !solr[key] or solr[key].sort != value_array.sort
+        if !solr[key] or solr[key].sort != value_array.sort
+          fails << key
+          puts "<< #{solr[key].sort.inspect}" if solr[key]
+          puts ">> #{value_array.sort.inspect}"
+        end
         #solr[key].should == value_array
       }
       fails.should == []

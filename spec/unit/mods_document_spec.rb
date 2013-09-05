@@ -64,11 +64,11 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
 
     it "should allow you to search by term pointer" do
       @mods_item.ng_xml.expects(:xpath).with('//oxns:location/oxns:physicalLocation[@authority="marcorg"]', @mods_item.ox_namespaces)
-      @mods_item.find_by_terms_and_value(:location, :repo_code)
+      @mods_item.find_by_terms_and_value(:location, :lib_repo)
     end
     it "should allow you to constrain your searches" do
       @mods_item.ng_xml.expects(:xpath).with('//oxns:location/oxns:physicalLocation[@authority="marcorg" and contains(., "NNC-RB")]', @mods_item.ox_namespaces)
-      @mods_item.find_by_terms_and_value(:location,:repo_code, "NNC-RB")
+      @mods_item.find_by_terms_and_value(:location,:lib_repo, "NNC-RB")
     end
     it "should allow you to use complex constraints" do
       @mods_item.ng_xml.expects(:xpath).with('//oxns:recordInfo/oxns:recordCreationDate[@encoding="w3cdtf" and contains(., "2010-07-12")]', @mods_item.ox_namespaces)
@@ -76,14 +76,27 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
     end
   end
   describe ".find_by_terms" do
+    it "should find the right terms for title" do
+      C = Cul::Scv::Hydra::Om::ModsDocument
+      T = C.terminology
+      term = T.retrieve_term(:title)
+      puts term.xpath
+      term.xpath.should == '//oxns:mods/oxns:titleInfo[not(@type)]/oxns:title'
+      T.has_term?(:title).should be_true
+      doc = {}
+      @fixturemods.to_solr(doc)
+      doc["title_ssm"].should == ["Manuscript, unidentified"]
+    end
+  
+
     it "should use Nokogiri to retrieve a NodeSet corresponding to the combination of term pointers and array/nodeset indexes" do
       @mods_item.find_by_terms( :access_condition ).length.should == 1
       @mods_item.find_by_terms( {:access_condition=>0} ).first.text.should == @mods_part.ng_xml.xpath('//oxns:accessCondition[@type="useAndReproduction"][1]', "oxns"=>"http://www.loc.gov/mods/v3").first.text
       Cul::Scv::Hydra::Om::ModsDocument.terminology.xpath_with_indexes( :mods, {:main_title_info=>0}, :main_title ).should == '//oxns:mods/oxns:titleInfo[not(@type)][1]/oxns:title'
       # Nokogiri behaves unexpectedly
       #@mods_item.find_by_terms( {:title_info=>0}, :title ).length.should == 1
-      @mods_item.find_by_terms( :title ).class.should == Nokogiri::XML::NodeSet
-      @mods_item.find_by_terms( :title ).first.text.should == "Manuscript, unidentified"
+      @mods_item.find_by_terms(:title ).class.should == Nokogiri::XML::NodeSet
+      @mods_item.find_by_terms(:title ).first.text.should == "Manuscript, unidentified"
     end
     it "should find a NodeSet where a terminology attribute has been set to :none" do
       @mods_item.find_by_terms(:location, :repo_text).first.text.should == "Rare Book and Manuscript Library, Columbia University"
@@ -98,6 +111,7 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
       @mods_item.find_by_terms( {:foo=>20}, :bar ).should == nil
     end
     it "should identify presence or absence of terms with shortcut methods" do
+      @mock_inner.stubs(:new?).returns(true)
       built  = Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner, 'descMetadata')
       built.ng_xml = Cul::Scv::Hydra::Om::ModsDocument.xml_template
       built.update_values({[:title]=>'foo'})
@@ -107,6 +121,7 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
   end
   describe ".xml_serialization" do
     it "should serialize new documents to xml" do
+      @mock_inner.stubs(:new?).returns(true)
       Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner,'descMetadata').to_xml
     end
     it "should parse and build namespaces identically" do
@@ -147,10 +162,11 @@ src
       passed.should == true
     end
     it "should produce equivalent xml when built up programatically" do
+      @mock_inner.stubs(:new?).returns(false)
       built = Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner,'descMetadata')
       built.ng_xml = Cul::Scv::Hydra::Om::ModsDocument.xml_template
       built.update_values({[:identifier] => "prd.custord.040148"})
-      built.update_values({[:title] => "Manuscript, unidentified"})
+      built.update_values({[:mods, :main_title_info, :main_title] => "Manuscript, unidentified"})
       built.update_values({[:type_of_resource] => "text"})
       built.update_values({[:physical_description, :form_marc] => "electronic"})
       built.update_values({[:physical_description, :form_aat] => "books"})
@@ -158,7 +174,7 @@ src
       built.update_values({[:physical_description, :reformatting_quality] => "access"})
       built.update_values({[:physical_description, :internet_media_type] => "image/tiff"})
       built.update_values({[:physical_description, :digital_origin] => "reformatted digital"})
-      built.update_values({[:location, :repo_code] => "NNC-RB"})
+      built.update_values({[:location, :lib_repo] => "NNC-RB"})
       built.update_values({[:location, :repo_text] => "Rare Book and Manuscript Library, Columbia University"})
       built.update_values({[:lib_project] => "Customer Order Collection"})
       built.update_values({[:note] => "Original PRD customer order number: 040148"})
@@ -174,6 +190,7 @@ ml
       built.ng_xml.should be_equivalent_to(@mods_item.ng_xml)
     end
     it "should produce equivalent xml for recordInfo" do
+      @mock_inner.stubs(:new?).returns(false)
       built = Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner, 'descMetadata')
       built.ng_xml = Cul::Scv::Hydra::Om::ModsDocument.xml_template
       built.update_values({[:record_info, :record_creation_date] => "2010-07-12"})
@@ -187,14 +204,16 @@ ml
       built.ng_xml.should be_equivalent_to(parsed)
     end
     it "should produce equivalent xml for physical location" do
+      @mock_inner.stubs(:new?).returns(false)
       built = Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner, 'descMetadata')
       built.ng_xml = Cul::Scv::Hydra::Om::ModsDocument.xml_template
-      built.update_values({[:location, :repo_code] => "NNC-RB"})
+      built.update_values({[:location, :lib_repo] => "NNC-RB"})
       built.update_values({[:location, :repo_text] => "Rare Book and Manuscript Library, Columbia University"})
       parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-physical-location.xml")))
       built.ng_xml.should be_equivalent_to(parsed)
     end
     it "should produce equivalent xml for date ranges" do
+      @mock_inner.stubs(:new?).returns(false)
       built = Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner, 'descMetadata')
       built.ng_xml = Cul::Scv::Hydra::Om::ModsDocument.xml_template
       built.update_values({[:origin_info, :start_date]=>"1900"})
@@ -207,7 +226,24 @@ ml
   describe ".update_values" do
     it "should mark the datastream as dirty" do
       @mods_item.update_values({[:record_info,:record_content_source]=> "NNC"})
-      @mods_item.dirty?.should be_true
+      @mods_item.changed?.should be_true
+    end
+  end
+  describe ".to_solr" do
+    it "should create the expected Solr hash for mapped project values" do
+      solr_doc = @mods_item.to_solr
+      puts solr_doc.inspect
+      # check the mapped facet value
+      solr_doc["lib_project_sim"].should include("PRD Orders")
+      # check the unmapped display value
+      solr_doc["lib_project_ssm"].should include("Customer Order Collection")
+      # check that the mapped value didn't find it's way into the display field
+      solr_doc["lib_project_ssm"].should_not include("PRD Orders")
+      solr_doc["lib_repo_sim"].should include("RBML")
+      # check the unmapped display value
+      solr_doc["lib_repo_ssim"].should include("Rare Book and Manuscript Library")
+      # check that the mapped value didn't find it's way into the display field
+      solr_doc["lib_repo_ssim"].should_not include("RBML")
     end
   end
 end

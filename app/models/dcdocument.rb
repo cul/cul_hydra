@@ -1,13 +1,13 @@
 require "active-fedora"
 class DcDocument < ActiveFedora::Base
+  include ::ActiveFedora::Associations
   include ::ActiveFedora::Finders
   include ::ActiveFedora::DatastreamCollections
-  include ::ActiveFedora::Relationships
   include Hydra::ModelMethods
   include Cul::Scv::Hydra::ActiveFedora::Model::Common
   alias :file_objects :resources
   
-  has_relationship "parts", :cul_member_of, :inbound => true
+  has_many :parts, :property=>:cul_member_of, :class_name=>'ActiveFedora::Base'
 
   def self.load_instance_from_solr(pid,solr_doc=nil)
     if solr_doc.nil?

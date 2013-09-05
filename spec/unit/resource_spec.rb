@@ -42,18 +42,18 @@ describe "Resource" do
     it "should be able to edit and push new data to Fedora" do
       new_value = "new.id.value"
       ds = @fixtureobj.datastreams["DC"]
-      ds.update_values({[:identifier] => new_value})
-      ds.dirty?.should == true
+      ds.update_values({[:dc_identifier] => new_value})
+      ds.changed?.should == true
       @fixtureobj.save
-      ds.dirty?.should == false
+      ds.changed?.should == false
       updated = Resource.find(@fixtureobj.pid)
       found = false
-      ds.find_by_terms(:identifier).each { |node|
+      ds.find_by_terms(:dc_identifier).each { |node|
         found ||= node.text == new_value
       }
       found.should == true
       found = false
-      updated.datastreams["DC"].find_by_terms(:identifier).each { |node|
+      updated.datastreams["DC"].find_by_terms(:dc_identifier).each { |node|
         found ||= node.text == new_value
       }
       found.should == true
@@ -80,23 +80,24 @@ describe "Resource" do
     end
 
     it "should be able to find its sampling type" do
-      pred = ActiveFedora::Predicates.find_graph_predicate(:sampling_unit)
+      pred = ActiveFedora::Predicates.find_graph_predicate(:resolution_unit)
+      puts "#{pred.class} : #{pred}"
       found = 0
-      query = RDF::Query.new({:subject=>{RDF::URI(pred) => :object }})
-      @newobj.relationships(RDF::URI(pred)).each { |object|
+      @newobj.relationships(pred).each { |object|
         found += 1
-        object.should == RDF::URI('http://purl.oclc.org/NET/CUL/RESOURCE/STILLIMAGE/ASSESSMENT/NoAbsoluteSampling')
+        object.should == RDF::Literal.new('1')
       }
       found.should == 1
     end
 
     it "should be able to find its width" do
-      @newobj.relationships(RDF::URI("http://purl.oclc.org/NET/CUL/RESOURCE/STILLIMAGE/BASIC/imageWidth")).length.should == 1
+      pred = ActiveFedora::Predicates.find_graph_predicate(:exif_image_width)
+      puts "#{pred.class} : #{pred}"
+      @newobj.relationships(pred).length.should == 1
     end
 
     it "should be able to find its extent" do
       pred = ActiveFedora::Predicates.find_graph_predicate(:extent)
-      query = RDF::Query.new({:subject=>{pred => :object }})
       values = @newobj.relationships(pred)
       found = 0
       values.each { |value|

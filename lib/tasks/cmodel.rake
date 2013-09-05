@@ -47,11 +47,21 @@ def content_for(pid)
 end
 
 def load_content(content, pid)
-  connection.ingest(:file=>StringIO.new(content), :pid=>pid)
+  begin
+    connection.ingest(:file=>StringIO.new(content), :pid=>pid)
+  rescue Exception => e 
+    puts "possible problem with ingest of #{pid}: #{e.message}"
+    raise e
+  end
 end
 
 def purge(pid)
-  connection.purge_object :pid=>pid
+  begin
+    connection.purge_object :pid=>pid
+  rescue Exception => e 
+    puts "possible problem with purge of #{pid}: #{e.message}"
+  end
+
 end
 
 def reload(pid)
@@ -86,6 +96,7 @@ namespace :cul_scv_hydra do
     task :reload_all => :environment do
       pattern = ENV["PATTERN"]
       pattern = Regexp.compile(pattern) if pattern
+      reload("ldpd:nullbind")
       each_cmodel do |pid|
         unless (pattern and not pid =~ pattern)
           puts "reloading #{pid}"

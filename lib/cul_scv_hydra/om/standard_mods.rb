@@ -5,9 +5,7 @@ module Cul
 module Scv
 module Hydra
 module Om
-  class StandardMods
-    include OM::XML::Document
-    include ::Solrizer::XML::TerminologyBasedSolrizer
+  class StandardMods < ::ActiveFedora::OmDatastream
   
     set_terminology do |t|
       t.root(:path=>"mods",

@@ -3,7 +3,7 @@ module Aggregator
   extend ActiveSupport::Concern
 
   included do
-    has_many :parts, :property => :cul_member_of
+    has_many :parts, :property => :cul_member_of, :class_name=>'ActiveFedora::Base'
     after_create :aggregator!
   end
 
@@ -21,7 +21,7 @@ module Aggregator
       container = "info:fedora/#{container}"
     end
     member.add_relationship(:cul_member_of, container)
-    member.datastreams["RELS-EXT"].dirty = true
+    member.datastreams["RELS-EXT"].content_will_change!
     member.save
   end
 
@@ -37,7 +37,7 @@ module Aggregator
     rel.object = container
     rel.predicate = :cul_member_of
     member.remove_relationship(rel)
-    member.datastreams["RELS-EXT"].dirty = true
+    member.datastreams["RELS-EXT"].content_will_change!
     member.save
   end
 end

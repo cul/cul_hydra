@@ -63,6 +63,7 @@ module Resource
           end
           subject = RDF::URI(internal_uri)
           predicate = RDF::URI("#{node.namespace.href}#{node.name}")
+          puts "Adding a resource predicate : #{predicate}"
           query = RDF::Query.new({ :subject => {predicate => :object}})
           relationships(predicate).dup.each { |stmt|
             relationships.delete(stmt)

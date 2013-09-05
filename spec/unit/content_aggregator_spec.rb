@@ -35,7 +35,7 @@ describe "ContentAggregator" do
       new_value = "new.id.value"
       ds = @fixtureobj.datastreams["descMetadata"]
       ds.update_values({[:identifier] => new_value})
-      ds.dirty?.should == true
+      ds.changed?.should == true
       @fixtureobj.save
       updated = ContentAggregator.find(@fixtureobj.pid)
       ds.find_by_terms(:identifier).first.text.should == new_value

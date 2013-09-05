@@ -3,29 +3,59 @@ module Cul
 module Scv
 module Hydra
 module Om
-  class DCMetadata < ::ActiveFedora::NokogiriDatastream
-    include OM::XML::Document
+  class DCMetadata < ::ActiveFedora::OmDatastream
+
     after_save :action_after_save
     set_terminology do |t|
       t.root(:path=>"dc", :namespace_prefix=>"oai_dc",
              "xmlns:oai_dc"=>"http://www.openarchives.org/OAI/2.0/oai_dc/",
              "xmlns:dc"=>"http://purl.org/dc/elements/1.1/",
              :schema=>"http://www.openarchives.org/OAI/2.0/oai_dc.xsd")
-      t.dc_contributor(:path=>"contributor", :namespace_prefix=>"dc", :index_as=>[:displayable, :searchable])
-      t.dc_coverage(:path=>"coverage", :namespace_prefix=>"dc", :index_as=>[:displayable, :searchable])
-      t.dc_creator(:path=>"creator", :namespace_prefix=>"dc", :index_as=>[:displayable, :searchable])
-      t.dc_date(:path=>"date", :namespace_prefix=>"dc", :index_as=>[:displayable, :searchable])
-      t.dc_description(:path=>"description", :namespace_prefix=>"dc", :index_as=>[:displayable, :searchable])
-      t.dc_format(:path=>"format", :namespace_prefix=>"dc", :index_as=>[:displayable, :searchable])
-      t.dc_identifier(:path=>"identifier", :namespace_prefix=>"dc", :index_as=>[:displayable, :searchable])
-      t.dc_language(:path=>"language", :namespace_prefix=>"dc", :index_as=>[:displayable, :searchable])
-      t.dc_publisher(:path=>"publisher", :namespace_prefix=>"dc", :index_as=>[:displayable, :searchable])
-      t.dc_relation(:path=>"relation", :namespace_prefix=>"dc", :index_as=>[:displayable, :searchable])
-      t.dc_rights(:path=>"rights", :namespace_prefix=>"dc", :index_as=>[:displayable, :searchable])
-      t.dc_source(:path=>"source", :namespace_prefix=>"dc", :index_as=>[:displayable, :searchable])
-      t.dc_subject(:path=>"subject", :namespace_prefix=>"dc", :index_as=>[:displayable, :searchable])
-      t.dc_title(:path=>"title", :namespace_prefix=>"dc", :index_as=>[:displayable, :searchable])
-      t.dc_type(:path=>"type", :namespace_prefix=>"dc", :index_as=>[:displayable, :searchable])
+      t.dc_contributor(:path=>"contributor", 
+        :namespace_prefix=>"dc",
+        :index_as=>[:displayable, :searchable])
+      t.dc_coverage(:path=>"coverage",
+        :namespace_prefix=>"dc",
+        :index_as=>[:displayable, :searchable])
+      t.dc_creator(:path=>"creator",
+        :namespace_prefix=>"dc",
+        :index_as=>[:displayable, :searchable])
+      t.dc_date(:path=>"date",
+        :namespace_prefix=>"dc",
+        :index_as=>[:displayable, :searchable])
+      t.dc_description(:path=>"description",
+        :namespace_prefix=>"dc",
+        :index_as=>[:displayable, :searchable])
+      t.dc_format(:path=>"format",
+        :namespace_prefix=>"dc",
+        :index_as=>[:displayable, :searchable])
+      t.dc_identifier(:path=>"identifier",
+        :namespace_prefix=>"dc",
+        :index_as=>[:displayable, :searchable])
+      t.dc_language(:path=>"language",
+        :namespace_prefix=>"dc",
+        :index_as=>[:displayable, :searchable])
+      t.dc_publisher(:path=>"publisher",
+        :namespace_prefix=>"dc",
+        :index_as=>[:displayable, :searchable])
+      t.dc_relation(:path=>"relation",
+        :namespace_prefix=>"dc",
+        :index_as=>[:displayable, :searchable])
+      t.dc_rights(:path=>"rights",
+        :namespace_prefix=>"dc",
+        :index_as=>[:displayable, :searchable])
+      t.dc_source(:path=>"source",
+        :namespace_prefix=>"dc",
+        :index_as=>[:displayable, :searchable])
+      t.dc_subject(:path=>"subject",
+        :namespace_prefix=>"dc",
+        :index_as=>[:displayable, :searchable])
+      t.dc_title(:path=>"title",
+        :namespace_prefix=>"dc",
+        :index_as=>[:displayable, :searchable])
+      t.dc_type(:path=>"type",
+        :namespace_prefix=>"dc",
+        :index_as=>[:displayable, :searchable])
     end
   
     def self.xml_template
@@ -42,7 +72,6 @@ src
     # Because FCRepo 3.5+ modifies DC on saves (to ensure that PID is a dc:identifier value),
     # this datastream's content must be reloaded after saves
     def action_after_save
-      self.dirty= false
       @content = nil
       @ng_xml = nil
       remove_instance_variable(:@ng_xml)

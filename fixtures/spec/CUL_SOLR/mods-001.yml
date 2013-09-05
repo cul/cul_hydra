@@ -1,20 +1,22 @@
 #format: ['multipartitem']
-identifier_s: ['prd.custord.070017']
-text: ['prd.custord.070017', 'Original PRD customer order number: 070017', 'Box 8, JP2 Feature Photography']
-lib_collection_facet: ['Pulitzer Prizes']
-lib_collection_display: ['Pulitzer Prizes']
-lib_project_facet: ['Pres Orders']
-lib_project_display: ['Customer Order Collection']
-lib_project_t: ['Customer Order Collection']
-title_sort: ['Photographs']
-title_display: ['Photographs']
-title_t: ['Photographs']
-lib_format_facet: ['photographs']
-lib_format_display: ['photographs']
-lib_name_facet: ['Kennerly, David']
-lib_name_display: ['Kennerly, David']
-lib_name_t: ['Kennerly, David']
-lib_repo_facet: ['RBML']
-lib_repo_display: ['Rare Book and Manuscript Library']
-lib_repo_t: ['RBML']
-access_condition_s: ['Columbia Libraries Staff Use Only']
+identifier_ssim: ['prd.custord.070017']
+all_text_timv: ['prd.custord.070017',
+ 'Original PRD customer order number: 070017',
+ 'Box 8, JP2 Feature Photography',
+ 'Customer Order Collection',
+ 'Photographs',
+ 'Kennerly, David',
+ 'RBML Rare Book and Manuscript Library'
+ ]
+lib_collection_sim: ['Pulitzer Prizes']
+lib_collection_ssm: ['Pulitzer Prizes']
+lib_project_sim: ['PRD Orders']
+lib_project_ssm: ['Customer Order Collection']
+title_si: ['Photographs']
+lib_format_sim: ['photographs']
+lib_format_ssm: ['photographs']
+lib_name_sim: ['Kennerly, David']
+lib_name_ssm: ['Kennerly, David']
+lib_repo_sim: ['RBML']
+lib_repo_ssim: ['Rare Book and Manuscript Library']
+access_condition_ssim: ['Columbia Libraries Staff Use Only']

@@ -20,8 +20,8 @@
   'NNC-RB' : 'Rare Book and Manuscript Library'
   'NyNyCBL' : 'Burke Library at Union Theological Seminary'
   'NyNyCOH' : 'Columbia Center for Oral History Collections'
-:project_facet :
-  'Customer Order Collection' : 'Pres Orders'
+:project_to_facet :
+  'Customer Order Collection' : 'PRD Orders'
   "Children's Drawings of the Spanish Civil War (online exhibition)" : 'Spanish Civil War'
   "Jewels in her crown: treasures of Columbia University Libraries special collections" : 'Jewels in her Crown'
   "Russian Imperial Corps of Pages" : 'Russian Corps of Pages'
