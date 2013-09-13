@@ -1,21 +1,30 @@
 require 'solrizer'
 module Solrizer::DefaultDescriptors
-  def self.textable
-    @textable_type ||= TextableDescriptor.new(:text, :indexed, :multivalued)
+  def self.date_sortable
+    @date_sortable ||= Solrizer::Descriptor.new(:date, :stored, :indexed, converter: date_sortable_converter)
   end
 
+  # Produces the field name 'all_text_timv'
+  def self.textable
+    @textable_type ||= TextableDescriptor.new()
+  end
+
+  # Produces _sim suffix
   def self.project_facetable
     @project_facet_type ||= ProjectFacetDescriptor.new(:string, :indexed, :multivalued)
   end
 
+  # Produces _sim suffix and a value-mapping converter
   def self.marc_code_facetable
     @marc_code_facet_type ||= MarcCodeFacetDescriptor.new(:string, :indexed, :multivalued)
   end
 
+  # Produces _ssm suffix and a value-mapping converter
   def self.marc_code_displayable
     @marc_code_type ||= MarcCodeDisplayDescriptor.new(:string, :stored, :indexed, :multivalued)
   end
 
+  # Produces all_text_timv fieldname and a value-mapping converter
   def self.marc_code_textable
     @marc_code_map_text_type ||= MarcCodeTextableDescriptor.new(:text, :indexed, :multivalued)
   end
@@ -43,6 +52,18 @@ module Solrizer::DefaultDescriptors
     @@value_maps ||= load_value_maps
   end
 
+  def self.date_sortable_converter
+    lambda do |type|
+      lambda do |val| 
+        begin
+          d = val.length < 11 ? Date.new(*(val.split('-').collect {|s| s.to_i})) : Date.parse(val)
+          iso8601_date(d)
+        rescue ArgumentError
+          nil 
+        end
+      end
+    end
+  end
 
   class TextableDescriptor < Solrizer::Descriptor 
     def name_and_converter(field_name, field_type)

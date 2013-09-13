@@ -19,7 +19,7 @@ module Om
         t.main_title(:path=>"title", :index_as=>[])
       }
       
-      t.title(:proxy=>[:mods, :main_title_info, :main_title],
+      t.title(:proxy=>[:mods, :main_title_info, :main_title], :type=>:string,
        :index_as=>[:displayable, :searchable, :sortable, :textable])
 
       t.search_title_info(:path=>'titleInfo', :index_as=>[]){
@@ -98,7 +98,8 @@ module Om
 
       t.origin_info(:path=>"originInfo", :index_as=>[]){
         t.date(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf'}, :index_as=>[])
-        t.key_date(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes'}, :index_as=>[])
+        t.lib_date(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes'},
+         :index_as=>[:date_sortable])
         t.start_date(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes',:point=>'start'}, :index_as=>[])
         t.end_date(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:point=>'end'}, :index_as=>[])
       }
