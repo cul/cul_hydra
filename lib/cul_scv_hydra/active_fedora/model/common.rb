@@ -140,9 +140,9 @@ module Common
     # if no mods, pull some values from DC
     if (solr_doc["title_ssm"].nil? or solr_doc["title_ssm"].length == 0)
       if self.dc.term_values(:dc_title).first
-        solr_doc["title_ssm"] = [self.dc.term_values(:dc_title).first]
+        solr_doc["title_ssm"] = self.dc.term_values(:dc_title)
       else
-        solr_doc["title_ssm"] = [self.dc.term_values(:dc_identifier).first]
+        solr_doc["title_ssm"] = self.dc.term_values(:dc_identifier).reject {|dcid| dcid.eql? self.id}
       end
       if self.dc.term_values(:dc_relation).first
         self.dc.term_values(:dc_relation).each {|val|
@@ -152,6 +152,9 @@ module Common
           end
         }
       end
+    end
+    if (solr_doc["identifier_ssim"].nil? or solr_doc["identifier_ssim"].length == 0)
+        solr_doc["identifier_ssim"] = self.dc.term_values(:dc_identifier).reject {|dcid| dcid.eql? self.id}
     end
     if (solr_doc["title_ssm"].length > 1)
       solr_doc["title_ssm"].uniq!
