@@ -31,7 +31,8 @@ module Om
         :index_as=>[:displayable, :searchable])
       t.dc_identifier(:path=>"identifier",
         :namespace_prefix=>"dc",
-        :index_as=>[:displayable, :searchable])
+        :type=>:string,
+        :index_as=>[:symbol])
       t.dc_language(:path=>"language",
         :namespace_prefix=>"dc",
         :index_as=>[:displayable, :searchable])

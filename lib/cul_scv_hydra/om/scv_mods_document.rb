@@ -31,16 +31,16 @@ module Om
         }
       }
       t.collection(:path=>"relatedItem", :attributes=>{:type=>"host", :displayLabel=>"Collection"}, :index_as=>[]){
-        t.collection_title_info(:path=>'titleInfo', :index_as=>[]){
-          t.lib_collection(:path=>'title', :index_as=>[:facetable, :displayable])
+        t.collection_title_info(:path=>'titleInfo', :index_as=>[:facetable, :displayable]){
+          t.lib_collection(:path=>'title', :index_as=>[])
         }
       }
-      t.lib_project(:proxy=>[:project,:project_title_info, :lib_project],
+      t.lib_project(:proxy=>[:project,:project_title_info],
         :index_as=>[:displayable, :searchable, :project_facetable, :textable])
-      t.lib_collection(:proxy=>[:collection,:collection_title_info, :lib_collection])
+      t.lib_collection(:proxy=>[:collection,:collection_title_info])
 # pattern matches
-      t.identifier(:path=>"identifier", :attributes=>{:type=>"local"}, :index_as=>[:symbol, :textable])
-      t.clio(:path=>"identifier", :attributes=>{:type=>"CLIO"}, :data_type=>:symbol, :index_as=>[:searchable, :displayable])
+      t.identifier(:path=>"identifier", :attributes=>{:type=>"local"}, :type=>:string, :index_as=>[:symbol, :textable])
+      t.clio(:path=>"identifier", :attributes=>{:type=>"CLIO"}, :data_type=>:symbol, :index_as=>[:symbol, :textable])
       t.abstract
       t.subject {
         t.topic

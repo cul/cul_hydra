@@ -26,6 +26,7 @@ describe "Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer" do
       debug = solr.dup
       debug.delete_if { |k, v| k.to_s =~ /^mods_.*/ }
       debug.delete_if { |k, v| k.to_s =~ /^top_.*/ }
+      puts debug.inspect
       fails = []
       @solr_fixture.each { |key, value_array|
         puts "BAD MATCH: #{key} got: #{solr[key].inspect} expected: #{value_array.inspect}" if !solr[key] or solr[key].sort != value_array.sort
