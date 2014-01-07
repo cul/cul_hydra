@@ -64,9 +64,8 @@ module Om
           :index_as=>[])
         t.shelf_locator(:path=>"shelfLocator", :index_as=>[:textable])
       }
-      t.lib_repo(:proxy=>[:location, :lib_repo],
-       :index_as=>[:marc_code_facetable, :marc_code_displayable,
-        :marc_code_textable])
+      t.lib_repo(:proxy=>[:location, :lib_repo], :type=>:text,
+       :index_as=>[:marc_code_facetable, :marc_code_displayable, :marc_code_textable])
       t.lib_name(
         :path=>'name',:attributes=>{:type=>'personal'},
         :index_as=>[:facetable, :displayable, :searchable, :textable]){

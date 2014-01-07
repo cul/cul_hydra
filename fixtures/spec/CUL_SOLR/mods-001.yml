@@ -1,6 +1,6 @@
 #format: ['multipartitem']
 identifier_ssim: ['prd.custord.070017']
-all_text_timv: ['prd.custord.070017',
+all_text_teim: ['prd.custord.070017',
  'Original PRD customer order number: 070017',
  'Box 8, JP2 Feature Photography',
  'Customer Order Collection',
@@ -10,9 +10,9 @@ all_text_timv: ['prd.custord.070017',
  ]
 lib_collection_sim: ['Pulitzer Prizes']
 lib_collection_ssm: ['Pulitzer Prizes']
-lib_project_sim: ['PRD Orders']
+lib_project_sim: ['Pres Orders']
 lib_project_ssm: ['Customer Order Collection']
-title_si: ['Photographs']
+title_si: 'Photographs'
 lib_format_sim: ['photographs']
 lib_format_ssm: ['photographs']
 lib_name_sim: ['Kennerly, David']

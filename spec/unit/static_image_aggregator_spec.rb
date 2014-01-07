@@ -25,21 +25,21 @@ describe "StaticImageAggregator" do
   
   after(:each) do
     @fixtureobj.delete
-    ActiveFedora::Base.find("test:thumb_image").delete
-    ActiveFedora::Base.find("test:screen_image").delete
-    ActiveFedora::Base.find("test:max_image").delete
+    ActiveFedora::Base.find("test:thumb_image", :cast=>false).delete
+    ActiveFedora::Base.find("test:screen_image", :cast=>false).delete
+    ActiveFedora::Base.find("test:max_image", :cast=>false).delete
   end
 
   after(:all) do
-    ActiveFedora::Base.find("test:c_agg").delete
-    ActiveFedora::Base.find("ldpd:StaticImageAggregator").delete
-    ActiveFedora::Base.find("ldpd:ContentAggregator").delete
+    ActiveFedora::Base.find("test:c_agg", :cast=>false).delete
+    ActiveFedora::Base.find("ldpd:StaticImageAggregator", :cast=>false).delete
+    ActiveFedora::Base.find("ldpd:ContentAggregator", :cast=>false).delete
   end
 
   it "should be detectable by ActiveFedora" do
     Kernel.const_get('StaticImageAggregator').is_a?(Class).should == true
     Module.const_get('StaticImageAggregator').is_a?(Class).should == true
-    obj = ActiveFedora::Base.find("test:si_agg")
+    obj = ActiveFedora::Base.find("test:si_agg", :cast=>false)
     ActiveFedora::ContentModel.models_asserted_by(obj).each { |m_uri|
       m_class = ActiveFedora::ContentModel.uri_to_model_class(m_uri)
     }
@@ -95,7 +95,7 @@ describe "StaticImageAggregator" do
     end
 
     it "should be able to add members/parts" do
-      obj = ActiveFedora::Base.find("test:thumb_image")
+      obj = ActiveFedora::Base.find("test:thumb_image", :cast=>false)
       @fixtureobj.add_member(obj)
       @fixtureobj.parts.length.should == 3
     end

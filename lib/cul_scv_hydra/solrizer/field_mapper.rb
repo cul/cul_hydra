@@ -4,9 +4,9 @@ module Solrizer::DefaultDescriptors
     @date_sortable ||= Solrizer::Descriptor.new(:date, :stored, :indexed, converter: date_sortable_converter)
   end
 
-  # Produces the field name 'all_text_timv'
+  # Produces the field name 'all_text_teim'
   def self.textable
-    @textable_type ||= TextableDescriptor.new()
+    @textable_type ||= TextableDescriptor.new(:text_en, :indexed, :multivalued)
   end
 
   # Produces _sim suffix
@@ -26,7 +26,7 @@ module Solrizer::DefaultDescriptors
 
   # Produces all_text_timv fieldname and a value-mapping converter
   def self.marc_code_textable
-    @marc_code_map_text_type ||= MarcCodeTextableDescriptor.new(:text, :indexed, :multivalued)
+    @marc_code_map_text_type ||= MarcCodeTextableDescriptor.new(:text_en, :indexed, :multivalued)
   end
 
   def self.load_value_maps(config_path=nil)
@@ -66,8 +66,8 @@ module Solrizer::DefaultDescriptors
   end
 
   class TextableDescriptor < Solrizer::Descriptor 
-    def name_and_converter(field_name, field_type)
-      ['all_text_timv']
+    def name_and_converter(field_name, args=nil)
+      super('all_text', args)
     end
   end
 
@@ -89,27 +89,31 @@ module Solrizer::DefaultDescriptors
     def converter(field_type)
       map = Solrizer::DefaultDescriptors.value_maps[:marc_to_display] || {}
       lambda {|value| (map.has_key? value) ? map[value] : value}
-    end 
+    end
   end
 
   class MarcCodeTextableDescriptor < Solrizer::Descriptor
-    def name_and_converter(field_name, field_type)
-      ['all_text_timv', converter(field_type)]
+    def name_and_converter(field_name, args=nil)
+      super('all_text', args)
     end
     def converter(field_type)
       fmap = Solrizer::DefaultDescriptors.value_maps[:marc_to_facet] || {}
       dmap = Solrizer::DefaultDescriptors.value_maps[:marc_to_display] || {}
       lambda do |value|
-        r = (fmap.has_key? value) ? [fmap[value]] : []
-        r << dmap[value] if (dmap.has_key? value)
-        r.join(' ')
+        if value.is_a? String
+          r = (fmap.has_key? value) ? [fmap[value]] : []
+          r << dmap[value] if (dmap.has_key? value)
+          r.uniq!
+          r.join(' ')
+        else
+          value
+        end
       end
     end
   end
   class MarcCodeDisplayTextableDescriptor < MarcCodeDisplayDescriptor
-    def name_and_converter(field_name, field_type)
-      puts "MarcCodeDisplayTextableDescriptor"
-      ['all_text_timv', converter(field_type)]
+    def name_and_converter(field_name, args=nil)
+      super('all_text', args)
     end
   end
 end

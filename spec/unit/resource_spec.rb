@@ -25,9 +25,9 @@ describe "Resource" do
   end
 
   after(:all) do
-    ActiveFedora::Base.find("test:c_agg").delete
-    ActiveFedora::Base.find("ldpd:StaticImageAggregator").delete
-    ActiveFedora::Base.find("ldpd:ContentAggregator").delete
+    ActiveFedora::Base.find("test:c_agg", :cast=>false).delete
+    ActiveFedora::Base.find("ldpd:StaticImageAggregator", :cast=>false).delete
+    ActiveFedora::Base.find("ldpd:ContentAggregator", :cast=>false).delete
   end
 
   it "should produce the correct CModel PID" do

@@ -29,11 +29,13 @@ describe "Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer" do
       puts debug.inspect
       fails = []
       @solr_fixture.each { |key, value_array|
-        puts "BAD MATCH: #{key} got: #{solr[key].inspect} expected: #{value_array.inspect}" if !solr[key] or solr[key].sort != value_array.sort
-        if !solr[key] or solr[key].sort != value_array.sort
+        actual = (solr[key].is_a? Array) ? solr[key].sort : [solr[key]]
+        expected = (value_array.is_a? Array) ? value_array.sort : [value_array]
+        puts "BAD MATCH: #{key} got: #{solr[key].inspect} expected: #{value_array.inspect}" if actual != expected
+        if actual != expected
           fails << key
-          puts "<< #{solr[key].sort.inspect}" if solr[key]
-          puts ">> #{value_array.sort.inspect}"
+          puts "<< #{actual.inspect}" if solr[key]
+          puts ">> #{expected.inspect}"
         end
         #solr[key].should == value_array
       }

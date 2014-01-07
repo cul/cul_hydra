@@ -234,11 +234,11 @@ ml
       solr_doc = @mods_item.to_solr
       puts solr_doc.inspect
       # check the mapped facet value
-      solr_doc["lib_project_sim"].should include("PRD Orders")
+      solr_doc["lib_project_sim"].should include("Pres Orders")
       # check the unmapped display value
       solr_doc["lib_project_ssm"].should include("Customer Order Collection")
       # check that the mapped value didn't find it's way into the display field
-      solr_doc["lib_project_ssm"].should_not include("PRD Orders")
+      solr_doc["lib_project_ssm"].should_not include("Pres Orders")
       solr_doc["lib_repo_sim"].should include("RBML")
       # check the unmapped display value
       solr_doc["lib_repo_ssim"].should include("Rare Book and Manuscript Library")

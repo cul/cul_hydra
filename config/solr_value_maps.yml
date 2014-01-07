@@ -1,4 +1,5 @@
 :marc_to_facet :
+  'NNC' : 'General Collections'
   'NNC-A' : 'Avery'
   'NNC-ART' : 'Office of Art Properties'
   'NNBa' : 'Barnard College Library'
@@ -10,6 +11,7 @@
   'NyNyCBL' : 'Burke Library'
   'NyNyCOH' : 'CCOH'
 :marc_to_display :
+  'NNC' : 'General Collections'
   'NNC-A' : 'Avery Architectural & Fine Arts Library'
   'NNC-ART' : 'Office of Art Properties'
   'NNBa' : 'Barnard College Library'
@@ -21,9 +23,9 @@
   'NyNyCBL' : 'Burke Library at Union Theological Seminary'
   'NyNyCOH' : 'Columbia Center for Oral History Collections'
 :project_to_facet :
-  'Customer Order Collection' : 'PRD Orders'
+  'Customer Order Collection' : 'Pres Orders'
   "Children's Drawings of the Spanish Civil War (online exhibition)" : 'Spanish Civil War'
   "Jewels in her crown: treasures of Columbia University Libraries special collections" : 'Jewels in her Crown'
   "Russian Imperial Corps of Pages" : 'Russian Corps of Pages'
-  "Osama bin Laden posters" : 'Osama bin Laden posters'
-  "Chinese paper gods" : 'Chinese paper gods'
+  "Preserving Historic Audio Content" : 'Audio Preservation'
+  'Papers of John Jay' : 'John Jay Papers'

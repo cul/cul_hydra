@@ -9,18 +9,6 @@ module Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer
   # Module Methods
       
   module ClassMethods
-    # Build a solr document from +doc+ based on its terminology
-    # @param [OM::XML::Document] doc  
-    # @param [Hash] solr_doc (optional) solr_doc (values hash) to populate
-    def solrize(doc, solr_doc=Hash.new, field_mapper = nil)
-      unless doc.class.terminology.nil?
-        doc.class.terminology.terms.each_pair do |term_name,term|
-          doc.solrize_term(term, solr_doc, field_mapper) unless term.is_root_term?
-        end
-      end
-
-      return solr_doc
-    end
   # Populate a solr document with solr fields corresponding to the given xml node
   # Field names are generated using settings from the term in the +doc+'s terminology corresponding to +term_pointer+
   # @param [Nokogiri::XML::Node] node to solrize
@@ -31,7 +19,6 @@ module Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer
       return solr_doc unless term.index_as && !term.index_as.empty?
       generic_field_name_base = OM::XML::Terminology.term_generic_name(*term_pointer)
       create_and_insert_terms(generic_field_name_base, node_value, term.index_as, solr_doc)
-      
       if term_pointer.length > 1
         #hierarchical_field_name_base = OM::XML::Terminology.term_hierarchical_name(*term_pointer)
         #create_and_insert_terms(hierarchical_field_name_base, node_value, term.index_as, solr_doc)

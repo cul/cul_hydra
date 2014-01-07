@@ -15,11 +15,11 @@ describe "ContentAggregator" do
   end
   
   after(:each) do
-    ActiveFedora::Base.find("test:c_agg").delete
+    ActiveFedora::Base.find("test:c_agg", :cast=>false).delete
   end
 
   after(:all) do
-    ActiveFedora::Base.find("test:si_agg").delete
+    ActiveFedora::Base.find("test:si_agg", :cast=>false).delete
   end
 
   it "should produce the correct CModel PID" do

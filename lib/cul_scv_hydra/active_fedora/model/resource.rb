@@ -51,7 +51,6 @@ module Resource
       image_properties = Cul::Image::Properties.identify(blob)
       if image_properties
         image_prop_nodes = image_properties.nodeset
-        puts image_properties.instance_variable_get(:@ng_xml).to_xml
         relsext = datastreams['RELS-EXT']
         image_prop_nodes.each { |node|
           if node["resource"]
@@ -63,7 +62,6 @@ module Resource
           end
           subject = RDF::URI(internal_uri)
           predicate = RDF::URI("#{node.namespace.href}#{node.name}")
-          puts "Adding a resource predicate : #{predicate}"
           query = RDF::Query.new({ :subject => {predicate => :object}})
           relationships(predicate).dup.each { |stmt|
             relationships.delete(stmt)

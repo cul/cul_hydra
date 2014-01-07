@@ -218,13 +218,13 @@ def ingest(pid, foxml, force=false)
   obj = @rubydora_conn.connection.find_or_initialize(pid)
   if obj.new?
     @rubydora_conn.connection.ingest(:pid=>pid, :file=>foxml)
-    return ActiveFedora::Base.find(pid)
+    return ActiveFedora::Base.find(pid, :cast=>true)
   else
-    base = ActiveFedora::Base.find(pid)
+    base = ActiveFedora::Base.find(pid, :cast=>true)
     if force
       base.delete
       @rubydora_conn.connection.ingest(:pid=>pid, :file=>foxml)
-      return ActiveFedora::Base.find(pid)
+      return ActiveFedora::Base.find(pid, :cast=>true)
     else
       return base
     end
