@@ -16,11 +16,14 @@ module Om
       }
 
       t.main_title_info(:path=>'titleInfo', :index_as=>[], :attributes=>{:type=>:none}){
+        t.non_sort(:path=>"nonSort", :index_as=>[])
         t.main_title(:path=>"title", :index_as=>[])
       }
       
       t.title(:proxy=>[:mods, :main_title_info, :main_title], :type=>:string,
-       :index_as=>[:displayable, :searchable, :sortable, :textable])
+       :index_as=>[:searchable, :sortable, :textable])
+      t.title_display(:proxy=>[:mods, :main_title_info], :type=>:string,
+       :index_as=>[:displayable])
 
       t.search_title_info(:path=>'titleInfo', :index_as=>[]){
         t.search_title(:path=>'title', :index_as=>[:searchable])

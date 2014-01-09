@@ -13,6 +13,7 @@ lib_collection_ssm: ['Pulitzer Prizes']
 lib_project_sim: ['Pres Orders']
 lib_project_ssm: ['Customer Order Collection']
 title_si: 'Photographs'
+title_display_ssm: ['The Photographs']
 lib_format_sim: ['photographs']
 lib_format_ssm: ['photographs']
 lib_name_sim: ['Kennerly, David']

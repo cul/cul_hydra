@@ -85,7 +85,7 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
       T.has_term?(:title).should be_true
       doc = {}
       @fixturemods.to_solr(doc)
-      doc["title_ssm"].should == ["Manuscript, unidentified"]
+      doc["title_display_ssm"].should == ["The Manuscript, unidentified"]
     end
   
 
@@ -166,6 +166,7 @@ src
       built = Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner,'descMetadata')
       built.ng_xml = Cul::Scv::Hydra::Om::ModsDocument.xml_template
       built.update_values({[:identifier] => "prd.custord.040148"})
+      built.update_values({[:mods, :main_title_info, :non_sort] => "The "})
       built.update_values({[:mods, :main_title_info, :main_title] => "Manuscript, unidentified"})
       built.update_values({[:type_of_resource] => "text"})
       built.update_values({[:physical_description, :form_marc] => "electronic"})
@@ -230,6 +231,11 @@ ml
     end
   end
   describe ".to_solr" do
+    it "should include nonSort text in display title and exclude it from index title" do
+      solr_doc = @mods_item.to_solr
+      solr_doc["title_display_ssm"].should include('The Manuscript, unidentified')
+      solr_doc["title_si"].should == "Manuscript, unidentified"
+    end
     it "should create the expected Solr hash for mapped project values" do
       solr_doc = @mods_item.to_solr
       puts solr_doc.inspect
