@@ -138,11 +138,11 @@ module Common
       solr_doc["descriptor_ssi"] = ["dublin core"]
     end
     # if no mods, pull some values from DC
-    if (solr_doc["title_ssm"].nil? or solr_doc["title_ssm"].length == 0)
+    if (solr_doc["title_display_ssm"].nil? or solr_doc["title_display_ssm"].length == 0)
       if self.datastreams["DC"].term_values(:dc_title).first
-        solr_doc["title_ssm"] = self.datastreams["DC"].term_values(:dc_title)
+        solr_doc["title_display_ssm"] = self.datastreams["DC"].term_values(:dc_title)
       else
-        solr_doc["title_ssm"] = self.datastreams["DC"].term_values(:dc_identifier).reject {|dcid| dcid.eql? self.id}
+        solr_doc["title_display_ssm"] = self.datastreams["DC"].term_values(:dc_identifier).reject {|dcid| dcid.eql? self.id}
       end
       if self.datastreams["DC"].term_values(:dc_relation).first
         self.datastreams["DC"].term_values(:dc_relation).each {|val|
@@ -156,8 +156,8 @@ module Common
     if (solr_doc["identifier_ssim"].nil? or solr_doc["identifier_ssim"].length == 0)
         solr_doc["identifier_ssim"] = self.datastreams["DC"].term_values(:dc_identifier).reject {|dcid| dcid.eql? self.id}
     end
-    if (solr_doc["title_ssm"].length > 1)
-      solr_doc["title_ssm"].uniq!
+    if (solr_doc["title_display_ssm"].length > 1)
+      solr_doc["title_display_ssm"].uniq!
     end
     solr_doc["format_ssi"] = [self.route_as]
     solr_doc["index_type_label_ssi"] = [self.index_type_label]
