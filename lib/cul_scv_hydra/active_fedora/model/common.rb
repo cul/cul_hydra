@@ -144,6 +144,7 @@ module Common
       else
         solr_doc["title_display_ssm"] = self.datastreams["DC"].term_values(:dc_identifier).reject {|dcid| dcid.eql? self.id}
       end
+      solr_doc["title_si"] = self.datastreams["DC"].term_values(:dc_title).first
       if self.datastreams["DC"].term_values(:dc_relation).first
         self.datastreams["DC"].term_values(:dc_relation).each {|val|
           if val =~ /clio:/
