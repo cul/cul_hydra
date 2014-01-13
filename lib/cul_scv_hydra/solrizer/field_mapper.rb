@@ -83,7 +83,6 @@ module Solrizer::DefaultDescriptors
     include Normal
     def converter(field_type)
       map = Solrizer::DefaultDescriptors.value_maps[:project_to_facet] || {}
-      puts map.inspect
       lambda {|value| (normal!(value) and map.has_key? value) ? map[value] : value}
     end 
   end
