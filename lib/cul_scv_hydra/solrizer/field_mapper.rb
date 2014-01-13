@@ -65,6 +65,14 @@ module Solrizer::DefaultDescriptors
     end
   end
 
+  module Normal
+    def normal!(value)
+      value.gsub!(/\s+/,' ')
+      value.strip!
+      true
+    end
+  end
+
   class TextableDescriptor < Solrizer::Descriptor 
     def name_and_converter(field_name, args=nil)
       super('all_text', args)
@@ -72,27 +80,32 @@ module Solrizer::DefaultDescriptors
   end
 
   class ProjectFacetDescriptor < Solrizer::Descriptor
+    include Normal
     def converter(field_type)
       map = Solrizer::DefaultDescriptors.value_maps[:project_to_facet] || {}
-      lambda {|value| (map.has_key? value) ? map[value] : value}
+      puts map.inspect
+      lambda {|value| (normal!(value) and map.has_key? value) ? map[value] : value}
     end 
   end
 
   class MarcCodeFacetDescriptor < Solrizer::Descriptor
+    include Normal
     def converter(field_type)
       map = Solrizer::DefaultDescriptors.value_maps[:marc_to_facet] || {}
-      lambda {|value| (map.has_key? value) ? map[value] : value}
+      lambda {|value| (normal!(value) and map.has_key? value) ? map[value] : value}
     end 
   end
 
   class MarcCodeDisplayDescriptor < Solrizer::Descriptor
+    include Normal
     def converter(field_type)
       map = Solrizer::DefaultDescriptors.value_maps[:marc_to_display] || {}
-      lambda {|value| (map.has_key? value) ? map[value] : value}
+      lambda {|value| (normal!(value) and map.has_key? value) ? map[value] : value}
     end
   end
 
   class MarcCodeTextableDescriptor < Solrizer::Descriptor
+    include Normal
     def name_and_converter(field_name, args=nil)
       super('all_text', args)
     end
@@ -101,6 +114,7 @@ module Solrizer::DefaultDescriptors
       dmap = Solrizer::DefaultDescriptors.value_maps[:marc_to_display] || {}
       lambda do |value|
         if value.is_a? String
+          normal!(value)
           r = (fmap.has_key? value) ? [fmap[value]] : []
           r << dmap[value] if (dmap.has_key? value)
           r.uniq!

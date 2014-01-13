@@ -103,7 +103,7 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
     end
     
     it "should support xpath queries as the pointer" do
-      @mods_item.find_by_terms('//oxns:relatedItem[@type="host"][1]//oxns:title[1]').first.text.should == "Customer Order Collection"
+      @mods_item.find_by_terms('//oxns:relatedItem[@type="host"][1]//oxns:title[1]').first.text.should == "Project Facet Mapping\nTest"
     end
     
     it "should return nil if the xpath fails to generate" do
@@ -177,7 +177,7 @@ src
       built.update_values({[:physical_description, :digital_origin] => "reformatted digital"})
       built.update_values({[:location, :lib_repo] => "NNC-RB"})
       built.update_values({[:location, :repo_text] => "Rare Book and Manuscript Library, Columbia University"})
-      built.update_values({[:project, :project_title_info, :lib_project] => "Customer Order Collection"})
+      built.update_values({[:project, :project_title_info, :lib_project] => "Project Facet Mapping\nTest"})
       built.update_values({[:note] => "Original PRD customer order number: 040148"})
       built.update_values({[:access_condition] => "Columbia Libraries Staff Use Only."})
       built.update_values({[:record_info, :record_creation_date] => "2010-07-12"})
@@ -240,11 +240,11 @@ ml
       solr_doc = @mods_item.to_solr
       puts solr_doc.inspect
       # check the mapped facet value
-      solr_doc["lib_project_sim"].should include("Pres Orders")
+      solr_doc["lib_project_sim"].should include("Successful Project Mapping")
       # check the unmapped display value
-      solr_doc["lib_project_ssm"].should include("Customer Order Collection")
+      solr_doc["lib_project_ssm"].should include("Project Facet Mapping Test")
       # check that the mapped value didn't find it's way into the display field
-      solr_doc["lib_project_ssm"].should_not include("Pres Orders")
+      solr_doc["lib_project_ssm"].should_not include("Successful Project Mapping")
       solr_doc["lib_repo_sim"].should include("RBML")
       # check the unmapped display value
       solr_doc["lib_repo_ssim"].should include("Rare Book and Manuscript Library")
