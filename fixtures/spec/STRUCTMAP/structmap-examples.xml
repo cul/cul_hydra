@@ -1,0 +1,21 @@
+<mets:structMap TYPE="physical" LABEL="Sides" xmlns:mets="http://www.loc.gov/METS/">
+    <mets:div ORDER="1" LABEL="Recto" CONTENTIDS="rbml_css_0702r" />
+    <mets:div ORDER="2" LABEL="Verso" CONTENTIDS="rbml_css_0702v" />
+</mets:structMap>
+
+<mets:structMap TYPE="logical" LABEL="Sequence" xmlns:mets="http://www.loc.gov/METS/">
+    <mets:div ORDER="1" LABEL="Item 1" CONTENTIDS="prd.custord.060108.001" />
+    <mets:div ORDER="2" LABEL="Item 2" CONTENTIDS="prd.custord.060108.002" />
+    <mets:div ORDER="3" LABEL="Item 3" CONTENTIDS="prd.custord.060108.003" />
+</mets:structMap>
+
+<mets:structMap TYPE="physical" LABEL="Leaves" xmlns:mets="http://www.loc.gov/METS/">
+<mets:div ORDER="1" LABEL="Leaf">    
+    <mets:div ORDER="1" LABEL="Recto" CONTENTIDS="rbml_css_0702r" />
+    <mets:div ORDER="2" LABEL="Verso" CONTENTIDS="rbml_css_0702v" />
+</div>
+<mets:div ORDER="2" LABEL="Leaf">    
+    <mets:div ORDER="1" LABEL="Recto" CONTENTIDS="rbml_css_0703r" />
+    <mets:div ORDER="2" LABEL="Verso" CONTENTIDS="rbml_css_0703v" />
+</div>
+</mets:structMap>
