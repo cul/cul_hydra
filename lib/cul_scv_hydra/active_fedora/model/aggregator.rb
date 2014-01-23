@@ -3,6 +3,7 @@ module Aggregator
   extend ActiveSupport::Concern
 
   included do
+    has_metadata :name => "structMetadata", :type=>Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata, :versionable => true, :controlGroup => 'M'
     has_many :parts, :property => :cul_member_of, :class_name=>'ActiveFedora::Base'
     after_create :aggregator!
   end

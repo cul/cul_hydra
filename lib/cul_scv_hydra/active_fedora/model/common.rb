@@ -170,6 +170,7 @@ module Common
         value.strip!
       end
     }
+    solr_doc[:structured_bsi] = 'false' unless solr_doc.has_key? :structured_bsi
     solr_doc
   end
   

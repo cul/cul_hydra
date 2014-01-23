@@ -27,7 +27,7 @@ describe "Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata" do
       @mock_repo.stubs(:datastream).raises(RestClient::ResourceNotFound)
       test_obj = Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata.new(@mock_inner, 'structMetadata')
       # it should have the default content
-      test_obj.content.should == Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata.root_content
+      test_obj.ng_xml.should be_equivalent_to Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata.xml_template
       # but it shouldn't be "saveable" until you do something
       test_obj.new?.should be_true
       test_obj.changed?.should be_false
@@ -39,7 +39,7 @@ describe "Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata" do
     end
   end
 
-  describe ".create_div " do
+  describe ".create_div_node " do
 	  it "should build a simple R/V structure" do
 	  	built = Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata.new(nil, 'structMetadata', label:'Sides', type:'physical')
 	  	built.create_div_node(nil, {:order=>"1", :label=>"Recto", :contentids=>"rbml_css_0702r"})
@@ -54,6 +54,20 @@ describe "Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata" do
       built.create_div_node(nil, {:order=>"3", :label=>"Item 3", :contentids=>"prd.custord.060108.003"})
       built.ng_xml.should be_equivalent_to(@seq_doc)
     end
+
+    it "should work if the parent node has its own NS prefix" do
+      test_src = "<foo:structMap xmlns:foo=\"http://www.loc.gov/METS/\" />"
+      test_obj = Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata.from_xml test_src
+      test_div = test_obj.create_div_node
+      test_div.namespace.prefix.should == "foo"
+    end
+
+    it "should work if the parent node is in the default NS" do
+      test_src = "<structMap xmlns=\"http://www.loc.gov/METS/\" />"
+      test_obj = Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata.from_xml test_src
+      test_div = test_obj.create_div_node
+      test_div.namespace.prefix.should be_nil
+    end
   end
 
   describe ".content= " do
@@ -61,16 +75,15 @@ describe "Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata" do
       @mock_repo.stubs(:datastream).returns('<datastreamProfile dsID="structMetadata"/>')
       @mock_repo.stubs(:datastream_dissemination=>@rv_fixture)
       test_obj = Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata.new(@mock_inner, 'structMetadata')
-      test_obj.content.should == @rv_fixture
+      test_obj.ng_xml.should be_equivalent_to(@rv_doc)
     end
 
     it "should replace existing structMetadata content from setter" do
       @mock_repo.stubs(:datastream).returns('<datastreamProfile dsID="structMetadata"/>')
       @mock_repo.stubs(:datastream_dissemination=>@rv_fixture)
   	  test_obj = Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata.new(@mock_inner, 'structMetadata')
-  	  test_obj.content.should == @rv_fixture
+      test_obj.ng_xml.should be_equivalent_to(@rv_doc)
       test_obj.content= @seq_fixture
-      test_obj.content.should == @seq_fixture
       test_obj.ng_xml.should be_equivalent_to(@seq_doc)
     end
   end
@@ -85,6 +98,26 @@ describe "Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata" do
       test_obj.serialize!
       test_obj.changed?.should be_true
       Nokogiri::XML::Document.parse(test_obj.content).should be_equivalent_to(expected)
+    end
+  end
+
+  describe "Recto/Verso convenince methods" do
+    it "should act otherwise identically to building with .create_div_node" do
+      test_obj = Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata.new(nil, 'structMetadata', label:'Sides', type:'physical')
+      test_obj.recto_verso!
+      test_obj.recto['CONTENTIDS']="rbml_css_0702r"
+      test_obj.verso['CONTENTIDS']="rbml_css_0702v"
+      test_obj.ng_xml.should be_equivalent_to(@rv_doc)
+      test_obj.changed?.should be_true
+    end
+
+    it "should not change content unnecessarily" do
+      @mock_repo.stubs(:datastream).returns('<datastreamProfile dsID="structMetadata"/>')
+      @mock_repo.stubs(:datastream_dissemination=>@rv_fixture)
+      test_obj = Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata.new(@mock_inner, 'structMetadata')
+      test_obj.changed?.should be_false
+      test_obj.recto_verso!
+      test_obj.changed?.should be_false
     end
   end
 end

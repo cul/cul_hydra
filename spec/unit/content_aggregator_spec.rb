@@ -43,6 +43,24 @@ describe "ContentAggregator" do
     end
   end
 
+  describe "structMetadata" do
+    it "should have a default, stubbed structMetadata datastream" do
+      ds = @fixtureobj.datastreams["structMetadata"]
+      ds.class.name.should == "Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata"
+      ds.changed?.should be_false
+      @fixtureobj.to_solr[:structured_bsi].should == 'false'
+    end
+
+    it "should correctly index as structured if there is structMetadata content" do
+      ds = @fixtureobj.datastreams["structMetadata"]
+      ds.label = "Test Label"
+      ds.changed?.should be_true
+      puts "structMetadata: #{ds.content}"
+      ds.save
+      @fixtureobj.to_solr[:structured_bsi].should == 'true'
+    end
+  end
+
   describe "aggregation functions" do
 
     it "should be able to find its members/parts" do
