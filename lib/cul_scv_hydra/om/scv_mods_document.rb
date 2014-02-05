@@ -8,6 +8,11 @@ module Om
   class ModsDocument < ::ActiveFedora::OmDatastream
     include ::OM::XML::TerminologyBasedSolrizer
     include Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer
+    include Cul::Scv::Hydra::Solrizer::ScvModsFieldable
+
+    map_field("lib_repo_sim", :marc_to_facet)
+    map_field("lib_repo_ssm", :marc_to_display)
+    map_field("lib_project_sim", :project_to_facet)
 
     set_terminology do |t|
       t.root(:path=>"mods",

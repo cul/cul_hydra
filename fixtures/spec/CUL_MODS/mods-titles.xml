@@ -1,0 +1,17 @@
+<mods xmlns='http://www.loc.gov/mods/v3' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd'>
+<titleInfo>
+	<nonSort>The </nonSort>
+    <title xml:lang="eng">Photographs</title>
+</titleInfo>
+<relatedItem type='host' displayLabel='Collection'>
+	<titleInfo>
+	<nonSort>"The </nonSort>
+		<title xml:lang="eng">Pulitzer Prize Photographs"</title>
+	</titleInfo>
+</relatedItem>
+<relatedItem type='host' displayLabel='Project'>
+	<titleInfo>
+		<title xml:lang="eng">Customer Order Project</title>
+	</titleInfo>
+</relatedItem>
+</mods>

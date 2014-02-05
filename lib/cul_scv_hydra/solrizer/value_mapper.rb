@@ -21,10 +21,21 @@ class ValueMapper
   # Instance methods
 
   def initialize(value_maps=nil)
-    @value_maps = value_maps || Cul::Scv::Hydra::Solrizer::ValueMapper.default_value_maps
+    @value_maps = (value_maps || Cul::Scv::Hydra::Solrizer::ValueMapper.default_value_maps).with_indifferent_access
+    @mapped_fields = {}.with_indifferent_access
   end
-  def solr_value(map_key, value_key)
-    return value_key unless @value_maps.has_key? map_key
+
+  def maps_field?(field_key)
+    @mapped_fields.has_key? field_key
+  end
+
+  def map_field(field_key, map_key)
+    @mapped_fields[field_key] = map_key
+  end
+
+  def map_value(field_key, value_key)
+    map_key = @mapped_fields[field_key]
+    return value_key unless @mapped_fields.has_key? field_key and @value_maps.has_key? map_key
     if value_key.is_a? Array
       value_key.collect{ |val| @value_maps[map_key].fetch(val, val) }
     else

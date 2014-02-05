@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency('cul_image_props')
   #s.add_dependency('mediashelf-loggable', ">=0.4.7")
   #s.add_dependency('nokogiri', ">= 1.4.2")
+  s.add_dependency('mods')
   s.add_dependency('om')
   s.add_dependency('solrizer', "~>3.0")
   s.add_development_dependency "rspec", "~>2.10"
