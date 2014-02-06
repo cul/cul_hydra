@@ -20,4 +20,16 @@
   <name>
     <namePart>Ignored</namePart>
   </name>
+  <subject authority="lcsh">
+      <name authority="naf" type="personal">
+         <namePart>Jay, John</namePart>
+         <namePart type="date">1745-1829</namePart>
+      </name>
+   </subject>
+   <name type="personal">
+      <namePart>"Dear Brother"</namePart>
+      <role>
+         <roleTerm authority="marcrelator" type="code">rcp</roleTerm>
+      </role>
+   </name>
 </mods>

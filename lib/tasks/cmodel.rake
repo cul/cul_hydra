@@ -73,27 +73,27 @@ end
 
 namespace :cul_scv_hydra do
   namespace :cmodel do
-    task :test => :environment do
+    task :test do #=> :environment do
       pid = ENV["PID"]
       puts content_for(pid)
     end
 
-    task :load => :environment do
+    task :load do #=> :environment do
       pid = ENV["PID"]
       load_content(content_for(pid),pid)
     end
 
-    task :purge => :environment do
+    task :purge do #=> :environment do
       pid = ENV["PID"]
       purge(pid)
     end
 
-    task :reload => :environment do
+    task :reload do #=> :environment do
       pid = ENV["PID"]
       reload(pid)
     end
 
-    task :reload_all => :environment do
+    task :reload_all do #=> :environment do
       pattern = ENV["PATTERN"]
       pattern = Regexp.compile(pattern) if pattern
       reload("ldpd:nullbind")

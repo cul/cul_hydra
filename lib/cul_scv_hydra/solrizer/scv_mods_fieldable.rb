@@ -47,7 +47,7 @@ module Cul::Scv::Hydra::Solrizer
           base_text << child.text unless child.name == 'nonSort'
         end
       end
-      base_text = ScvModsFieldable.normalize(base_text)
+      base_text = ScvModsFieldable.normalize(base_text, true)
       base_text = nil if base_text.empty?
       base_text
     end
@@ -81,10 +81,16 @@ module Cul::Scv::Hydra::Solrizer
         end
         xpath << "]/ancestor::mods:name"
       end
-      mods.xpath(xpath, MODS_NS).collect do |node|
+      names = mods.xpath(xpath, MODS_NS).collect do |node|
         base_text = node.xpath('./mods:namePart', MODS_NS).collect { |c| c.text }.join(' ')
-        ScvModsFieldable.normalize(base_text)
+        ScvModsFieldable.normalize(base_text, true)
       end
+      xpath = "./mods:subject" + xpath[1,xpath.length]
+      mods.xpath(xpath, MODS_NS).each do |node|
+        base_text = node.xpath('./mods:namePart', MODS_NS).collect { |c| c.text }.join(' ')
+        names << ScvModsFieldable.normalize(base_text, true)
+      end
+      names
     end
 
     def dates(node=mods)
