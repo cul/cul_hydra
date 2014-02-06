@@ -111,6 +111,12 @@ module Cul::Scv::Hydra::Solrizer
       end
     end
 
+    def shelf_locators(node=mods)
+      node.xpath("./mods:location/mods:shelfLocator", MODS_NS).collect do |n|
+        ScvModsFieldable.normalize(n.text, true)
+      end
+    end
+
     def to_solr(solr_doc={})
       solr_doc = (defined? super) ? super : solr_doc
       solr_doc["title_si"] = sort_title
@@ -119,9 +125,11 @@ module Cul::Scv::Hydra::Solrizer
       solr_doc["lib_project_sim"] = projects
       solr_doc["lib_name_sim"] = names
       solr_doc["lib_name_ssm"] = solr_doc["lib_name_sim"]
+      solr_doc["lib_author_sim"] = names(:marcrelator, 'aut')
       solr_doc["lib_recipient_sim"] = names(:marcrelator, 'rcp')
       solr_doc["lib_format_sim"] = formats
       solr_doc["lib_repo_sim"] = repositories
+      solr_doc["lib_shelf_sim"] = shelf_locators
       solr_doc.each do |k, v|
         if self.class.maps_field? k
           solr_doc[k] = self.class.map_value(k, v)
@@ -131,13 +139,23 @@ module Cul::Scv::Hydra::Solrizer
     end
 
     def self.normalize(t, strip_punctuation=false)
+      # strip whitespace
       n_t = t.dup.strip
+      # collapse intermediate whitespace
+      n_t.gsub!(/\s+/, ' ')
+      # pull off paired punctuation, and any leading punctuation
       if strip_punctuation
+        n_t = n_t.sub(/^\((.*)\)$/, "\\1")
+        n_t = n_t.sub(/^\{(.*)\}$/, "\\1")
+        n_t = n_t.sub(/^\[(.*)\]$/, "\\1")
+        n_t = n_t.sub(/^"(.*)"$/, "\\1")
+        n_t = n_t.sub(/^'(.*)'$/, "\\1")
+        n_t = n_t.sub(/^<(.*)>$/, "\\1")
+        #n_t = n_t.sub(/^\p{Ps}(.*)\p{Pe}/u, "\\1")
         n_t = n_t.sub(/^[[:punct:]]+/, '')
-        n_t = n_t.sub(/[[:punct:]]+$/, '')
+        # this may have 'created' leading/trailing space, so strip
         n_t.strip!
       end
-      n_t.gsub!(/\s+/, ' ')
       n_t
     end
   end

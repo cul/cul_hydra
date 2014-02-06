@@ -42,7 +42,7 @@ describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable do
   end
 
   describe ".to_solr" do
-    before :each do
+    before :all do
       @test_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-all.xml")))
       @solr_doc = ModsIndexDatastream.new(@test_ng).to_solr
     end
@@ -65,8 +65,8 @@ describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable do
     end
 
     it "should facet on corporate and personal names, ignoring roleTerms" do
-      @solr_doc["lib_name_sim"].should == ['Name, Inc', 'Name, Personal 1745-1829', 'Name, Recipient 1829-1745']
-      @solr_doc["lib_name_ssm"].should == ['Name, Inc', 'Name, Personal 1745-1829', 'Name, Recipient 1829-1745']
+      @solr_doc["lib_name_sim"].should == ['Name, Inc.', 'Name, Personal 1745-1829', 'Name, Recipient 1829-1745']
+      @solr_doc["lib_name_ssm"].should == ['Name, Inc.', 'Name, Personal 1745-1829', 'Name, Recipient 1829-1745']
     end
 
     it "should facet on the special library format values" do
@@ -91,9 +91,14 @@ describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable do
       e = "'Foo Bar\""
       a = Cul::Scv::Hydra::Solrizer::ScvModsFieldable.normalize(d)
       a.should == e
-      e = "Foo Bar"
-      a = Cul::Scv::Hydra::Solrizer::ScvModsFieldable.normalize("   'Foo \n Bar\" ", true)
+      e = "Foo Bar\""
+      a = Cul::Scv::Hydra::Solrizer::ScvModsFieldable.normalize(d, true)
       a.should == e
+      d = "<Jay, John (Pres. of Cong.)>"
+      e = "Jay, John (Pres. of Cong.)"
+      a = Cul::Scv::Hydra::Solrizer::ScvModsFieldable.normalize(d, true)
+      a.should == e
+
     end
   end
 
@@ -118,13 +123,23 @@ describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable do
     end
   end
 
+  describe ".shelf_locators" do
+    before :all do
+      @test_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-physical-location.xml")))
+      @solr_doc = ModsIndexDatastream.new(@test_ng).to_solr
+    end
+    it "should find the shelf locators" do
+      @solr_doc["lib_shelf_sim"].should == ["Box no. 057"]
+    end
+  end
+
   describe ".names" do
     before :all do
       @names_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-names.xml")))
     end
     it "should find name values and ignore roleTerms" do
       test = ModsIndexDatastream.new(@names_ng)
-      test.names.should == ['Name, Inc', 'Name, Personal 1745-1829', 'Name, Recipient 1829-1745', 'Dear Brother', 'Jay, John 1745-1829']
+      test.names.should == ['Name, Inc.', 'Name, Personal 1745-1829', 'Name, Recipient 1829-1745', 'Dear Brother', 'Jay, John 1745-1829']
     end
     it "should find name values with authority/role pairs" do
       test = ModsIndexDatastream.new(@names_ng)
