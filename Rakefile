@@ -5,6 +5,7 @@ rescue LoadError
   puts 'You must `gem install bundler` and `bundle install` to run rake tasks'
 end
 require 'rspec'
+require 'rspec/core/rake_task'
 require 'rake/testtask'
 require 'cul_scv_hydra'
 require 'rake'
@@ -12,12 +13,12 @@ require 'rake'
 Bundler::GemHelper.install_tasks
 load "lib/tasks/cmodel.rake" if defined?(Rake)
 # require 'spec/rake/spectask'
-RSpec::Rake::SpecTask.new(:spec) do |spec|
+RSpec::Core::RakeTask.new(:spec) do |spec|
   #spec.libs << 'lib' << 'spec'
   spec.pattern = 'spec/**/*_spec.rb'
 end
 
-RSpec::Rake::SpecTask.new(:rcov) do |spec|
+RSpec::Core::RakeTask.new(:rcov) do |spec|
   #spec.libs << 'lib' << 'spec'
   spec.pattern = 'spec/**/*_spec.rb'
   spec.rcov = true
