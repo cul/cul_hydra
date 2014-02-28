@@ -11,7 +11,7 @@ module Aggregator
   def aggregator!
     add_relationship(:rdf_type, Cul::Scv::Hydra::ActiveFedora::AGGREGATOR_TYPE.to_s)
     @metadata_is_dirty = true
-    update
+    self.save
   end
 
   def add_member(member, container=self)
