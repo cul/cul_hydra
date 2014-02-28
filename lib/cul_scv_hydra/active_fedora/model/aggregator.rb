@@ -15,31 +15,31 @@ module Aggregator
   end
 
   def add_member(member, container=self)
-    if container.respond_to?:internal_uri
-      container = container.internal_uri
-    end
-    if container =~ /\A[\w\-]+:[\w\-]+\Z/
-      container = "info:fedora/#{container}"
-    end
-    member.add_relationship(:cul_member_of, container)
+    member.add_relationship(:cul_member_of, to_uri(container))
     member.datastreams["RELS-EXT"].content_will_change!
     member.save
   end
 
   def remove_member(member, container=self)
-    if container.respond_to?:internal_uri
-      container = container.internal_uri
-    end
-    if container =~ /\A[\w\-]+:[\w\-]+\Z/
-      container = "info:fedora/#{container}"
-    end
     rel = ActiveFedora::Relationship.new()
     rel.subject_pid= :self
-    rel.object = container
+    rel.object = to_uri(container)
     rel.predicate = :cul_member_of
     member.remove_relationship(rel)
     member.datastreams["RELS-EXT"].content_will_change!
     member.save
+  end
+
+  private
+  def to_uri(obj)
+    if obj.respond_to? :internal_uri
+      return obj.internal_uri
+    end
+    obj = obj.pid unless obj.is_a? String
+    if obj.is_a? String and obj =~ /\A[\w\-]+:[\w\-]+\Z/
+      obj = "info:fedora/#{obj}"
+    end
+    return obj
   end
 end
 end
