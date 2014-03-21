@@ -104,7 +104,7 @@ describe "Cul::Scv::Hydra::Om::DCMetadata" do
   end
   describe ".xml_serialization" do
     it "should serialize new documents to xml" do
-      @mock_inner.stubs(:"new?").returns(true)
+      @mock_inner.stubs(:"new_record?").returns(true)
       Cul::Scv::Hydra::Om::DCMetadata.new(@mock_inner,'DC').to_xml
     end
     it "should parse and build namespaces identically" do
@@ -142,7 +142,7 @@ src
     end
 
     it "should produce equivalent xml when built up programatically" do
-      @mock_inner.stubs(:"new?").returns(true)
+      @mock_inner.stubs(:"new_record?").returns(true)
       built = Cul::Scv::Hydra::Om::DCMetadata.new(@mock_inner,'DC')
       built.update_values({[:dc_identifier] => "prd.custord.070103a"})
       built.update_values({[:dc_title] => "With William Burroughs, image"})
@@ -154,7 +154,7 @@ src
 
   describe ".to_solr" do
     it "should create the right map for Solr indexing" do
-      @mock_inner.stubs(:"new?").returns(true)
+      @mock_inner.stubs(:"new_record?").returns(true)
       built = Cul::Scv::Hydra::Om::DCMetadata.new(@mock_inner,'DC')
       built.update_values({[:dc_identifier] => "prd.custord.070103a"})
       built.update_values({[:dc_title] => "With William Burroughs, image"})

@@ -1,3 +1,5 @@
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'lib'))
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'app','models'))
 require 'rubygems'
 begin
   require 'bundler'
@@ -6,23 +8,10 @@ rescue LoadError
 end
 require 'rspec'
 require 'rspec/core/rake_task'
-require 'rake/testtask'
-require 'cul_scv_hydra'
-require 'rake'
 
 Bundler::GemHelper.install_tasks
-load "lib/tasks/cmodel.rake" if defined?(Rake)
+import "lib/tasks/cmodel.rake" if defined?(Rake)
 # require 'spec/rake/spectask'
-RSpec::Core::RakeTask.new(:spec) do |spec|
-  #spec.libs << 'lib' << 'spec'
-  spec.pattern = 'spec/**/*_spec.rb'
-end
-
-RSpec::Core::RakeTask.new(:rcov) do |spec|
-  #spec.libs << 'lib' << 'spec'
-  spec.pattern = 'spec/**/*_spec.rb'
-  spec.rcov = true
-end
 
 task :default => :spec
 

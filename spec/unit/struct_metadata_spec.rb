@@ -8,7 +8,7 @@ describe "Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata" do
   
   before(:each) do
     @mock_inner = mock('inner object')
-    @mock_inner.stubs(:"new?").returns(false)
+    @mock_inner.stubs(:"new_record?").returns(false)
     @mock_repo = mock('repository')
     @mock_ds = mock('datastream')
     @mock_repo.stubs(:config).returns({})
@@ -24,7 +24,7 @@ describe "Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata" do
 
   describe ".new " do
     it "should create a new DS when no structMetadata exists" do
-      @mock_repo.stubs(:datastream).raises(RestClient::ResourceNotFound)
+      @mock_repo.stubs(:datastream_profile).returns({})
       test_obj = Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata.new(@mock_inner, 'structMetadata')
       # it should have the default content
       test_obj.ng_xml.should be_equivalent_to Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata.xml_template
@@ -72,14 +72,14 @@ describe "Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata" do
 
   describe ".content= " do
     it "should parse existing structMetadata content appropriately" do
-      @mock_repo.stubs(:datastream).returns('<datastreamProfile dsID="structMetadata"/>')
+      @mock_repo.stubs(:datastream_profile).returns({:dsID => 'structMetadata'})
       @mock_repo.stubs(:datastream_dissemination=>@rv_fixture)
       test_obj = Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata.new(@mock_inner, 'structMetadata')
       test_obj.ng_xml.should be_equivalent_to(@rv_doc)
     end
 
     it "should replace existing structMetadata content from setter" do
-      @mock_repo.stubs(:datastream).returns('<datastreamProfile dsID="structMetadata"/>')
+      @mock_repo.stubs(:datastream_profile).returns({:dsID => 'structMetadata'})
       @mock_repo.stubs(:datastream_dissemination=>@rv_fixture)
   	  test_obj = Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata.new(@mock_inner, 'structMetadata')
       test_obj.ng_xml.should be_equivalent_to(@rv_doc)
@@ -90,7 +90,7 @@ describe "Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata" do
 
   describe ".serialize! " do
     it "should signal changes to ng_xml" do
-      @mock_repo.stubs(:datastream).returns('<datastreamProfile dsID="structMetadata"/>')
+      @mock_repo.stubs(:datastream_profile).returns({:dsID => 'structMetadata'})
       @mock_repo.stubs(:datastream_dissemination=>@rv_fixture)
       test_obj = Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata.new(@mock_inner, 'structMetadata')
       expected = Nokogiri::XML::Document.parse(@rv_fixture.sub(/Sides/,'sediS'))
@@ -112,7 +112,7 @@ describe "Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata" do
     end
 
     it "should not change content unnecessarily" do
-      @mock_repo.stubs(:datastream).returns('<datastreamProfile dsID="structMetadata"/>')
+      @mock_repo.stubs(:datastream_profile).returns({:dsID => 'structMetadata'})
       @mock_repo.stubs(:datastream_dissemination=>@rv_fixture)
       test_obj = Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata.new(@mock_inner, 'structMetadata')
       test_obj.changed?.should be_false

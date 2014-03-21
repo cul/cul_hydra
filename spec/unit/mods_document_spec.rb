@@ -11,7 +11,7 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
     @mock_repo = mock('repository')
     @mock_ds = mock('datastream')
     @mock_repo.stubs(:config).returns({})
-    @mock_repo.stubs(:datastream).returns('<datastreamProfile />')
+    @mock_repo.stubs(:datastream_profile).returns({})
     @mock_repo.stubs(:datastream_dissemination=>'My Content')
     @mock_inner.stubs(:repository).returns(@mock_repo)
     @mock_inner.stubs(:pid)
@@ -111,7 +111,7 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
       @mods_item.find_by_terms( {:foo=>20}, :bar ).should == nil
     end
     it "should identify presence or absence of terms with shortcut methods" do
-      @mock_inner.stubs(:new?).returns(true)
+      @mock_inner.stubs(:new_record?).returns(true)
       built  = Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner, 'descMetadata')
       built.ng_xml = Cul::Scv::Hydra::Om::ModsDocument.xml_template
       built.update_values({[:title]=>'foo'})
@@ -121,7 +121,7 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
   end
   describe ".xml_serialization" do
     it "should serialize new documents to xml" do
-      @mock_inner.stubs(:new?).returns(true)
+      @mock_inner.stubs(:new_record?).returns(true)
       Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner,'descMetadata').to_xml
     end
     it "should parse and build namespaces identically" do
@@ -162,7 +162,7 @@ src
       passed.should == true
     end
     it "should produce equivalent xml when built up programatically" do
-      @mock_inner.stubs(:new?).returns(false)
+      @mock_inner.stubs(:new_record?).returns(false)
       built = Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner,'descMetadata')
       built.ng_xml = Cul::Scv::Hydra::Om::ModsDocument.xml_template
       built.update_values({[:identifier] => "prd.custord.040148"})
@@ -191,7 +191,7 @@ ml
       built.ng_xml.should be_equivalent_to(@mods_item.ng_xml)
     end
     it "should produce equivalent xml for recordInfo" do
-      @mock_inner.stubs(:new?).returns(false)
+      @mock_inner.stubs(:new_record?).returns(false)
       built = Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner, 'descMetadata')
       built.ng_xml = Cul::Scv::Hydra::Om::ModsDocument.xml_template
       built.update_values({[:record_info, :record_creation_date] => "2010-07-12"})
@@ -205,16 +205,17 @@ ml
       built.ng_xml.should be_equivalent_to(parsed)
     end
     it "should produce equivalent xml for physical location" do
-      @mock_inner.stubs(:new?).returns(false)
+      @mock_inner.stubs(:new_record?).returns(false)
       built = Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner, 'descMetadata')
       built.ng_xml = Cul::Scv::Hydra::Om::ModsDocument.xml_template
       built.update_values({[:location, :lib_repo] => "NNC-RB"})
       built.update_values({[:location, :repo_text] => "Rare Book and Manuscript Library, Columbia University"})
+      built.update_values({[:location, :shelf_locator] => "(Box no. \n        057)"})
       parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-physical-location.xml")))
       built.ng_xml.should be_equivalent_to(parsed)
     end
     it "should produce equivalent xml for date ranges" do
-      @mock_inner.stubs(:new?).returns(false)
+      @mock_inner.stubs(:new_record?).returns(false)
       built = Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner, 'descMetadata')
       built.ng_xml = Cul::Scv::Hydra::Om::ModsDocument.xml_template
       built.update_values({[:origin_info, :start_date]=>"1900"})
