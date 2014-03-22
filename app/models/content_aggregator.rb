@@ -12,7 +12,7 @@ class ContentAggregator < ::ActiveFedora::Base
   def route_as
     "multipartitem"
   end
-  
+
   def thumbnail_info
     members = resources
     if members.length > 1
