@@ -13,4 +13,10 @@ class BagAggregator < ::ActiveFedora::Base
   def route_as
     "collection"
   end
+
+  # Override update_index to do nothing so that we can use Fedora without needing a Solr index
+  #def update_index
+    # Do nothing!
+  #end
+
 end
