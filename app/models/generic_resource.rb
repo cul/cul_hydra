@@ -3,6 +3,7 @@ require "mime/types"
 require "uri"
 require "open-uri"
 require "tempfile"
+require "active_fedora_finders"
 class GenericResource < ::ActiveFedora::Base
   extend ActiveModel::Callbacks
   include ::ActiveFedora::Finders
@@ -11,13 +12,13 @@ class GenericResource < ::ActiveFedora::Base
   include Cul::Scv::Hydra::ActiveFedora::Model::Common
   include ::ActiveFedora::RelsInt
   alias :file_objects :resources
-  
+
   IMAGE_EXT = {"image/bmp" => 'bmp', "image/gif" => 'gif', "image/jpeg" => 'jpg', "image/png" => 'png', "image/tiff" => 'tif', "image/x-windows-bmp" => 'bmp'}
   WIDTH = RDF::URI(ActiveFedora::Predicates.find_graph_predicate(:image_width))
   LENGTH = RDF::URI(ActiveFedora::Predicates.find_graph_predicate(:image_length))
-  
+
   has_datastream :name => "content", :type=>::ActiveFedora::Datastream, :versionable => true
-  
+
   def assert_content_model
     super
     add_relationship(:rdf_type, Cul::Scv::Hydra::ActiveFedora::RESOURCE_TYPE.to_s)
@@ -38,7 +39,7 @@ class GenericResource < ::ActiveFedora::Base
     end
     solr_doc
   end
-  
+
   def thumbnail_info
     thumb = relsint.relationships(datastreams['content'],:foaf_thumb).first
     if thumb
@@ -48,5 +49,5 @@ class GenericResource < ::ActiveFedora::Base
       return {:url=>image_url("cul_scv_hydra/crystal/file.png"),:mime=>'image/png'}
     end
   end
-        
+
 end
