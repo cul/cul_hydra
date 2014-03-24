@@ -1,8 +1,0 @@
-.bundle
-db/*.sqlite3
-log/*.log
-tmp/
-*.gem
-fedora.yml
-solr.yml
-subs.yml
