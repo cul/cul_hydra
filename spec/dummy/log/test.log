@@ -1,0 +1,205 @@
+  [1m[36m (0.3ms)[0m  [1mbegin transaction[0m
+---------------------------
+CulScvHydraTest: test_truth
+---------------------------
+  [1m[35m (0.1ms)[0m  rollback transaction
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+ActiveFedora: loading fedora config from /Users/ba2213/Github/cul_scv_hydra/config/fedora.yml
+Using the default solr.yml that comes with active-fedora.  If you want to override this, pass the path to solr.yml to ActiveFedora - ie. ActiveFedora.init(:solr_config_path => '/path/to/solr.yml') - or set Rails.root and put solr.yml into #{Rails.root}/config.
+ActiveFedora: loading solr config from /Users/ba2213/Github/cul_scv_hydra/om/ruby/1.9.1/gems/active-fedora-7.0.1/config/solr.yml
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+ActiveFedora: loading fedora config from /Users/ba2213/Github/cul_scv_hydra/config/fedora.yml
+Using the default solr.yml that comes with active-fedora.  If you want to override this, pass the path to solr.yml to ActiveFedora - ie. ActiveFedora.init(:solr_config_path => '/path/to/solr.yml') - or set Rails.root and put solr.yml into #{Rails.root}/config.
+ActiveFedora: loading solr config from /Users/ba2213/Github/cul_scv_hydra/om/ruby/1.9.1/gems/active-fedora-7.0.1/config/solr.yml
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+ActiveFedora: loading fedora config from /Users/ba2213/Github/cul_scv_hydra/config/fedora.yml
+Using the default solr.yml that comes with active-fedora.  If you want to override this, pass the path to solr.yml to ActiveFedora - ie. ActiveFedora.init(:solr_config_path => '/path/to/solr.yml') - or set Rails.root and put solr.yml into #{Rails.root}/config.
+ActiveFedora: loading solr config from /Users/ba2213/Github/cul_scv_hydra/om/ruby/1.9.1/gems/active-fedora-7.0.1/config/solr.yml
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+ActiveFedora: loading fedora config from /Users/ba2213/Github/cul_scv_hydra/config/fedora.yml
+Using the default solr.yml that comes with active-fedora.  If you want to override this, pass the path to solr.yml to ActiveFedora - ie. ActiveFedora.init(:solr_config_path => '/path/to/solr.yml') - or set Rails.root and put solr.yml into #{Rails.root}/config.
+ActiveFedora: loading solr config from /Users/ba2213/Github/cul_scv_hydra/om/ruby/1.9.1/gems/active-fedora-7.0.1/config/solr.yml
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+ActiveFedora: loading fedora config from /Users/ba2213/Github/cul_scv_hydra/config/fedora.yml
+Using the default solr.yml that comes with active-fedora.  If you want to override this, pass the path to solr.yml to ActiveFedora - ie. ActiveFedora.init(:solr_config_path => '/path/to/solr.yml') - or set Rails.root and put solr.yml into #{Rails.root}/config.
+ActiveFedora: loading solr config from /Users/ba2213/Github/cul_scv_hydra/om/ruby/1.9.1/gems/active-fedora-7.0.1/config/solr.yml
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+ActiveFedora: loading fedora config from /Users/ba2213/Github/cul_scv_hydra/config/fedora.yml
+Using the default solr.yml that comes with active-fedora.  If you want to override this, pass the path to solr.yml to ActiveFedora - ie. ActiveFedora.init(:solr_config_path => '/path/to/solr.yml') - or set Rails.root and put solr.yml into #{Rails.root}/config.
+ActiveFedora: loading solr config from /Users/ba2213/Github/cul_scv_hydra/om/ruby/1.9.1/gems/active-fedora-7.0.1/config/solr.yml
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+ValueMapper: no field value maps at /Users/ba2213/Github/cul_scv_hydra/spec/dummy/config/solr_value_maps.yml
+ValueMapper: loading field value maps from /Users/ba2213/Github/cul_scv_hydra/config/solr_value_maps.yml
+ValueMapper: no field value maps at /Users/ba2213/Github/cul_scv_hydra/spec/dummy/config/solr_value_maps.yml
+ValueMapper: loading field value maps from /Users/ba2213/Github/cul_scv_hydra/config/solr_value_maps.yml
+ValueMapper: no field value maps at /Users/ba2213/Github/cul_scv_hydra/spec/dummy/config/solr_value_maps.yml
+ValueMapper: loading field value maps from /Users/ba2213/Github/cul_scv_hydra/config/solr_value_maps.yml
+ValueMapper: no field value maps at /Users/ba2213/Github/cul_scv_hydra/spec/dummy/config/solr_value_maps.yml
+ValueMapper: loading field value maps from /Users/ba2213/Github/cul_scv_hydra/config/solr_value_maps.yml
+ValueMapper: no field value maps at /Users/ba2213/Github/cul_scv_hydra/spec/dummy/config/solr_value_maps.yml
+ValueMapper: loading field value maps from /Users/ba2213/Github/cul_scv_hydra/config/solr_value_maps.yml
+ValueMapper: no field value maps at /Users/ba2213/Github/cul_scv_hydra/spec/dummy/config/solr_value_maps.yml
+ValueMapper: loading field value maps from /Users/ba2213/Github/cul_scv_hydra/config/solr_value_maps.yml
+ValueMapper: no field value maps at /Users/ba2213/Github/cul_scv_hydra/spec/dummy/config/solr_value_maps.yml
+ValueMapper: loading field value maps from /Users/ba2213/Github/cul_scv_hydra/config/solr_value_maps.yml
+ValueMapper: no field value maps at /Users/ba2213/Github/cul_scv_hydra/spec/dummy/config/solr_value_maps.yml
+ValueMapper: loading field value maps from /Users/ba2213/Github/cul_scv_hydra/config/solr_value_maps.yml
+ValueMapper: no field value maps at /Users/ba2213/Github/cul_scv_hydra/spec/dummy/config/solr_value_maps.yml
+ValueMapper: loading field value maps from /Users/ba2213/Github/cul_scv_hydra/config/solr_value_maps.yml
+ValueMapper: no field value maps at /Users/ba2213/Github/cul_scv_hydra/spec/dummy/config/solr_value_maps.yml
+ValueMapper: loading field value maps from /Users/ba2213/Github/cul_scv_hydra/config/solr_value_maps.yml
+ValueMapper: no field value maps at /Users/ba2213/Github/cul_scv_hydra/spec/dummy/config/solr_value_maps.yml
+ValueMapper: loading field value maps from /Users/ba2213/Github/cul_scv_hydra/config/solr_value_maps.yml
+ValueMapper: no field value maps at /Users/ba2213/Github/cul_scv_hydra/spec/dummy/config/solr_value_maps.yml
+ValueMapper: loading field value maps from /Users/ba2213/Github/cul_scv_hydra/config/solr_value_maps.yml
+ValueMapper: no field value maps at /Users/ba2213/Github/cul_scv_hydra/spec/dummy/config/solr_value_maps.yml
+ValueMapper: loading field value maps from /Users/ba2213/Github/cul_scv_hydra/config/solr_value_maps.yml
+ValueMapper: no field value maps at /Users/ba2213/Github/cul_scv_hydra/spec/dummy/config/solr_value_maps.yml
+ValueMapper: loading field value maps from /Users/ba2213/Github/cul_scv_hydra/config/solr_value_maps.yml
+ValueMapper: no field value maps at /Users/ba2213/Github/cul_scv_hydra/spec/dummy/config/solr_value_maps.yml
+ValueMapper: loading field value maps from /Users/ba2213/Github/cul_scv_hydra/config/solr_value_maps.yml
+ValueMapper: no field value maps at /Users/ba2213/Github/cul_scv_hydra/spec/dummy/config/solr_value_maps.yml
+ValueMapper: loading field value maps from /Users/ba2213/Github/cul_scv_hydra/config/solr_value_maps.yml
+ValueMapper: no field value maps at /Users/ba2213/Github/cul_scv_hydra/spec/dummy/config/solr_value_maps.yml
+ValueMapper: loading field value maps from /Users/ba2213/Github/cul_scv_hydra/config/solr_value_maps.yml
+ValueMapper: no field value maps at /Users/ba2213/Github/cul_scv_hydra/spec/dummy/config/solr_value_maps.yml
+ValueMapper: loading field value maps from /Users/ba2213/Github/cul_scv_hydra/config/solr_value_maps.yml
+ValueMapper: no field value maps at /Users/ba2213/Github/cul_scv_hydra/spec/dummy/config/solr_value_maps.yml
+ValueMapper: loading field value maps from /Users/ba2213/Github/cul_scv_hydra/config/solr_value_maps.yml
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+ActiveFedora: loading fedora config from /Users/ba2213/Github/cul_scv_hydra/config/fedora.yml
+Using the default solr.yml that comes with active-fedora.  If you want to override this, pass the path to solr.yml to ActiveFedora - ie. ActiveFedora.init(:solr_config_path => '/path/to/solr.yml') - or set Rails.root and put solr.yml into #{Rails.root}/config.
+ActiveFedora: loading solr config from /Users/ba2213/Github/cul_scv_hydra/om/ruby/1.9.1/gems/active-fedora-7.0.1/config/solr.yml
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+ValueMapper: no field value maps at /Users/ba2213/Github/cul_scv_hydra/spec/dummy/config/solr_value_maps.yml
+ValueMapper: loading field value maps from /Users/ba2213/Github/cul_scv_hydra/config/solr_value_maps.yml
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+ActiveFedora: loading fedora config from /Users/ba2213/Github/cul_scv_hydra/config/fedora.yml
+Using the default solr.yml that comes with active-fedora.  If you want to override this, pass the path to solr.yml to ActiveFedora - ie. ActiveFedora.init(:solr_config_path => '/path/to/solr.yml') - or set Rails.root and put solr.yml into #{Rails.root}/config.
+ActiveFedora: loading solr config from /Users/ba2213/Github/cul_scv_hydra/om/ruby/1.9.1/gems/active-fedora-7.0.1/config/solr.yml
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+ValueMapper: no field value maps at /Users/ba2213/Github/cul_scv_hydra/spec/dummy/config/solr_value_maps.yml
+ValueMapper: loading field value maps from /Users/ba2213/Github/cul_scv_hydra/config/solr_value_maps.yml
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+ActiveFedora: loading fedora config from /Users/ba2213/Github/cul_scv_hydra/config/fedora.yml
+Using the default solr.yml that comes with active-fedora.  If you want to override this, pass the path to solr.yml to ActiveFedora - ie. ActiveFedora.init(:solr_config_path => '/path/to/solr.yml') - or set Rails.root and put solr.yml into #{Rails.root}/config.
+ActiveFedora: loading solr config from /Users/ba2213/Github/cul_scv_hydra/om/ruby/1.9.1/gems/active-fedora-7.0.1/config/solr.yml
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+ValueMapper: no field value maps at /Users/ba2213/Github/cul_scv_hydra/spec/dummy/config/solr_value_maps.yml
+ValueMapper: loading field value maps from /Users/ba2213/Github/cul_scv_hydra/config/solr_value_maps.yml
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+ActiveFedora: loading fedora config from /Users/ba2213/Github/cul_scv_hydra/config/fedora.yml
+Using the default solr.yml that comes with active-fedora.  If you want to override this, pass the path to solr.yml to ActiveFedora - ie. ActiveFedora.init(:solr_config_path => '/path/to/solr.yml') - or set Rails.root and put solr.yml into #{Rails.root}/config.
+ActiveFedora: loading solr config from /Users/ba2213/Github/cul_scv_hydra/om/ruby/1.9.1/gems/active-fedora-7.0.1/config/solr.yml
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+ValueMapper: no field value maps at /Users/ba2213/Github/cul_scv_hydra/spec/dummy/config/solr_value_maps.yml
+ValueMapper: loading field value maps from /Users/ba2213/Github/cul_scv_hydra/config/solr_value_maps.yml
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+ActiveFedora: loading fedora config from /Users/ba2213/Github/cul_scv_hydra/config/fedora.yml
+Using the default solr.yml that comes with active-fedora.  If you want to override this, pass the path to solr.yml to ActiveFedora - ie. ActiveFedora.init(:solr_config_path => '/path/to/solr.yml') - or set Rails.root and put solr.yml into #{Rails.root}/config.
+ActiveFedora: loading solr config from /Users/ba2213/Github/cul_scv_hydra/om/ruby/1.9.1/gems/active-fedora-7.0.1/config/solr.yml
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+ValueMapper: no field value maps at /Users/ba2213/Github/cul_scv_hydra/spec/dummy/config/solr_value_maps.yml
+ValueMapper: loading field value maps from /Users/ba2213/Github/cul_scv_hydra/config/solr_value_maps.yml
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+ActiveFedora: loading fedora config from /Users/ba2213/Github/cul_scv_hydra/config/fedora.yml
+Using the default solr.yml that comes with active-fedora.  If you want to override this, pass the path to solr.yml to ActiveFedora - ie. ActiveFedora.init(:solr_config_path => '/path/to/solr.yml') - or set Rails.root and put solr.yml into #{Rails.root}/config.
+ActiveFedora: loading solr config from /Users/ba2213/Github/cul_scv_hydra/om/ruby/1.9.1/gems/active-fedora-7.0.1/config/solr.yml
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+Unable to connect to Fedora at http://127.0.0.1:8983/fedora
+ValueMapper: no field value maps at /Users/ba2213/Github/cul_scv_hydra/spec/dummy/config/solr_value_maps.yml
+ValueMapper: loading field value maps from /Users/ba2213/Github/cul_scv_hydra/config/solr_value_maps.yml

@@ -5,5 +5,6 @@ require "rails"
 
 module Cul::Scv::Hydra
   class Engine < ::Rails::Engine
+  	isolate_namespace Cul::Scv::Hydra
   end
 end

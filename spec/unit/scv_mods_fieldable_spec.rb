@@ -18,22 +18,24 @@ describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable do
   end
   
   before(:each) do
-    @mock_inner = mock('inner object')
     @mock_repo = mock('repository')
     @mock_ds = mock('datastream')
     @mock_repo.stubs(:config).returns({})
+    @mock_repo.stubs(:datastream_profile).returns({})
     @mock_repo.stubs(:datastream).returns('<datastreamProfile />')
     @mock_repo.stubs(:datastream_dissemination=>'My Content')
+
+    @mock_inner = mock('inner object')
+    @mock_inner.stubs(:"new_record?").returns(false)
     @mock_inner.stubs(:repository).returns(@mock_repo)
     @mock_inner.stubs(:pid)
     @item_xml = fixture( File.join("CUL_MODS", "mods-item.xml") ).read
-    @item_om = Cul::Scv::Hydra::Om::ModsDocument.from_xml(@item_xml)
-    @item_om.digital_object= @mock_inner
+    @item_om = descMetadata(@mock_inner, @item_xml)
+
     @item_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-item.xml")))
     @mods_ns = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-ns.xml")))
     @part_xml = fixture( File.join("CUL_MODS", "mods-part.xml") )
-    @part_om = Cul::Scv::Hydra::Om::ModsDocument.from_xml(@part_xml)
-    @part_om.digital_object= @mock_inner
+    @part_om = descMetadata(@mock_inner, @part_xml)
     @titles_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-titles.xml")))
   end
   

@@ -1,5 +1,6 @@
 require "active-fedora"
 require "active_fedora_finders"
+require "hydra-core"
 class BagAggregator < ::ActiveFedora::Base
   extend ActiveModel::Callbacks
   include ::ActiveFedora::Finders

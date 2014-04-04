@@ -7,7 +7,7 @@ describe "Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer" do
   end
   
   before(:each) do
-    @mods_fixture = Cul::Scv::Hydra::Om::ModsDocument.from_xml( fixture( File.join("CUL_MODS", "mods-001.xml") ) )
+    @mods_fixture = descMetadata(@mock_inner, fixture( File.join("CUL_MODS", "mods-001.xml")))
     @solr_fixture = YAML::load( fixture( File.join("CUL_SOLR", "mods-001.yml") ) )
   end
   

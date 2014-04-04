@@ -1,24 +1,24 @@
-ENV["environment"] ||= 'test'
-ENV["RAILS_ENV"] ||= 'test'
-$LOAD_PATH.unshift(File.dirname(__FILE__))
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'app','models'))
-libs = File.expand_path(File.dirname(__FILE__) + '/../lib/*.rb')
-#require 'om'
-require 'rails'
-require 'rails/all'
-require 'rspec'
-require 'rspec/autorun'
+# Configure Rails Environment
+ENV["RAILS_ENV"] = "test"
+
+require File.expand_path("../dummy/config/environment.rb",  __FILE__)
+require 'bundler/setup'
 require 'rspec/rails'
-require 'equivalent-xml/rspec_matchers'
-#require 'ruby-debug'
+require 'rspec/autorun'
 require 'cul_scv_hydra'
-Dir.glob(libs).each {|lib| require lib}
-predicate_config_path = File.join(File.dirname(__FILE__), "..", "config", "predicate_mappings.yml")
-puts "PREDICATE CONFIG: #{predicate_config_path}"
-ActiveFedora::Predicates.predicate_config=YAML::load(File.open(predicate_config_path))
-models = File.expand_path(File.dirname(__FILE__) + '/../app/models/*.rb')
-Dir.glob(models).each {|model| require model}
+require 'equivalent-xml/rspec_matchers'
+
+include EquivalentXml::RSpecMatchers
+
+Rails.backtrace_cleaner.remove_silencers!
+
+# Load support files
+Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
+
+# Load fixtures from the engine
+if ActiveSupport::TestCase.method_defined?(:fixture_path=)
+  ActiveSupport::TestCase.fixture_path = File.expand_path("../fixtures", __FILE__)
+end
 
 
 RSpec.configure do |config|
@@ -195,6 +195,20 @@ def same_namespace?(node_1, node_2)
   href1 = node_1.namespace.nil? ? '' : node_1.namespace.href
   href2 = node_2.namespace.nil? ? '' : node_2.namespace.href
   return href1 == href2
+end
+
+def descMetadata(inner_object, file)
+  tmpl = Cul::Scv::Hydra::Om::ModsDocument.new(inner_object, 'descMetadata')
+  tmpl.ng_xml = Nokogiri::XML::Document.parse(file)
+  tmpl.ng_xml_doesnt_change!
+  tmpl
+end
+
+def structMetadata(inner_object, file)
+  tmpl = Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata.new(inner_object, 'structMetadata')
+  tmpl.ng_xml = Nokogiri::XML::Document.parse(file)
+  tmpl.ng_xml_doesnt_change!
+  tmpl
 end
     
 def as_node(data)

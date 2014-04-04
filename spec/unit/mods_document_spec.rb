@@ -8,6 +8,7 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
   
   before(:each) do
     @mock_inner = mock('inner object')
+    @mock_inner.stubs(:"new_record?").returns(false)
     @mock_repo = mock('repository')
     @mock_ds = mock('datastream')
     @mock_repo.stubs(:config).returns({})
@@ -15,16 +16,13 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
     @mock_repo.stubs(:datastream_dissemination=>'My Content')
     @mock_inner.stubs(:repository).returns(@mock_repo)
     @mock_inner.stubs(:pid)
-    @fixturemods = Cul::Scv::Hydra::Om::ModsDocument.from_xml( fixture( File.join("CUL_MODS", "mods-item.xml") ) )
-    @fixturemods.digital_object= @mock_inner
+    @fixturemods = descMetadata(@mock_inner, fixture( File.join("CUL_MODS", "mods-item.xml") ) )
     item_xml = fixture( File.join("CUL_MODS", "mods-item.xml") )
-    @mods_item = Cul::Scv::Hydra::Om::ModsDocument.from_xml(item_xml)
-    @mods_item.digital_object= @mock_inner
+    @mods_item = descMetadata(@mock_inner, item_xml)
     @mods_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-item.xml")))
     @mods_ns = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-ns.xml")))
     part_xml = fixture( File.join("CUL_MODS", "mods-part.xml") )
-    @mods_part = Cul::Scv::Hydra::Om::ModsDocument.from_xml(part_xml)
-    @mods_part.digital_object= @mock_inner
+    @mods_part = descMetadata(@mock_inner, part_xml)
   end
   
   after(:all) do
@@ -80,12 +78,11 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
       C = Cul::Scv::Hydra::Om::ModsDocument
       T = C.terminology
       term = T.retrieve_term(:title)
-      puts term.xpath
-      term.xpath.should == '//oxns:mods/oxns:titleInfo[not(@type)]/oxns:title'
+      expect(term.xpath).to eql '//oxns:mods/oxns:titleInfo[not(@type)]/oxns:title'
       T.has_term?(:title).should be_true
-      doc = {}
-      @fixturemods.to_solr(doc)
-      doc["title_display_ssm"].should == ["The Manuscript, unidentified"]
+      doc = @fixturemods.to_solr()
+      title = doc["title_display_ssm"]
+      expect(title).to eql ["The Manuscript, unidentified"]
     end
   
 
@@ -239,7 +236,6 @@ ml
     end
     it "should create the expected Solr hash for mapped project values" do
       solr_doc = @mods_item.to_solr
-      puts solr_doc.inspect
       # check the mapped facet value
       solr_doc["lib_project_sim"].should include("Successful Project Mapping")
       # check the unmapped display value

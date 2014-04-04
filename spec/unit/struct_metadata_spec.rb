@@ -12,12 +12,13 @@ describe "Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata" do
     @mock_repo = mock('repository')
     @mock_ds = mock('datastream')
     @mock_repo.stubs(:config).returns({})
+    @mock_repo.stubs(:datastream_profile).returns({})
     #@mock_repo.stubs(:datastream_dissemination=>'My Content')
     @mock_inner.stubs(:repository).returns(@mock_repo)
     @mock_inner.stubs(:pid)
     @rv_fixture = fixture( File.join("STRUCTMAP", "structmap-recto.xml")).read
     @rv_doc = Nokogiri::XML::Document.parse(@rv_fixture)
-    @struct_fixture = Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata.from_xml(@rv_fixture)
+    @struct_fixture = structMetadata(@mock_inner, @rv_fixture)
     @seq_fixture = fixture( File.join("STRUCTMAP", "structmap-seq.xml")).read
     @seq_doc = Nokogiri::XML::Document.parse(@seq_fixture)
   end
@@ -29,13 +30,13 @@ describe "Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata" do
       # it should have the default content
       test_obj.ng_xml.should be_equivalent_to Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata.xml_template
       # but it shouldn't be "saveable" until you do something
-      test_obj.new?.should be_true
-      test_obj.changed?.should be_false
+      expect(test_obj.new?).to be_true
+      expect(test_obj.changed?).to be_false
       # like assigning an attribute value
       test_obj = Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata.new(@mock_inner,
        'structMetadata', :label=>'TEST LABEL')
-      test_obj.new?.should be_true
-      test_obj.changed?.should be_true
+      expect(test_obj.new?).to be_true
+      expect(test_obj.changed?).to be_true
     end
   end
 
@@ -44,7 +45,7 @@ describe "Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata" do
 	  	built = Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata.new(nil, 'structMetadata', label:'Sides', type:'physical')
 	  	built.create_div_node(nil, {:order=>"1", :label=>"Recto", :contentids=>"rbml_css_0702r"})
 	  	built.create_div_node(nil, {:order=>"2", :label=>"Verso", :contentids=>"rbml_css_0702v"})
-	  	built.ng_xml.should be_equivalent_to(@rv_doc)
+	  	expect(built.ng_xml).to be_equivalent_to(@rv_doc)
 	  end
 
     it "should build a simple sequence structure" do

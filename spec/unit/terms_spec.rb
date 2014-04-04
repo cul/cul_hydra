@@ -1,5 +1,4 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
-require 'om'
 class ControllerHarness
   def self.before_filter(*args)
   end
@@ -30,7 +29,7 @@ class TermsHarness < ControllerHarness
   end
 end
 
-class TestTerms < ActiveFedora::NokogiriDatastream
+class TestTerms < ActiveFedora::OmDatastream
   set_terminology do |t|
     t.root(:path=>"root")
     
