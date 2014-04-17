@@ -3,7 +3,7 @@ require 'uri'
 module Cul::Scv::Hydra::ActiveFedora::Model
 module Common
   extend ActiveSupport::Concern
-    
+
   included do
     define_model_callbacks :create
 
@@ -11,9 +11,9 @@ module Common
     has_metadata :name => "DC", :type=>Cul::Scv::Hydra::Om::DCMetadata, :versionable => true
     has_metadata :name => "descMetadata", :type=>Cul::Scv::Hydra::Om::ModsDocument, :versionable => true
     has_metadata :name => "rightsMetadata", :type=>::Hydra::Datastream::RightsMetadata, :versionable => true
-    
+
   end
-    
+
   module ClassMethods
     def pid_namespace
       'ldpd'
@@ -22,14 +22,14 @@ module Common
 
   def rdf_type
     relationships[:rdf_type]
-  end 
-    
+  end
+
   def initialize(attrs = nil)
     attrs = {} if attrs.nil?
     attrs[:namespace] = self.class.pid_namespace unless attrs[:namespace]
     super
   end
-    
+
   def create
     run_callbacks :create do
       super
@@ -67,13 +67,13 @@ module Common
   def members(opts={})
     resources(opts)
   end
-  
+
   def members_ids(opts={})
     opts = opts.merge({:response_format=>:id_array})
     resources(opts)
   end
-  
-    
+
+
   def cmodel_pid(klass)
     klass.pid_namespace + ":" + klass.name.split("::")[-1]
   end
@@ -83,7 +83,7 @@ module Common
     self.datastreams_xml['datastream'].each do |ds|
       dsid = ds["dsid"]
       ds.merge!({:pid => self.pid, :dsID => dsid, :dsLabel => ds["label"]})
-      if dsid == "RELS-EXT" 
+      if dsid == "RELS-EXT"
         mds.merge!({dsid => ActiveFedora::RelsExtDatastream.new(ds)})
       else
         if self.class.ds_specs.has_key? dsid
@@ -100,7 +100,7 @@ module Common
   def route_as
     "default"
   end
-  
+
   def index_type_label
     riquery = Cul::Scv::Hydra::ActiveFedora::MEMBER_QUERY.gsub(/%PID%/, self.pid)
     begin
@@ -162,7 +162,7 @@ module Common
     end
     solr_doc["format_ssi"] = [self.route_as]
     solr_doc["index_type_label_ssi"] = [self.index_type_label]
-    
+
     solr_doc.each_pair {|key, value|
       if value.is_a? Array
         value.each {|v| v.strip! unless v.nil? }
@@ -173,11 +173,11 @@ module Common
     solr_doc[:structured_bsi] = 'false' unless solr_doc.has_key? :structured_bsi
     solr_doc
   end
-  
+
   def update_datastream_attributes(params={}, opts={})
     logger.debug "Common.update_datastream_attributes"
     result = params.dup
-    params.each_pair do |dsid, ds_params| 
+    params.each_pair do |dsid, ds_params|
       if datastreams.include?(dsid)
         verify_params = ds_params.dup
         current_indexed_attributes = {}
@@ -198,7 +198,7 @@ module Common
     end
     return result
   end
-  
+
   def thumbnail_info
     {:url=>image_url("cul_scv_hydra/crystal/kmultiple.png"),:mime_type=>"image/png"}
   end
@@ -224,7 +224,7 @@ module Common
     logger.debug "remaining values! #{values.inspect}" if values.length > 0
     changed || (values.length > 0)
   end
- 
+
   def no_update(ds_params)
     response = {}
     ds_params.each{|pointer, values|

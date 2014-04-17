@@ -1,4 +1,5 @@
 require "active-fedora"
+require "active_fedora_finders"
 class ContentAggregator < ::ActiveFedora::Base
   extend ActiveModel::Callbacks
   include ::ActiveFedora::Finders
@@ -12,7 +13,7 @@ class ContentAggregator < ::ActiveFedora::Base
   def route_as
     "multipartitem"
   end
-  
+
   def thumbnail_info
     members = resources
     if members.length > 1
@@ -27,4 +28,10 @@ class ContentAggregator < ::ActiveFedora::Base
     end
     return {:url=>image_url("cul_scv_hydra/crystal/file.png"),:mime=>'image/png'}
   end
+
+  # Override update_index to do nothing so that we can use Fedora without needing a Solr index
+  #def update_index
+  #  # Do nothing!
+  #end
+
 end

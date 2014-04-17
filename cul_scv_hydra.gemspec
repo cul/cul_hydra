@@ -33,5 +33,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rbx-require-relative"
 
   s.files = Dir.glob("{bin,lib,app,config}/**/*")
-  s.require_paths = ['lib']
+  s.require_paths = ['lib', 'fixtures']
 end

@@ -43,13 +43,13 @@ end
 def content_for(pid)
   fname = filename_for_pid(pid)
   fcontent = cmodel_fixture(fname).read
-  fcontent = do_subs(fcontent)
+  #fcontent = do_subs(fcontent) # Commenting this out because I don't currently have any substitutions to do
 end
 
 def load_content(content, pid)
   begin
     connection.ingest(:file=>StringIO.new(content), :pid=>pid)
-  rescue Exception => e 
+  rescue Exception => e
     puts "possible problem with ingest of #{pid}: #{e.message}"
     raise e
   end
@@ -58,7 +58,7 @@ end
 def purge(pid)
   begin
     connection.purge_object :pid=>pid
-  rescue Exception => e 
+  rescue Exception => e
     puts "possible problem with purge of #{pid}: #{e.message}"
   end
 
@@ -69,7 +69,7 @@ def reload(pid)
   purge(pid)
   load_content(fcontent, pid)
 end
-  
+
 
 namespace :cul_scv_hydra do
   namespace :cmodel do
