@@ -1,15 +1,18 @@
 require 'active-fedora'
 require 'uri'
-module Cul::Scv::Hydra::ActiveFedora::Model
+module Cul::Scv::Hydra::Models
 module Common
   extend ActiveSupport::Concern
-    
+    DC_SPEC = {
+      :name => "DC", :type=>Cul::Scv::Hydra::Datastreams::DCMetadata,
+      :versionable => true, :label => 'Dublin Core Record for this object'
+    }
   included do
     define_model_callbacks :create
-
     has_and_belongs_to_many :containers, :property=>:cul_member_of, :class_name=>'ActiveFedora::Base'
-    has_metadata :name => "DC", :type=>Cul::Scv::Hydra::Om::DCMetadata, :versionable => true
-    has_metadata :name => "descMetadata", :type=>Cul::Scv::Hydra::Om::ModsDocument, :versionable => true
+    has_metadata :name => "DC", :type=>Cul::Scv::Hydra::Datastreams::DCMetadata, :versionable => true
+    #self.ds_specs['DC'] = DC_SPEC
+    has_metadata :name => "descMetadata", :type=>Cul::Scv::Hydra::Datastreams::ModsDocument, :versionable => true
     has_metadata :name => "rightsMetadata", :type=>::Hydra::Datastream::RightsMetadata, :versionable => true
     
   end
@@ -17,6 +20,31 @@ module Common
   module ClassMethods
     def pid_namespace
       'ldpd'
+    end
+
+    # override a buggy impl in AF
+    def has_datastream(args)
+      unless args.has_key?(:name)
+        return false
+      end
+      unless args.has_key?(:prefix)
+        args.merge!({:prefix=>args[:name].to_s.upcase})
+      end
+      unless class_named_datastreams_desc.has_key?(args[:name]) 
+        class_named_datastreams_desc[args[:name]] = {} 
+      end
+          
+      args.merge!({:mimeType=>args[:mime_type]}) if args.has_key?(:mime_type)
+      
+      unless class_named_datastreams_desc[args[:name]].has_key?(:type) 
+        #default to type ActiveFedora::Datastream
+        args[:type] ||= ActiveFedora::Datastream
+      end
+      args[:type] = args[:type].constantize if args[:type].is_a? String
+      raise args[:type] unless args[:type].name
+      class_named_datastreams_desc[args[:name]]= args   
+      create_named_datastream_finders(args[:name],args[:prefix])
+      create_named_datastream_update_methods(args[:name])
     end
   end
 
@@ -102,15 +130,15 @@ module Common
   end
   
   def index_type_label
-    riquery = Cul::Scv::Hydra::ActiveFedora::MEMBER_QUERY.gsub(/%PID%/, self.pid)
+    riquery = Cul::Scv::Hydra::Models::MEMBER_QUERY.gsub(/%PID%/, self.pid)
     begin
       docs = ::ActiveFedora::Base.connection_for_pid(self.pid).find_by_sparql riquery
     rescue Exception=>e
       docs = self.parts
     end
-    if docs.length == 0
+    if docs.size == 0
       label = "EMPTY"
-    elsif docs.length == 1
+    elsif docs.size == 1
       label = "SINGLE PART"
     else
       label = "MULTIPART"
@@ -180,7 +208,6 @@ module Common
     params.each_pair do |dsid, ds_params| 
       if datastreams.include?(dsid)
         verify_params = ds_params.dup
-        current_indexed_attributes = {}
         changed = false
         verify_params.each { |pointer, values|
           changed ||= value_changed?(datastreams[dsid],pointer,values)

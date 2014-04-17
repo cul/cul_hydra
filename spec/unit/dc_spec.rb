@@ -1,21 +1,20 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
-require 'rubydora'
 
-describe "Cul::Scv::Hydra::Om::DCMetadata" do
+describe "Cul::Scv::Hydra::Datastreams::DCMetadata" do
   
   before(:all) do
-    @mock_inner = mock('Rubydora::DigitalObject')
-    @mock_repo = mock('Rubydora::Repository')
-    @mock_repo.stubs(:config).returns({})
-    @mock_repo.stubs(:datastream_dissemination=>'My Content')
-    @mock_repo.stubs(:datastream=>'My Datastream')
-    @mock_inner.stubs(:repository).returns(@mock_repo)
-    @mock_inner.stubs(:pid).returns('pid:do_not_use')
   end
   
   before(:each) do
-    @fixture = Cul::Scv::Hydra::Om::DCMetadata.from_xml( fixture( File.join("CUL_DC", "dc.xml") ) )
+    @fixture = Cul::Scv::Hydra::Datastreams::DCMetadata.from_xml( fixture( File.join("CUL_DC", "dc.xml") ) )
     @fixture.digital_object = @mock_inner
+    @mock_inner = double('Rubydora::DigitalObject')
+    @mock_repo = double('Rubydora::Repository')
+    @mock_repo.stub(:config).and_return({})
+    @mock_repo.stub(:datastream_dissemination=>'My Content')
+    @mock_repo.stub(:datastream=>'My Datastream')
+    @mock_inner.stub(:repository).and_return(@mock_repo)
+    @mock_inner.stub(:pid).and_return('pid:do_not_use')
   end
   
   after(:all) do
@@ -23,9 +22,9 @@ describe "Cul::Scv::Hydra::Om::DCMetadata" do
   end
   
   it "should automatically include the necessary modules" do
-    Cul::Scv::Hydra::Om::DCMetadata.included_modules.should include(OM::XML::Container)
-    Cul::Scv::Hydra::Om::DCMetadata.included_modules.should include(OM::XML::TermValueOperators)
-    Cul::Scv::Hydra::Om::DCMetadata.included_modules.should include(OM::XML::Validation)
+    Cul::Scv::Hydra::Datastreams::DCMetadata.included_modules.should include(OM::XML::Container)
+    Cul::Scv::Hydra::Datastreams::DCMetadata.included_modules.should include(OM::XML::TermValueOperators)
+    Cul::Scv::Hydra::Datastreams::DCMetadata.included_modules.should include(OM::XML::Validation)
   end
   
   describe ".ox_namespaces" do
@@ -84,8 +83,8 @@ describe "Cul::Scv::Hydra::Om::DCMetadata" do
     it "should be able to update or add values by pointer" do
       @fixture.update_values([:dc_title]=>"With Billy Burroughs, image")
       @fixture.find_by_terms(:dc_title).first.text.should == "With Billy Burroughs, image"
-      puts "XPATH: " + Cul::Scv::Hydra::Om::DCMetadata.terminology.retrieve_term(:dc_type).xpath_relative
-      puts "TEMPLATE: " + Cul::Scv::Hydra::Om::DCMetadata.terminology.retrieve_term(:dc_type).xml_builder_template
+      puts "XPATH: " + Cul::Scv::Hydra::Datastreams::DCMetadata.terminology.retrieve_term(:dc_type).xpath_relative
+      puts "TEMPLATE: " + Cul::Scv::Hydra::Datastreams::DCMetadata.terminology.retrieve_term(:dc_type).xml_builder_template
       @fixture.update_indexed_attributes([:dc_type=>0]=>"Text")
       puts @fixture.ng_xml.to_xml
       @fixture.find_by_terms(:dc_type).first.text.should == "Text"
@@ -96,7 +95,7 @@ describe "Cul::Scv::Hydra::Om::DCMetadata" do
       @fixture.find_by_terms( {:foo=>20}, :bar ).should == nil
     end
     it "should identify presence or absence of terms with shortcut methods" do
-      built  = Cul::Scv::Hydra::Om::DCMetadata.from_xml(nil)
+      built  = Cul::Scv::Hydra::Datastreams::DCMetadata.from_xml(nil)
       built.update_values({[:dc_title]=>'foo'})
       built.dc_title?.should == true
       built.clio_id?.should == false
@@ -104,11 +103,11 @@ describe "Cul::Scv::Hydra::Om::DCMetadata" do
   end
   describe ".xml_serialization" do
     it "should serialize new documents to xml" do
-      @mock_inner.stubs(:"new_record?").returns(true)
-      Cul::Scv::Hydra::Om::DCMetadata.new(@mock_inner,'DC').to_xml
+      @mock_inner.stub(:"new_record?").and_return(true)
+      Cul::Scv::Hydra::Datastreams::DCMetadata.new(@mock_inner,'DC').to_xml
     end
     it "should parse and build namespaces identically" do
-      doc = Cul::Scv::Hydra::Om::DCMetadata.from_xml(nil).ng_xml
+      doc = Cul::Scv::Hydra::Datastreams::DCMetadata.from_xml(nil).ng_xml
       # namespaced attributes must be added after root node construction for namespace to be handled correctly
       dc_ns = Nokogiri::XML::Document.parse(<<-src
 <oai_dc:dc
@@ -142,8 +141,8 @@ src
     end
 
     it "should produce equivalent xml when built up programatically" do
-      @mock_inner.stubs(:"new_record?").returns(true)
-      built = Cul::Scv::Hydra::Om::DCMetadata.new(@mock_inner,'DC')
+      @mock_inner.stub(:"new_record?").and_return(true)
+      built = Cul::Scv::Hydra::Datastreams::DCMetadata.new(@mock_inner,'DC')
       built.update_values({[:dc_identifier] => "prd.custord.070103a"})
       built.update_values({[:dc_title] => "With William Burroughs, image"})
       built.update_values({[:dc_type] => "Collection"})
@@ -154,8 +153,8 @@ src
 
   describe ".to_solr" do
     it "should create the right map for Solr indexing" do
-      @mock_inner.stubs(:"new_record?").returns(true)
-      built = Cul::Scv::Hydra::Om::DCMetadata.new(@mock_inner,'DC')
+      @mock_inner.stub(:"new_record?").and_return(true)
+      built = Cul::Scv::Hydra::Datastreams::DCMetadata.new(@mock_inner,'DC')
       built.update_values({[:dc_identifier] => "prd.custord.070103a"})
       built.update_values({[:dc_title] => "With William Burroughs, image"})
       built.update_values({[:dc_type] => "Collection"})

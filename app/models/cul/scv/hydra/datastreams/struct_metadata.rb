@@ -1,9 +1,12 @@
-module Cul::Scv::Hydra::ActiveFedora::Model
+module Cul
+module Scv
+module Hydra
+module Datastreams
 class StructMetadata < ::ActiveFedora::Datastream
-  include NokogiriDatastreams
+  include ::ActiveFedora::Datastreams::NokogiriDatastreams
 
-	def self.default_attributes
-		super.merge(:controlGroup => 'M', :mimeType => 'text/xml')
+  def self.default_attributes
+    super.merge(:controlGroup => 'M', :mimeType => 'text/xml')
   end
 
   def self.xml_template
@@ -114,5 +117,8 @@ class StructMetadata < ::ActiveFedora::Datastream
     doc
   end
 
+end
+end
+end
 end
 end

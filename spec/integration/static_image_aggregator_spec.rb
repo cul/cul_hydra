@@ -63,7 +63,7 @@ describe "StaticImageAggregator" do
 
   describe "DC" do
     it "should have a DC datastream" do
-      @fixtureobj.datastreams["DC"].class.should == Cul::Scv::Hydra::Om::DCMetadata
+      @fixtureobj.datastreams["DC"].class.should == Cul::Scv::Hydra::Datastreams::DCMetadata
     end
 
     it "should be able to edit and push new data to Fedora" do
@@ -73,8 +73,7 @@ describe "StaticImageAggregator" do
       ds.changed?.should be_true
       @fixtureobj.save
       ds.changed?.should be_false
-      updated = StaticImageAggregator.find(
-@fixtureobj.pid)
+      updated = StaticImageAggregator.find(@fixtureobj.pid)
       found = false
       ds.find_by_terms(:dc_identifier).each { |node|
         found ||= node.text == new_value
@@ -91,17 +90,17 @@ describe "StaticImageAggregator" do
   describe "aggregation functions" do
 
     it "should be able to find its members/parts" do
-      @fixtureobj.parts.length.should == 2
+      @fixtureobj.parts.to_a.length.should == 2
     end
 
     it "should be able to add members/parts" do
       obj = ActiveFedora::Base.find("test:thumb_image", :cast=>false)
       @fixtureobj.add_member(obj)
-      @fixtureobj.parts.length.should == 3
+      @fixtureobj.parts.to_a.length.should == 3
     end
 
     it "should be able to find its containers" do
-      @fixtureobj.containers.length.should == 1
+      @fixtureobj.containers.to_a.length.should == 1
     end
   end
 end

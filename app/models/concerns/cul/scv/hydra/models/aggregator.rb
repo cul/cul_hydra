@@ -1,15 +1,15 @@
-module Cul::Scv::Hydra::ActiveFedora::Model
+module Cul::Scv::Hydra::Models
 module Aggregator
   extend ActiveSupport::Concern
 
   included do
-    has_metadata :name => "structMetadata", :type=>Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata, :versionable => true, :controlGroup => 'M'
+    has_metadata :name => "structMetadata", :type=>Cul::Scv::Hydra::Datastreams::StructMetadata, :versionable => true, :controlGroup => 'M'
     has_many :parts, :property => :cul_member_of, :class_name=>'ActiveFedora::Base'
     after_create :aggregator!
   end
 
   def aggregator!
-    add_relationship(:rdf_type, Cul::Scv::Hydra::ActiveFedora::AGGREGATOR_TYPE.to_s)
+    add_relationship(:rdf_type, Cul::Scv::Hydra::Models::AGGREGATOR_TYPE.to_s)
     @metadata_is_dirty = true
     self.save
   end

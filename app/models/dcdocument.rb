@@ -1,10 +1,11 @@
 require "active-fedora"
+require "active_fedora_finders"
 class DcDocument < ActiveFedora::Base
   include ::ActiveFedora::Associations
   include ::ActiveFedora::Finders
   include ::ActiveFedora::DatastreamCollections
   include Hydra::ModelMethods
-  include Cul::Scv::Hydra::ActiveFedora::Model::Common
+  include Cul::Scv::Hydra::Models::Common
   alias :file_objects :resources
   
   has_many :parts, :property=>:cul_member_of, :class_name=>'ActiveFedora::Base'

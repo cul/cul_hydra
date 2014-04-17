@@ -10,7 +10,7 @@ describe "ContentAggregator" do
   before(:each) do
     @foxml = fixture( File.join("FOXML", "content-aggregator.xml"))
     ingest("test:c_agg", fixture( File.join("FOXML", "content-aggregator.xml")), true)
-    @fixtureobj = ContentAggregator.find_by_identifier( "prd.custord.070103a")
+    @fixtureobj = ContentAggregator.search_repo.find_by!(identifier: "prd.custord.070103a")
     @fixtureobj.send :update_index
   end
   
@@ -28,7 +28,7 @@ describe "ContentAggregator" do
 
   describe "descMetadata" do
     it "should have a descMetadata datastream" do
-      @fixtureobj.datastreams["descMetadata"].class.name.should == "Cul::Scv::Hydra::Om::ModsDocument"
+      @fixtureobj.datastreams["descMetadata"].class.name.should == "Cul::Scv::Hydra::Datastreams::ModsDocument"
     end
 
     it "should be able to edit and push new data to Fedora" do
@@ -46,7 +46,7 @@ describe "ContentAggregator" do
   describe "structMetadata" do
     it "should have a default, stubbed structMetadata datastream" do
       ds = @fixtureobj.datastreams["structMetadata"]
-      ds.class.name.should == "Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata"
+      ds.class.name.should == "Cul::Scv::Hydra::Datastreams::StructMetadata"
       ds.changed?.should be_false
       @fixtureobj.to_solr[:structured_bsi].should == 'false'
     end
@@ -64,7 +64,7 @@ describe "ContentAggregator" do
   describe "aggregation functions" do
 
     it "should be able to find its members/parts" do
-      @fixtureobj.parts.length.should == 1
+      @fixtureobj.parts.to_a.length.should == 1
     end
 
   end

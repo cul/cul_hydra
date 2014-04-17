@@ -3,12 +3,13 @@ require "mime/types"
 require "uri"
 require "open-uri"
 require "tempfile"
+require "active_fedora_finders"
 class GenericResource < ::ActiveFedora::Base
   extend ActiveModel::Callbacks
   include ::ActiveFedora::Finders
   include ::ActiveFedora::DatastreamCollections
   include ::Hydra::ModelMethods
-  include Cul::Scv::Hydra::ActiveFedora::Model::Common
+  include Cul::Scv::Hydra::Models::Common
   include ::ActiveFedora::RelsInt
   alias :file_objects :resources
   

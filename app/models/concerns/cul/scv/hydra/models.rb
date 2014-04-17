@@ -3,9 +3,9 @@ require "cul_scv_hydra/om"
 require 'uri'
 require 'rdf'
 module Cul
-  module Scv
-  module Hydra
-  module ActiveFedora
+module Scv
+module Hydra
+  module Models
     AGGREGATOR_TYPE = (URI.parse("http://purl.oclc.org/NET/CUL/Aggregator"))
     RESOURCE_TYPE = (URI.parse("http://purl.oclc.org/NET/CUL/Resource"))
     MEMBER_QUERY = <<-SPARQL
@@ -15,4 +15,3 @@ module Cul
 end
 end
 end
-require 'cul_scv_hydra/active_fedora/model.rb'

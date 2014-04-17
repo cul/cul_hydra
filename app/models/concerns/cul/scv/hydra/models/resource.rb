@@ -1,4 +1,4 @@
-module Cul::Scv::Hydra::ActiveFedora::Model
+module Cul::Scv::Hydra::Models
 module Resource
     extend ActiveSupport::Concern
 # constants #
@@ -35,7 +35,7 @@ module Resource
   end
 
   def resource!
-    add_relationship(:rdf_type, Cul::Scv::Hydra::ActiveFedora::RESOURCE_TYPE.to_s)
+    add_relationship(:rdf_type, Cul::Scv::Hydra::Models::RESOURCE_TYPE.to_s)
     @metadata_is_dirty = true
     update
   end

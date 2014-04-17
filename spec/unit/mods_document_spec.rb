@@ -1,21 +1,21 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe "Cul::Scv::Hydra::Om::ModsDocument" do
+describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
   
   before(:all) do
         
   end
   
   before(:each) do
-    @mock_inner = mock('inner object')
-    @mock_inner.stubs(:"new_record?").returns(false)
-    @mock_repo = mock('repository')
-    @mock_ds = mock('datastream')
-    @mock_repo.stubs(:config).returns({})
-    @mock_repo.stubs(:datastream_profile).returns({})
-    @mock_repo.stubs(:datastream_dissemination=>'My Content')
-    @mock_inner.stubs(:repository).returns(@mock_repo)
-    @mock_inner.stubs(:pid)
+    @mock_inner = double('inner object')
+    @mock_inner.stub(:"new_record?").and_return(false)
+    @mock_repo = double('repository')
+    @mock_ds = double('datastream')
+    @mock_repo.stub(:config).and_return({})
+    @mock_repo.stub(:datastream_profile).and_return({})
+    @mock_repo.stub(:datastream_dissemination=>'My Content')
+    @mock_inner.stub(:repository).and_return(@mock_repo)
+    @mock_inner.stub(:pid)
     @fixturemods = descMetadata(@mock_inner, fixture( File.join("CUL_MODS", "mods-item.xml") ) )
     item_xml = fixture( File.join("CUL_MODS", "mods-item.xml") )
     @mods_item = descMetadata(@mock_inner, item_xml)
@@ -30,9 +30,9 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
   end
   
   it "should automatically include the necessary modules" do
-    Cul::Scv::Hydra::Om::ModsDocument.included_modules.should include(OM::XML::Container)
-    Cul::Scv::Hydra::Om::ModsDocument.included_modules.should include(OM::XML::TermValueOperators)
-    Cul::Scv::Hydra::Om::ModsDocument.included_modules.should include(OM::XML::Validation)
+    Cul::Scv::Hydra::Datastreams::ModsDocument.included_modules.should include(OM::XML::Container)
+    Cul::Scv::Hydra::Datastreams::ModsDocument.included_modules.should include(OM::XML::TermValueOperators)
+    Cul::Scv::Hydra::Datastreams::ModsDocument.included_modules.should include(OM::XML::Validation)
   end
   
   describe ".ox_namespaces" do
@@ -61,21 +61,21 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
     end
 
     it "should allow you to search by term pointer" do
-      @mods_item.ng_xml.expects(:xpath).with('//oxns:location/oxns:physicalLocation[@authority="marcorg"]', @mods_item.ox_namespaces)
+      @mods_item.ng_xml.should_receive(:xpath).with('//oxns:location/oxns:physicalLocation[@authority="marcorg"]', @mods_item.ox_namespaces)
       @mods_item.find_by_terms_and_value(:location, :lib_repo)
     end
     it "should allow you to constrain your searches" do
-      @mods_item.ng_xml.expects(:xpath).with('//oxns:location/oxns:physicalLocation[@authority="marcorg" and contains(., "NNC-RB")]', @mods_item.ox_namespaces)
+      @mods_item.ng_xml.should_receive(:xpath).with('//oxns:location/oxns:physicalLocation[@authority="marcorg" and contains(., "NNC-RB")]', @mods_item.ox_namespaces)
       @mods_item.find_by_terms_and_value(:location,:lib_repo, "NNC-RB")
     end
     it "should allow you to use complex constraints" do
-      @mods_item.ng_xml.expects(:xpath).with('//oxns:recordInfo/oxns:recordCreationDate[@encoding="w3cdtf" and contains(., "2010-07-12")]', @mods_item.ox_namespaces)
+      @mods_item.ng_xml.should_receive(:xpath).with('//oxns:recordInfo/oxns:recordCreationDate[@encoding="w3cdtf" and contains(., "2010-07-12")]', @mods_item.ox_namespaces)
       @mods_item.find_by_terms_and_value(:record_info, :record_creation_date=>"2010-07-12")
     end
   end
   describe ".find_by_terms" do
     it "should find the right terms for title" do
-      C = Cul::Scv::Hydra::Om::ModsDocument
+      C = Cul::Scv::Hydra::Datastreams::ModsDocument
       T = C.terminology
       term = T.retrieve_term(:title)
       expect(term.xpath).to eql '//oxns:mods/oxns:titleInfo[not(@type)]/oxns:title'
@@ -89,7 +89,7 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
     it "should use Nokogiri to retrieve a NodeSet corresponding to the combination of term pointers and array/nodeset indexes" do
       @mods_item.find_by_terms( :access_condition ).length.should == 1
       @mods_item.find_by_terms( {:access_condition=>0} ).first.text.should == @mods_part.ng_xml.xpath('//oxns:accessCondition[@type="useAndReproduction"][1]', "oxns"=>"http://www.loc.gov/mods/v3").first.text
-      Cul::Scv::Hydra::Om::ModsDocument.terminology.xpath_with_indexes( :mods, {:main_title_info=>0}, :main_title ).should == '//oxns:mods/oxns:titleInfo[not(@type)][1]/oxns:title'
+      Cul::Scv::Hydra::Datastreams::ModsDocument.terminology.xpath_with_indexes( :mods, {:main_title_info=>0}, :main_title ).should == '//oxns:mods/oxns:titleInfo[not(@type)][1]/oxns:title'
       # Nokogiri behaves unexpectedly
       #@mods_item.find_by_terms( {:title_info=>0}, :title ).length.should == 1
       @mods_item.find_by_terms(:title ).class.should == Nokogiri::XML::NodeSet
@@ -108,9 +108,9 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
       @mods_item.find_by_terms( {:foo=>20}, :bar ).should == nil
     end
     it "should identify presence or absence of terms with shortcut methods" do
-      @mock_inner.stubs(:new_record?).returns(true)
-      built  = Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner, 'descMetadata')
-      built.ng_xml = Cul::Scv::Hydra::Om::ModsDocument.xml_template
+      @mock_inner.stub(:new_record?).and_return(true)
+      built  = Cul::Scv::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
+      built.ng_xml = Cul::Scv::Hydra::Datastreams::ModsDocument.xml_template
       built.update_values({[:title]=>'foo'})
       built.title?.should be_true
       built.clio?.should be_false
@@ -118,8 +118,8 @@ describe "Cul::Scv::Hydra::Om::ModsDocument" do
   end
   describe ".xml_serialization" do
     it "should serialize new documents to xml" do
-      @mock_inner.stubs(:new_record?).returns(true)
-      Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner,'descMetadata').to_xml
+      @mock_inner.stub(:new_record?).and_return(true)
+      Cul::Scv::Hydra::Datastreams::ModsDocument.new(@mock_inner,'descMetadata').to_xml
     end
     it "should parse and build namespaces identically" do
       builder = Nokogiri::XML::Builder.new do |xml|
@@ -159,9 +159,9 @@ src
       passed.should == true
     end
     it "should produce equivalent xml when built up programatically" do
-      @mock_inner.stubs(:new_record?).returns(false)
-      built = Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner,'descMetadata')
-      built.ng_xml = Cul::Scv::Hydra::Om::ModsDocument.xml_template
+      @mock_inner.stub(:new_record?).and_return(false)
+      built = Cul::Scv::Hydra::Datastreams::ModsDocument.new(@mock_inner,'descMetadata')
+      built.ng_xml = Cul::Scv::Hydra::Datastreams::ModsDocument.xml_template
       built.update_values({[:identifier] => "prd.custord.040148"})
       built.update_values({[:mods, :main_title_info, :non_sort] => "The "})
       built.update_values({[:mods, :main_title_info, :main_title] => "Manuscript, unidentified"})
@@ -188,9 +188,9 @@ ml
       built.ng_xml.should be_equivalent_to(@mods_item.ng_xml)
     end
     it "should produce equivalent xml for recordInfo" do
-      @mock_inner.stubs(:new_record?).returns(false)
-      built = Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner, 'descMetadata')
-      built.ng_xml = Cul::Scv::Hydra::Om::ModsDocument.xml_template
+      @mock_inner.stub(:new_record?).and_return(false)
+      built = Cul::Scv::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
+      built.ng_xml = Cul::Scv::Hydra::Datastreams::ModsDocument.xml_template
       built.update_values({[:record_info, :record_creation_date] => "2010-07-12"})
       built.update_values({[:record_info, :language_of_cataloging, :language_code] => "eng"})
       built.update_values({[:record_info,:record_content_source]=> "NNC"})
@@ -202,9 +202,9 @@ ml
       built.ng_xml.should be_equivalent_to(parsed)
     end
     it "should produce equivalent xml for physical location" do
-      @mock_inner.stubs(:new_record?).returns(false)
-      built = Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner, 'descMetadata')
-      built.ng_xml = Cul::Scv::Hydra::Om::ModsDocument.xml_template
+      @mock_inner.stub(:new_record?).and_return(false)
+      built = Cul::Scv::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
+      built.ng_xml = Cul::Scv::Hydra::Datastreams::ModsDocument.xml_template
       built.update_values({[:location, :lib_repo] => "NNC-RB"})
       built.update_values({[:location, :repo_text] => "Rare Book and Manuscript Library, Columbia University"})
       built.update_values({[:location, :shelf_locator] => "(Box no. \n        057)"})
@@ -212,9 +212,9 @@ ml
       built.ng_xml.should be_equivalent_to(parsed)
     end
     it "should produce equivalent xml for date ranges" do
-      @mock_inner.stubs(:new_record?).returns(false)
-      built = Cul::Scv::Hydra::Om::ModsDocument.new(@mock_inner, 'descMetadata')
-      built.ng_xml = Cul::Scv::Hydra::Om::ModsDocument.xml_template
+      @mock_inner.stub(:new_record?).and_return(false)
+      built = Cul::Scv::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
+      built.ng_xml = Cul::Scv::Hydra::Datastreams::ModsDocument.xml_template
       built.update_values({[:origin_info, :start_date]=>"1900"})
       built.update_values({[:origin_info, :end_date]=>"1905"})
       parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-date-range.xml")))

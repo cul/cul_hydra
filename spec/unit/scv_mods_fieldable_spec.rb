@@ -20,15 +20,15 @@ describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable do
   before(:each) do
     @mock_repo = mock('repository')
     @mock_ds = mock('datastream')
-    @mock_repo.stubs(:config).returns({})
-    @mock_repo.stubs(:datastream_profile).returns({})
-    @mock_repo.stubs(:datastream).returns('<datastreamProfile />')
-    @mock_repo.stubs(:datastream_dissemination=>'My Content')
+    @mock_repo.stub(:config).and_return({})
+    @mock_repo.stub(:datastream_profile).and_return({})
+    @mock_repo.stub(:datastream).and_return('<datastreamProfile />')
+    @mock_repo.stub(:datastream_dissemination=>'My Content')
 
     @mock_inner = mock('inner object')
-    @mock_inner.stubs(:"new_record?").returns(false)
-    @mock_inner.stubs(:repository).returns(@mock_repo)
-    @mock_inner.stubs(:pid)
+    @mock_inner.stub(:"new_record?").and_return(false)
+    @mock_inner.stub(:repository).and_return(@mock_repo)
+    @mock_inner.stub(:pid)
     @item_xml = fixture( File.join("CUL_MODS", "mods-item.xml") ).read
     @item_om = descMetadata(@mock_inner, @item_xml)
 

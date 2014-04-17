@@ -2,6 +2,9 @@
 ENV["RAILS_ENV"] = "test"
 
 require File.expand_path("../dummy/config/environment.rb",  __FILE__)
+
+ENGINE_RAILS_ROOT=File.join(File.dirname(__FILE__), '../')
+
 require 'bundler/setup'
 require 'rspec/rails'
 require 'rspec/autorun'
@@ -13,7 +16,7 @@ include EquivalentXml::RSpecMatchers
 Rails.backtrace_cleaner.remove_silencers!
 
 # Load support files
-Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
+Dir[File.join(ENGINE_RAILS_ROOT, "spec/support/**/*.rb")].each {|f| require f }
 
 # Load fixtures from the engine
 if ActiveSupport::TestCase.method_defined?(:fixture_path=)
@@ -22,7 +25,7 @@ end
 
 
 RSpec.configure do |config|
-  config.mock_with :mocha
+  config.use_transactional_fixtures = true
 end
 
 def fixture(file)
@@ -198,14 +201,14 @@ def same_namespace?(node_1, node_2)
 end
 
 def descMetadata(inner_object, file)
-  tmpl = Cul::Scv::Hydra::Om::ModsDocument.new(inner_object, 'descMetadata')
+  tmpl = Cul::Scv::Hydra::Datastreams::ModsDocument.new(inner_object, 'descMetadata')
   tmpl.ng_xml = Nokogiri::XML::Document.parse(file)
   tmpl.ng_xml_doesnt_change!
   tmpl
 end
 
 def structMetadata(inner_object, file)
-  tmpl = Cul::Scv::Hydra::ActiveFedora::Model::StructMetadata.new(inner_object, 'structMetadata')
+  tmpl = Cul::Scv::Hydra::Datastreams::StructMetadata.new(inner_object, 'structMetadata')
   tmpl.ng_xml = Nokogiri::XML::Document.parse(file)
   tmpl.ng_xml_doesnt_change!
   tmpl

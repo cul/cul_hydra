@@ -1,4 +1,5 @@
 require "active-fedora"
+require "active_fedora_finders"
 require "cul_image_props"
 require "mime/types"
 require "uri"
@@ -7,8 +8,8 @@ class Resource < ::ActiveFedora::Base
   include ::ActiveFedora::Finders
   include ::ActiveFedora::DatastreamCollections
   include ::Hydra::ModelMethods
-  include Cul::Scv::Hydra::ActiveFedora::Model::Common
-  include Cul::Scv::Hydra::ActiveFedora::Model::Resource
+  include Cul::Scv::Hydra::Models::Common
+  include Cul::Scv::Hydra::Models::Resource
 
   alias :file_objects :resources
 

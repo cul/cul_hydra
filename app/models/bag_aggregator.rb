@@ -6,8 +6,8 @@ class BagAggregator < ::ActiveFedora::Base
   include ::ActiveFedora::Finders
   include ::ActiveFedora::DatastreamCollections
   include ::Hydra::ModelMethods
-  include Cul::Scv::Hydra::ActiveFedora::Model::Common
-  include Cul::Scv::Hydra::ActiveFedora::Model::Aggregator
+  include Cul::Scv::Hydra::Models::Common
+  include Cul::Scv::Hydra::Models::Aggregator
 
   alias :file_objects :resources
 

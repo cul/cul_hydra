@@ -23,8 +23,17 @@ def each_cmodel
 end
 
 def config_subs
-  cfile = File.open(File.join(APP_ROOT,'config','subs.yml'))
-  YAML::load(cfile)[Rails.env]
+  @subs ||= begin
+    cfile = File.join(APP_ROOT,'config','subs.yml')
+    subs = {}
+    if File.exists? cfile
+      open(cfile) {|blob| subs = YAML::load(blob)[Rails.env] }
+    else
+      Rails.logger.warn("No subs.yml found; CModels will be loaded without inline substitutions")
+    end
+    subs
+  end
+  @subs
 end
 
 def do_subs(orig)

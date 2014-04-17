@@ -77,6 +77,14 @@ module Om
       builder.doc.root["xsi:schemaLocation"] = 'http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd'
       return builder.doc
     end
+
+    def prefix
+      if ::ActiveFedora::VERSION >= '8'
+        Rails.logger.warn("the prefix method of #{self.class.name} was overriden to maintain backwards compatibility")
+      end
+      ''
+    end
+
     def method_missing method, *args
       query = false
       _mname = method.id2name

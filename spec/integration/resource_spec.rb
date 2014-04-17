@@ -35,13 +35,14 @@ describe "Resource" do
   end
 
   describe "DC" do
+    subject {@fixtureobj.datastreams['DC']}
     it "should have a DC datastream" do
-      @fixtureobj.datastreams["DC"].class.name.should == "Cul::Scv::Hydra::Om::DCMetadata"
+      subject.class.name.should == "Cul::Scv::Hydra::Datastreams::DCMetadata"
     end
 
     it "should be able to edit and push new data to Fedora" do
       new_value = "new.id.value"
-      ds = @fixtureobj.datastreams["DC"]
+      ds =subject
       ds.update_values({[:dc_identifier] => new_value})
       ds.changed?.should == true
       @fixtureobj.save
