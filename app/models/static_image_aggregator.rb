@@ -1,14 +1,6 @@
 require "active-fedora"
 require "active_fedora_finders"
-class StaticImageAggregator < ::ActiveFedora::Base
-  extend ActiveModel::Callbacks
-  include ::ActiveFedora::Finders
-  include ::ActiveFedora::DatastreamCollections
-  include ::Hydra::ModelMethods
-  include Cul::Scv::Hydra::Models::Common
-  include Cul::Scv::Hydra::Models::Aggregator
-
-  alias :file_objects :resources
+class StaticImageAggregator < ResourceAggregator
   
   CUL_WIDTH = "http://purl.oclc.org/NET/CUL/RESOURCE/STILLIMAGE/BASIC/imageWidth"
   CUL_LENGTH = "http://purl.oclc.org/NET/CUL/RESOURCE/STILLIMAGE/BASIC/imageLength"
@@ -18,20 +10,17 @@ class StaticImageAggregator < ::ActiveFedora::Base
   end
 
   def index_type_label
-    "PART"
+    'PART'
   end
-  
+
   def thumbnail_info
     candidate = nil
     max_dim = 251
     resources.each do |pid|
       resource = Resource.find(pid)
-      width = resource.object_relations[CUL_WIDTH].first.to_i
-      length = resource.object_relations[CUL_LENGTH].first.to_i
-      max = (width > length) ? width : length
-      if max_dim > max
+      if max_dim > resouce.long
         candidate = resource
-        max_dim = max
+        max_dim = resource.long
       end
     end
     if candidate.nil?

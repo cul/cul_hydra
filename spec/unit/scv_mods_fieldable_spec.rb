@@ -18,14 +18,14 @@ describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable do
   end
   
   before(:each) do
-    @mock_repo = mock('repository')
-    @mock_ds = mock('datastream')
+    @mock_repo = double('repository')
+    @mock_ds = double('datastream')
     @mock_repo.stub(:config).and_return({})
     @mock_repo.stub(:datastream_profile).and_return({})
     @mock_repo.stub(:datastream).and_return('<datastreamProfile />')
     @mock_repo.stub(:datastream_dissemination=>'My Content')
 
-    @mock_inner = mock('inner object')
+    @mock_inner = double('inner object')
     @mock_inner.stub(:"new_record?").and_return(false)
     @mock_inner.stub(:repository).and_return(@mock_repo)
     @mock_inner.stub(:pid)

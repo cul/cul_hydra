@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 #require 'mediashelf/active_fedora_helper'
 
-describe "StaticImageAggregator" do
+describe StaticImageAggregator do
   before(:all) do
     ingest("ldpd:ContentAggregator", fixture( File.join("FOXML", "content-cmodel.xml")), true)
     @parentobj = ingest("test:c_agg", fixture( File.join("FOXML", "content-aggregator.xml")), true)

@@ -7,6 +7,13 @@ module Cul::Scv::Hydra
   class Engine < ::Rails::Engine
   	isolate_namespace Cul::Scv::Hydra
 
+    config.mount_at = '/'
+
+    config.autoload_paths += %W(
+      #{config.root}/app/controllers/concerns
+      #{config.root}/app/models/concerns
+    )
+
     config.generators do |g|                                                               
       g.test_framework :rspec
       g.integration_tool :rspec

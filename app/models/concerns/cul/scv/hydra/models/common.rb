@@ -3,15 +3,10 @@ require 'uri'
 module Cul::Scv::Hydra::Models
 module Common
   extend ActiveSupport::Concern
-    DC_SPEC = {
-      :name => "DC", :type=>Cul::Scv::Hydra::Datastreams::DCMetadata,
-      :versionable => true, :label => 'Dublin Core Record for this object'
-    }
+
   included do
     define_model_callbacks :create
-    has_and_belongs_to_many :containers, :property=>:cul_member_of, :class_name=>'ActiveFedora::Base'
     has_metadata :name => "DC", :type=>Cul::Scv::Hydra::Datastreams::DCMetadata, :versionable => true
-    #self.ds_specs['DC'] = DC_SPEC
     has_metadata :name => "descMetadata", :type=>Cul::Scv::Hydra::Datastreams::ModsDocument, :versionable => true
     has_metadata :name => "rightsMetadata", :type=>::Hydra::Datastream::RightsMetadata, :versionable => true
     
@@ -22,30 +17,6 @@ module Common
       'ldpd'
     end
 
-    # override a buggy impl in AF
-    def has_datastream(args)
-      unless args.has_key?(:name)
-        return false
-      end
-      unless args.has_key?(:prefix)
-        args.merge!({:prefix=>args[:name].to_s.upcase})
-      end
-      unless class_named_datastreams_desc.has_key?(args[:name]) 
-        class_named_datastreams_desc[args[:name]] = {} 
-      end
-          
-      args.merge!({:mimeType=>args[:mime_type]}) if args.has_key?(:mime_type)
-      
-      unless class_named_datastreams_desc[args[:name]].has_key?(:type) 
-        #default to type ActiveFedora::Datastream
-        args[:type] ||= ActiveFedora::Datastream
-      end
-      args[:type] = args[:type].constantize if args[:type].is_a? String
-      raise args[:type] unless args[:type].name
-      class_named_datastreams_desc[args[:name]]= args   
-      create_named_datastream_finders(args[:name],args[:prefix])
-      create_named_datastream_update_methods(args[:name])
-    end
   end
 
   def rdf_type
@@ -63,44 +34,6 @@ module Common
       super
     end
   end
-
-  def resources(opts={})
-    if self.respond_to? :parts # aggregator
-      opts = {:rows=>25,:response_format=>:solr}.merge(opts)
-      self.parts(opts)
-          #opts = {:rows=>25,:response_format=>:solr}.merge(opts)
-          #query = self.class.inbound_relationship_query(self.pid, "parts")
-          #solr_result = ::ActiveFedora::SolrService.instance.conn.query(query, :rows=>opts[:rows])
-          #if opts[:response_format] == :solr
-          #  return solr_result
-          #else
-          #  if opts[:response_format] == :id_array
-          #    id_array = []
-          #    solr_result.hits.each do |hit|
-          #      id_array << hit[SOLR_DOCUMENT_ID]
-          #    end
-          #    return id_array
-          #  elsif opts[:response_format] == :load_from_solr || self.load_from_solr
-          #    return ::ActiveFedora::SolrService.reify_solr_results(solr_result,{:load_from_solr=>true})
-          #  else
-          #    return ::ActiveFedora::SolrService.reify_solr_results(solr_result)
-          #  end
-          #end
-   else
-      logger.warn 'parts not defined; was this an Aggregator?'
-      []
-    end
-  end
-
-  def members(opts={})
-    resources(opts)
-  end
-  
-  def members_ids(opts={})
-    opts = opts.merge({:response_format=>:id_array})
-    resources(opts)
-  end
-  
     
   def cmodel_pid(klass)
     klass.pid_namespace + ":" + klass.name.split("::")[-1]
@@ -129,23 +62,6 @@ module Common
     "default"
   end
   
-  def index_type_label
-    riquery = Cul::Scv::Hydra::Models::MEMBER_QUERY.gsub(/%PID%/, self.pid)
-    begin
-      docs = ::ActiveFedora::Base.connection_for_pid(self.pid).find_by_sparql riquery
-    rescue Exception=>e
-      docs = self.parts
-    end
-    if docs.size == 0
-      label = "EMPTY"
-    elsif docs.size == 1
-      label = "SINGLE PART"
-    else
-      label = "MULTIPART"
-    end
-    label
-  end
-
   def has_desc?
     has_desc = false
     begin
@@ -159,7 +75,7 @@ module Common
   end
 
   def to_solr(solr_doc = Hash.new, opts={})
-    super
+    solr_doc = super(solr_doc, opts)
     if has_desc?
       solr_doc["descriptor_ssi"] = ["mods"]
     else

@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe "Resource" do
+describe ::Resource do
   
   before(:all) do
     ingest("ldpd:ContentAggregator", fixture( File.join("FOXML", "content-cmodel.xml")), true)
@@ -12,11 +12,10 @@ describe "Resource" do
   
   before(:each) do
     @foxml = fixture( File.join("FOXML", "static-image-aggregator.xml"))
-    ingest("test:si_agg", fixture( File.join("FOXML", "static-image-aggregator.xml")), true)
-    ingest("test:thumb_image",fixture( File.join("FOXML", "resource-thumb.xml")), true)
+    @containerobj = ingest("test:si_agg", fixture( File.join("FOXML", "static-image-aggregator.xml")), true)
+    @fixtureobj = ingest("test:thumb_image",fixture( File.join("FOXML", "resource-thumb.xml")), true)
     @containerobj = StaticImageAggregator.find( "test:si_agg")
     @containerobj.send :update_index
-    @fixtureobj = Resource.find("test:thumb_image")
   end
   
   after(:each) do
@@ -34,7 +33,14 @@ describe "Resource" do
     @containerobj.cmodel_pid(@fixtureobj.class).should == "ldpd:Resource"
   end
 
+  it "should work with finders" do
+    expect(@fixtureobj.pid).to eql 'test:thumb_image'
+    actual = Resource.find('test:thumb_image')
+    expect(actual).to be_a Resource
+  end
+
   describe "DC" do
+
     subject {@fixtureobj.datastreams['DC']}
     it "should have a DC datastream" do
       subject.class.name.should == "Cul::Scv::Hydra::Datastreams::DCMetadata"

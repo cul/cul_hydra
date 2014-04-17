@@ -1,27 +1,13 @@
-require "active-fedora"
-require "active_fedora_finders"
-class ContentAggregator < ::ActiveFedora::Base
-  extend ActiveModel::Callbacks
-  include ::ActiveFedora::Finders
-  include ::ActiveFedora::DatastreamCollections
-  include ::Hydra::ModelMethods
-  include Cul::Scv::Hydra::Models::Common
-  include Cul::Scv::Hydra::Models::Aggregator
-
-  alias :file_objects :resources
-
-  def route_as
-    "multipartitem"
-  end
+class ContentAggregator < GenericAggregator
   
   def thumbnail_info
-    members = resources
-    if members.length > 1
+    _members = member_ids()
+    if _members.length > 1
       return {:url=>image_url("cul_scv_hydra/crystal/kmultiple.png"),:mime=>'image/png'}
-    elsif members.length == 0
+    elsif _members.length == 0
       return {:url=>image_url("cul_scv_hydra/crystal/file.png"),:mime=>'image/png'}
     else
-      member = ActiveFedora::Base.find(members[0], :cast=>true)
+      member = ActiveFedora::Base.find(_members[0], :cast=>true)
       if member.respond_to? :thumbnail_info
         return member.thumbnail_info
       end

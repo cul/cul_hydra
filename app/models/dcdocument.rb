@@ -8,7 +8,7 @@ class DcDocument < ActiveFedora::Base
   include Cul::Scv::Hydra::Models::Common
   alias :file_objects :resources
   
-  has_many :parts, :property=>:cul_member_of, :class_name=>'ActiveFedora::Base'
+  has_and_belongs_to_many :parts, :property => :cul_member_of, :class_name=>'ActiveFedora::Base'
 
   def self.load_instance_from_solr(pid,solr_doc=nil)
     if solr_doc.nil?

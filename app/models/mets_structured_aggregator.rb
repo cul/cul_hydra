@@ -8,6 +8,8 @@ class METSStructuredAggregator < ::ActiveFedora::Base
   include Cul::Scv::Hydra::Models::Common
   include Cul::Scv::Hydra::Models::Aggregator
 
+  has_many :parts, :property => :cul_member_of, :class_name=>'ActiveFedora::Base'
+
   alias :file_objects :resources
 
   def route_as
