@@ -1,5 +1,4 @@
-module Cul::Scv::Hydra::Models
-module Aggregator
+module Cul::Scv::Hydra::Models::Aggregator
   extend ActiveSupport::Concern
 
   included do
@@ -56,7 +55,7 @@ module Aggregator
   def members(opts={})
     solr_members(opts)
   end
-  
+
   def members_ids(opts={})
     opts = opts.merge({:response_format=>:id_array})
     solr_members(opts)
@@ -132,5 +131,4 @@ module Aggregator
     end
     return obj
   end
-end
 end

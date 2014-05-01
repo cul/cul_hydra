@@ -10,7 +10,7 @@ class GenericObject < ::ActiveFedora::Base
 
   has_many :parts, :property => :cul_member_of, :class_name=>'ActiveFedora::Base'
 
-  alias :file_objects :resources
+  #alias :file_objects :resources
 
   def route_as
     "multipartitem"

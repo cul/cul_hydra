@@ -8,3 +8,7 @@ fedora.yml
 solr.yml
 subs.yml
 spec/dummy/log/*
+
+.DS_Store
+*~
+*.komodoproject

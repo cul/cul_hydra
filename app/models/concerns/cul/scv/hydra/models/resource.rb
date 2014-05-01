@@ -1,5 +1,4 @@
-module Cul::Scv::Hydra::Models
-module Resource
+module Cul::Scv::Hydra::Models::Resource
     extend ActiveSupport::Concern
 # constants #
   IMAGE_MIME_TYPES = [
@@ -26,8 +25,8 @@ module Resource
             return relationships[:#{y.to_s}]
         }
       }
-      
-      after_create :resource!      
+
+      after_create :resource!
     end
     if self.respond_to? :has_datastream
       has_datastream :name => "CONTENT", :type=>::ActiveFedora::Datastream, :versionable => true
@@ -85,5 +84,4 @@ module Resource
     mime_types = MIME::Types.of(file_name)
     mime_type = mime_types.empty? ? "application/octet-stream" : mime_types.first.content_type
   end
-end
 end

@@ -6,8 +6,8 @@ class DcDocument < ActiveFedora::Base
   include ::ActiveFedora::DatastreamCollections
   include Hydra::ModelMethods
   include Cul::Scv::Hydra::Models::Common
-  alias :file_objects :resources
-  
+  #alias :file_objects :resources
+
   has_and_belongs_to_many :parts, :property => :cul_member_of, :class_name=>'ActiveFedora::Base'
 
   def self.load_instance_from_solr(pid,solr_doc=nil)
@@ -20,7 +20,7 @@ class DcDocument < ActiveFedora::Base
     else
       raise "Solr document record id and pid do not match" unless pid == solr_doc[SOLR_DOCUMENT_ID]
     end
-     
+
     create_date = solr_doc[::ActiveFedora::SolrService.solr_name(:system_create, :date)].nil? ? solr_doc[::ActiveFedora::SolrService.solr_name(:system_create, :date).to_s] : solr_doc[::ActiveFedora::SolrService.solr_name(:system_create, :date)]
     modified_date = solr_doc[::ActiveFedora::SolrService.solr_name(:system_create, :date)].nil? ? solr_doc[::ActiveFedora::SolrService.solr_name(:system_modified, :date).to_s] : solr_doc[::ActiveFedora::SolrService.solr_name(:system_modified, :date)]
     obj = DcDocument.new({:pid=>solr_doc[SOLR_DOCUMENT_ID],:create_date=>create_date,:modified_date=>modified_date})
