@@ -66,7 +66,7 @@ module Cul::Scv::Hydra::Models::Aggregator
     members = []
     r.collect {|hit| members << SolrDocument.new(hit) } unless r.blank?
     if members.length == 0
-      return {:url=>image_url("cul_scv_hydra/crystal/file.png",:mime=>'image/png'}
+      return {:url=>image_url("cul_scv_hydra/crystal/file.png"),:mime=>'image/png'}
     else
       thumb = nil
       unless datastreams['structMetadata'].new?
