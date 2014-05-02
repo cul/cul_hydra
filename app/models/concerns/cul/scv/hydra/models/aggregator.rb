@@ -56,7 +56,7 @@ module Cul::Scv::Hydra::Models::Aggregator
     solr_members(opts)
   end
 
-  def members_ids(opts={})
+  def member_ids(opts={})
     opts = opts.merge({:response_format=>:id_array})
     solr_members(opts)
   end
@@ -75,7 +75,7 @@ module Cul::Scv::Hydra::Models::Aggregator
         thumb =  thumb_from_members(members)
       end
     end
-    return thumb || {:url=>image_url("cul_scv_hydra/crystal/file.png",:mime=>'image/png'}
+    return thumb || {:url=>image_url("cul_scv_hydra/crystal/file.png"),:mime=>'image/png'}
   end
 
   private
