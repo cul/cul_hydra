@@ -1,3 +1,4 @@
+require 'httpclient'
 module Cul::Scv::Hydra::Thumbnails
   # some thumbnail urls
   NO_THUMB = "cul_scv_hydra/crystal/file.png"
@@ -22,26 +23,32 @@ module Cul::Scv::Hydra::Thumbnails
     if r_obj.respond_to? :thumbnail_info
       url = r_obj.thumbnail_info
     else
-      url = {:url=>image_url(COLLECTION_THUMB),:mime=>'image/png'}
+      url = {:asset=>(COLLECTION_THUMB),:mime=>'image/png'}
     end
     if url[:asset]
-      url[:url] = asset_path_from_config(url[:asset])
+      #url = {:url=>asset_url(COLLECTION_THUMB),:mime=>'image/png'}
+      #redirect_to asset_url(url[:asset]).to_s, status: 302
+      #return
     end
-    puts "#{url[:url]} #{url[:mime]}"
+    Rails.logger.debug "thumbnail #{url[:url] || url[:asset]} #{url[:mime]}"
     filename = pid + '.' + url[:mime].split('/')[1].downcase
     h_cd = "filename=""#{CGI.escapeHTML(filename)}"""
     headers.delete "Cache-Control"
     headers["Content-Disposition"] = h_cd
     headers["Content-Type"] = url[:mime]
    
-    if url[:url].to_s =~ /^https?:/
+    if url[:asset]
+      full_path = Rails.application.assets.resolve(url[:asset]).to_path
+      render :status => 200, :text => File.read(full_path)
+      return
+    elsif url[:url].to_s =~ /^https?:/
       cl = http_client
       render :status => 200, :text => cl.get_content(url[:url])
       return
     else
       render :status => 200, :text => File.read(url[:url])
       return
-    end 
+    end
   end
 
   def jp2_thumbnail(pid)
@@ -52,16 +59,4 @@ module Cul::Scv::Hydra::Thumbnails
     return uri.sub(/info:fedora\//,'')
   end
   
-  def asset_path_from_config(asset)
-    Rails.configuration.assets.paths.each do |dir|
-      result = "#{dir}/#{asset}"
-      return result if File.exists?(result)
-    end
-    return nil
-  end
-
-  def image_asset_url(source)
-    URI.join(root_url, ActionController::Base.helpers.asset_path(source))
-  end
-
 end

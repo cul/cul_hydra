@@ -142,7 +142,7 @@ module Cul::Scv::Hydra::Models::Common
   end
 
   def thumbnail_info
-    {:url=>image_url("cul_scv_hydra/crystal/kmultiple.png"),:mime_type=>"image/png"}
+    {:asset=>("cul_scv_hydra/crystal/kmultiple.png"),:mime_type=>"image/png"}
   end
 
   private

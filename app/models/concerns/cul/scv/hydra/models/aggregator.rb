@@ -31,42 +31,24 @@ module Cul::Scv::Hydra::Models::Aggregator
 
   def solr_members(opts={})
     opts = {:rows=>25,:response_format=>:solr}.merge(opts)
-    self.parts(opts)
-    #opts = {:rows=>25,:response_format=>:solr}.merge(opts)
-    #query = self.class.inbound_relationship_query(self.pid, "parts")
-    #solr_result = ::ActiveFedora::SolrService.instance.conn.query(query, :rows=>opts[:rows])
-    #if opts[:response_format] == :solr
-    #  return solr_result
-    #else
-    #  if opts[:response_format] == :id_array
-    #    id_array = []
-    #    solr_result.hits.each do |hit|
-    #      id_array << hit[SOLR_DOCUMENT_ID]
-    #    end
-    #    return id_array
-    #  elsif opts[:response_format] == :load_from_solr || self.load_from_solr
-    #    return ::ActiveFedora::SolrService.reify_solr_results(solr_result,{:load_from_solr=>true})
-    #  else
-    #    return ::ActiveFedora::SolrService.reify_solr_results(solr_result)
-    #  end
-    #end
+    r = self.parts(opts)
+    members = []
+    r.collect {|hit| members << SolrDocument.new(hit) } unless r.blank?
+    members
   end
 
   def members(opts={})
-    solr_members(opts)
+    parts(opts)
   end
 
   def member_ids(opts={})
-    opts = opts.merge({:response_format=>:id_array})
-    solr_members(opts)
+    solr_members(opts).collect {|hit| hit.id}
   end
 
   def thumbnail_info
-    r = self.parts.reader(:response_format => :solr)
-    members = []
-    r.collect {|hit| members << SolrDocument.new(hit) } unless r.blank?
+    members = solr_members
     if members.length == 0
-      return {:url=>image_url("cul_scv_hydra/crystal/file.png"),:mime=>'image/png'}
+      thumb = {:asset=>"cul_scv_hydra/crystal/file.png",:mime=>'image/png'}
     else
       thumb = nil
       unless datastreams['structMetadata'].new?
@@ -75,20 +57,22 @@ module Cul::Scv::Hydra::Models::Aggregator
         thumb =  thumb_from_members(members)
       end
     end
-    return thumb || {:url=>image_url("cul_scv_hydra/crystal/file.png"),:mime=>'image/png'}
+    return thumb || {:asset=>"cul_scv_hydra/crystal/file.png",:mime=>'image/png'}
   end
 
   private
   def thumb_from_struct(members)
+    puts "thumb thumb_from_struct"
     sm = datastreams['structMetadata']
     first = sm.divs_with_attribute(false,'ORDER','1').first
     if first
       members.each do |member|
+        puts "looking for #{first["CONTENTIDS"]} in #{member["identifier_ssim"].inspect}"
         if member["identifier_ssim"].include? first["CONTENTIDS"]
           return thumb_from_solr_doc(member)
         end
       end
-      return nil
+      return thumb_from_solr_doc(members.first) if members.first
     else
       return nil
     end
@@ -114,8 +98,7 @@ module Cul::Scv::Hydra::Models::Aggregator
 
   def thumb_from_solr_doc(solr_doc)
     if solr_doc and (member =  ActiveFedora::Base.find(solr_doc.id, :cast=>true)).respond_to? :thumbnail_info
-      puts "thumb: " + (thumb = member.thumbnail_info).inspect
-      thumb
+      member.thumbnail_info
     else
       return nil
     end
