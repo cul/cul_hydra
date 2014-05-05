@@ -1,6 +1,6 @@
 module Cul::Scv::Hydra::Indexer
 
-  def self.recursively_index_fedora_objects(pid, skip_top_level_object_indexing=false, verbose_output)
+  def self.recursively_index_fedora_objects(pid, skip_top_level_object_indexing=false, verbose_output=false)
 
     if pid.blank?
       raise 'Please supply a pid (e.g. rake recursively_index_fedora_objects pid=ldpd:123)'
