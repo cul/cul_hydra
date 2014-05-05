@@ -10,14 +10,18 @@ require 'rspec'
 require 'rspec/core/rake_task'
 
 Bundler::GemHelper.install_tasks
-import "lib/tasks/cmodel.rake" if defined?(Rake)
+if defined?(Rake)
+  Dir.glob("lib/tasks/*.rake").each do |rakefile|
+    import rakefile
+  end
+end
 # require 'spec/rake/spectask'
 
 task :default => :spec
 
 require 'rdoc/task'
 Rake::RDocTask.new do |rdoc|
-  version = Cul::Scv::Hydra::VERSION 
+  version = Cul::Scv::Hydra::VERSION
 
   rdoc.rdoc_dir = 'rdoc'
   rdoc.title = "cul-om-scv #{version}"

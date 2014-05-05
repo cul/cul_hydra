@@ -14,7 +14,7 @@ module Cul::Scv::Hydra
       #{config.root}/app/models/concerns
     )
 
-    config.generators do |g|                                                               
+    config.generators do |g|
       g.test_framework :rspec
       g.integration_tool :rspec
     end
@@ -23,7 +23,7 @@ module Cul::Scv::Hydra
     rake_tasks do
       Dir.chdir(File.expand_path(File.join(File.dirname(__FILE__), '..'))) do
         Dir.glob(File.join('tasks', '*.rake')).each do |railtie|
-          load railtie
+          #load railtie # Commenting this out for now because we appear to be loading rake tasks twice
         end
       end
     end
