@@ -1,7 +1,7 @@
 module Cul
   module Scv
     module Fedora
-      class FakeObject
+      class DummyObject
         attr_accessor :pid
         def initialize(pid, isNew=false)
           @pid = pid
@@ -17,7 +17,7 @@ module Cul
           Cul::Scv::Fedora.repository
         end
         def spawn(pid)
-          s = FakeObject.new(pid)
+          s = DummyObject.new(pid)
           s.connection= connection
           s.repository= repository
           s
