@@ -10,6 +10,12 @@ module Cul
         def new_record?
           @isNew
         end
+        def new_record=(val)
+          @isNew = val
+        end
+        def internal_uri
+          @uri ||= "info:fedora/#{@pid}"
+        end
         def connection
           Cul::Scv::Fedora.connection
         end    
@@ -17,7 +23,7 @@ module Cul
           Cul::Scv::Fedora.repository
         end
         def spawn(pid)
-          s = DummyObject.new(pid)
+          s = DummyObject.new(pid, @isNew)
           s.connection= connection
           s.repository= repository
           s
