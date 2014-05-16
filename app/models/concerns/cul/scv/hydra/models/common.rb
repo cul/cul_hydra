@@ -180,4 +180,19 @@ module Cul::Scv::Hydra::Models::Common
       response[OM::XML::Terminology.term_hierarchical_name(pointer)] = returned
     }
   end
+
+  def legacy_content_path(ds, ds_root=ActiveFedora.config.credentials[:datastreams_root])
+    unless ds.controlGroup == 'M'
+      return ds.dsLocation
+    end
+    cd = ds.dsCreateDate
+    tz = ActiveFedora.config.credentials[:time_zone]
+    tzi = ActiveSupport::TimeZone.find_tzinfo(tz)
+    ld = tzi.utc_to_local(cd)
+    month = (ld.month < 10) ? "0#{ld.month}" : ld.month.to_s
+    day = (ld.day < 10) ? "0#{ld.day}" : ld.day.to_s
+    hour = (ld.hour < 10) ? "0#{ld.hour}" : ld.hour.to_s
+    min = (ld.min < 10) ? "0#{ld.min}" : ld.min.to_s
+    return File.join(ds_root,"#{ld.year}/#{month}#{day}/#{hour}/#{min}", ds.dsLocation.sub(':','_'))
+  end
 end

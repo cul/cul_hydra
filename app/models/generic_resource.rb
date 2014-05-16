@@ -61,7 +61,7 @@ class GenericResource < ::ActiveFedora::Base
     if self.zooming?
       fz = rels_int.relationships(datastreams['content'], :foaf_zooming).first.object.to_s.split('/')[-1]
       ds = datastreams[fz]
-      rft_id = ds.controlGroup == 'E' ? datastreams[fz].dsLocation : fedora_ds_url(pid, ds.dsid) + '/content'
+      rft_id = ds.controlGroup == 'E' ? datastreams[fz].dsLocation : legacy_content_path(ds,'info:fedora/datastreams/')
       solr_doc['rft_id_ss'] = rft_id
     end
     solr_doc
