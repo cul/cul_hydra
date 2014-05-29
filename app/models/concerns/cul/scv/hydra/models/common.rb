@@ -75,6 +75,7 @@ module Cul::Scv::Hydra::Models::Common
 
   def to_solr(solr_doc = Hash.new, opts={})
     solr_doc = super(solr_doc, opts)
+
     if has_desc?
       solr_doc["descriptor_ssi"] = ["mods"]
     else
@@ -114,6 +115,9 @@ module Cul::Scv::Hydra::Models::Common
       end
     }
     solr_doc[:structured_bsi] = 'false' unless solr_doc.has_key? :structured_bsi
+
+    solr_doc["cul_number_of_members_isi"] = Cul::Scv::Hydra::RisearchMembers.get_direct_member_pids(pid).length
+
     solr_doc
   end
 

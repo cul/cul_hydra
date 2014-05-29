@@ -20,7 +20,8 @@ namespace :cul_scv_hydra do
       begin
         Cul::Scv::Hydra::Indexer.recursively_index_fedora_objects(pid, skip_top_level_object_indexing, true)
       rescue => e
-        puts e
+        puts 'Error: ' + e.message
+        puts e.backtrace
         next
       end
 
