@@ -116,8 +116,6 @@ module Cul::Scv::Hydra::Models::Common
     }
     solr_doc[:structured_bsi] = 'false' unless solr_doc.has_key? :structured_bsi
 
-    solr_doc["cul_number_of_members_isi"] = Cul::Scv::Hydra::RisearchMembers.get_direct_member_pids(pid).length
-
     solr_doc
   end
 
