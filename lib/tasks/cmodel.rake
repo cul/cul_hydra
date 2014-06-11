@@ -1,4 +1,9 @@
 APP_ROOT = File.expand_path("#{File.dirname(__FILE__)}/../../")
+require 'active-fedora'
+
+def logger
+  @logger ||= Logger.new($stdout)
+end
 
 def filename_for_pid(pid)
   pid.gsub(/\:/,'_') + '.xml'
@@ -27,9 +32,9 @@ def config_subs
     cfile = File.join(APP_ROOT,'config','subs.yml')
     subs = {}
     if File.exists? cfile
-      open(cfile) {|blob| subs = YAML::load(blob)[Rails.env] }
+      open(cfile) {|blob| subs = YAML::load(blob)[ENV['RAILS_ENV'] || 'test'] }
     else
-      Rails.logger.warn("No subs.yml found; CModels will be loaded without inline substitutions")
+      logger.warn("No subs.yml found; CModels will be loaded without inline substitutions")
     end
     subs
   end

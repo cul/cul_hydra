@@ -38,7 +38,7 @@ module Cul::Scv::Hydra::Models::Aggregator
   end
 
   def members(opts={})
-    parts(opts)
+    parts({:response_format=>:solr}.merge(opts))
   end
 
   def member_ids(opts={})

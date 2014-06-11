@@ -3,7 +3,12 @@ module Cul
     module Fedora
       module RubydoraPatch
         def find_by_itql query, options = {}
-          self.risearch(query, {:lang => 'itql'}.merge(options))
+          begin
+          	self.risearch(query, {:lang => 'itql'}.merge(options))
+          rescue Exception => e
+          	logger.error e
+          	"{\"results\":[]}"
+          end
         end
       end
     end

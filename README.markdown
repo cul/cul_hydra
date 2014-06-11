@@ -1,5 +1,13 @@
 # CUL OM and Solrizer Implementations
-
+## To Run Integration Tests
+```
+bundle exec rake jetty:unzip
+bundle exec rake cul_hydra:ci
+```
+## To Run Unit Tests
+```
+bundle exec rspec spec/unit
+```
 ## Additions to Solr
 ###Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer
 This Solrizer is basically a clone of the default implementation with a couple of bugfixes and two added features:

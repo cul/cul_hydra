@@ -8,7 +8,7 @@ fedora.yml
 solr.yml
 subs.yml
 spec/dummy/log/*
-
+jetty
 .DS_Store
 *~
 *.komodoproject
