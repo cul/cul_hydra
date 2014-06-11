@@ -25,24 +25,7 @@ module Cul::Scv::Hydra::Indexer
 
     puts 'Recursively retreieving and indexing all members...'
 
-    member_query =
-      'select $child $parent $cmodel from <#ri>
-      where
-      walk($child <http://purl.oclc.org/NET/CUL/memberOf> <fedora:' + pid + '> and $child <http://purl.oclc.org/NET/CUL/memberOf> $parent)
-      and
-      $child <fedora-model:hasModel> $cmodel'
-
-    puts 'Performing query:' if verbose_output
-    puts member_query if verbose_output
-
-    search_response = JSON(Cul::Scv::Fedora.repository.find_by_itql(member_query, {
-      :type => 'tuples',
-      :format => 'json',
-      :limit => '',
-      :stream => 'on'
-    }))
-
-    unique_pids = search_response['results'].map{|result| result['child'].gsub('info:fedora/', '') }.uniq
+    unique_pids = Cul::Scv::Hydra::RisearchMembers.get_recursive_member_pids(pid, true)
 
     total_number_of_members = unique_pids.length
     puts 'Recursive search found ' + total_number_of_members.to_s + ' members.' if verbose_output
