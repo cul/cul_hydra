@@ -18,4 +18,5 @@ Test</title></titleInfo></relatedItem>
 <note>Original PRD customer order number: 040148</note>
 <accessCondition type='useAndReproduction'>Columbia Libraries Staff Use Only.</accessCondition>
 <recordInfo><recordCreationDate encoding='w3cdtf'>2010-07-12</recordCreationDate><recordContentSource authority='marcorg'>NNC</recordContentSource><languageOfCataloging><languageTerm type='code' authority='iso639-2b'>eng</languageTerm></languageOfCataloging><recordOrigin>From PRD customer order database, edited to conform to the DLF Implementation Guidelines for Shareable MODS Records, Version 1.1.</recordOrigin></recordInfo>
+<language><languageTerm type="text">English</languageTerm><languageTerm type="code">eng</languageTerm></language>
 </mods>

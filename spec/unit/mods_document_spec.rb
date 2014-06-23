@@ -1,11 +1,11 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
-  
+
   before(:all) do
-        
+
   end
-  
+
   before(:each) do
     @mock_inner = double('inner object')
     @mock_inner.stub(:"new_record?").and_return(false)
@@ -24,17 +24,17 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
     part_xml = fixture( File.join("CUL_MODS", "mods-part.xml") )
     @mods_part = descMetadata(@mock_inner, part_xml)
   end
-  
+
   after(:all) do
 
   end
-  
+
   it "should automatically include the necessary modules" do
     Cul::Scv::Hydra::Datastreams::ModsDocument.included_modules.should include(OM::XML::Container)
     Cul::Scv::Hydra::Datastreams::ModsDocument.included_modules.should include(OM::XML::TermValueOperators)
     Cul::Scv::Hydra::Datastreams::ModsDocument.included_modules.should include(OM::XML::Validation)
   end
-  
+
   describe ".ox_namespaces" do
     it "should merge terminology namespaces with document namespaces" do
       @mods_item.ox_namespaces.should == {"oxns"=>"http://www.loc.gov/mods/v3", "xmlns:xsi"=>"http://www.w3.org/2001/XMLSchema-instance", "xmlns"=>"http://www.loc.gov/mods/v3"}
@@ -49,8 +49,8 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
       result.should == true
     end
   end
-  
-  
+
+
   describe ".find_by_terms_and_value" do
     it "should fail gracefully if you try to look up nodes for an undefined property" do
       pending "better to get an informative error?"
@@ -84,7 +84,7 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
       title = doc["title_display_ssm"]
       expect(title).to eql ["The Manuscript, unidentified"]
     end
-  
+
 
     it "should use Nokogiri to retrieve a NodeSet corresponding to the combination of term pointers and array/nodeset indexes" do
       @mods_item.find_by_terms( :access_condition ).length.should == 1
@@ -98,11 +98,11 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
     it "should find a NodeSet where a terminology attribute has been set to :none" do
       @mods_item.find_by_terms(:location, :repo_text).first.text.should == "Rare Book and Manuscript Library, Columbia University"
     end
-    
+
     it "should support xpath queries as the pointer" do
       @mods_item.find_by_terms('//oxns:relatedItem[@type="host"][1]//oxns:title[1]').first.text.should == "Project Facet Mapping\nTest"
     end
-    
+
     it "should return nil if the xpath fails to generate" do
       pending "Can't decide if it's better to return nil or raise an error.  Choosing informative errors for now."
       @mods_item.find_by_terms( {:foo=>20}, :bar ).should == nil
@@ -180,6 +180,8 @@ src
       built.update_values({[:record_info, :record_creation_date] => "2010-07-12"})
       built.update_values({[:language_code] => "eng"})
       built.update_values({[:record_info,:record_content_source]=> "NNC"})
+      built.update_values({[:language,:language_term_text]=> "English"})
+      built.update_values({[:language,:language_term_code]=> "eng"})
       built.update_values({[:record_info,:record_origin]=> <<ml
 From PRD customer order database, edited to conform to the DLF Implementation Guidelines for Shareable MODS Records, Version 1.1.
 ml
@@ -247,6 +249,14 @@ ml
       solr_doc["lib_repo_ssim"].should include("Rare Book and Manuscript Library")
       # check that the mapped value didn't find it's way into the display field
       solr_doc["lib_repo_ssim"].should_not include("RBML")
+
+
+      puts 'ZZZZZZ: ' + solr_doc.inspect
+
+      # location
+      solr_doc["language_language_term_code_sim"].should == ['eng']
+      solr_doc["language_language_term_text_sim"].should == ['English']
+
     end
   end
 end

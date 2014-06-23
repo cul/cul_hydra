@@ -24,7 +24,7 @@ class ModsDocument < ::ActiveFedora::OmDatastream
       t.non_sort(:path=>"nonSort", :index_as=>[])
       t.main_title(:path=>"title", :index_as=>[])
     }
-    
+
     t.title(:proxy=>[:mods, :main_title_info, :main_title], :type=>:string,
      :index_as=>[:searchable, :sortable, :textable])
     t.title_display(:proxy=>[:mods, :main_title_info], :type=>:string,
@@ -80,7 +80,7 @@ class ModsDocument < ::ActiveFedora::OmDatastream
       t.name_part(:path=>'namePart', :index_as=>[])
     }
     t.name_corporate(
-      :path=>'name',:attributes=>{:type=>'corporate'}, 
+      :path=>'name',:attributes=>{:type=>'corporate'},
       :index_as=>[:facetable, :displayable, :searchable],
       :variant_of=>{:field_base=>:lib_name}){
       t.name_part(
@@ -103,6 +103,11 @@ class ModsDocument < ::ActiveFedora::OmDatastream
     t.language_term(:proxy=>[:record_info, :language_of_cataloging, :language_term])
     t.language_code(:proxy=>[:record_info, :language_of_cataloging, :language_code])
 
+    t.language(:index_as=>[]){
+      t.language_term_text(:path=>"languageTerm", :attributes=>{:type=>'text'}, :index_as=>[:facetable])
+      t.language_term_code(:path=>"languageTerm", :attributes=>{:type=>'code'}, :index_as=>[:facetable])
+    }
+
     t.origin_info(:path=>"originInfo", :index_as=>[]){
       t.date(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf'}, :index_as=>[])
       t.lib_date(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes'},
@@ -114,7 +119,7 @@ class ModsDocument < ::ActiveFedora::OmDatastream
 
   def self.xml_template
     builder = Nokogiri::XML::Builder.new do |xml|
-      xml.mods(:version=>"3.4", 
+      xml.mods(:version=>"3.4",
          "xmlns"=>"http://www.loc.gov/mods/v3",
          "xmlns:xlink"=>"http://www.w3.org/1999/xlink",
          "xmlns:xsi"=>"http://www.w3.org/2001/XMLSchema-instance"){
