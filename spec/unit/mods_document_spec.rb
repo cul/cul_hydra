@@ -182,6 +182,8 @@ src
       built.update_values({[:record_info,:record_content_source]=> "NNC"})
       built.update_values({[:language,:language_term_text]=> "English"})
       built.update_values({[:language,:language_term_code]=> "eng"})
+      built.update_values({[:origin_info,:date_created_start]=> "1801"})
+      built.update_values({[:origin_info,:date_created_end]=> "1802"})
       built.update_values({[:record_info,:record_origin]=> <<ml
 From PRD customer order database, edited to conform to the DLF Implementation Guidelines for Shareable MODS Records, Version 1.1.
 ml
@@ -213,14 +215,61 @@ ml
       parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-physical-location.xml")))
       built.ng_xml.should be_equivalent_to(parsed)
     end
-    it "should produce equivalent xml for date ranges" do
+    it "should produce equivalent xml for a single dateIssued value" do
       @mock_inner.stub(:new_record?).and_return(false)
       built = Cul::Scv::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
       built.ng_xml = Cul::Scv::Hydra::Datastreams::ModsDocument.xml_template
-      built.update_values({[:origin_info, :start_date]=>"1900"})
-      built.update_values({[:origin_info, :end_date]=>"1905"})
-      parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-date-range.xml")))
-      #built.ng_xml.should be_equivalent_to(parsed)
+      built.update_values({[:origin_info, :date_issued]=>"1700"})
+      parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-date-issued-single.xml")))
+      built.ng_xml.should be_equivalent_to(parsed)
+      equivalent?(built.ng_xml,parsed)
+    end
+    it "should produce equivalent xml for a single dateCreated value" do
+      @mock_inner.stub(:new_record?).and_return(false)
+      built = Cul::Scv::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
+      built.ng_xml = Cul::Scv::Hydra::Datastreams::ModsDocument.xml_template
+      built.update_values({[:origin_info, :date_created]=>"1800"})
+      parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-date-created-single.xml")))
+      built.ng_xml.should be_equivalent_to(parsed)
+      equivalent?(built.ng_xml,parsed)
+    end
+    it "should produce equivalent xml for a single dateOther value" do
+      @mock_inner.stub(:new_record?).and_return(false)
+      built = Cul::Scv::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
+      built.ng_xml = Cul::Scv::Hydra::Datastreams::ModsDocument.xml_template
+      built.update_values({[:origin_info, :date_other]=>"1900"})
+      parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-date-other-single.xml")))
+      built.ng_xml.should be_equivalent_to(parsed)
+      equivalent?(built.ng_xml,parsed)
+    end
+    it "should produce equivalent xml for a dateIssued range" do
+      @mock_inner.stub(:new_record?).and_return(false)
+      built = Cul::Scv::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
+      built.ng_xml = Cul::Scv::Hydra::Datastreams::ModsDocument.xml_template
+      built.update_values({[:origin_info, :date_issued_start]=>"1701"})
+      built.update_values({[:origin_info, :date_issued_end]=>"1702"})
+      parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-date-issued-range.xml")))
+      built.ng_xml.should be_equivalent_to(parsed)
+      equivalent?(built.ng_xml,parsed)
+    end
+    it "should produce equivalent xml for a dateCreated range" do
+      @mock_inner.stub(:new_record?).and_return(false)
+      built = Cul::Scv::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
+      built.ng_xml = Cul::Scv::Hydra::Datastreams::ModsDocument.xml_template
+      built.update_values({[:origin_info, :date_created_start]=>"1801"})
+      built.update_values({[:origin_info, :date_created_end]=>"1802"})
+      parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-date-created-range.xml")))
+      built.ng_xml.should be_equivalent_to(parsed)
+      equivalent?(built.ng_xml,parsed)
+    end
+    it "should produce equivalent xml for a dateOther range" do
+      @mock_inner.stub(:new_record?).and_return(false)
+      built = Cul::Scv::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
+      built.ng_xml = Cul::Scv::Hydra::Datastreams::ModsDocument.xml_template
+      built.update_values({[:origin_info, :date_other_start]=>"1901"})
+      built.update_values({[:origin_info, :date_other_end]=>"1902"})
+      parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-date-other-range.xml")))
+      built.ng_xml.should be_equivalent_to(parsed)
       equivalent?(built.ng_xml,parsed)
     end
   end
@@ -249,14 +298,83 @@ ml
       solr_doc["lib_repo_ssim"].should include("Rare Book and Manuscript Library")
       # check that the mapped value didn't find it's way into the display field
       solr_doc["lib_repo_ssim"].should_not include("RBML")
-
-
-      puts 'ZZZZZZ: ' + solr_doc.inspect
-
-      # location
+      # check the language term code and text fields
       solr_doc["language_language_term_code_sim"].should == ['eng']
       solr_doc["language_language_term_text_sim"].should == ['English']
-
+      # check the date fields
+      solr_doc["origin_info_date_created_start_ssm"].should == ['1801']
+      solr_doc["origin_info_date_created_end_ssm"].should == ['1802']
+      # check specially generated start_date and end_date fields
+      solr_doc["lib_start_date_sim"].should == ['1801']
+      solr_doc["lib_end_date_sim"].should == ['1802']
+    end
+    describe " date element handling" do
+      it "handles date issued single" do
+        item_xml = fixture( File.join("CUL_MODS", "mods-date-issued-single.xml") )
+        mods_item = descMetadata(@mock_inner, item_xml)
+        solr_doc = mods_item.to_solr
+        
+        solr_doc["origin_info_date_issued_ssm"].should == ['1700']
+        solr_doc["origin_info_date_issued_start_ssm"].should == nil
+        solr_doc["origin_info_date_issued_end_ssm"].should == nil
+        solr_doc["lib_start_date_sim"].should == ['1700']
+        solr_doc["lib_end_date_sim"].should == ['1700']
+      end
+      it "handles date issued range" do
+        item_xml = fixture( File.join("CUL_MODS", "mods-date-issued-range.xml") )
+        mods_item = descMetadata(@mock_inner, item_xml)
+        solr_doc = mods_item.to_solr
+        
+        solr_doc["origin_info_date_issued_ssm"].should == ['1701']
+        solr_doc["origin_info_date_issued_start_ssm"].should == ['1701']
+        solr_doc["origin_info_date_issued_end_ssm"].should == ['1702']
+        solr_doc["lib_start_date_sim"].should == ['1701']
+        solr_doc["lib_end_date_sim"].should == ['1702']
+      end
+      it "handles date created single" do
+        item_xml = fixture( File.join("CUL_MODS", "mods-date-created-single.xml") )
+        mods_item = descMetadata(@mock_inner, item_xml)
+        solr_doc = mods_item.to_solr
+        
+        solr_doc["origin_info_date_created_ssm"].should == ['1800']
+        solr_doc["origin_info_date_created_start_ssm"].should == nil
+        solr_doc["origin_info_date_created_end_ssm"].should == nil
+        solr_doc["lib_start_date_sim"].should == ['1800']
+        solr_doc["lib_end_date_sim"].should == ['1800']
+      end
+      it "handles date created range" do
+        item_xml = fixture( File.join("CUL_MODS", "mods-date-created-range.xml") )
+        mods_item = descMetadata(@mock_inner, item_xml)
+        solr_doc = mods_item.to_solr
+        
+        solr_doc["origin_info_date_created_ssm"].should == ['1801']
+        solr_doc["origin_info_date_created_start_ssm"].should == ['1801']
+        solr_doc["origin_info_date_created_end_ssm"].should == ['1802']
+        solr_doc["lib_start_date_sim"].should == ['1801']
+        solr_doc["lib_end_date_sim"].should == ['1802']
+      end
+      it "handles date other single" do
+        item_xml = fixture( File.join("CUL_MODS", "mods-date-other-single.xml") )
+        mods_item = descMetadata(@mock_inner, item_xml)
+        solr_doc = mods_item.to_solr
+        
+        solr_doc["origin_info_date_other_ssm"].should == ['1900']
+        solr_doc["origin_info_date_other_start_ssm"].should == nil
+        solr_doc["origin_info_date_other_end_ssm"].should == nil
+        solr_doc["lib_start_date_sim"].should == ['1900']
+        solr_doc["lib_end_date_sim"].should == ['1900']
+      end
+      it "handles date other range" do
+        item_xml = fixture( File.join("CUL_MODS", "mods-date-other-range.xml") )
+        mods_item = descMetadata(@mock_inner, item_xml)
+        solr_doc = mods_item.to_solr
+        
+        solr_doc["origin_info_date_other_ssm"].should == ['1901']
+        solr_doc["origin_info_date_other_start_ssm"].should == ['1901']
+        solr_doc["origin_info_date_other_end_ssm"].should == ['1902']
+        solr_doc["lib_start_date_sim"].should == ['1901']
+        solr_doc["lib_end_date_sim"].should == ['1902']
+      end
     end
   end
 end
