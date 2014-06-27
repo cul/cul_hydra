@@ -130,6 +130,29 @@ module Cul::Scv::Hydra::Solrizer
       solr_doc["lib_format_sim"] = formats
       solr_doc["lib_repo_sim"] = repositories
       solr_doc["lib_shelf_sim"] = shelf_locators
+
+      # Create convenient start and end date values based on one of the many possible originInfo/dateX elements.
+      possible_start_date_fields = ['origin_info_date_issued_ssm', 'origin_info_date_issued_start_ssm', 'origin_info_date_created_ssm', 'origin_info_date_created_start_ssm', 'origin_info_date_other_ssm', 'origin_info_date_other_start_ssm']
+			possible_end_date_fields = ['origin_info_date_issued_end_ssm', 'origin_info_date_created_end_ssm', 'origin_info_date_other_end_ssm']
+			start_date = nil
+			end_date = nil
+			possible_start_date_fields.each{|key|
+				if solr_doc.has_key?(key)
+						start_date = solr_doc[key]
+					break
+				end
+			}
+			possible_end_date_fields.each{|key|
+				if solr_doc.has_key?(key)
+						end_date = solr_doc[key]
+					break
+				end
+			}
+			end_date = start_date if end_date.blank?
+			
+			solr_doc["lib_start_date_sim"] = start_date if start_date.present?
+			solr_doc["lib_end_date_sim"] = end_date if end_date.present?
+
       solr_doc.each do |k, v|
         if self.class.maps_field? k
           solr_doc[k] = self.class.map_value(k, v)
