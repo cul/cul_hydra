@@ -104,8 +104,8 @@ class ModsDocument < ::ActiveFedora::OmDatastream
     t.language_code(:proxy=>[:record_info, :language_of_cataloging, :language_code])
 
     t.language(:index_as=>[]){
-      t.language_term_text(:path=>"languageTerm", :attributes=>{:type=>'text'}, :index_as=>[:facetable])
-      t.language_term_code(:path=>"languageTerm", :attributes=>{:type=>'code'}, :index_as=>[:facetable])
+      t.language_term_text(:path=>"languageTerm", :attributes=>{:authority=>'iso639-2b',:type=>'text'}, :index_as=>[:facetable])
+      t.language_term_code(:path=>"languageTerm", :attributes=>{:authority=>'iso639-2b',:type=>'code'}, :index_as=>[:facetable])
     }
 
     t.origin_info(:path=>"originInfo", :index_as=>[]){
