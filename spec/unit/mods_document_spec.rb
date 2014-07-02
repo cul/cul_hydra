@@ -306,9 +306,9 @@ ml
       solr_doc["origin_info_date_created_end_ssm"].should == ['1802']
       # check specially generated start_date and end_date fields
       solr_doc["lib_start_date_sim"].should == ['1801']
-      solr_doc["lib_start_date_year_sim"].should == ['1801']
+      solr_doc["lib_start_date_year_iim"].should == [1801]
       solr_doc["lib_end_date_sim"].should == ['1802']
-      solr_doc["lib_end_date_year_sim"].should == ['1802']
+      solr_doc["lib_end_date_year_iim"].should == [1802]
     end
     describe " date element handling" do
       it "handles date issued single" do
@@ -320,9 +320,9 @@ ml
         solr_doc["origin_info_date_issued_start_ssm"].should == nil
         solr_doc["origin_info_date_issued_end_ssm"].should == nil
         solr_doc["lib_start_date_sim"].should == ['1700']
-        solr_doc["lib_start_date_year_sim"].should == ['1700']
+        solr_doc["lib_start_date_year_iim"].should == [1700]
         solr_doc["lib_end_date_sim"].should == ['1700']
-        solr_doc["lib_end_date_year_sim"].should == ['1700']
+        solr_doc["lib_end_date_year_iim"].should == [1700]
       end
       it "handles date issued range" do
         item_xml = fixture( File.join("CUL_MODS", "mods-date-issued-range.xml") )
@@ -333,9 +333,9 @@ ml
         solr_doc["origin_info_date_issued_start_ssm"].should == ['1701']
         solr_doc["origin_info_date_issued_end_ssm"].should == ['1702']
         solr_doc["lib_start_date_sim"].should == ['1701']
-        solr_doc["lib_start_date_year_sim"].should == ['1701']
+        solr_doc["lib_start_date_year_iim"].should == [1701]
         solr_doc["lib_end_date_sim"].should == ['1702']
-        solr_doc["lib_end_date_year_sim"].should == ['1702']
+        solr_doc["lib_end_date_year_iim"].should == [1702]
       end
       it "handles date created single" do
         item_xml = fixture( File.join("CUL_MODS", "mods-date-created-single.xml") )
@@ -346,9 +346,9 @@ ml
         solr_doc["origin_info_date_created_start_ssm"].should == nil
         solr_doc["origin_info_date_created_end_ssm"].should == nil
         solr_doc["lib_start_date_sim"].should == ['1800']
-        solr_doc["lib_start_date_year_sim"].should == ['1800']
+        solr_doc["lib_start_date_year_iim"].should == [1800]
         solr_doc["lib_end_date_sim"].should == ['1800']
-        solr_doc["lib_end_date_year_sim"].should == ['1800']
+        solr_doc["lib_end_date_year_iim"].should == [1800]
       end
       it "handles date created range" do
         item_xml = fixture( File.join("CUL_MODS", "mods-date-created-range.xml") )
@@ -359,9 +359,9 @@ ml
         solr_doc["origin_info_date_created_start_ssm"].should == ['1801']
         solr_doc["origin_info_date_created_end_ssm"].should == ['1802']
         solr_doc["lib_start_date_sim"].should == ['1801']
-        solr_doc["lib_start_date_year_sim"].should == ['1801']
+        solr_doc["lib_start_date_year_iim"].should == [1801]
         solr_doc["lib_end_date_sim"].should == ['1802']
-        solr_doc["lib_end_date_year_sim"].should == ['1802']
+        solr_doc["lib_end_date_year_iim"].should == [1802]
       end
       it "handles date other single" do
         item_xml = fixture( File.join("CUL_MODS", "mods-date-other-single.xml") )
@@ -372,9 +372,9 @@ ml
         solr_doc["origin_info_date_other_start_ssm"].should == nil
         solr_doc["origin_info_date_other_end_ssm"].should == nil
         solr_doc["lib_start_date_sim"].should == ['1900']
-        solr_doc["lib_start_date_year_sim"].should == ['1900']
+        solr_doc["lib_start_date_year_iim"].should == [1900]
         solr_doc["lib_end_date_sim"].should == ['1900']
-        solr_doc["lib_end_date_year_sim"].should == ['1900']
+        solr_doc["lib_end_date_year_iim"].should == [1900]
       end
       it "handles date other range" do
         item_xml = fixture( File.join("CUL_MODS", "mods-date-other-range.xml") )
@@ -385,9 +385,9 @@ ml
         solr_doc["origin_info_date_other_start_ssm"].should == ['1901']
         solr_doc["origin_info_date_other_end_ssm"].should == ['1902']
         solr_doc["lib_start_date_sim"].should == ['1901']
-        solr_doc["lib_start_date_year_sim"].should == ['1901']
+        solr_doc["lib_start_date_year_iim"].should == [1901]
         solr_doc["lib_end_date_sim"].should == ['1902']
-        solr_doc["lib_end_date_year_sim"].should == ['1902']
+        solr_doc["lib_end_date_year_iim"].should == [1902]
       end
     end
   end

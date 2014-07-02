@@ -157,11 +157,11 @@ module Cul::Scv::Hydra::Solrizer
 			
 			if start_date.present?
 				start_year_match = start_date[0].match(year_regex)
-				solr_doc["lib_start_date_year_sim"] = [start_date[0].match(year_regex).captures[0]] if start_year_match
+				solr_doc["lib_start_date_year_iim"] = [start_date[0].match(year_regex).captures[0].to_i] if start_year_match
 			end
 			if end_date.present?
 				end_year_match = end_date[0].match(year_regex)
-				solr_doc["lib_end_date_year_sim"] = [end_date[0].match(year_regex).captures[0]] if end_year_match
+				solr_doc["lib_end_date_year_iim"] = [end_date[0].match(year_regex).captures[0].to_i] if end_year_match
 			end
 
       solr_doc.each do |k, v|
