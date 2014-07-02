@@ -136,32 +136,39 @@ module Cul::Scv::Hydra::Solrizer
 			possible_end_date_fields = ['origin_info_date_issued_end_ssm', 'origin_info_date_created_end_ssm', 'origin_info_date_other_end_ssm']
 			start_date = nil
 			end_date = nil
+			start_year = nil
+			end_year = nil
 			possible_start_date_fields.each{|key|
 				if solr_doc.has_key?(key)
-						start_date = solr_doc[key]
+						start_date = solr_doc[key][0]
 					break
 				end
 			}
 			possible_end_date_fields.each{|key|
 				if solr_doc.has_key?(key)
-						end_date = solr_doc[key]
+						end_date = solr_doc[key][0]
 					break
 				end
 			}
-			end_date = start_date if end_date.blank?
-			
-			solr_doc["lib_start_date_sim"] = start_date if start_date.present?
-			solr_doc["lib_end_date_sim"] = end_date if end_date.present?
-			
-			year_regex = /\A(\d\d\d\d).*/
-			
+
 			if start_date.present?
-				start_year_match = start_date[0].match(year_regex)
-				solr_doc["lib_start_date_year_iim"] = [start_date[0].match(year_regex).captures[0].to_i] if start_year_match
-			end
-			if end_date.present?
-				end_year_match = end_date[0].match(year_regex)
-				solr_doc["lib_end_date_year_iim"] = [end_date[0].match(year_regex).captures[0].to_i] if end_year_match
+
+				end_date = start_date if end_date.blank?
+
+				solr_doc["lib_start_date_ss"] = start_date
+				solr_doc["lib_end_date_ss"] = end_date
+
+				year_regex = /^(-?\d\d\d\d).*/
+
+				start_year_match = start_date.match(year_regex)
+				start_year = start_year_match.captures[0] if start_year_match
+				solr_doc["lib_start_date_year_si"] = start_year if start_year
+
+				end_year_match = end_date.match(year_regex)
+				end_year = end_year_match.captures[0] if end_year_match
+				solr_doc["lib_end_date_year_si"] = end_year if end_year
+
+				solr_doc["lib_date_year_range_si"] = start_year + '-' + end_year
 			end
 
       solr_doc.each do |k, v|
