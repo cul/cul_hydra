@@ -158,16 +158,17 @@ module Cul::Scv::Hydra::Solrizer
 				solr_doc["lib_start_date_ss"] = start_date
 				solr_doc["lib_end_date_ss"] = end_date
 
-				year_regex = /^(-?\d\d\d\d).*/
+				year_regex = /^(-?\d{1,4}).*/
 
 				start_year_match = start_date.match(year_regex)
 				start_year = start_year_match.captures[0] if start_year_match
+				start_year = zero_pad_year(start_year)
 				solr_doc["lib_start_date_year_ssi"] = start_year if start_year
 
 				end_year_match = end_date.match(year_regex)
 				end_year = end_year_match.captures[0] if end_year_match
+				end_year = zero_pad_year(end_year)
 				solr_doc["lib_end_date_year_ssi"] = end_year if end_year
-
 				solr_doc["lib_date_year_range_si"] = start_year + '-' + end_year
 			end
 
@@ -178,6 +179,17 @@ module Cul::Scv::Hydra::Solrizer
       end
       solr_doc
     end
+
+    def zero_pad_year(year)
+			year = year.to_s
+			is_negative = year.start_with?('-')
+			year_without_sign = (is_negative ? year[1, year.length]: year)
+			if year_without_sign.length < 4
+				year_without_sign = year_without_sign.rjust(4, '0')
+			end
+
+			return (is_negative ? '-' : '') + year_without_sign
+		end
 
     def self.normalize(t, strip_punctuation=false)
       # strip whitespace

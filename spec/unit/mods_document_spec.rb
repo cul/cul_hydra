@@ -396,6 +396,20 @@ ml
         solr_doc["lib_end_date_year_ssi"].should == '1902'
         solr_doc["lib_date_year_range_si"].should == '1901-1902'
       end
+      it "handles date years that are fewer than four characters long, whether positive (CE) or negative (BCE)" do
+        item_xml = fixture( File.join("CUL_MODS", "mods-date-range-short-years.xml") )
+        mods_item = descMetadata(@mock_inner, item_xml)
+        solr_doc = mods_item.to_solr
+
+        solr_doc["origin_info_date_other_ssm"].should == ['-99']
+        solr_doc["origin_info_date_other_start_ssm"].should == ['-99']
+        solr_doc["origin_info_date_other_end_ssm"].should == ['25']
+        solr_doc["lib_start_date_ss"].should == '-99'
+        solr_doc["lib_start_date_year_ssi"].should == '-0099'
+        solr_doc["lib_end_date_ss"].should == '25'
+        solr_doc["lib_end_date_year_ssi"].should == '0025'
+        solr_doc["lib_date_year_range_si"].should == '-0099-0025'
+      end
     end
   end
 end
