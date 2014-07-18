@@ -288,12 +288,12 @@ ml
     it "should create the expected Solr hash for mapped project values" do
       solr_doc = @mods_item.to_solr
       # check the mapped facet value
-      solr_doc["lib_project_sim"].should include("Successful Project Mapping")
+      solr_doc["lib_project_sim"].should include("Successful Project Mapping") # We're not doing project mapping anymore
       # check the unmapped display value
       solr_doc["lib_project_ssm"].should include("Project Facet Mapping Test")
       # check that the mapped value didn't find it's way into the display field
       solr_doc["lib_project_ssm"].should_not include("Successful Project Mapping")
-      solr_doc["lib_repo_sim"].should include("RBML")
+      solr_doc["lib_repo_sim"].should include("RBML") # We're not doing repo mapping anymore
       # check the unmapped display value
       solr_doc["lib_repo_ssim"].should include("Rare Book and Manuscript Library")
       # check that the mapped value didn't find it's way into the display field
@@ -311,7 +311,7 @@ ml
       solr_doc["lib_end_date_year_ssi"].should == '1802'
       solr_doc["lib_date_year_range_si"].should == '1801-1802'
     end
-    describe " date element handling" do
+    describe "date element handling" do
       it "handles date issued single" do
         item_xml = fixture( File.join("CUL_MODS", "mods-date-issued-single.xml") )
         mods_item = descMetadata(@mock_inner, item_xml)
@@ -409,6 +409,8 @@ ml
         solr_doc["lib_end_date_ss"].should == '25'
         solr_doc["lib_end_date_year_ssi"].should == '0025'
         solr_doc["lib_date_year_range_si"].should == '-0099-0025'
+        solr_doc["lib_start_date_year_dttsi"] = '-0099-01-01T00:00:00Z'
+        solr_doc["lib_end_date_year_dttsi"] = '0025-01-01T00:00:00Z'
       end
     end
   end

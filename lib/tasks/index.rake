@@ -19,8 +19,10 @@ namespace :cul_scv_hydra do
         pids_to_omit = nil
       end
 
+      skip_generic_resources = true if ENV['skip_generic_resources'] == 'true'
+
       begin
-        Cul::Scv::Hydra::Indexer.recursively_index_fedora_objects(pid, pids_to_omit, true)
+        Cul::Scv::Hydra::Indexer.recursively_index_fedora_objects(pid, pids_to_omit, skip_generic_resources, true)
       rescue => e
         puts 'Error: ' + e.message
         puts e.backtrace

@@ -1,6 +1,6 @@
 module Cul::Scv::Hydra::Indexer
 
-  def self.recursively_index_fedora_objects(pid, pids_to_omit=nil, verbose_output=false)
+  def self.recursively_index_fedora_objects(pid, pids_to_omit=nil, skip_generic_resources=false, verbose_output=false)
 
     if pid.blank?
       raise 'Please supply a pid (e.g. rake recursively_index_fedora_objects pid=ldpd:123)'
@@ -18,9 +18,14 @@ module Cul::Scv::Hydra::Indexer
 
       # We found an object with the desired PID. Let's reindex it
       active_fedora_object = ActiveFedora::Base.find(pid, :cast => true)
-      active_fedora_object.update_index
 
-      puts 'Done indexing topmost object (' + pid + '). Took ' + (Time.now - START_TIME).to_s + ' seconds' if verbose_output
+      if skip_generic_resources && active_fedora_object.is_a?(GenericResource)
+        puts 'Top level object was skipped because GenericResources are being skipped and it is a GenericResource.'
+      else
+        active_fedora_object.update_index
+        puts 'Done indexing topmost object (' + pid + '). Took ' + (Time.now - START_TIME).to_s + ' seconds' if verbose_output
+      end
+
     end
 
     puts 'Recursively retreieving and indexing all members of ' + pid + '...'
@@ -43,10 +48,14 @@ module Cul::Scv::Hydra::Indexer
         print 'Indexing ' + i.to_s + ' of ' + total_number_of_members.to_s + ' members (' + pid + ')...' if verbose_output
 
         active_fedora_object = ActiveFedora::Base.find(pid, :cast => true)
-        active_fedora_object.update_index
 
-        # Display progress
-        puts 'done.' if verbose_output
+        if skip_generic_resources && active_fedora_object.is_a?(GenericResource)
+          puts "skipped (because we're skipping GenericResources." if verbose_output
+        else
+          active_fedora_object.update_index
+          # Display progress
+          puts 'done.' if verbose_output
+        end
 
         i += 1
       }
