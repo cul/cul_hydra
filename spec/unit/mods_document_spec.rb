@@ -184,6 +184,8 @@ src
       built.update_values({[:language,:language_term_code]=> "eng"})
       built.update_values({[:origin_info,:date_created_start]=> "1801"})
       built.update_values({[:origin_info,:date_created_end]=> "1802"})
+      built.update_values({[:subject,:topic]=> "Indians of North America--Missions"})
+      built.update_values({[:subject,:geographic]=> "Rosebud Indian Reservation (S.D.)"})
       built.update_values({[:record_info,:record_origin]=> <<ml
 From PRD customer order database, edited to conform to the DLF Implementation Guidelines for Shareable MODS Records, Version 1.1.
 ml
@@ -312,6 +314,8 @@ ml
       solr_doc["lib_start_date_year_itsi"].should == 1801
       solr_doc["lib_end_date_year_itsi"].should == 1802
       solr_doc["lib_date_year_range_si"].should == '1801-1802'
+      solr_doc["subject_topic_sim"].should == ['Indians of North America--Missions']
+      solr_doc["subject_geographic_sim"].should == ['Rosebud Indian Reservation (S.D.)']
     end
     describe "date element handling" do
       it "handles date issued single" do

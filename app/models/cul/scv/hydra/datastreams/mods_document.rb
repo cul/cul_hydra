@@ -50,8 +50,9 @@ class ModsDocument < ::ActiveFedora::OmDatastream
     t.identifier(:path=>"identifier", :attributes=>{:type=>"local"}, :type=>:string, :index_as=>[:symbol, :textable])
     t.clio(:path=>"identifier", :attributes=>{:type=>"CLIO"}, :data_type=>:symbol, :index_as=>[:symbol, :textable])
     t.abstract
-    t.subject {
-      t.topic
+    t.subject(:index_as=>[]){
+      t.topic(:index_as=>[:facetable])
+      t.geographic(:index_as=>[:facetable])
     }
     t.type_of_resource(:path=>"typeOfResource", :index_as=>[:displayable])
     t.physical_description(:path=>"physicalDescription", :index_as=>[]){
