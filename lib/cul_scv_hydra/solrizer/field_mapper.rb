@@ -69,7 +69,7 @@ module Solrizer::DefaultDescriptors
     def normal!(value)
       value.gsub!(/\s+/,' ')
       value.strip!
-      true
+      value
     end
   end
 
@@ -83,7 +83,7 @@ module Solrizer::DefaultDescriptors
     include Normal
     def converter(field_type)
       map = Solrizer::DefaultDescriptors.value_maps[:project_to_facet] || {}
-      lambda {|value| (normal!(value) and map.has_key? value) ? map[value] : value}
+      lambda {|value| I18n.t("ldpd.short.project.#{normal!(value)}")}
     end 
   end
 
@@ -91,7 +91,7 @@ module Solrizer::DefaultDescriptors
     include Normal
     def converter(field_type)
       map = Solrizer::DefaultDescriptors.value_maps[:marc_to_facet] || {}
-      lambda {|value| (normal!(value) and map.has_key? value) ? map[value] : value}
+      lambda {|value| I18n.t("ldpd.short.repo.#{normal!(value)}")}
     end 
   end
 
@@ -99,7 +99,7 @@ module Solrizer::DefaultDescriptors
     include Normal
     def converter(field_type)
       map = Solrizer::DefaultDescriptors.value_maps[:marc_to_display] || {}
-      lambda {|value| (normal!(value) and map.has_key? value) ? map[value] : value}
+      lambda {|value| I18n.t("ldpd.long.repo.#{normal!(value)}")}
     end
   end
 
@@ -109,13 +109,11 @@ module Solrizer::DefaultDescriptors
       super('all_text', args)
     end
     def converter(field_type)
-      fmap = Solrizer::DefaultDescriptors.value_maps[:marc_to_facet] || {}
-      dmap = Solrizer::DefaultDescriptors.value_maps[:marc_to_display] || {}
       lambda do |value|
         if value.is_a? String
           normal!(value)
-          r = (fmap.has_key? value) ? [fmap[value]] : []
-          r << dmap[value] if (dmap.has_key? value)
+          r = [I18n.t("ldpd.short.repo.#{normal!(value)}")]
+          r << I18n.t("ldpd.long.repo.#{normal!(value)}")
           r.uniq!
           r.join(' ')
         else

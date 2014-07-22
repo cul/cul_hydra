@@ -181,5 +181,17 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
         #solr_doc["lib_end_date_year_dttsi"] = '0025-01-01T00:00:00Z'
       end
     end
+    describe "location" do
+      describe "physical location" do
+        it "should be in text field" do
+          solr_doc = @mods_item.to_solr
+          solr_doc.should include("all_text_teim")
+          # check the mapped facet value
+          solr_doc["all_text_teim"].join(' ').should include("RBML") # We're not doing repo mapping anymore
+          # check the unmapped display value
+          solr_doc["all_text_teim"].join(' ').should include("Rare Book and Manuscript Library")
+        end
+      end
+    end
   end
 end
