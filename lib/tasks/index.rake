@@ -11,14 +11,18 @@ namespace :cul_scv_hydra do
 
       START_TIME = Time.now
 
-      #lindquist == burke_lindq == ldpd:130509
-
       ENV["RAILS_ENV"] ||= Rails.env
       pid = ENV['pid']
-      skip_top_level_object_indexing = ( ! ENV['skip_top_level_object_indexing'].blank? && ENV['skip_top_level_object_indexing'])
+      if ENV['omit']
+        pids_to_omit = ENV['omit'].split(',').map{|pid|pid.strip}
+      else
+        pids_to_omit = nil
+      end
+
+      skip_generic_resources = true if ENV['skip_generic_resources'] == 'true'
 
       begin
-        Cul::Scv::Hydra::Indexer.recursively_index_fedora_objects(pid, skip_top_level_object_indexing, true)
+        Cul::Scv::Hydra::Indexer.recursively_index_fedora_objects(pid, pids_to_omit, skip_generic_resources, true)
       rescue => e
         puts 'Error: ' + e.message
         puts e.backtrace
