@@ -14,11 +14,8 @@
       <roleTerm authority="marcrelator" type="code">rcp</roleTerm>
     </role>
   </name>
-  <name type="ignored">
-    <namePart>Ignored</namePart>
-  </name>
   <name>
-    <namePart>Ignored</namePart>
+    <namePart>Included Without Attribute</namePart>
   </name>
   <subject authority="lcsh">
       <name authority="naf" type="personal">

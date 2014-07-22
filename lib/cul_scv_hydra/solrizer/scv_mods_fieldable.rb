@@ -71,9 +71,8 @@ module Cul::Scv::Hydra::Solrizer
 
     def names(role_authority=nil, role=nil)
       # get all the name nodes
-      # reject the ones that aren't type 'personal' or 'corporate'
       # keep all child text except the role terms
-      xpath = "./mods:name[@type = 'personal' or @type = 'corporate']"
+      xpath = "./mods:name"
       unless role_authority.nil?
         xpath << "/mods:role/mods:roleTerm[@authority='#{role_authority.to_s}'"
         unless role.nil?

@@ -45,11 +45,8 @@
       <roleTerm authority="marcrelator" type="code">rcp</roleTerm>
     </role>
   </name>
-  <name type="ignored">
-    <namePart>Ignored</namePart>
-  </name>
   <name>
-    <namePart>Ignored</namePart>
+    <namePart>Included Without Attribute</namePart>
   </name>
   <accessCondition type='useAndReproduction'>Columbia Libraries Staff Use Only.</accessCondition>
   <recordInfo>
