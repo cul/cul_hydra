@@ -1,12 +1,16 @@
 #format: ['multipartitem']
 identifier_ssim: ['prd.custord.070017']
 all_text_teim: ['prd.custord.070017',
- 'Original PRD customer order number: 070017',
- 'Box 8, JP2 Feature Photography',
- 'Customer Order Collection',
- 'Photographs',
- 'Kennerly, David',
- 'RBML Rare Book and Manuscript Library'
+"Box 8, JP2 Feature Photography",
+"Customer Order Collection",
+"Pres Orders",
+"Kennerly, David",
+"RBML Rare Book and Manuscript Library",
+"NNC-RB",
+"Original PRD customer order number: 070017",
+"Photographs",
+"Pulitzer Prizes",
+"photographs"
  ]
 lib_collection_sim: ['Pulitzer Prizes']
 lib_collection_ssm: ['Pulitzer Prizes']

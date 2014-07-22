@@ -14,6 +14,10 @@ module Solrizer::DefaultDescriptors
     @project_facet_type ||= ProjectFacetDescriptor.new(:string, :indexed, :multivalued)
   end
 
+  def self.project_textable
+    @project_textable_type ||= ProjectTextableDescriptor.new(:text_en, :indexed, :multivalued)
+  end
+
   # Produces _sim suffix and a value-mapping converter
   def self.marc_code_facetable
     @marc_code_facet_type ||= MarcCodeFacetDescriptor.new(:string, :indexed, :multivalued)
@@ -66,6 +70,9 @@ module Solrizer::DefaultDescriptors
   end
 
   module Normal
+    def normal(value)
+      normal!(value.clone)
+    end
     def normal!(value)
       value.gsub!(/\s+/,' ')
       value.strip!
@@ -74,31 +81,49 @@ module Solrizer::DefaultDescriptors
   end
 
   class TextableDescriptor < Solrizer::Descriptor 
+    include Normal
     def name_and_converter(field_name, args=nil)
       super('all_text', args)
+    end
+    def converter(field_type)
+      lambda {|value| normal(value)}
+    end
+  end
+
+  class ProjectTextableDescriptor < Solrizer::Descriptor
+    include Normal
+    def name_and_converter(field_name, args=nil)
+      super('all_text', args)
+    end
+    def converter(field_type)
+      lambda do |value|
+        if value.is_a? String
+          I18n.t("ldpd.short.project.#{normal!(value)}")
+        else
+          raise "unexpected project_textable #{value.inspect}"
+          value
+        end
+      end
     end
   end
 
   class ProjectFacetDescriptor < Solrizer::Descriptor
     include Normal
     def converter(field_type)
-      map = Solrizer::DefaultDescriptors.value_maps[:project_to_facet] || {}
       lambda {|value| I18n.t("ldpd.short.project.#{normal!(value)}")}
-    end 
+    end
   end
 
   class MarcCodeFacetDescriptor < Solrizer::Descriptor
     include Normal
     def converter(field_type)
-      map = Solrizer::DefaultDescriptors.value_maps[:marc_to_facet] || {}
       lambda {|value| I18n.t("ldpd.short.repo.#{normal!(value)}")}
-    end 
+    end
   end
 
   class MarcCodeDisplayDescriptor < Solrizer::Descriptor
     include Normal
     def converter(field_type)
-      map = Solrizer::DefaultDescriptors.value_maps[:marc_to_display] || {}
       lambda {|value| I18n.t("ldpd.long.repo.#{normal!(value)}")}
     end
   end
@@ -120,11 +145,6 @@ module Solrizer::DefaultDescriptors
           value
         end
       end
-    end
-  end
-  class MarcCodeDisplayTextableDescriptor < MarcCodeDisplayDescriptor
-    def name_and_converter(field_name, args=nil)
-      super('all_text', args)
     end
   end
 end

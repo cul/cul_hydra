@@ -26,12 +26,12 @@ class ModsDocument < ::ActiveFedora::OmDatastream
     }
 
     t.title(:proxy=>[:mods, :main_title_info, :main_title], :type=>:string,
-     :index_as=>[:searchable, :sortable, :textable])
+     :index_as=>[:searchable, :sortable])
     t.title_display(:proxy=>[:mods, :main_title_info], :type=>:string,
      :index_as=>[:displayable])
 
     t.search_title_info(:path=>'titleInfo', :index_as=>[]){
-      t.search_title(:path=>'title', :index_as=>[:searchable])
+      t.search_title(:path=>'title', :index_as=>[:textable])
     }
     t.project(:path=>"relatedItem", :attributes=>{:type=>"host", :displayLabel=>"Project"}, :index_as=>[]){
       t.project_title_info(:path=>'titleInfo', :index_as=>[]){
@@ -44,13 +44,13 @@ class ModsDocument < ::ActiveFedora::OmDatastream
       }
     }
     t.lib_project(:proxy=>[:project,:project_title_info],
-      :index_as=>[:displayable, :searchable, :project_facetable, :textable])
+      :index_as=>[:displayable, :searchable, :project_facetable, :project_textable])
     t.lib_collection(:proxy=>[:collection,:collection_title_info])
 # pattern matches
     t.identifier(:path=>"identifier", :attributes=>{:type=>"local"}, :type=>:string, :index_as=>[:symbol, :textable])
     t.clio(:path=>"identifier", :attributes=>{:type=>"CLIO"}, :data_type=>:symbol, :index_as=>[:symbol, :textable])
     t.abstract
-    t.subject(:index_as=>[]){
+    t.subject(:index_as=>[:textable]){
       t.topic(:index_as=>[:facetable])
       t.geographic(:index_as=>[:facetable])
     }
@@ -65,13 +65,14 @@ class ModsDocument < ::ActiveFedora::OmDatastream
       t.internet_media_type(:path=>"internetMediaType", :index_as=>[:displayable])
       t.digital_origin(:path=>"digitalOrigin", :index_as=>[:displayable])
     }
-    t.lib_format(:proxy=>[:physical_description, :form_nomarc], :index_as=>[:displayable, :facetable])
+    t.lib_format(:proxy=>[:physical_description, :form_nomarc], :index_as=>[:displayable, :facetable, :textable])
     t.location(:path=>"location", :index_as=>[]){
       t.repo_text(:path=>"physicalLocation",:attributes=>{:authority=>:none},  :index_as=>[])
       t.lib_repo(:path=>"physicalLocation",
         :attributes=>{:authority=>"marcorg"},
-        :index_as=>[])
+        :index_as=>[:textable])
       t.shelf_locator(:path=>"shelfLocator", :index_as=>[:textable])
+      t.sublocation(:path=>"sublocation", :index_as=>[:textable])
     }
     t.lib_repo(:proxy=>[:location, :lib_repo], :type=>:text,
      :index_as=>[:marc_code_facetable, :marc_code_displayable, :marc_code_textable])
@@ -105,20 +106,20 @@ class ModsDocument < ::ActiveFedora::OmDatastream
     t.language_code(:proxy=>[:record_info, :language_of_cataloging, :language_code])
 
     t.language(:index_as=>[]){
-      t.language_term_text(:path=>"languageTerm", :attributes=>{:authority=>'iso639-2b',:type=>'text'}, :index_as=>[:facetable])
-      t.language_term_code(:path=>"languageTerm", :attributes=>{:authority=>'iso639-2b',:type=>'code'}, :index_as=>[:facetable])
+      t.language_term_text(:path=>"languageTerm", :attributes=>{:authority=>'iso639-2b',:type=>'text'}, :index_as=>[:facetable, :textable])
+      t.language_term_code(:path=>"languageTerm", :attributes=>{:authority=>'iso639-2b',:type=>'code'}, :index_as=>[:facetable, :textable])
     }
 
     t.origin_info(:path=>"originInfo", :index_as=>[]){
-      t.date_issued(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes'}, :index_as=>[:displayable])
-      t.date_issued_start(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes',:point=>'start'}, :index_as=>[:displayable])
-      t.date_issued_end(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:point=>'end'}, :index_as=>[:displayable])
-      t.date_created(:path=>"dateCreated", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes'}, :index_as=>[:displayable])
-      t.date_created_start(:path=>"dateCreated", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes',:point=>'start'}, :index_as=>[:displayable])
-      t.date_created_end(:path=>"dateCreated", :attributes=>{:encoding=>'w3cdtf',:point=>'end'}, :index_as=>[:displayable])
-      t.date_other(:path=>"dateOther", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes'}, :index_as=>[:displayable])
-      t.date_other_start(:path=>"dateOther", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes',:point=>'start'}, :index_as=>[:displayable])
-      t.date_other_end(:path=>"dateOther", :attributes=>{:encoding=>'w3cdtf',:point=>'end'}, :index_as=>[:displayable])
+      t.date_issued(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes'}, :index_as=>[:displayable, :textable])
+      t.date_issued_start(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes',:point=>'start'}, :index_as=>[:displayable, :textable])
+      t.date_issued_end(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:point=>'end'}, :index_as=>[:displayable, :textable])
+      t.date_created(:path=>"dateCreated", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes'}, :index_as=>[:displayable, :textable])
+      t.date_created_start(:path=>"dateCreated", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes',:point=>'start'}, :index_as=>[:displayable, :textable])
+      t.date_created_end(:path=>"dateCreated", :attributes=>{:encoding=>'w3cdtf',:point=>'end'}, :index_as=>[:displayable, :textable])
+      t.date_other(:path=>"dateOther", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes'}, :index_as=>[:displayable, :textable])
+      t.date_other_start(:path=>"dateOther", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes',:point=>'start'}, :index_as=>[:displayable, :textable])
+      t.date_other_end(:path=>"dateOther", :attributes=>{:encoding=>'w3cdtf',:point=>'end'}, :index_as=>[:displayable, :textable])
     }
   end
 

@@ -24,13 +24,13 @@ module Om
       t.type_of_resource(:path=>"typeOfResource", :index_as=>[:not_searchable])
       t.physical_description(:path=>"physicalDescription", :index_as=>[:not_searchable]){
         t.form_marc(:path=>"form", :attributes=>{:authority=>"marcform"}, :index_as=>[:not_searchable])
-        t.form_nomarc(:path=>"form[@authority !='marcform']", :index_as=>[:not_searchable, :displayable, :facetable])
+        t.form_nomarc(:path=>"form[@authority !='marcform']", :index_as=>[:not_searchable, :displayable, :facetable, :textable])
         t.extent(:path=>"extent", :index_as=>[:not_searchable])
         t.reformatting_quality(:path=>"reformattingQuality", :index_as=>[:not_searchable])
         t.internet_media_type(:path=>"internetMediaType", :index_as=>[:not_searchable])
         t.digital_origin(:path=>"digitalOrigin", :index_as=>[:not_searchable])
       }
-      t.lib_format(:proxy=>[:physical_description, :form_nomarc])
+      t.lib_format(proxy: [:physical_description, :form_nomarc] )
       t.location(:path=>"location", :index_as=>[:not_searchable]){
         t.repo_text(:path=>"physicalLocation",:attributes=>{:authority=>:none},  :index_as=>[:not_searchable])
         t.repo_code(:path=>"physicalLocation",:attributes=>{:authority=>"marcorg"}, :index_as=>[:not_searchable])

@@ -3,6 +3,10 @@
 	<nonSort>The </nonSort>
     <title xml:lang="eng">Photographs</title>
 </titleInfo>
+<titleInfo type="translated">
+	<nonSort>Los </nonSort>
+    <title xml:lang="esp">Fotos</title>
+</titleInfo>
 <relatedItem type='host' displayLabel='Collection'>
 	<titleInfo>
 	<nonSort>"The </nonSort>
