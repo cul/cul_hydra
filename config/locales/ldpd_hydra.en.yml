@@ -1,0 +1,39 @@
+en:
+  ldpd:
+    short:
+      repo:
+        'NNC' : 'General Collections'
+        'NNC-A' : 'Avery'
+        'NNC-ART' : 'Office of Art Properties'
+        'NNBa' : 'Barnard College Library'
+        'NNC-EA' : 'East Asian'
+        'NNC-L' : 'Law Library'
+        'NNC-M' : 'Health Sciences Library'
+        'NNC-MUS' : 'Music Library'
+        'NNC-RB' : 'RBML'
+        'NyNyCBL' : 'Burke Library'
+        'NyNyCOH' : 'CCOH'
+        'UkWC-A' : 'Royal Archives, Windsor Castle'
+      project:
+        'Customer Order Collection' : 'Pres Orders'
+        "Children's Drawings of the Spanish Civil War (online exhibition)" : 'Spanish Civil War'
+        "Jewels in her crown: treasures of Columbia University Libraries special collections" : 'Jewels in her Crown'
+        "Russian Imperial Corps of Pages" : 'Russian Corps of Pages'
+        "Preserving Historic Audio Content" : 'Audio Preservation'
+        'Papers of John Jay' : 'John Jay Papers'
+        'Project Facet Mapping Test' : 'Successful Project Mapping'
+        'G.E.E. Lindquist Native American Photographs' : 'Lindquist Photographs'
+    long:
+      repo:
+        'NNC' : 'General Collections'
+        'NNC-A' : 'Avery Architectural & Fine Arts Library'
+        'NNC-ART' : 'Office of Art Properties'
+        'NNBa' : 'Barnard College Library'
+        'NNC-EA' : 'Starr East Asian'
+        'NNC-L' : 'Law Library'
+        'NNC-M' : 'Health Sciences Library'
+        'NNC-MUS' : 'Music Library'
+        'NNC-RB' : 'Rare Book and Manuscript Library'
+        'NyNyCBL' : 'Burke Library at Union Theological Seminary'
+        'NyNyCOH' : 'Columbia Center for Oral History Collections'
+        'UkWC-A' : 'Royal Archives, Windsor Castle'
