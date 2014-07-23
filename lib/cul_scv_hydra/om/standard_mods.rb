@@ -6,7 +6,7 @@ module Scv
 module Hydra
 module Om
   class StandardMods < ::ActiveFedora::OmDatastream
-  
+
     set_terminology do |t|
       t.root(:path=>"mods",
              :xmlns=>"http://www.loc.gov/mods/v3",
@@ -65,10 +65,10 @@ module Om
         t.end_date(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:point=>'end'}, :index_as=>[:not_searchable])
       }
     end
-  
+
     def self.xml_template
       builder = Nokogiri::XML::Builder.new do |xml|
-        xml.mods(:version=>"3.4", 
+        xml.mods(:version=>"3.4",
            "xmlns"=>"http://www.loc.gov/mods/v3",
            "xmlns:xsi"=>"http://www.w3.org/2001/XMLSchema-instance"){
         }
@@ -79,9 +79,9 @@ module Om
     end
 
     def prefix
-      if ::ActiveFedora::VERSION >= '8'
-        Rails.logger.warn("the prefix method of #{self.class.name} was overriden to maintain backwards compatibility")
-      end
+      #if ::ActiveFedora::VERSION >= '8'
+      #  Rails.logger.warn("the prefix method of #{self.class.name} was overriden to maintain backwards compatibility")
+      #end
       ''
     end
 

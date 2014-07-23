@@ -11,7 +11,7 @@ class DCMetadata < ::ActiveFedora::OmDatastream
            "xmlns:oai_dc"=>"http://www.openarchives.org/OAI/2.0/oai_dc/",
            "xmlns:dc"=>"http://purl.org/dc/elements/1.1/",
            :schema=>"http://www.openarchives.org/OAI/2.0/oai_dc.xsd")
-    t.dc_contributor(:path=>"contributor", 
+    t.dc_contributor(:path=>"contributor",
       :namespace_prefix=>"dc",
       :index_as=>[:displayable, :searchable])
     t.dc_coverage(:path=>"coverage",
@@ -79,9 +79,9 @@ src
   end
 
   def prefix
-    if ::ActiveFedora::VERSION >= '8'
-      Rails.logger.warn("the prefix method of #{self.class.name} was overriden to maintain backwards compatibility")
-    end
+    #if ::ActiveFedora::VERSION >= '8'
+    #  Rails.logger.warn("the prefix method of #{self.class.name} was overriden to maintain backwards compatibility")
+    #end
     ''
   end
 

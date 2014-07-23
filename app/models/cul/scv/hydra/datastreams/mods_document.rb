@@ -138,9 +138,9 @@ class ModsDocument < ::ActiveFedora::OmDatastream
   end
 
   def prefix
-    if ::ActiveFedora::VERSION >= '8'
-      Rails.logger.warn("the prefix method of #{self.class.name} was overriden to maintain backwards compatibility")
-    end
+    #if ::ActiveFedora::VERSION >= '8'
+    #  Rails.logger.warn("the prefix method of #{self.class.name} was overriden to maintain backwards compatibility")
+    #end
     ''
   end
 

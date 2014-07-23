@@ -44,11 +44,11 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
       solr_doc["lib_project_ssm"].should include("Project Facet Mapping Test")
       # check that the mapped value didn't find it's way into the display field
       solr_doc["lib_project_ssm"].should_not include("Successful Project Mapping")
-      solr_doc["lib_repo_sim"].should include("RBML") # We're not doing repo mapping anymore
+      solr_doc["lib_repo_sim"].should include("Rare Book Library")
       # check the unmapped display value
-      solr_doc["lib_repo_ssim"].should include("Rare Book and Manuscript Library")
+      solr_doc["lib_repo_ssim"].should include("Rare Book & Manuscript Library, Columbia University")
       # check that the mapped value didn't find it's way into the display field
-      solr_doc["lib_repo_ssim"].should_not include("RBML")
+      solr_doc["lib_repo_ssim"].should_not include("Rare Book Library")
       # check the language term code and text fields
       solr_doc["language_language_term_code_sim"].should == ['eng']
       solr_doc["language_language_term_text_sim"].should == ['English']
@@ -192,9 +192,19 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
           solr_doc = @mods_item.to_solr
           solr_doc.should include("all_text_teim")
           # check the mapped facet value
-          solr_doc["all_text_teim"].join(' ').should include("RBML") # We're not doing repo mapping anymore
+          solr_doc["all_text_teim"].join(' ').should include("Rare Book Library")
           # check the unmapped display value
-          solr_doc["all_text_teim"].join(' ').should include("Rare Book and Manuscript Library")
+          solr_doc["all_text_teim"].join(' ').should include("Rare Book & Manuscript Library, Columbia University")
+        end
+        it "should fall back to code when untranslated" do
+          item_xml = fixture( File.join("CUL_MODS", "mods-bad-repo.xml") )
+          mods_item = descMetadata(@mock_inner, item_xml)
+          solr_doc = mods_item.to_solr
+          solr_doc.should include("lib_repo_sim")
+          solr_doc.should include("all_text_teim")
+          solr_doc["lib_repo_sim"].should include("NNC-Nonsense")
+          solr_doc["lib_repo_ssim"].should include("NNC-Nonsense")
+          solr_doc["all_text_teim"].join(' ').should include("NNC-Nonsense")
         end
       end
       describe "sublocation" do
@@ -225,7 +235,7 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
         end
       end
     end
-    describe "relatedItem" do
+    describe "relatedItem (project)" do
       describe "[@type='Host, @displayLabel='Project']" do
         it "should be in facet field" do
           solr_doc = @mods_item.to_solr
@@ -238,9 +248,17 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
           solr_doc["all_text_teim"].join(' ').should include("Project Facet Mapping Test")
           solr_doc["all_text_teim"].join(' ').should include("Successful Project Mapping")
         end
+        it "should fall back to full project name when untranslated" do
+          item_xml = fixture( File.join("CUL_MODS", "mods-unmapped-project.xml") )
+          mods_item = descMetadata(@mock_inner, item_xml)
+          solr_doc = mods_item.to_solr
+          solr_doc.should include("lib_project_sim")
+          solr_doc["lib_project_sim"].should include("Some Nonsense Project Name")
+          solr_doc["all_text_teim"].join(' ').should include("Some Nonsense Project Name")
+        end
       end
     end
-    describe "relatedItem" do
+    describe "relatedItem (Collection)" do
       describe "[@type='Host, @displayLabel='Collection']" do
         it "should be in facet field" do
           solr_doc = @mods_all.to_solr

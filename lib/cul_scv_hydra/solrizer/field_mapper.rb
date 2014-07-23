@@ -58,18 +58,21 @@ module Solrizer::DefaultDescriptors
 
   def self.date_sortable_converter
     lambda do |type|
-      lambda do |val| 
+      lambda do |val|
         begin
           d = val.length < 11 ? Date.new(*(val.split('-').collect {|s| s.to_i})) : Date.parse(val)
           iso8601_date(d)
         rescue ArgumentError
-          nil 
+          nil
         end
       end
     end
   end
 
   module Normal
+    SHORT_REPO = "ldpd.short.repo."
+    SHORT_PROJ = "ldpd.short.project."
+    LONG_REPO  = "ldpd.long.repo."
     def normal(value)
       normal!(value.clone)
     end
@@ -78,9 +81,16 @@ module Solrizer::DefaultDescriptors
       value.strip!
       value
     end
+    def translate_with_default(prefix, value)
+      begin
+        I18n.t(prefix + value, default: value)
+      rescue
+        value
+      end
+    end
   end
 
-  class TextableDescriptor < Solrizer::Descriptor 
+  class TextableDescriptor < Solrizer::Descriptor
     include Normal
     def name_and_converter(field_name, args=nil)
       super('all_text', args)
@@ -98,7 +108,7 @@ module Solrizer::DefaultDescriptors
     def converter(field_type)
       lambda do |value|
         if value.is_a? String
-          I18n.t("ldpd.short.project.#{normal!(value)}")
+          translate_with_default(SHORT_PROJ, normal!(value))
         else
           raise "unexpected project_textable #{value.inspect}"
           value
@@ -110,21 +120,21 @@ module Solrizer::DefaultDescriptors
   class ProjectFacetDescriptor < Solrizer::Descriptor
     include Normal
     def converter(field_type)
-      lambda {|value| I18n.t("ldpd.short.project.#{normal!(value)}")}
+      lambda {|value| translate_with_default(SHORT_PROJ, normal!(value))}
     end
   end
 
   class MarcCodeFacetDescriptor < Solrizer::Descriptor
     include Normal
     def converter(field_type)
-      lambda {|value| I18n.t("ldpd.short.repo.#{normal!(value)}")}
+      lambda {|value| translate_with_default(SHORT_REPO, normal!(value))}
     end
   end
 
   class MarcCodeDisplayDescriptor < Solrizer::Descriptor
     include Normal
     def converter(field_type)
-      lambda {|value| I18n.t("ldpd.long.repo.#{normal!(value)}")}
+      lambda {|value| translate_with_default(LONG_REPO, normal!(value))}
     end
   end
 
@@ -137,8 +147,8 @@ module Solrizer::DefaultDescriptors
       lambda do |value|
         if value.is_a? String
           normal!(value)
-          r = [I18n.t("ldpd.short.repo.#{normal!(value)}")]
-          r << I18n.t("ldpd.long.repo.#{normal!(value)}")
+          r = [translate_with_default(SHORT_REPO, normal!(value))]
+          r << translate_with_default(LONG_REPO, normal!(value))
           r.uniq!
           r.join(' ')
         else

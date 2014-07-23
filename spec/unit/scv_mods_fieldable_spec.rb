@@ -16,7 +16,7 @@ describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable do
       end
     end
   end
-  
+
   before(:each) do
     @mock_repo = double('repository')
     @mock_ds = double('datastream')
@@ -38,7 +38,7 @@ describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable do
     @part_om = descMetadata(@mock_inner, @part_xml)
     @titles_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-titles.xml")))
   end
-  
+
   after(:all) do
 
   end
@@ -50,7 +50,7 @@ describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable do
     end
 
     it "should produce a hash" do
-      @solr_doc.should be_a Hash 
+      @solr_doc.should be_a Hash
     end
 
     it "should have a single sortable title" do
@@ -76,7 +76,7 @@ describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable do
     end
 
     it "should have value-mapped repo facets" do
-      @solr_doc["lib_repo_sim"].should == ['RBML']
+      @solr_doc["lib_repo_sim"].should == ['Rare Book Library']
     end
   end
 
@@ -145,7 +145,7 @@ describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable do
     end
     it "should find name values with authority/role pairs" do
       test = ModsIndexDatastream.new(@names_ng)
-      test.names(:marcrelator, 'rcp').should == ['Name, Recipient 1829-1745', 'Dear Brother'] 
+      test.names(:marcrelator, 'rcp').should == ['Name, Recipient 1829-1745', 'Dear Brother']
     end
   end
 end

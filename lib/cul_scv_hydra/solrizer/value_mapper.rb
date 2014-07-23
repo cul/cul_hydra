@@ -11,7 +11,7 @@ class ValueMapper
         config_path = File.join(File.dirname(__FILE__), "..", "..", "..", "config", "solr_value_maps.yml")
       end
     end
-    logger.info("ValueMapper: loading field value maps from #{File.expand_path(config_path)}")
+    #logger.info("ValueMapper: loading field value maps from #{File.expand_path(config_path)}")
     YAML::load(File.open(config_path))
   end
 
