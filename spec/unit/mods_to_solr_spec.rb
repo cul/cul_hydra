@@ -208,7 +208,7 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
         end
       end
       describe "sublocation" do
-        it "should be in text field" do
+        it "should be in text field and stored as a string" do
           item_xml = fixture( File.join("CUL_MODS", "mods-physical-location.xml") )
           mods_item = descMetadata(@mock_inner, item_xml)
           solr_doc = mods_item.to_solr
@@ -219,7 +219,7 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
         end
       end
       describe "shelfLocator" do
-        it "should be in text field" do
+        it "should be in text field and stored as a string" do
           item_xml = fixture( File.join("CUL_MODS", "mods-physical-location.xml") )
           mods_item = descMetadata(@mock_inner, item_xml)
           solr_doc = mods_item.to_solr
@@ -227,6 +227,15 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
           solr_doc.should include("location_shelf_locator_ssm")
           solr_doc["location_shelf_locator_ssm"].should include("(Box no. \n\t057)") # ssm field captures whitespace characters like tabs and newlines
           solr_doc["all_text_teim"].join(' ').should include("(Box no. 057)")
+        end
+      end
+      describe "url" do
+        it "should be stored as a string" do
+          item_xml = fixture( File.join("CUL_MODS", "mods-physical-location.xml") )
+          mods_item = descMetadata(@mock_inner, item_xml)
+          solr_doc = mods_item.to_solr
+          solr_doc.should include("location_url_ssm")
+          solr_doc["location_url_ssm"].should include("http://somewhere.cul.columbia.edu/something/123") 
         end
       end
     end

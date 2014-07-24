@@ -73,6 +73,7 @@ class ModsDocument < ::ActiveFedora::OmDatastream
         :index_as=>[:textable])
       t.shelf_locator(:path=>"shelfLocator", :index_as=>[:textable, :displayable])
       t.sublocation(:path=>"sublocation", :index_as=>[:textable, :displayable])
+      t.url(:index_as=>[:displayable])
     }
     t.lib_repo(:proxy=>[:location, :lib_repo], :type=>:text,
      :index_as=>[:marc_code_facetable, :marc_code_displayable, :marc_code_textable])
