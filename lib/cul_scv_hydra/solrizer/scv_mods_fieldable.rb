@@ -144,6 +144,22 @@ module Cul::Scv::Hydra::Solrizer
 				)]
 			end
 		end
+    
+    def date_notes(node=mods)
+			date_notes = []
+			node.xpath("./mods:note[@type = 'date' or @type = 'date source']", MODS_NS).collect do |n|
+        date_notes << ScvModsFieldable.normalize(n.text, true)
+      end
+			return date_notes
+		end
+    
+    def non_date_notes(node=mods)
+			non_date_notes = []
+			node.xpath("./mods:note[not(@type) or (@type != 'date' and @type != 'date source')]", MODS_NS).collect do |n|
+        non_date_notes << ScvModsFieldable.normalize(n.text, true)
+      end
+			return non_date_notes
+		end
 
     def to_solr(solr_doc={})
       solr_doc = (defined? super) ? super : solr_doc
@@ -159,6 +175,8 @@ module Cul::Scv::Hydra::Solrizer
       solr_doc["lib_repo_sim"] = repositories
       solr_doc["lib_shelf_sim"] = shelf_locators
       solr_doc["lib_date_textual_sim"] = textual_dates
+      solr_doc["lib_date_notes_ssm"] = date_notes
+      solr_doc["lib_non_date_notes_ssm"] = non_date_notes
 
       # Create convenient start and end date values based on one of the many possible originInfo/dateX elements.
       possible_start_date_fields = ['origin_info_date_issued_ssm', 'origin_info_date_issued_start_ssm', 'origin_info_date_created_ssm', 'origin_info_date_created_start_ssm', 'origin_info_date_other_ssm', 'origin_info_date_other_start_ssm']
