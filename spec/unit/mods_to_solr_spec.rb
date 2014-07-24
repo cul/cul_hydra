@@ -214,7 +214,7 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
           solr_doc = mods_item.to_solr
           solr_doc.should include("all_text_teim")
           solr_doc.should include("location_sublocation_ssm")
-          solr_doc["location_sublocation_ssm"].join(' ').should include("exampleSublocation")
+          solr_doc["location_sublocation_ssm"].should include("exampleSublocation")
           solr_doc["all_text_teim"].join(' ').should include("exampleSublocation")
         end
       end
@@ -224,6 +224,8 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
           mods_item = descMetadata(@mock_inner, item_xml)
           solr_doc = mods_item.to_solr
           solr_doc.should include("all_text_teim")
+          solr_doc.should include("location_shelf_locator_ssm")
+          solr_doc["location_shelf_locator_ssm"].should include("(Box no. 057)")
           solr_doc["all_text_teim"].join(' ').should include("(Box no. 057)")
         end
       end
