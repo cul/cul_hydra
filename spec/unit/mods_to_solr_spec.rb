@@ -66,104 +66,133 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
       text.should include("Indians of North America")
       text.should include("Rosebud Indian Reservation")
     end
-    describe "date element handling" do
-      it "handles date issued single" do
-        item_xml = fixture( File.join("CUL_MODS", "mods-date-issued-single.xml") )
-        mods_item = descMetadata(@mock_inner, item_xml)
-        solr_doc = mods_item.to_solr
-
-        solr_doc["origin_info_date_issued_ssm"].should == ['1700']
-        solr_doc["origin_info_date_issued_start_ssm"].should == nil
-        solr_doc["origin_info_date_issued_end_ssm"].should == nil
-        solr_doc["all_text_teim"].join(' ').should include("1700")
-        solr_doc["lib_start_date_year_itsi"].should == 1700
-        solr_doc["lib_end_date_year_itsi"].should == 1700
-        solr_doc["lib_date_year_range_si"].should == '1700-1700'
-        solr_doc["lib_date_textual_sim"].should == ['1700'] # Derived from key date
+    describe "originInfo" do
+      describe "date element handling" do
+        it "handles date issued single" do
+          item_xml = fixture( File.join("CUL_MODS", "mods-date-issued-single.xml") )
+          mods_item = descMetadata(@mock_inner, item_xml)
+          solr_doc = mods_item.to_solr
+  
+          solr_doc["origin_info_date_issued_ssm"].should == ['1700']
+          solr_doc["origin_info_date_issued_start_ssm"].should == nil
+          solr_doc["origin_info_date_issued_end_ssm"].should == nil
+          solr_doc["all_text_teim"].join(' ').should include("1700")
+          solr_doc["lib_start_date_year_itsi"].should == 1700
+          solr_doc["lib_end_date_year_itsi"].should == 1700
+          solr_doc["lib_date_year_range_si"].should == '1700-1700'
+          solr_doc["lib_date_textual_sim"].should == ['1700'] # Derived from key date
+        end
+        it "handles date issued range" do
+          item_xml = fixture( File.join("CUL_MODS", "mods-date-issued-range.xml") )
+          mods_item = descMetadata(@mock_inner, item_xml)
+          solr_doc = mods_item.to_solr
+  
+          solr_doc["origin_info_date_issued_ssm"].should == ['1701']
+          solr_doc["origin_info_date_issued_start_ssm"].should == ['1701']
+          solr_doc["origin_info_date_issued_end_ssm"].should == ['1702']
+          solr_doc["lib_start_date_year_itsi"].should == 1701
+          solr_doc["lib_end_date_year_itsi"].should == 1702
+          solr_doc["lib_date_year_range_si"].should == '1701-1702'
+          solr_doc["lib_date_textual_sim"].should == ['Between 1701 and 1702'] # Derived from key date
+        end
+        it "handles date created single" do
+          item_xml = fixture( File.join("CUL_MODS", "mods-date-created-single.xml") )
+          mods_item = descMetadata(@mock_inner, item_xml)
+          solr_doc = mods_item.to_solr
+  
+          solr_doc["origin_info_date_created_ssm"].should == ['1800']
+          solr_doc["origin_info_date_created_start_ssm"].should == nil
+          solr_doc["origin_info_date_created_end_ssm"].should == nil
+          solr_doc["lib_start_date_year_itsi"].should == 1800
+          solr_doc["lib_end_date_year_itsi"].should == 1800
+          solr_doc["lib_date_year_range_si"].should == '1800-1800'
+          solr_doc["lib_date_textual_sim"].should == ['1800'] # Derived from key date
+        end
+        it "handles date created range" do
+          item_xml = fixture( File.join("CUL_MODS", "mods-date-created-range.xml") )
+          mods_item = descMetadata(@mock_inner, item_xml)
+          solr_doc = mods_item.to_solr
+  
+          solr_doc["origin_info_date_created_ssm"].should == ['1801']
+          solr_doc["origin_info_date_created_start_ssm"].should == ['1801']
+          solr_doc["origin_info_date_created_end_ssm"].should == ['1802']
+          solr_doc["lib_start_date_year_itsi"].should == 1801
+          solr_doc["lib_end_date_year_itsi"].should == 1802
+          solr_doc["lib_date_year_range_si"].should == '1801-1802'
+          solr_doc["lib_date_textual_sim"].should == ['Between 1801 and 1802'] # Derived from key date
+        end
+        it "handles date other single" do
+          item_xml = fixture( File.join("CUL_MODS", "mods-date-other-single.xml") )
+          mods_item = descMetadata(@mock_inner, item_xml)
+          solr_doc = mods_item.to_solr
+  
+          solr_doc["origin_info_date_other_ssm"].should == ['1900']
+          solr_doc["origin_info_date_other_start_ssm"].should == nil
+          solr_doc["origin_info_date_other_end_ssm"].should == nil
+          solr_doc["lib_start_date_year_itsi"].should == 1900
+          solr_doc["lib_end_date_year_itsi"].should == 1900
+          solr_doc["lib_date_year_range_si"].should == '1900-1900'
+          solr_doc["lib_date_textual_sim"].should == ['1900'] # Derived from key date
+        end
+        it "handles date other range" do
+          item_xml = fixture( File.join("CUL_MODS", "mods-date-other-range.xml") )
+          mods_item = descMetadata(@mock_inner, item_xml)
+          solr_doc = mods_item.to_solr
+  
+          solr_doc["origin_info_date_other_ssm"].should == ['1901']
+          solr_doc["origin_info_date_other_start_ssm"].should == ['1901']
+          solr_doc["origin_info_date_other_end_ssm"].should == ['1902']
+          solr_doc["lib_start_date_year_itsi"].should == 1901
+          solr_doc["lib_end_date_year_itsi"].should == 1902
+          solr_doc["lib_date_year_range_si"].should == '1901-1902'
+          solr_doc["lib_date_textual_sim"].should == ['Between 1901 and 1902'] # Derived from key date
+        end
+        it "handles date years that are fewer than four characters long, whether positive (CE) or negative (BCE)" do
+          item_xml = fixture( File.join("CUL_MODS", "mods-date-range-short-years.xml") )
+          mods_item = descMetadata(@mock_inner, item_xml)
+          solr_doc = mods_item.to_solr
+  
+          solr_doc["origin_info_date_other_ssm"].should == ['-99']
+          solr_doc["origin_info_date_other_start_ssm"].should == ['-99']
+          solr_doc["origin_info_date_other_end_ssm"].should == ['25']
+          solr_doc["lib_start_date_year_itsi"].should == -99
+          solr_doc["lib_end_date_year_itsi"].should == 25
+          solr_doc["lib_date_year_range_si"].should == '-0099-0025'
+          solr_doc["lib_date_textual_sim"].should == ['Between 99 BCE and 25 CE'] # Derived from key date
+        end
+        it "extracts tetual dates (non-key dates)" do
+          item_xml = fixture( File.join("CUL_MODS", "mods-textual-date.xml") )
+          mods_item = descMetadata(@mock_inner, item_xml)
+          solr_doc = mods_item.to_solr
+          solr_doc["lib_date_textual_sim"].should == ['Some time around 1919']
+        end
       end
-      it "handles date issued range" do
-        item_xml = fixture( File.join("CUL_MODS", "mods-date-issued-range.xml") )
-        mods_item = descMetadata(@mock_inner, item_xml)
-        solr_doc = mods_item.to_solr
-
-        solr_doc["origin_info_date_issued_ssm"].should == ['1701']
-        solr_doc["origin_info_date_issued_start_ssm"].should == ['1701']
-        solr_doc["origin_info_date_issued_end_ssm"].should == ['1702']
-        solr_doc["lib_start_date_year_itsi"].should == 1701
-        solr_doc["lib_end_date_year_itsi"].should == 1702
-        solr_doc["lib_date_year_range_si"].should == '1701-1702'
-        solr_doc["lib_date_textual_sim"].should == ['Between 1701 and 1702'] # Derived from key date
+      describe "publisher" do
+        it "should be stored as a string" do
+          item_xml = fixture( File.join("CUL_MODS", "mods-origin-info.xml") )
+          mods_item = descMetadata(@mock_inner, item_xml)
+          solr_doc = mods_item.to_solr
+          solr_doc.should include("origin_info_publisher_ssm")
+          solr_doc["origin_info_publisher_ssm"].should == ['Amazing Publisher']
+        end
       end
-      it "handles date created single" do
-        item_xml = fixture( File.join("CUL_MODS", "mods-date-created-single.xml") )
-        mods_item = descMetadata(@mock_inner, item_xml)
-        solr_doc = mods_item.to_solr
-
-        solr_doc["origin_info_date_created_ssm"].should == ['1800']
-        solr_doc["origin_info_date_created_start_ssm"].should == nil
-        solr_doc["origin_info_date_created_end_ssm"].should == nil
-        solr_doc["lib_start_date_year_itsi"].should == 1800
-        solr_doc["lib_end_date_year_itsi"].should == 1800
-        solr_doc["lib_date_year_range_si"].should == '1800-1800'
-        solr_doc["lib_date_textual_sim"].should == ['1800'] # Derived from key date
+      describe "place" do
+        it "should be stored as a string" do
+          item_xml = fixture( File.join("CUL_MODS", "mods-origin-info.xml") )
+          mods_item = descMetadata(@mock_inner, item_xml)
+          solr_doc = mods_item.to_solr
+          solr_doc.should include("origin_info_place_ssm")
+          solr_doc["origin_info_place_ssm"].should == ['Such A Great Place']
+        end
       end
-      it "handles date created range" do
-        item_xml = fixture( File.join("CUL_MODS", "mods-date-created-range.xml") )
-        mods_item = descMetadata(@mock_inner, item_xml)
-        solr_doc = mods_item.to_solr
-
-        solr_doc["origin_info_date_created_ssm"].should == ['1801']
-        solr_doc["origin_info_date_created_start_ssm"].should == ['1801']
-        solr_doc["origin_info_date_created_end_ssm"].should == ['1802']
-        solr_doc["lib_start_date_year_itsi"].should == 1801
-        solr_doc["lib_end_date_year_itsi"].should == 1802
-        solr_doc["lib_date_year_range_si"].should == '1801-1802'
-        solr_doc["lib_date_textual_sim"].should == ['Between 1801 and 1802'] # Derived from key date
-      end
-      it "handles date other single" do
-        item_xml = fixture( File.join("CUL_MODS", "mods-date-other-single.xml") )
-        mods_item = descMetadata(@mock_inner, item_xml)
-        solr_doc = mods_item.to_solr
-
-        solr_doc["origin_info_date_other_ssm"].should == ['1900']
-        solr_doc["origin_info_date_other_start_ssm"].should == nil
-        solr_doc["origin_info_date_other_end_ssm"].should == nil
-        solr_doc["lib_start_date_year_itsi"].should == 1900
-        solr_doc["lib_end_date_year_itsi"].should == 1900
-        solr_doc["lib_date_year_range_si"].should == '1900-1900'
-        solr_doc["lib_date_textual_sim"].should == ['1900'] # Derived from key date
-      end
-      it "handles date other range" do
-        item_xml = fixture( File.join("CUL_MODS", "mods-date-other-range.xml") )
-        mods_item = descMetadata(@mock_inner, item_xml)
-        solr_doc = mods_item.to_solr
-
-        solr_doc["origin_info_date_other_ssm"].should == ['1901']
-        solr_doc["origin_info_date_other_start_ssm"].should == ['1901']
-        solr_doc["origin_info_date_other_end_ssm"].should == ['1902']
-        solr_doc["lib_start_date_year_itsi"].should == 1901
-        solr_doc["lib_end_date_year_itsi"].should == 1902
-        solr_doc["lib_date_year_range_si"].should == '1901-1902'
-        solr_doc["lib_date_textual_sim"].should == ['Between 1901 and 1902'] # Derived from key date
-      end
-      it "handles date years that are fewer than four characters long, whether positive (CE) or negative (BCE)" do
-        item_xml = fixture( File.join("CUL_MODS", "mods-date-range-short-years.xml") )
-        mods_item = descMetadata(@mock_inner, item_xml)
-        solr_doc = mods_item.to_solr
-
-        solr_doc["origin_info_date_other_ssm"].should == ['-99']
-        solr_doc["origin_info_date_other_start_ssm"].should == ['-99']
-        solr_doc["origin_info_date_other_end_ssm"].should == ['25']
-        solr_doc["lib_start_date_year_itsi"].should == -99
-        solr_doc["lib_end_date_year_itsi"].should == 25
-        solr_doc["lib_date_year_range_si"].should == '-0099-0025'
-        solr_doc["lib_date_textual_sim"].should == ['Between 99 BCE and 25 CE'] # Derived from key date
-      end
-      it "extracts tetual dates (non-key dates)" do
-        item_xml = fixture( File.join("CUL_MODS", "mods-textual-date.xml") )
-        mods_item = descMetadata(@mock_inner, item_xml)
-        solr_doc = mods_item.to_solr
-        solr_doc["lib_date_textual_sim"].should == ['Some time around 1919']
+      describe "edition" do
+        it "should be stored as a string" do
+          item_xml = fixture( File.join("CUL_MODS", "mods-origin-info.xml") )
+          mods_item = descMetadata(@mock_inner, item_xml)
+          solr_doc = mods_item.to_solr
+          solr_doc.should include("origin_info_edition_ssm")
+          solr_doc["origin_info_edition_ssm"].should == ['First Edition']
+        end
       end
     end
     describe "location" do

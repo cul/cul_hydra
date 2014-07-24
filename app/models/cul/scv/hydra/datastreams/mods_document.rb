@@ -130,6 +130,10 @@ class ModsDocument < ::ActiveFedora::OmDatastream
       t.date_other_start(:path=>"dateOther", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes',:point=>'start'}, :index_as=>[:displayable, :textable])
       t.date_other_end(:path=>"dateOther", :attributes=>{:encoding=>'w3cdtf',:point=>'end'}, :index_as=>[:displayable, :textable])
       t.date_other_textual(:path=>"dateOther", :attributes=>{:encoding=>:none, :keyDate=>:none}, :index_as=>[:textable])
+      
+      t.publisher(:index_as=>[:displayable])
+      t.place(:index_as=>[:displayable])
+      t.edition(:index_as=>[:displayable])
     }
   end
 
