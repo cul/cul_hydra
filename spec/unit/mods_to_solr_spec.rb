@@ -267,6 +267,16 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
         end
       end
     end
+    describe "relatedItem (Part)" do
+      describe "[@type='constituent]" do
+        it "should be in text field and in a stored field" do
+          solr_doc = @mods_item.to_solr
+          solr_doc.should include("all_text_teim")
+          solr_doc["lib_part_ssm"].should include("Constituent item / part")
+          solr_doc["all_text_teim"].join(' ').should include("Constituent item / part")
+        end
+      end
+    end
     describe "physicalDescription" do
       describe "form" do
         it "should be in facet field" do

@@ -88,6 +88,7 @@ src
       built.update_values({[:location, :lib_repo] => "NNC-RB"})
       built.update_values({[:location, :repo_text] => "Rare Book and Manuscript Library, Columbia University"})
       built.update_values({[:project, :project_title_info, :lib_project] => "Project Facet Mapping\nTest"})
+      built.update_values({[:part, :part_title_info, :lib_part] => "Constituent item / part"})
       built.update_values({[:note] => "Original PRD customer order number: 040148"})
       built.update_values({[:access_condition] => "Columbia Libraries Staff Use Only."})
       built.update_values({[:record_info, :record_creation_date] => "2010-07-12"})

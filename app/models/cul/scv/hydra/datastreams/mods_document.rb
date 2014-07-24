@@ -33,6 +33,11 @@ class ModsDocument < ::ActiveFedora::OmDatastream
     t.search_title_info(:path=>'titleInfo', :index_as=>[]){
       t.search_title(:path=>'title', :index_as=>[:textable])
     }
+    t.part(:path=>"relatedItem", :attributes=>{:type=>"constituent"}, :index_as=>[]){
+      t.part_title_info(:path=>'titleInfo', :index_as=>[]){
+        t.lib_part(:path=>'title',:index_as=>[])
+      }
+    }
     t.project(:path=>"relatedItem", :attributes=>{:type=>"host", :displayLabel=>"Project"}, :index_as=>[]){
       t.project_title_info(:path=>'titleInfo', :index_as=>[]){
         t.lib_project(:path=>'title',:index_as=>[])
@@ -43,10 +48,10 @@ class ModsDocument < ::ActiveFedora::OmDatastream
         t.lib_collection(:path=>'title', :index_as=>[])
       }
     }
-    t.lib_project(:proxy=>[:project,:project_title_info],
-      :index_as=>[:displayable, :searchable, :project_facetable, :project_textable])
+    t.lib_project(:proxy=>[:project,:project_title_info], :index_as=>[:displayable, :searchable, :project_facetable, :project_textable])
     t.lib_collection(:proxy=>[:collection,:collection_title_info])
-# pattern matches
+    t.lib_part(:proxy=>[:part,:part_title_info], :index_as=>[:displayable, :textable])
+    # pattern matches
     t.identifier(:path=>"identifier", :attributes=>{:type=>"local"}, :type=>:string, :index_as=>[:symbol, :textable])
     t.clio(:path=>"identifier", :attributes=>{:type=>"CLIO"}, :data_type=>:symbol, :index_as=>[:symbol, :textable])
     t.abstract(:index_as=>[:displayable, :textable])
