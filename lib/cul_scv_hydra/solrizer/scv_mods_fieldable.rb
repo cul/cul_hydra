@@ -115,6 +115,20 @@ module Cul::Scv::Hydra::Solrizer
         ScvModsFieldable.normalize(n.text, true)
       end
     end
+    
+    def textual_dates(node=mods)
+			dates = []
+			node.xpath("./mods:originInfo/mods:dateCreated[not(@keyDate) and not(@point) and not(@w3cdtf)]", MODS_NS).collect do |n|
+        dates << ScvModsFieldable.normalize(n.text, true)
+      end
+			node.xpath("./mods:originInfo/mods:dateIssued[not(@keyDate) and not(@point) and not(@w3cdtf)]", MODS_NS).collect do |n|
+        dates << ScvModsFieldable.normalize(n.text, true)
+      end
+			node.xpath("./mods:originInfo/mods:dateOther[not(@keyDate) and not(@point) and not(@w3cdtf)]", MODS_NS).collect do |n|
+        dates << ScvModsFieldable.normalize(n.text, true)
+      end
+			return dates
+		end
 
     def to_solr(solr_doc={})
       solr_doc = (defined? super) ? super : solr_doc
@@ -129,6 +143,7 @@ module Cul::Scv::Hydra::Solrizer
       solr_doc["lib_format_sim"] = formats
       solr_doc["lib_repo_sim"] = repositories
       solr_doc["lib_shelf_sim"] = shelf_locators
+      solr_doc["lib_date_textual_sim"] = textual_dates
 
       # Create convenient start and end date values based on one of the many possible originInfo/dateX elements.
       possible_start_date_fields = ['origin_info_date_issued_ssm', 'origin_info_date_issued_start_ssm', 'origin_info_date_created_ssm', 'origin_info_date_created_start_ssm', 'origin_info_date_other_ssm', 'origin_info_date_other_start_ssm']
@@ -154,21 +169,16 @@ module Cul::Scv::Hydra::Solrizer
 
 				end_date = start_date if end_date.blank?
 
-				#solr_doc["lib_start_date_ss"] = start_date
-				#solr_doc["lib_end_date_ss"] = end_date
-
 				year_regex = /^(-?\d{1,4}).*/
 
 				start_year_match = start_date.match(year_regex)
 				start_year = start_year_match.captures[0] if start_year_match
 				start_year = zero_pad_year(start_year)
-				#solr_doc["lib_start_date_year_ssi"] = start_year if start_year
 				solr_doc["lib_start_date_year_itsi"] = start_year.to_i if start_year # TrieInt version for searches
 
 				end_year_match = end_date.match(year_regex)
 				end_year = end_year_match.captures[0] if end_year_match
 				end_year = zero_pad_year(end_year)
-				#solr_doc["lib_end_date_year_ssi"] = end_year if end_year
 				solr_doc["lib_end_date_year_itsi"] = end_year.to_i  if end_year # TrieInt version for searches
 
 				solr_doc["lib_date_year_range_si"] = start_year + '-' + end_year if start_year

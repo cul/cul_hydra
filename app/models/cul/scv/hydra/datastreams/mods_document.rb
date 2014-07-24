@@ -115,12 +115,17 @@ class ModsDocument < ::ActiveFedora::OmDatastream
       t.date_issued(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes'}, :index_as=>[:displayable, :textable])
       t.date_issued_start(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes',:point=>'start'}, :index_as=>[:displayable, :textable])
       t.date_issued_end(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:point=>'end'}, :index_as=>[:displayable, :textable])
+      t.date_issued_textual(:path=>"dateIssued", :attributes=>{:encoding=>:none, :keyDate=>:none}, :index_as=>[:textable])
+      
       t.date_created(:path=>"dateCreated", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes'}, :index_as=>[:displayable, :textable])
       t.date_created_start(:path=>"dateCreated", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes',:point=>'start'}, :index_as=>[:displayable, :textable])
       t.date_created_end(:path=>"dateCreated", :attributes=>{:encoding=>'w3cdtf',:point=>'end'}, :index_as=>[:displayable, :textable])
+      t.date_created_textual(:path=>"dateCreated", :attributes=>{:encoding=>:none, :keyDate=>:none}, :index_as=>[:textable])
+      
       t.date_other(:path=>"dateOther", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes'}, :index_as=>[:displayable, :textable])
       t.date_other_start(:path=>"dateOther", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes',:point=>'start'}, :index_as=>[:displayable, :textable])
       t.date_other_end(:path=>"dateOther", :attributes=>{:encoding=>'w3cdtf',:point=>'end'}, :index_as=>[:displayable, :textable])
+      t.date_other_textual(:path=>"dateOther", :attributes=>{:encoding=>:none, :keyDate=>:none}, :index_as=>[:textable])
     }
   end
 
