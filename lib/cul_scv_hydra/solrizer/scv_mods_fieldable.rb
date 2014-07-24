@@ -129,6 +129,21 @@ module Cul::Scv::Hydra::Solrizer
       end
 			return dates
 		end
+    
+    def date_range_to_textual_date(start_year, end_year)
+			start_year = start_year.to_i.to_s # Remove zero-padding if present
+			end_year = end_year.to_i.to_s # Remove zero-padding if present
+			
+			if start_year == end_year
+				return [start_year]
+			else
+				return [('Between ' +
+					(start_year.to_i > 0 ? start_year : start_year[1,start_year.length] + ' BCE') +
+					' and ' +
+					(end_year.to_i > 0 ? (start_year.to_i > 0 ? end_year : end_year + ' CE') : end_year[1,end_year.length] + ' BCE')
+				)]
+			end
+		end
 
     def to_solr(solr_doc={})
       solr_doc = (defined? super) ? super : solr_doc
@@ -182,6 +197,12 @@ module Cul::Scv::Hydra::Solrizer
 				solr_doc["lib_end_date_year_itsi"] = end_year.to_i  if end_year # TrieInt version for searches
 
 				solr_doc["lib_date_year_range_si"] = start_year + '-' + end_year if start_year
+				
+				# When no textual date is available, fall back to other date data (if available)
+				if solr_doc["lib_date_textual_sim"].blank?
+					
+					solr_doc["lib_date_textual_sim"] = date_range_to_textual_date(start_year.to_i, end_year.to_i)
+				end
 			end
 
       solr_doc.each do |k, v|

@@ -59,6 +59,7 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
       solr_doc["lib_start_date_year_itsi"].should == 1801
       solr_doc["lib_end_date_year_itsi"].should == 1802
       solr_doc["lib_date_year_range_si"].should == '1801-1802'
+      solr_doc["lib_date_textual_sim"].should == ['Between 1801 and 1802'] # Derived from key date
       solr_doc["subject_topic_sim"].should == ['Indians of North America--Missions']
       solr_doc["subject_geographic_sim"].should == ['Rosebud Indian Reservation (S.D.)']
       text = solr_doc["all_text_teim"].join(' ')
@@ -78,6 +79,7 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
         solr_doc["lib_start_date_year_itsi"].should == 1700
         solr_doc["lib_end_date_year_itsi"].should == 1700
         solr_doc["lib_date_year_range_si"].should == '1700-1700'
+        solr_doc["lib_date_textual_sim"].should == ['1700'] # Derived from key date
       end
       it "handles date issued range" do
         item_xml = fixture( File.join("CUL_MODS", "mods-date-issued-range.xml") )
@@ -90,6 +92,7 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
         solr_doc["lib_start_date_year_itsi"].should == 1701
         solr_doc["lib_end_date_year_itsi"].should == 1702
         solr_doc["lib_date_year_range_si"].should == '1701-1702'
+        solr_doc["lib_date_textual_sim"].should == ['Between 1701 and 1702'] # Derived from key date
       end
       it "handles date created single" do
         item_xml = fixture( File.join("CUL_MODS", "mods-date-created-single.xml") )
@@ -102,6 +105,7 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
         solr_doc["lib_start_date_year_itsi"].should == 1800
         solr_doc["lib_end_date_year_itsi"].should == 1800
         solr_doc["lib_date_year_range_si"].should == '1800-1800'
+        solr_doc["lib_date_textual_sim"].should == ['1800'] # Derived from key date
       end
       it "handles date created range" do
         item_xml = fixture( File.join("CUL_MODS", "mods-date-created-range.xml") )
@@ -114,6 +118,7 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
         solr_doc["lib_start_date_year_itsi"].should == 1801
         solr_doc["lib_end_date_year_itsi"].should == 1802
         solr_doc["lib_date_year_range_si"].should == '1801-1802'
+        solr_doc["lib_date_textual_sim"].should == ['Between 1801 and 1802'] # Derived from key date
       end
       it "handles date other single" do
         item_xml = fixture( File.join("CUL_MODS", "mods-date-other-single.xml") )
@@ -126,6 +131,7 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
         solr_doc["lib_start_date_year_itsi"].should == 1900
         solr_doc["lib_end_date_year_itsi"].should == 1900
         solr_doc["lib_date_year_range_si"].should == '1900-1900'
+        solr_doc["lib_date_textual_sim"].should == ['1900'] # Derived from key date
       end
       it "handles date other range" do
         item_xml = fixture( File.join("CUL_MODS", "mods-date-other-range.xml") )
@@ -138,6 +144,7 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
         solr_doc["lib_start_date_year_itsi"].should == 1901
         solr_doc["lib_end_date_year_itsi"].should == 1902
         solr_doc["lib_date_year_range_si"].should == '1901-1902'
+        solr_doc["lib_date_textual_sim"].should == ['Between 1901 and 1902'] # Derived from key date
       end
       it "handles date years that are fewer than four characters long, whether positive (CE) or negative (BCE)" do
         item_xml = fixture( File.join("CUL_MODS", "mods-date-range-short-years.xml") )
@@ -150,9 +157,10 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
         solr_doc["lib_start_date_year_itsi"].should == -99
         solr_doc["lib_end_date_year_itsi"].should == 25
         solr_doc["lib_date_year_range_si"].should == '-0099-0025'
+        solr_doc["lib_date_textual_sim"].should == ['Between 99 BCE and 25 CE'] # Derived from key date
       end
       it "extracts tetual dates (non-key dates)" do
-        item_xml = fixture( File.join("CUL_MODS", "mods-textual-dates.xml") )
+        item_xml = fixture( File.join("CUL_MODS", "mods-textual-date.xml") )
         mods_item = descMetadata(@mock_inner, item_xml)
         solr_doc = mods_item.to_solr
         solr_doc["lib_date_textual_sim"].should == ['Some time around 1919']
