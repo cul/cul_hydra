@@ -10,7 +10,8 @@ all_text_teim: ['prd.custord.070017',
 "Original PRD customer order number: 070017",
 "Photographs",
 "Pulitzer Prizes",
-"photographs"
+"photographs",
+"This is the abstract"
  ]
 lib_collection_sim: ['Pulitzer Prizes']
 lib_collection_ssm: ['Pulitzer Prizes']

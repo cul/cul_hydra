@@ -49,9 +49,9 @@ class ModsDocument < ::ActiveFedora::OmDatastream
 # pattern matches
     t.identifier(:path=>"identifier", :attributes=>{:type=>"local"}, :type=>:string, :index_as=>[:symbol, :textable])
     t.clio(:path=>"identifier", :attributes=>{:type=>"CLIO"}, :data_type=>:symbol, :index_as=>[:symbol, :textable])
-    t.abstract
+    t.abstract(:index_as=>[:displayable, :textable])
     t.subject(:index_as=>[:textable]){
-      t.topic(:index_as=>[:facetable])
+      t.topic(:index_as=>[:facetable, :displayable])
       t.geographic(:index_as=>[:facetable])
     }
     t.type_of_resource(:path=>"typeOfResource", :index_as=>[:displayable])
@@ -91,9 +91,7 @@ class ModsDocument < ::ActiveFedora::OmDatastream
         :index_as=>[])
     }
     t.note(:path=>"note", :index_as=>[:textable])
-    t.access_condition(:path=>"accessCondition",
-     :attributes=>{:type=>"useAndReproduction"},
-     :index_as => [:searchable, :symbol])
+    t.access_condition(:path=>"accessCondition", :attributes=>{:type=>"useAndReproduction"}, :index_as => [:searchable, :symbol])
     t.record_info(:path=>"recordInfo", :index_as=>[]) {
       t.record_creation_date(:path=>"recordCreationDate",:attributes=>{:encoding=>"w3cdtf"}, :index_as=>[])
       t.record_content_source(:path=>"recordContentSource",:attributes=>{:authority=>"marcorg"}, :index_as=>[])
