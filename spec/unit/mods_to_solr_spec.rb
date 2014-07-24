@@ -327,6 +327,15 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
         solr_doc["abstract_ssm"].should include("This is the abstract")
       end
     end
+    describe "tableOfContents" do
+      it "should be texted and stored" do
+        item_xml = fixture( File.join("CUL_MODS", "mods-001.xml") )
+        mods_item = descMetadata(@mock_inner, item_xml)
+        solr_doc = mods_item.to_solr
+        solr_doc["all_text_teim"].join(' ').should include("This is the table of contents")
+        solr_doc["table_of_contents_ssm"].should include("This is the table\nof\ncontents")
+      end
+    end
     describe "title" do
       describe "main" do
         it "should have the expected main title" do
