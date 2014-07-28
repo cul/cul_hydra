@@ -115,25 +115,29 @@ module Cul::Scv::Hydra::Solrizer
         ScvModsFieldable.normalize(n.text, true)
       end
     end
-    
+
     def textual_dates(node=mods)
 			dates = []
 			node.xpath("./mods:originInfo/mods:dateCreated[not(@keyDate) and not(@point) and not(@w3cdtf)]", MODS_NS).collect do |n|
+				puts 'n.text: ' + n.text
         dates << ScvModsFieldable.normalize(n.text, true)
       end
 			node.xpath("./mods:originInfo/mods:dateIssued[not(@keyDate) and not(@point) and not(@w3cdtf)]", MODS_NS).collect do |n|
+				puts 'n.text: ' + n.text
         dates << ScvModsFieldable.normalize(n.text, true)
       end
 			node.xpath("./mods:originInfo/mods:dateOther[not(@keyDate) and not(@point) and not(@w3cdtf)]", MODS_NS).collect do |n|
+				puts 'n.text: ' + n.text
         dates << ScvModsFieldable.normalize(n.text, true)
       end
+			puts 'Found: ' + dates.inspect
 			return dates
 		end
-    
+
     def date_range_to_textual_date(start_year, end_year)
 			start_year = start_year.to_i.to_s # Remove zero-padding if present
 			end_year = end_year.to_i.to_s # Remove zero-padding if present
-			
+
 			if start_year == end_year
 				return [start_year]
 			else
@@ -144,7 +148,7 @@ module Cul::Scv::Hydra::Solrizer
 				)]
 			end
 		end
-    
+
     def date_notes(node=mods)
 			date_notes = []
 			node.xpath("./mods:note[@type = 'date' or @type = 'date source']", MODS_NS).collect do |n|
@@ -152,7 +156,7 @@ module Cul::Scv::Hydra::Solrizer
       end
 			return date_notes
 		end
-    
+
     def non_date_notes(node=mods)
 			non_date_notes = []
 			node.xpath("./mods:note[not(@type) or (@type != 'date' and @type != 'date source')]", MODS_NS).collect do |n|
@@ -174,7 +178,7 @@ module Cul::Scv::Hydra::Solrizer
       solr_doc["lib_format_sim"] = formats
       solr_doc["lib_repo_sim"] = repositories
       solr_doc["lib_shelf_sim"] = shelf_locators
-      solr_doc["lib_date_textual_sim"] = textual_dates
+      solr_doc["lib_date_textual_ssm"] = textual_dates
       solr_doc["lib_date_notes_ssm"] = date_notes
       solr_doc["lib_non_date_notes_ssm"] = non_date_notes
 
@@ -215,11 +219,11 @@ module Cul::Scv::Hydra::Solrizer
 				solr_doc["lib_end_date_year_itsi"] = end_year.to_i  if end_year # TrieInt version for searches
 
 				solr_doc["lib_date_year_range_si"] = start_year + '-' + end_year if start_year
-				
+
 				# When no textual date is available, fall back to other date data (if available)
-				if solr_doc["lib_date_textual_sim"].blank?
-					
-					solr_doc["lib_date_textual_sim"] = date_range_to_textual_date(start_year.to_i, end_year.to_i)
+				if solr_doc["lib_date_textual_ssm"].blank?
+
+					solr_doc["lib_date_textual_ssm"] = date_range_to_textual_date(start_year.to_i, end_year.to_i)
 				end
 			end
 
