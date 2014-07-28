@@ -173,7 +173,7 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
           mods_item = descMetadata(@mock_inner, item_xml)
           solr_doc = mods_item.to_solr
           solr_doc.should include("origin_info_publisher_ssm")
-          solr_doc["origin_info_publisher_ssm"].should == ['Amazing Publisher']
+          solr_doc["lib_publisher_ssm"].should == ['Amazing Publisher']
         end
       end
       describe "place" do
@@ -234,17 +234,17 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
           solr_doc = mods_item.to_solr
           solr_doc.should include("all_text_teim")
           solr_doc.should include("location_shelf_locator_ssm")
-          solr_doc["location_shelf_locator_ssm"].should include("(Box no. \n\t057)") # ssm field captures whitespace characters like tabs and newlines
+          solr_doc["location_shelf_locator_ssm"].should include("(Box no.\n\t057)") # ssm field captures whitespace characters like tabs and newlines
           solr_doc["all_text_teim"].join(' ').should include("(Box no. 057)")
         end
       end
       describe "url" do
         it "should be stored as a string" do
-          item_xml = fixture( File.join("CUL_MODS", "mods-physical-location.xml") )
+          item_xml = fixture( File.join("CUL_MODS", "mods-top-level-location-vs-relateditem-location.xml") )
           mods_item = descMetadata(@mock_inner, item_xml)
           solr_doc = mods_item.to_solr
-          solr_doc.should include("location_url_ssm")
-          solr_doc["location_url_ssm"].should include("http://somewhere.cul.columbia.edu/something/123")
+          solr_doc.should include("lib_item_in_context_url_ssm")
+          solr_doc["lib_item_in_context_url_ssm"].should == ["http://somewhere.cul.columbia.edu/something/123"]
         end
       end
     end

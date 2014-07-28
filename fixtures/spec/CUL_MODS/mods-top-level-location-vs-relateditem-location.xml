@@ -5,5 +5,14 @@
 <shelfLocator>(Box no.
 	057)</shelfLocator>
 <sublocation>exampleSublocation</sublocation>
+<url access="object in context" usage="primary display">http://somewhere.cul.columbia.edu/something/123</url>
 </location>
+<relatedItem displayLabel="Project" type="host">
+	<titleInfo>
+		<title>Some sample project</title>
+	</titleInfo>
+	<location>
+		<url>http://not-the-item-url.cul.columbia.edu</url>
+	</location>
+</relatedItem>
 </mods>

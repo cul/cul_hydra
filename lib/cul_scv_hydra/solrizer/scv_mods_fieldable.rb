@@ -119,18 +119,14 @@ module Cul::Scv::Hydra::Solrizer
     def textual_dates(node=mods)
 			dates = []
 			node.xpath("./mods:originInfo/mods:dateCreated[not(@keyDate) and not(@point) and not(@w3cdtf)]", MODS_NS).collect do |n|
-				puts 'n.text: ' + n.text
         dates << ScvModsFieldable.normalize(n.text, true)
       end
 			node.xpath("./mods:originInfo/mods:dateIssued[not(@keyDate) and not(@point) and not(@w3cdtf)]", MODS_NS).collect do |n|
-				puts 'n.text: ' + n.text
         dates << ScvModsFieldable.normalize(n.text, true)
       end
 			node.xpath("./mods:originInfo/mods:dateOther[not(@keyDate) and not(@point) and not(@w3cdtf)]", MODS_NS).collect do |n|
-				puts 'n.text: ' + n.text
         dates << ScvModsFieldable.normalize(n.text, true)
       end
-			puts 'Found: ' + dates.inspect
 			return dates
 		end
 
@@ -165,6 +161,14 @@ module Cul::Scv::Hydra::Solrizer
 			return non_date_notes
 		end
 
+    def item_in_context_url(node=mods)
+			item_in_context_url_val = []
+			node.xpath("./mods:location/mods:url[@access='object in context' and @usage='primary display']", MODS_NS).collect do |n|
+        item_in_context_url_val << ScvModsFieldable.normalize(n.text, true)
+      end
+			item_in_context_url_val
+		end
+
     def to_solr(solr_doc={})
       solr_doc = (defined? super) ? super : solr_doc
       solr_doc["title_si"] = sort_title
@@ -181,6 +185,7 @@ module Cul::Scv::Hydra::Solrizer
       solr_doc["lib_date_textual_ssm"] = textual_dates
       solr_doc["lib_date_notes_ssm"] = date_notes
       solr_doc["lib_non_date_notes_ssm"] = non_date_notes
+      solr_doc["lib_item_in_context_url_ssm"] = item_in_context_url
 
       # Create convenient start and end date values based on one of the many possible originInfo/dateX elements.
       possible_start_date_fields = ['origin_info_date_issued_ssm', 'origin_info_date_issued_start_ssm', 'origin_info_date_created_ssm', 'origin_info_date_created_start_ssm', 'origin_info_date_other_ssm', 'origin_info_date_other_start_ssm']

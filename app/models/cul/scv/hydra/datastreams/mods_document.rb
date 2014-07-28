@@ -79,8 +79,9 @@ class ModsDocument < ::ActiveFedora::OmDatastream
         :index_as=>[:textable])
       t.shelf_locator(:path=>"shelfLocator", :index_as=>[:textable, :displayable])
       t.sublocation(:path=>"sublocation", :index_as=>[:textable, :displayable])
-      t.url(:index_as=>[:displayable])
+      t.url
     }
+    t.top_level_location_url(:proxy=>[:mods, :location, :url])
     t.lib_repo(:proxy=>[:location, :lib_repo], :type=>:text,
      :index_as=>[:marc_code_facetable, :marc_code_displayable, :marc_code_textable])
     t.lib_name(
@@ -120,21 +121,22 @@ class ModsDocument < ::ActiveFedora::OmDatastream
       t.date_issued_start(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes',:point=>'start'}, :index_as=>[:displayable, :textable])
       t.date_issued_end(:path=>"dateIssued", :attributes=>{:encoding=>'w3cdtf',:point=>'end'}, :index_as=>[:displayable, :textable])
       t.date_issued_textual(:path=>"dateIssued", :attributes=>{:encoding=>:none, :keyDate=>:none}, :index_as=>[:textable])
-      
+
       t.date_created(:path=>"dateCreated", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes'}, :index_as=>[:displayable, :textable])
       t.date_created_start(:path=>"dateCreated", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes',:point=>'start'}, :index_as=>[:displayable, :textable])
       t.date_created_end(:path=>"dateCreated", :attributes=>{:encoding=>'w3cdtf',:point=>'end'}, :index_as=>[:displayable, :textable])
       t.date_created_textual(:path=>"dateCreated", :attributes=>{:encoding=>:none, :keyDate=>:none}, :index_as=>[:textable])
-      
+
       t.date_other(:path=>"dateOther", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes'}, :index_as=>[:displayable, :textable])
       t.date_other_start(:path=>"dateOther", :attributes=>{:encoding=>'w3cdtf',:keyDate=>'yes',:point=>'start'}, :index_as=>[:displayable, :textable])
       t.date_other_end(:path=>"dateOther", :attributes=>{:encoding=>'w3cdtf',:point=>'end'}, :index_as=>[:displayable, :textable])
       t.date_other_textual(:path=>"dateOther", :attributes=>{:encoding=>:none, :keyDate=>:none}, :index_as=>[:textable])
-      
+
       t.publisher(:index_as=>[:displayable])
       t.place(:index_as=>[:displayable])
       t.edition(:index_as=>[:displayable])
     }
+    t.lib_publisher(:proxy=>[:mods, :origin_info, :publisher], :index_as=>[:displayable])
   end
 
   def self.xml_template

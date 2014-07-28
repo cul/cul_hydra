@@ -127,9 +127,8 @@ ml
       built.ng_xml = Cul::Scv::Hydra::Datastreams::ModsDocument.xml_template
       built.update_values({[:location, :lib_repo] => "NNC-RB"})
       built.update_values({[:location, :repo_text] => "Rare Book and Manuscript Library, Columbia University"})
-      built.update_values({[:location, :shelf_locator] => "(Box no. \n        057)"})
+      built.update_values({[:location, :shelf_locator] => "(Box no.\n        057)"})
       built.update_values({[:location, :sublocation] => "exampleSublocation"})
-      built.update_values({[:location, :url] => "http://somewhere.cul.columbia.edu/something/123"})
       parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-physical-location.xml")))
       built.ng_xml.should be_equivalent_to(parsed)
     end
