@@ -50,8 +50,8 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
       # check that the mapped value didn't find it's way into the display field
       solr_doc["lib_repo_ssim"].should_not include("Rare Book Library")
       # check the language term code and text fields
-      solr_doc["language_language_term_code_sim"].should == ['eng']
-      solr_doc["language_language_term_text_sim"].should == ['English']
+      solr_doc["language_language_term_code_ssim"].should == ['eng']
+      solr_doc["language_language_term_text_ssim"].should == ['English']
       # check the date fields
       solr_doc["origin_info_date_created_start_ssm"].should == ['1801']
       solr_doc["origin_info_date_created_end_ssm"].should == ['1802']
@@ -324,14 +324,14 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
       describe "languageTerm" do
         it "code should be faceted and texted" do
           solr_doc = @mods_item.to_solr
-          solr_doc.should include("language_language_term_code_sim")
-          solr_doc["language_language_term_code_sim"].should include("eng")
+          solr_doc.should include("language_language_term_code_ssim")
+          solr_doc["language_language_term_code_ssim"].should include("eng")
           solr_doc["all_text_teim"].join(' ').should include(" eng")
         end
         it "text should be faceted and texted" do
           solr_doc = @mods_item.to_solr
-          solr_doc.should include("language_language_term_text_sim")
-          solr_doc["language_language_term_text_sim"].should include("English")
+          solr_doc.should include("language_language_term_text_ssim")
+          solr_doc["language_language_term_text_ssim"].should include("English")
           solr_doc["all_text_teim"].join(' ').should include("English")
         end
       end
