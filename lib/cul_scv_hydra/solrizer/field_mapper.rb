@@ -83,9 +83,9 @@ module Solrizer::DefaultDescriptors
     end
     def translate_with_default(prefix, value)
       begin
-        I18n.t(prefix + value, default: value)
+        return I18n.t(prefix + value, default: value)
       rescue
-        value
+        return value
       end
     end
   end
@@ -147,8 +147,8 @@ module Solrizer::DefaultDescriptors
       lambda do |value|
         if value.is_a? String
           normal!(value)
-          r = [translate_with_default(SHORT_REPO, normal!(value))]
-          r << translate_with_default(LONG_REPO, normal!(value))
+          r = [translate_with_default(SHORT_REPO, value)]
+          r << translate_with_default(LONG_REPO, value)
           r.uniq!
           r.join(' ')
         else

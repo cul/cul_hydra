@@ -6,9 +6,9 @@ describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable do
   before(:all) do
     class ModsIndexDatastream
       include Cul::Scv::Hydra::Solrizer::ScvModsFieldable
-      map_field("lib_repo_sim", :marc_to_facet)
-      map_field("lib_repo_ssm", :marc_to_display)
-      map_field("lib_project_sim", :project_to_facet)
+      #map_field("lib_repo_sim", :marc_to_facet)
+      #map_field("lib_repo_ssm", :marc_to_display)
+      #map_field("lib_project_sim", :project_to_facet)
 
       attr_accessor :ng_xml
       def initialize(ng_xml)
@@ -62,10 +62,6 @@ describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable do
       @solr_doc["lib_collection_sim"].should == ['Collection Facet Normalization Test']
     end
 
-    it "should have value-mapped project facets" do
-      @solr_doc["lib_project_sim"].should == ['Successful Project Mapping']
-    end
-
     it "should facet on corporate and personal names, ignoring roleTerms" do
       @solr_doc["lib_name_sim"].should == ['Name, Inc.', 'Name, Personal 1745-1829', 'Name, Recipient 1829-1745','Included Without Attribute']
       @solr_doc["lib_name_ssm"].should == ['Name, Inc.', 'Name, Personal 1745-1829', 'Name, Recipient 1829-1745','Included Without Attribute']
@@ -73,10 +69,6 @@ describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable do
 
     it "should facet on the special library format values" do
       @solr_doc["lib_format_sim"].should == ['books']
-    end
-
-    it "should have value-mapped repo facets" do
-      @solr_doc["lib_repo_sim"].should == ['Rare Book Library']
     end
   end
 
