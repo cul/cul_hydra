@@ -22,7 +22,11 @@ module Cul::Scv::Hydra::Indexer
       if skip_generic_resources && active_fedora_object.is_a?(GenericResource)
         puts 'Top level object was skipped because GenericResources are being skipped and it is a GenericResource.'
       else
-        active_fedora_object.update_index
+        begin
+          active_fedora_object.update_index
+        rescue Exception => e
+          puts 'Encountered problem.  Skipping record.  Exception: ' + e.message
+        end
         puts 'Done indexing topmost object (' + pid + '). Took ' + (Time.now - START_TIME).to_s + ' seconds' if verbose_output
       end
 
@@ -52,7 +56,11 @@ module Cul::Scv::Hydra::Indexer
         if skip_generic_resources && active_fedora_object.is_a?(GenericResource)
           puts "skipped (because we're skipping GenericResources." if verbose_output
         else
-          active_fedora_object.update_index
+          begin
+            active_fedora_object.update_index
+          rescue Exception => e
+            puts 'Encountered problem.  Skipping record.  Exception: ' + e.message
+          end
           # Display progress
           puts 'done.' if verbose_output
         end

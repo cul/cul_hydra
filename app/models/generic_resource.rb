@@ -15,13 +15,13 @@ class GenericResource < ::ActiveFedora::Base
   include ::ActiveFedora::RelsInt
 
   has_and_belongs_to_many :containers, :property=>:cul_member_of, :class_name=>'ActiveFedora::Base'
-  
+
   IMAGE_EXT = {"image/bmp" => 'bmp', "image/gif" => 'gif', "image/jpeg" => 'jpg', "image/png" => 'png', "image/tiff" => 'tif', "image/x-windows-bmp" => 'bmp'}
   WIDTH = RDF::URI(ActiveFedora::Predicates.find_graph_predicate(:image_width))
   LENGTH = RDF::URI(ActiveFedora::Predicates.find_graph_predicate(:image_length))
-  
+
   has_datastream :name => "content", :type=>::ActiveFedora::Datastream, :versionable => true
-  
+
   def assert_content_model
     super
     add_relationship(:rdf_type, Cul::Scv::Hydra::ActiveFedora::RESOURCE_TYPE.to_s)
@@ -42,7 +42,7 @@ class GenericResource < ::ActiveFedora::Base
     end
     solr_doc
   end
-  
+
   def thumbnail_info
     thumb = relsint.relationships(datastreams['content'],:foaf_thumb).first
     if thumb
@@ -61,12 +61,14 @@ class GenericResource < ::ActiveFedora::Base
     if self.zooming?
       fz = rels_int.relationships(datastreams['content'], :foaf_zooming).first.object.to_s.split('/')[-1]
       ds = datastreams[fz]
-      rft_id = ds.controlGroup == 'E' ? datastreams[fz].dsLocation : legacy_content_path(ds,'info:fedora/datastreams/')
-      solr_doc['rft_id_ss'] = rft_id
+      unless ds.nil?
+        rft_id = ds.controlGroup == 'E' ? datastreams[fz].dsLocation : legacy_content_path(ds,'info:fedora/datastreams/')
+        solr_doc['rft_id_ss'] = rft_id
+      end
     end
     solr_doc
   end
-  
+
   def thumbnail_info
     thumb = rels_int.relationships(datastreams['content'],:foaf_thumbnail).first
     if thumb
@@ -82,7 +84,7 @@ class GenericResource < ::ActiveFedora::Base
       return {:asset => "cul_scv_hydra/crystal/file.png",:mime=>'image/png'}
     end
   end
-  
+
   def linkable_resources
     # let's start with the known DSIDs from lindquist, then work our way back to parsing the solrized relsint
     results = []
@@ -123,7 +125,7 @@ class GenericResource < ::ActiveFedora::Base
   def zooming?
     !rels_int.relationships(datastreams['content'], :foaf_zooming).first.blank?
   end
-  
+
   private
   def datastream_as_resource(dsid, props={})
     ds = datastreams[dsid]
@@ -144,5 +146,5 @@ class GenericResource < ::ActiveFedora::Base
     base_filename = pid.gsub(/\:/,"")
     res[:filename] = base_filename + "." + dsid + "." + ds.mimeType.gsub(/^[^\/]+\//,"")
    res
-  end       
+  end
 end
