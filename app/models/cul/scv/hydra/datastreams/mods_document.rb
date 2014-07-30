@@ -86,12 +86,12 @@ class ModsDocument < ::ActiveFedora::OmDatastream
      :index_as=>[:marc_code_facetable, :marc_code_displayable, :marc_code_textable])
     t.lib_name(
       :path=>'name',:attributes=>{:type=>'personal'},
-      :index_as=>[:facetable, :displayable, :searchable, :textable]){
+      :index_as=>[:facetable, :displayable]){
       t.name_part(:path=>'namePart', :index_as=>[])
     }
     t.name_corporate(
       :path=>'name',:attributes=>{:type=>'corporate'},
-      :index_as=>[:facetable, :displayable, :searchable],
+      :index_as=>[:facetable, :displayable],
       :variant_of=>{:field_base=>:lib_name}){
       t.name_part(
         :path=>'namePart',

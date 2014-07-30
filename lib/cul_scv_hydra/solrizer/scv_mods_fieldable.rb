@@ -176,6 +176,9 @@ module Cul::Scv::Hydra::Solrizer
       solr_doc["lib_collection_sim"] = collections
       #solr_doc["lib_project_sim"] = projects
       solr_doc["lib_name_sim"] = names
+      solr_doc["lib_name_teim"] = names
+      solr_doc["all_text_teim"] ||= []
+      solr_doc["all_text_teim"] += solr_doc["lib_name_teim"]
       solr_doc["lib_name_ssm"] = solr_doc["lib_name_sim"]
       solr_doc["lib_author_sim"] = names(:marcrelator, 'aut')
       solr_doc["lib_recipient_sim"] = names(:marcrelator, 'rcp')
