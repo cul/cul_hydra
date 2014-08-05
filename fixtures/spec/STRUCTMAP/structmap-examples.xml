@@ -10,11 +10,11 @@
 </mets:structMap>
 
 <mets:structMap TYPE="physical" LABEL="Leaves" xmlns:mets="http://www.loc.gov/METS/">
-<mets:div ORDER="1" LABEL="Leaf">    
+<mets:div ORDER="1" LABEL="Leaf">
     <mets:div ORDER="1" LABEL="Recto" CONTENTIDS="rbml_css_0702r" />
     <mets:div ORDER="2" LABEL="Verso" CONTENTIDS="rbml_css_0702v" />
 </div>
-<mets:div ORDER="2" LABEL="Leaf">    
+<mets:div ORDER="2" LABEL="Leaf">
     <mets:div ORDER="1" LABEL="Recto" CONTENTIDS="rbml_css_0703r" />
     <mets:div ORDER="2" LABEL="Verso" CONTENTIDS="rbml_css_0703v" />
 </div>

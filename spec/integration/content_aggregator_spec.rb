@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ContentAggregator do
-  
+
   before(:each) do
     @foxml = fixture( File.join("FOXML", "content-aggregator.xml"))
     ingest("test:c_agg", fixture( File.join("FOXML", "content-aggregator.xml")), true)
@@ -10,7 +10,7 @@ describe ContentAggregator do
     @fixtureobj = ContentAggregator.search_repo.find_by!(identifier: "prd.custord.070103a")
     @fixtureobj.send :update_index
   end
-  
+
   after(:each) do
     ActiveFedora::Base.find("test:si_agg", :cast=>false).delete
     ActiveFedora::Base.find("test:c_agg", :cast=>false).delete

@@ -6,7 +6,7 @@ module Cul
           begin
           	self.risearch(query, {:lang => 'itql'}.merge(options))
           rescue Exception => e
-          	logger.error e
+          	logger.error e if defined?(logger)
           	"{\"results\":[]}"
           end
         end

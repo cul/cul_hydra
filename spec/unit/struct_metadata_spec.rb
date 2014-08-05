@@ -1,11 +1,11 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe "Cul::Scv::Hydra::Datastreams::StructMetadata" do
-  
+
   before(:all) do
-        
+
   end
-  
+
   before(:each) do
     @mock_inner = double('inner object')
     @mock_inner.stub(:"new_record?").and_return(false)
@@ -21,6 +21,7 @@ describe "Cul::Scv::Hydra::Datastreams::StructMetadata" do
     @struct_fixture = structMetadata(@mock_inner, @rv_fixture)
     @seq_fixture = fixture( File.join("STRUCTMAP", "structmap-seq.xml")).read
     @seq_doc = Nokogiri::XML::Document.parse(@seq_fixture)
+    @unordered_seq_fixture = fixture( File.join("STRUCTMAP", "structmap-unordered-seq.xml")).read
   end
 
   describe ".new " do
@@ -121,4 +122,20 @@ describe "Cul::Scv::Hydra::Datastreams::StructMetadata" do
       test_obj.changed?.should be_false
     end
   end
+
+  describe "Retrieving data from a structmap" do
+		it "should be able to retrieve divs with a CONTENTIDS attribute" do
+			struct = Cul::Scv::Hydra::Datastreams::StructMetadata.from_xml(@seq_fixture)
+			divs_with_contentids_attr = struct.divs_with_attribute(true, 'CONTENTIDS')
+			divs_with_contentids_attr.length.should == 3
+		end
+		it "should be able to retrieve the first ordered content div (where ORDER=\"1\"), regardless of div order" do
+			struct = Cul::Scv::Hydra::Datastreams::StructMetadata.from_xml(@unordered_seq_fixture)
+			divs_with_contentids_attr = struct.first_ordered_content_div
+			divs_with_contentids_attr.attr('ORDER').should == '1'
+			divs_with_contentids_attr.attr('LABEL').should == 'Item 1'
+			divs_with_contentids_attr.attr('CONTENTIDS').should == 'prd.custord.060108.001'
+		end
+	end
+
 end

@@ -29,6 +29,10 @@ module Cul::Scv::Hydra::Models::Aggregator
     member.save
   end
 
+  def has_struct_metadata?
+    return (!datastreams['structMetadata'].nil?) && datastreams['structMetadata'].has_content?
+  end
+
   def solr_members(opts={})
     opts = {:rows=>25,:response_format=>:solr}.merge(opts)
     r = self.parts(opts)

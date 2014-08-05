@@ -21,8 +21,8 @@ class StructMetadata < ::ActiveFedora::Datastream
     super
   end
 
-  # Indicates that this datastream has metadata content. 
-  # @return true 
+  # Indicates that this datastream has metadata content.
+  # @return true
   def metadata?
     true
   end
@@ -71,7 +71,7 @@ class StructMetadata < ::ActiveFedora::Datastream
     [:label, :order, :contentids]. each do |key|
       divNode[key.to_s.upcase] = atts[key].to_s if atts.has_key? key
     end
-    ng_xml_will_change! if (divNode.document == ng_xml.document) 
+    ng_xml_will_change! if (divNode.document == ng_xml.document)
     divNode
   end
 
@@ -86,6 +86,14 @@ class StructMetadata < ::ActiveFedora::Datastream
       xpath << ']'
     end
     ng_xml.xpath(xpath, ng_xml.namespaces)
+  end
+
+  def first_ordered_content_div
+    divs_with_contentids_attr = self.divs_with_attribute(true, 'CONTENTIDS')
+    sorted_divs_with_contentids_attr = divs_with_contentids_attr.sort_by{ |node|
+      node.attr("ORDER").to_i
+    }
+    return sorted_divs_with_contentids_attr.first
   end
 
   # a convenience method for setting attributes and creating divs (if necessary) for R/V structure
