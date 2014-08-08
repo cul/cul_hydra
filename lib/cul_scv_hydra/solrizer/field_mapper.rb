@@ -81,9 +81,9 @@ module Solrizer::DefaultDescriptors
       value.strip!
       value
     end
-    def translate_with_default(prefix, value)
+    def translate_with_default(prefix, value, default)
       begin
-        return I18n.t(prefix + value, default: value)
+        return I18n.t(prefix + value, default: default)
       rescue
         return value
       end
@@ -108,7 +108,7 @@ module Solrizer::DefaultDescriptors
     def converter(field_type)
       lambda do |value|
         if value.is_a? String
-          translate_with_default(SHORT_PROJ, normal!(value))
+          translate_with_default(SHORT_PROJ, normal!(value), normal!(value))
         else
           raise "unexpected project_textable #{value.inspect}"
           value
@@ -120,21 +120,21 @@ module Solrizer::DefaultDescriptors
   class ProjectFacetDescriptor < Solrizer::Descriptor
     include Normal
     def converter(field_type)
-      lambda {|value| translate_with_default(SHORT_PROJ, normal!(value))}
+      lambda {|value| translate_with_default(SHORT_PROJ, normal!(value), normal!(value))}
     end
   end
 
   class MarcCodeFacetDescriptor < Solrizer::Descriptor
     include Normal
     def converter(field_type)
-      lambda {|value| translate_with_default(SHORT_REPO, normal!(value))}
+      lambda {|value| translate_with_default(SHORT_REPO, normal!(value), 'Non-Columbia Location')}
     end
   end
 
   class MarcCodeDisplayDescriptor < Solrizer::Descriptor
     include Normal
     def converter(field_type)
-      lambda {|value| translate_with_default(LONG_REPO, normal!(value))}
+      lambda {|value| translate_with_default(LONG_REPO, normal!(value), 'Non-Columbia Location')}
     end
   end
 
@@ -147,8 +147,8 @@ module Solrizer::DefaultDescriptors
       lambda do |value|
         if value.is_a? String
           normal!(value)
-          r = [translate_with_default(SHORT_REPO, value)]
-          r << translate_with_default(LONG_REPO, value)
+          r = [translate_with_default(SHORT_REPO, value, 'Non-Columbia Location')]
+          r << translate_with_default(LONG_REPO, value, 'Non-Columbia Location')
           r.uniq!
           r.join(' ')
         else

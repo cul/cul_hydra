@@ -205,15 +205,15 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
           # check the unmapped display value
           solr_doc["all_text_teim"].join(' ').should include("Rare Book & Manuscript Library, Columbia University")
         end
-        it "should fall back to code when untranslated" do
+        it "should fall back to 'Non-Columbia Location' when untranslated" do
           item_xml = fixture( File.join("CUL_MODS", "mods-bad-repo.xml") )
           mods_item = descMetadata(@mock_inner, item_xml)
           solr_doc = mods_item.to_solr
           solr_doc.should include("lib_repo_sim")
           solr_doc.should include("all_text_teim")
-          solr_doc["lib_repo_sim"].should include("NNC-Nonsense")
-          solr_doc["lib_repo_ssim"].should include("NNC-Nonsense")
-          solr_doc["all_text_teim"].join(' ').should include("NNC-Nonsense")
+          solr_doc["lib_repo_sim"].should include('Non-Columbia Location')
+          solr_doc["lib_repo_ssim"].should include('Non-Columbia Location')
+          solr_doc["all_text_teim"].join(' ').should include('Non-Columbia Location')
         end
       end
       describe "sublocation" do
