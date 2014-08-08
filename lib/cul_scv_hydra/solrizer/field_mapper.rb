@@ -18,15 +18,15 @@ module Solrizer::DefaultDescriptors
     @project_textable_type ||= ProjectTextableDescriptor.new(:text_en, :indexed, :multivalued)
   end
 
-  # Produces _sim suffix and a value-mapping converter
-  def self.marc_code_facetable
-    @marc_code_facet_type ||= MarcCodeFacetDescriptor.new(:string, :indexed, :multivalued)
-  end
+  ## Produces _sim suffix and a value-mapping converter
+  #def self.marc_code_facetable
+  #  @marc_code_facet_type ||= MarcCodeFacetDescriptor.new(:string, :indexed, :multivalued)
+  #end
 
-  # Produces _ssm suffix and a value-mapping converter
-  def self.marc_code_displayable
-    @marc_code_type ||= MarcCodeDisplayDescriptor.new(:string, :stored, :indexed, :multivalued)
-  end
+  ## Produces _ssm suffix and a value-mapping converter
+  #def self.marc_code_displayable
+  #  @marc_code_type ||= MarcCodeDisplayDescriptor.new(:string, :stored, :indexed, :multivalued)
+  #end
 
   # Produces all_text_timv fieldname and a value-mapping converter
   def self.marc_code_textable
@@ -71,8 +71,9 @@ module Solrizer::DefaultDescriptors
 
   module Normal
     SHORT_REPO = "ldpd.short.repo."
-    SHORT_PROJ = "ldpd.short.project."
     LONG_REPO  = "ldpd.long.repo."
+    FULL_REPO = "ldpd.full.repo."
+    SHORT_PROJ = "ldpd.short.project."
     def normal(value)
       normal!(value.clone)
     end
@@ -124,19 +125,19 @@ module Solrizer::DefaultDescriptors
     end
   end
 
-  class MarcCodeFacetDescriptor < Solrizer::Descriptor
-    include Normal
-    def converter(field_type)
-      lambda {|value| translate_with_default(SHORT_REPO, normal!(value), 'Non-Columbia Location')}
-    end
-  end
+  #class MarcCodeFacetDescriptor < Solrizer::Descriptor
+  #  include Normal
+  #  def converter(field_type)
+  #    lambda {|value| translate_with_default(SHORT_REPO, normal!(value), 'Non-Columbia Location')}
+  #  end
+  #end
 
-  class MarcCodeDisplayDescriptor < Solrizer::Descriptor
-    include Normal
-    def converter(field_type)
-      lambda {|value| translate_with_default(LONG_REPO, normal!(value), 'Non-Columbia Location')}
-    end
-  end
+  #class MarcCodeDisplayDescriptor < Solrizer::Descriptor
+  #  include Normal
+  #  def converter(field_type)
+  #    lambda {|value| translate_with_default(LONG_REPO, normal!(value), 'Non-Columbia Location')}
+  #  end
+  #end
 
   class MarcCodeTextableDescriptor < Solrizer::Descriptor
     include Normal

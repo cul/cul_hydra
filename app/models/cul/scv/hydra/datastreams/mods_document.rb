@@ -10,9 +10,9 @@ class ModsDocument < ::ActiveFedora::OmDatastream
   include Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer
   include Cul::Scv::Hydra::Solrizer::ScvModsFieldable
 
-  map_field("lib_repo_sim", :marc_to_facet)
-  map_field("lib_repo_long_ssim", :marc_to_display)
-  map_field("lib_project_sim", :project_to_facet)
+  #map_field("lib_repo_sim", :marc_to_facet)
+  #map_field("lib_repo_long_ssim", :marc_to_display)
+  #map_field("lib_project_sim", :project_to_facet)
 
   set_terminology do |t|
     t.root(:path=>"mods",
@@ -83,7 +83,7 @@ class ModsDocument < ::ActiveFedora::OmDatastream
     }
     t.top_level_location_url(:proxy=>[:mods, :location, :url])
     t.lib_repo(:proxy=>[:location, :lib_repo], :type=>:text,
-     :index_as=>[:marc_code_facetable, :marc_code_displayable, :marc_code_textable])
+     :index_as=>[:marc_code_textable])
     t.lib_name(
       :path=>'name',:attributes=>{:type=>'personal'},
       :index_as=>[:facetable, :displayable]){

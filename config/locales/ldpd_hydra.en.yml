@@ -5,18 +5,18 @@ en:
         'NNBa' : 'Barnard College Library'
         'NNC' : 'Butler Library'
         'NNC-A' : 'Avery Library'
-        'NNC-ART' : 'Office of Art Properties'
         'NNC-EA' : 'East Asian Library'
         'NNC-L' : 'Law Library'
         'NNC-M' : 'Health Sciences Library'
         'NNC-MUS' : 'Music Library'
-        'NNC-RB' : 'Rare Book Library'
+        'NNC-RB' : 'Rare Book & Manuscript Library'
         'NNC-UA' : 'University Archives'
         'NyNyCBL' : 'Burke Library'
-        'NyNyCOH' : 'Oral History'
         'NyNyCAP' : 'Art Properties'
+        'NNC-ART' : 'Art Properties' # This is an unofficial form of NyNyCAP that we've used in the past
         'NyNyCMA' : 'Music Library'
-        'UkWC-A' : 'Royal Archives, Windsor Castle'
+        'NNC-MUS' : 'Music Library' # This is an unofficial form of NyNyCMA that we've used in the past
+        'NyNyCOH' : 'Oral History Center'
       project:
         'Customer Order Collection' : 'Pres Orders'
         "Children's Drawings of the Spanish Civil War (online exhibition)" : 'Spanish Civil War'
@@ -29,9 +29,25 @@ en:
     long:
       repo:
         'NNBa' : 'Barnard College Library'
-        'NNC' : 'Columbia University Libraries'
+        'NNC' : 'Butler Library'
+        'NNC-A' : 'Avery Architectural & Fine Arts Library'
+        'NNC-EA' : 'C.V. Starr East Asian Library'
+        'NNC-L' : 'Arthur W. Diamond Law Library'
+        'NNC-M' : 'Augustus C. Long Health Sciences Library'
+        'NNC-MUS' : 'Music Library'
+        'NNC-RB' : 'Rare Book & Manuscript Library'
+        'NNC-UA' : 'University Archives'
+        'NyNyCBL' : 'Burke Library at Union Theological Seminary'
+        'NyNyCAP' : 'Art Properties'
+        'NNC-ART' : 'Art Properties' # This is an unofficial form of NyNyCAP that we've used in the past
+        'NyNyCMA' : 'Gabe M. Wiener Music & Arts Library'
+        'NNC-MUS' : 'Gabe M. Wiener Music & Arts Library' # This is an unofficial form of NyNyCMA that we've used in the past
+        'NyNyCOH' : 'Columbia Center for Oral History'
+    full:
+      repo:
+        'NNBa' : 'Barnard College Library'
+        'NNC' : 'Butler Library, Columbia University'
         'NNC-A' : 'Avery Architectural & Fine Arts Library, Columbia University'
-        'NNC-ART' : 'Office of Art Properties'
         'NNC-EA' : 'C.V. Starr East Asian Library, Columbia University'
         'NNC-L' : 'Arthur W. Diamond Law Library, Columbia University'
         'NNC-M' : 'Augustus C. Long Health Sciences Library, Columbia University'
@@ -39,7 +55,8 @@ en:
         'NNC-RB' : 'Rare Book & Manuscript Library, Columbia University'
         'NNC-UA' : 'University Archives, Columbia University'
         'NyNyCBL' : 'Burke Library at Union Theological Seminary, Columbia University'
-        'NyNyCOH' : 'Columbia Center for Oral History, Columbia University'
         'NyNyCAP' : 'Art Properties, Columbia University'
+        'NNC-ART' : 'Art Properties, Columbia University' # This is an unofficial form of NyNyCAP that we've used in the past
         'NyNyCMA' : 'Gabe M. Wiener Music & Arts Library, Columbia University'
-        'UkWC-A' : 'Royal Archives, Windsor Castle'
+        'NNC-MUS' : 'Gabe M. Wiener Music & Arts Library, Columbia University' # This is an unofficial form of NyNyCMA that we've used in the past
+        'NyNyCOH' : 'Columbia Center for Oral History, Columbia University'

@@ -1,6 +1,7 @@
 module Cul::Scv::Hydra::Solrizer
 	module ScvModsFieldable
     extend ActiveSupport::Concern
+    include Solrizer::DefaultDescriptors::Normal
 
     MODS_NS = {'mods'=>'http://www.loc.gov/mods/v3'}
 
@@ -110,6 +111,20 @@ module Cul::Scv::Hydra::Solrizer
       end
     end
 
+    def translate_repo_marc_code(code, type)
+			normalized_code_value = code
+
+			if type == 'short'
+				return translate_with_default(SHORT_REPO, normalized_code_value, 'Non-Columbia Location')
+			elsif type == 'long'
+				return translate_with_default(LONG_REPO, normalized_code_value, 'Non-Columbia Location')
+			elsif type == 'full'
+				return translate_with_default(FULL_REPO, normalized_code_value, 'Non-Columbia Location')
+			end
+
+			return nil
+		end
+
     def shelf_locators(node=mods)
       node.xpath("./mods:location/mods:shelfLocator", MODS_NS).collect do |n|
         ScvModsFieldable.normalize(n.text, true)
@@ -187,6 +202,11 @@ module Cul::Scv::Hydra::Solrizer
       solr_doc["lib_date_notes_ssm"] = date_notes
       solr_doc["lib_non_date_notes_ssm"] = non_date_notes
       solr_doc["lib_item_in_context_url_ssm"] = item_in_context_url
+
+      repo_marc_code = repositories.first
+      solr_doc["lib_repo_short_sim"] = [translate_repo_marc_code(repo_marc_code, 'short')]
+      solr_doc["lib_repo_long_sim"] = [translate_repo_marc_code(repo_marc_code, 'long')]
+      solr_doc["lib_repo_full_ssim"] = [translate_repo_marc_code(repo_marc_code, 'full')]
 
       # Create convenient start and end date values based on one of the many possible originInfo/dateX elements.
       possible_start_date_fields = ['origin_info_date_issued_ssm', 'origin_info_date_issued_start_ssm', 'origin_info_date_created_ssm', 'origin_info_date_created_start_ssm', 'origin_info_date_other_ssm', 'origin_info_date_other_start_ssm']
