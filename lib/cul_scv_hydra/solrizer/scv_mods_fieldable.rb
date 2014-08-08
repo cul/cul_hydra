@@ -174,7 +174,6 @@ module Cul::Scv::Hydra::Solrizer
       solr_doc["title_si"] = sort_title
       solr_doc["title_ssm"] = titles
       solr_doc["lib_collection_sim"] = collections
-      #solr_doc["lib_project_sim"] = projects
       solr_doc["lib_name_sim"] = names
       solr_doc["lib_name_teim"] = names
       solr_doc["all_text_teim"] ||= []
@@ -183,7 +182,6 @@ module Cul::Scv::Hydra::Solrizer
       solr_doc["lib_author_sim"] = names(:marcrelator, 'aut')
       solr_doc["lib_recipient_sim"] = names(:marcrelator, 'rcp')
       solr_doc["lib_format_sim"] = formats
-      #solr_doc["lib_repo_sim"] = repositories
       solr_doc["lib_shelf_sim"] = shelf_locators
       solr_doc["lib_date_textual_ssm"] = textual_dates
       solr_doc["lib_date_notes_ssm"] = date_notes

@@ -11,7 +11,7 @@ class ModsDocument < ::ActiveFedora::OmDatastream
   include Cul::Scv::Hydra::Solrizer::ScvModsFieldable
 
   map_field("lib_repo_sim", :marc_to_facet)
-  map_field("lib_repo_ssm", :marc_to_display)
+  map_field("lib_repo_long_ssim", :marc_to_display)
   map_field("lib_project_sim", :project_to_facet)
 
   set_terminology do |t|

@@ -6,9 +6,6 @@ describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable do
   before(:all) do
     class ModsIndexDatastream
       include Cul::Scv::Hydra::Solrizer::ScvModsFieldable
-      #map_field("lib_repo_sim", :marc_to_facet)
-      #map_field("lib_repo_ssm", :marc_to_display)
-      #map_field("lib_project_sim", :project_to_facet)
 
       attr_accessor :ng_xml
       def initialize(ng_xml)
