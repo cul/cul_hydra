@@ -46,7 +46,7 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
       # check that the mapped value didn't find it's way into the display field
       solr_doc["lib_project_ssm"].should_not include("Successful Project Mapping")
       # check that various repo mappings are working
-      solr_doc["lib_repo_short_sim"].should include("Rare Book & Manuscript Library")
+      solr_doc["lib_repo_short_ssim"].should include("Rare Book & Manuscript Library")
       solr_doc["lib_repo_long_sim"].should include("Rare Book & Manuscript Library")
       solr_doc["lib_repo_full_ssim"].should include("Rare Book & Manuscript Library, Columbia University")
       # check the language term code and text fields
@@ -209,11 +209,11 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
           item_xml = fixture( File.join("CUL_MODS", "mods-bad-repo.xml") )
           mods_item = descMetadata(@mock_inner, item_xml)
           solr_doc = mods_item.to_solr
-          solr_doc.should include("lib_repo_short_sim")
+          solr_doc.should include("lib_repo_short_ssim")
           solr_doc.should include("lib_repo_long_sim")
           solr_doc.should include("lib_repo_full_ssim")
           solr_doc.should include("all_text_teim")
-          solr_doc["lib_repo_short_sim"].should include('Non-Columbia Location')
+          solr_doc["lib_repo_short_ssim"].should include('Non-Columbia Location')
           solr_doc["lib_repo_long_sim"].should include('Non-Columbia Location')
           solr_doc["lib_repo_full_ssim"].should include('Non-Columbia Location')
           solr_doc["all_text_teim"].join(' ').should include('Non-Columbia Location')

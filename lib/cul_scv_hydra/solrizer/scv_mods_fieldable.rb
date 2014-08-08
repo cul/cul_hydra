@@ -204,7 +204,7 @@ module Cul::Scv::Hydra::Solrizer
       solr_doc["lib_item_in_context_url_ssm"] = item_in_context_url
 
       repo_marc_code = repositories.first
-      solr_doc["lib_repo_short_sim"] = [translate_repo_marc_code(repo_marc_code, 'short')]
+      solr_doc["lib_repo_short_ssim"] = [translate_repo_marc_code(repo_marc_code, 'short')]
       solr_doc["lib_repo_long_sim"] = [translate_repo_marc_code(repo_marc_code, 'long')]
       solr_doc["lib_repo_full_ssim"] = [translate_repo_marc_code(repo_marc_code, 'full')]
 
