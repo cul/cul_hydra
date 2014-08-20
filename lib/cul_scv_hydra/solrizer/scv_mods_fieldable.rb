@@ -85,11 +85,15 @@ module Cul::Scv::Hydra::Solrizer
         base_text = node.xpath('./mods:namePart', MODS_NS).collect { |c| c.text }.join(' ')
         ScvModsFieldable.normalize(base_text, true)
       end
-      xpath = "./mods:subject" + xpath[1,xpath.length]
-      mods.xpath(xpath, MODS_NS).each do |node|
-        base_text = node.xpath('./mods:namePart', MODS_NS).collect { |c| c.text }.join(' ')
-        names << ScvModsFieldable.normalize(base_text, true)
-      end
+
+      # Note: Removing subject names from name field extraction.
+      # See: https://issues.cul.columbia.edu/browse/DCV-231 and https://issues.cul.columbia.edu/browse/SCV-102
+      #xpath = "./mods:subject" + xpath[1,xpath.length]
+      #mods.xpath(xpath, MODS_NS).each do |node|
+      #  base_text = node.xpath('./mods:namePart', MODS_NS).collect { |c| c.text }.join(' ')
+      #  names << ScvModsFieldable.normalize(base_text, true)
+      #end
+      
       names
     end
 

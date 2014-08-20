@@ -49,6 +49,11 @@
     <namePart>Included Without Attribute</namePart>
   </name>
   <accessCondition type='useAndReproduction'>Columbia Libraries Staff Use Only.</accessCondition>
+  <subject authority="lcsh" valueURI="http://id.loc.gov/authorities/names/n79088877">
+      <name authority="naf">
+         <namePart>Jay, John, 1745-1829</namePart>
+      </name>
+   </subject>
   <recordInfo>
     <recordCreationDate encoding='w3cdtf'>2010-07-12</recordCreationDate>
     <recordContentSource authority='marcorg'>NNC</recordContentSource>

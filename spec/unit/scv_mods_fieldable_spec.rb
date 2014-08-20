@@ -64,6 +64,11 @@ describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable do
       @solr_doc["lib_name_ssm"].should == ['Name, Inc.', 'Name, Personal 1745-1829', 'Name, Recipient 1829-1745','Included Without Attribute']
     end
 
+    it "should not include /mods/subject/name elements in the list of /mods/name elements" do
+      @solr_doc["lib_name_sim"].should_not include('Jay, John, 1745-1829')
+      @solr_doc["lib_name_ssm"].should_not include('Jay, John, 1745-1829')
+    end
+
     it "should facet on the special library format values" do
       @solr_doc["lib_format_sim"].should == ['books']
     end
@@ -130,11 +135,15 @@ describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable do
     end
     it "should find name values and ignore roleTerms" do
       test = ModsIndexDatastream.new(@names_ng)
-      test.names.should == ['Name, Inc.', 'Name, Personal 1745-1829', 'Name, Recipient 1829-1745', 'Included Without Attribute', 'Dear Brother', 'Jay, John 1745-1829']
+      test.names.should == ['Name, Inc.', 'Name, Personal 1745-1829', 'Name, Recipient 1829-1745', 'Included Without Attribute', 'Dear Brother']
     end
     it "should find name values with authority/role pairs" do
       test = ModsIndexDatastream.new(@names_ng)
       test.names(:marcrelator, 'rcp').should == ['Name, Recipient 1829-1745', 'Dear Brother']
+    end
+    it "should not find subject names" do
+      test = ModsIndexDatastream.new(@names_ng)
+      test.names.should_not include('Jay, John 1745-1829')
     end
   end
 end

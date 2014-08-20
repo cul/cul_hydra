@@ -84,19 +84,19 @@ class ModsDocument < ::ActiveFedora::OmDatastream
     t.top_level_location_url(:proxy=>[:mods, :location, :url])
     t.lib_repo(:proxy=>[:location, :lib_repo], :type=>:text,
      :index_as=>[:marc_code_textable])
-    t.lib_name(
-      :path=>'name',:attributes=>{:type=>'personal'},
-      :index_as=>[:facetable, :displayable]){
-      t.name_part(:path=>'namePart', :index_as=>[])
-    }
-    t.name_corporate(
-      :path=>'name',:attributes=>{:type=>'corporate'},
-      :index_as=>[:facetable, :displayable],
-      :variant_of=>{:field_base=>:lib_name}){
-      t.name_part(
-        :path=>'namePart',
-        :index_as=>[])
-    }
+    #t.lib_name(
+    #  :path=>'name',:attributes=>{:type=>'personal'},
+    #  :index_as=>[:facetable, :displayable]){
+    #  t.name_part(:path=>'namePart', :index_as=>[])
+    #}
+    #t.name_corporate(
+    #  :path=>'name',:attributes=>{:type=>'corporate'},
+    #  :index_as=>[:facetable, :displayable],
+    #  :variant_of=>{:field_base=>:lib_name}){
+    #  t.name_part(
+    #    :path=>'namePart',
+    #    :index_as=>[])
+    #}
     t.note(:path=>"note", :index_as=>[:textable])
     t.access_condition(:path=>"accessCondition", :attributes=>{:type=>"useAndReproduction"}, :index_as => [:searchable, :symbol])
     t.record_info(:path=>"recordInfo", :index_as=>[]) {
