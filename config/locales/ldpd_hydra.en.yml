@@ -18,14 +18,16 @@ en:
         'NNC-MUS' : 'Music Library' # This is an unofficial form of NyNyCMA that we've used in the past
         'NyNyCOH' : 'Oral History Center'
       project:
-        'Customer Order Collection' : 'Pres Orders'
         "Children's Drawings of the Spanish Civil War (online exhibition)" : 'Spanish Civil War'
-        "Jewels in her crown: treasures of Columbia University Libraries special collections" : 'Jewels in her Crown'
-        "Russian Imperial Corps of Pages" : 'Russian Corps of Pages'
-        "Preserving Historic Audio Content" : 'Audio Preservation'
-        'The Papers of John Jay' : 'John Jay Papers'
-        'Project Facet Mapping Test' : 'Successful Project Mapping'
+        'Chinese paper gods' : 'Chinese Paper Gods'
+        'Community Service Society Photographs' : 'Community Service Society'
+        'Customer Order Collection' : 'Pres Orders'
         'G.E.E. Lindquist Native American Photographs' : 'Lindquist Photographs'
+        'Jewels in her crown: treasures of Columbia University Libraries special collections' : 'Jewels in Her Crown'
+        'Preserving Historic Audio Content' : 'Audio Preservation'
+        'Project Mapping Test' : 'Successful Project Mapping For Short Project Title'
+        'Russian Imperial Corps of Pages' : 'Russian Corps of Pages'
+        'The Papers of John Jay' : 'Jay Papers'
     long:
       repo:
         'NNBa' : 'Barnard College Library'
@@ -60,3 +62,14 @@ en:
         'NyNyCMA' : 'Gabe M. Wiener Music & Arts Library, Columbia University'
         'NNC-MUS' : 'Gabe M. Wiener Music & Arts Library, Columbia University' # This is an unofficial form of NyNyCMA that we've used in the past
         'NyNyCOH' : 'Columbia Center for Oral History, Columbia University'
+      project:
+        "Children's Drawings of the Spanish Civil War (online exhibition)" : "Children's Drawings of the Spanish Civil War"
+        'Chinese paper gods' : 'Chinese Paper Gods'
+        'Community Service Society Photographs' : 'Community Service Society Photographs'
+        'Customer Order Collection' : 'Customer Order Collection'
+        'G.E.E. Lindquist Native American Photographs' : 'G.E.E. Lindquist Native American Photographs'
+        'Jewels in her crown: treasures of Columbia University Libraries special collections' : 'Jewels in her Crown: Treasures of Columbia University Libraries Special Collections '
+        'Preserving Historic Audio Content' : 'Preserving Historic Audio Content'
+        'Project Mapping Test' : 'Successful Project Mapping For Full Project Title'
+        'Russian Imperial Corps of Pages' : 'Russian Imperial Corps of Pages '
+        'The Papers of John Jay' : 'Papers of John Jay'

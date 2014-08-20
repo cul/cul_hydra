@@ -39,12 +39,8 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
     it "should create the expected Solr hash for mapped project values" do
       solr_doc = @mods_item.to_solr
       # check the mapped facet value
-      puts 'solr_doc["lib_project_sim"]: ' + solr_doc["lib_project_sim"].inspect
-      solr_doc["lib_project_sim"].should include("Successful Project Mapping")
-      # check the unmapped display value
-      solr_doc["lib_project_ssm"].should include("Project Facet Mapping Test")
-      # check that the mapped value didn't find it's way into the display field
-      solr_doc["lib_project_ssm"].should_not include("Successful Project Mapping")
+      solr_doc["lib_project_short_ssim"].should include("Successful Project Mapping For Short Project Title")
+      solr_doc["lib_project_full_ssim"].should include("Successful Project Mapping For Full Project Title")
       # check that various repo mappings are working
       solr_doc["lib_repo_short_ssim"].should include("Rare Book & Manuscript Library")
       solr_doc["lib_repo_long_sim"].should include("Rare Book & Manuscript Library")
@@ -264,21 +260,25 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
       describe "[@type='Host, @displayLabel='Project']" do
         it "should be in facet field" do
           solr_doc = @mods_item.to_solr
-          solr_doc.should include("lib_project_sim")
-          solr_doc["lib_project_sim"].should include("Successful Project Mapping")
+          solr_doc.should include("lib_project_short_ssim")
+          solr_doc.should include("lib_project_full_ssim")
+          solr_doc["lib_project_short_ssim"].should include("Successful Project Mapping For Short Project Title")
+          solr_doc["lib_project_full_ssim"].should include("Successful Project Mapping For Full Project Title")
         end
         it "should be in text field" do
           solr_doc = @mods_item.to_solr
           solr_doc.should include("all_text_teim")
-          solr_doc["all_text_teim"].join(' ').should include("Project Facet Mapping Test")
-          solr_doc["all_text_teim"].join(' ').should include("Successful Project Mapping")
+          solr_doc["all_text_teim"].join(' ').should include("Successful Project Mapping For Short Project Title")
+          solr_doc["all_text_teim"].join(' ').should include("Successful Project Mapping For Full Project Title")
         end
         it "should fall back to full project name when untranslated" do
           item_xml = fixture( File.join("CUL_MODS", "mods-unmapped-project.xml") )
           mods_item = descMetadata(@mock_inner, item_xml)
           solr_doc = mods_item.to_solr
-          solr_doc.should include("lib_project_sim")
-          solr_doc["lib_project_sim"].should include("Some Nonsense Project Name")
+          solr_doc.should include("lib_project_short_ssim")
+          solr_doc.should include("lib_project_full_ssim")
+          solr_doc["lib_project_short_ssim"].should include("Some Nonsense Project Name")
+          solr_doc["lib_project_full_ssim"].should include("Some Nonsense Project Name")
           solr_doc["all_text_teim"].join(' ').should include("Some Nonsense Project Name")
         end
       end
@@ -289,13 +289,11 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
           solr_doc = @mods_all.to_solr
           solr_doc.should include("lib_collection_sim")
           solr_doc["lib_collection_sim"].should include("Collection Facet Normalization Test")
-          solr_doc["all_text_teim"].join(' ').should include("Collection Facet Normalization Test")
         end
         it "should be in text field" do
-          solr_doc = @mods_item.to_solr
+          solr_doc = @mods_all.to_solr
           solr_doc.should include("all_text_teim")
-          solr_doc["all_text_teim"].join(' ').should include("Project Facet Mapping Test")
-          solr_doc["all_text_teim"].join(' ').should include("Successful Project Mapping")
+          solr_doc["all_text_teim"].join(' ').should include("Collection Facet Normalization Test")
         end
       end
     end

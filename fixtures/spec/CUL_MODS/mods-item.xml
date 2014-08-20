@@ -13,7 +13,7 @@
 <location><physicalLocation authority='marcorg'>NNC-RB</physicalLocation>
 <physicalLocation>Rare Book and Manuscript Library, Columbia University</physicalLocation>
 </location>
-<relatedItem type='host' displayLabel='Project'><titleInfo><title>Project Facet Mapping
+<relatedItem type='host' displayLabel='Project'><titleInfo><title>Project Mapping
 Test</title></titleInfo></relatedItem>
 <relatedItem type='constituent'><titleInfo><title>Constituent item / part</title></titleInfo></relatedItem>
 <note>Original PRD customer order number: 040148</note>

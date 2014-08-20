@@ -74,6 +74,7 @@ module Solrizer::DefaultDescriptors
     LONG_REPO  = "ldpd.long.repo."
     FULL_REPO = "ldpd.full.repo."
     SHORT_PROJ = "ldpd.short.project."
+    FULL_PROJ = "ldpd.full.project."
     def normal(value)
       normal!(value.clone)
     end
@@ -109,7 +110,11 @@ module Solrizer::DefaultDescriptors
     def converter(field_type)
       lambda do |value|
         if value.is_a? String
-          translate_with_default(SHORT_PROJ, normal!(value), normal!(value))
+          normal!(value)
+          r = [translate_with_default(SHORT_PROJ, value, normal!(value))]
+          r << translate_with_default(FULL_PROJ, value, normal!(value))
+          r.uniq!
+          r.join(' ')
         else
           raise "unexpected project_textable #{value.inspect}"
           value

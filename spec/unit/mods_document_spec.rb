@@ -100,7 +100,7 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
     end
 
     it "should support xpath queries as the pointer" do
-      @mods_item.find_by_terms('//oxns:relatedItem[@type="host"][1]//oxns:title[1]').first.text.should == "Project Facet Mapping\nTest"
+      @mods_item.find_by_terms('//oxns:relatedItem[@type="host"][1]//oxns:title[1]').first.text.should == "Project Mapping\nTest"
     end
 
     it "should return nil if the xpath fails to generate" do

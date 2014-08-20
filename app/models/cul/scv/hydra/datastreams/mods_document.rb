@@ -44,12 +44,12 @@ class ModsDocument < ::ActiveFedora::OmDatastream
       }
     }
     t.collection(:path=>"relatedItem", :attributes=>{:type=>"host", :displayLabel=>"Collection"}, :index_as=>[]){
-      t.collection_title_info(:path=>'titleInfo', :index_as=>[:facetable, :displayable]){
+      t.collection_title_info(:path=>'titleInfo', :index_as=>[]){
         t.lib_collection(:path=>'title', :index_as=>[])
       }
     }
-    t.lib_project(:proxy=>[:project,:project_title_info], :index_as=>[:displayable, :searchable, :project_facetable, :project_textable])
-    t.lib_collection(:proxy=>[:collection,:collection_title_info])
+    t.lib_project(:proxy=>[:project,:project_title_info], :index_as=>[:project_textable])
+    t.lib_collection(:proxy=>[:collection,:collection_title_info], :index_as=>[:displayable])
     t.lib_part(:proxy=>[:part,:part_title_info], :index_as=>[:displayable, :textable])
     # pattern matches
     t.identifier(:path=>"identifier", :attributes=>{:type=>"local"}, :type=>:string, :index_as=>[:symbol, :textable])

@@ -3,7 +3,7 @@ identifier_ssim: ['prd.custord.070017']
 all_text_teim: ['prd.custord.070017',
 "Box 8, JP2 Feature Photography",
 "Customer Order Collection",
-"Pres Orders",
+"Pres Orders Customer Order Collection",
 "Kennerly, David",
 "Rare Book & Manuscript Library",
 "NNC-RB",
@@ -16,8 +16,8 @@ all_text_teim: ['prd.custord.070017',
  ]
 lib_collection_sim: ['Pulitzer Prizes']
 lib_collection_ssm: ['Pulitzer Prizes']
-lib_project_sim: ['Pres Orders']
-lib_project_ssm: ['Customer Order Collection']
+lib_project_short_ssim: ['Pres Orders']
+lib_project_full_ssim: ['Customer Order Collection']
 title_si: 'Photographs'
 title_display_ssm: ['The Photographs']
 lib_format_sim: ['photographs']

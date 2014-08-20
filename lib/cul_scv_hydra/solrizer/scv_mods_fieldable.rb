@@ -104,22 +104,39 @@ module Cul::Scv::Hydra::Solrizer
       end
     end
 
-    def repositories(node=mods)
-      # get all the location/physicalLocation[@authority = 'marcorg']
-      node.xpath("./mods:location/mods:physicalLocation[@authority = 'marcorg']", MODS_NS).collect do |n|
-        ScvModsFieldable.normalize(n.text)
-      end
+    def repository_code(node=mods)
+      # get the location/physicalLocation[@authority = 'marcorg']
+      repo_code_node = node.xpath("./mods:location/mods:physicalLocation[@authority = 'marcorg']", MODS_NS).first
+
+      if repo_code_node
+				ScvModsFieldable.normalize(repo_code_node.text)
+			else
+				return nil
+			end
+
     end
 
     def translate_repo_marc_code(code, type)
-			normalized_code_value = code
+			#code = ScvModsFieldable.normalize(code)
 
 			if type == 'short'
-				return translate_with_default(SHORT_REPO, normalized_code_value, 'Non-Columbia Location')
+				return translate_with_default(SHORT_REPO, code, 'Non-Columbia Location')
 			elsif type == 'long'
-				return translate_with_default(LONG_REPO, normalized_code_value, 'Non-Columbia Location')
+				return translate_with_default(LONG_REPO, code, 'Non-Columbia Location')
 			elsif type == 'full'
-				return translate_with_default(FULL_REPO, normalized_code_value, 'Non-Columbia Location')
+				return translate_with_default(FULL_REPO, code, 'Non-Columbia Location')
+			end
+
+			return nil
+		end
+
+    def translate_project_title(project_title, type)
+			normalized_project_title = ScvModsFieldable.normalize(project_title)
+
+			if type == 'short'
+				return translate_with_default(SHORT_PROJ, normalized_project_title, normalized_project_title)
+			elsif type == 'full'
+				return translate_with_default(FULL_PROJ, normalized_project_title, normalized_project_title)
 			end
 
 			return nil
@@ -203,10 +220,24 @@ module Cul::Scv::Hydra::Solrizer
       solr_doc["lib_non_date_notes_ssm"] = non_date_notes
       solr_doc["lib_item_in_context_url_ssm"] = item_in_context_url
 
-      repo_marc_code = repositories.first
-      solr_doc["lib_repo_short_ssim"] = [translate_repo_marc_code(repo_marc_code, 'short')]
-      solr_doc["lib_repo_long_sim"] = [translate_repo_marc_code(repo_marc_code, 'long')]
-      solr_doc["lib_repo_full_ssim"] = [translate_repo_marc_code(repo_marc_code, 'full')]
+      repo_marc_code = repository_code
+      unless repo_marc_code.nil?
+				solr_doc["lib_repo_short_ssim"] = [translate_repo_marc_code(repo_marc_code, 'short')]
+				solr_doc["lib_repo_long_sim"] = [translate_repo_marc_code(repo_marc_code, 'long')]
+				solr_doc["lib_repo_full_ssim"] = [translate_repo_marc_code(repo_marc_code, 'full')]
+			end
+
+      project_titles = projects
+      unless project_titles.nil?
+				solr_doc["lib_project_short_ssim"] = []
+				solr_doc["lib_project_full_ssim"] = []
+				project_titles.each {|project_title|
+					solr_doc["lib_project_short_ssim"] << translate_project_title(project_title, 'short')
+					solr_doc["lib_project_full_ssim"] << translate_project_title(project_title, 'full')
+				}
+				solr_doc["lib_project_short_ssim"].uniq!
+				solr_doc["lib_project_full_ssim"].uniq!
+			end
 
       # Create convenient start and end date values based on one of the many possible originInfo/dateX elements.
       possible_start_date_fields = ['origin_info_date_issued_ssm', 'origin_info_date_issued_start_ssm', 'origin_info_date_created_ssm', 'origin_info_date_created_start_ssm', 'origin_info_date_other_ssm', 'origin_info_date_other_start_ssm']
