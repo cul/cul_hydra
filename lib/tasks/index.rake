@@ -2,7 +2,7 @@ namespace :cul_scv_hydra do
 
   namespace :index do
 
-    task :recursively_index_fedora_objects => :environment do
+    task :recursive => :environment do
 
       puts '---------------------------'
       puts 'Fedora URL: ' + ActiveFedora.config.credentials[:url]
