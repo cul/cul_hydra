@@ -109,8 +109,8 @@ class GenericResource < ::ActiveFedora::Base
 
       dsuris.each do |dsuri|
         dsid = dsuri.to_s.split('/')[-1]
-        width_rel = rels_int.relationships(dsuri, :exif_image_width)[0]
-        length_rel = rels_int.relationships(dsuri, :exif_image_length)[0]
+        width_rel = rels_int.relationships(dsuri, :image_width)[0]
+        length_rel = rels_int.relationships(dsuri, :image_length)[0]
         extent_rel = rels_int.relationships(dsuri, :extent)[0]
         props = {EXTENT_PREDICATE => [], WIDTH_PREDICATE => [], LENGTH_PREDICATE => []}
         props[EXTENT_PREDICATE] << extent_rel.object.to_s unless extent_rel.blank?
