@@ -65,10 +65,17 @@ module Cul::Scv::Hydra::Solrizer
 
     def titles(node=mods)
       # all titles without descending into relatedItems
-      node.xpath('./mods:titleInfo', MODS_NS).collect do |t|
+      # For now, this only includes the main title and selected alternate_titles
+      all_titles = []
+      all_titles << main_title unless main_title.nil?
+      all_titles += alternative_titles unless alternative_titles.nil?
+    end
+
+    def alternative_titles(node=mods)
+      node.xpath('./mods:titleInfo[@type and (@type="alternative" or @type="abbreviated" or @type="translated" or @type="uniform")]', MODS_NS).collect do |t|
         ScvModsFieldable.normalize(t.text)
       end
-    end
+		end
 
     def names(role_authority=nil, role=nil)
       # get all the name nodes
@@ -93,7 +100,7 @@ module Cul::Scv::Hydra::Solrizer
       #  base_text = node.xpath('./mods:namePart', MODS_NS).collect { |c| c.text }.join(' ')
       #  names << ScvModsFieldable.normalize(base_text, true)
       #end
-      
+
       names
     end
 
@@ -205,15 +212,47 @@ module Cul::Scv::Hydra::Solrizer
 			item_in_context_url_val
 		end
 
+    def all_subjects(node=mods)
+			list_of_subjects = []
+
+			node.xpath("./mods:subject/mods:topic", MODS_NS).collect do |n|
+        list_of_subjects << ScvModsFieldable.normalize(n.text, true)
+      end
+			node.xpath("./mods:subject/mods:geographic", MODS_NS).collect do |n|
+        list_of_subjects << ScvModsFieldable.normalize(n.text, true)
+      end
+			node.xpath("./mods:subject/mods:name", MODS_NS).collect do |n|
+        list_of_subjects << ScvModsFieldable.normalize(n.text, true)
+      end
+			node.xpath("./mods:subject/mods:temporal", MODS_NS).collect do |n|
+        list_of_subjects << ScvModsFieldable.normalize(n.text, true)
+      end
+			node.xpath("./mods:subject/mods:titleInfo", MODS_NS).collect do |n|
+        list_of_subjects << ScvModsFieldable.normalize(n.text, true)
+      end
+			node.xpath("./mods:subject/mods:genre", MODS_NS).collect do |n|
+        list_of_subjects << ScvModsFieldable.normalize(n.text, true)
+      end
+
+			return list_of_subjects
+		end
+
     def to_solr(solr_doc={})
       solr_doc = (defined? super) ? super : solr_doc
+
+      solr_doc["all_text_teim"] ||= []
+
       solr_doc["title_si"] = sort_title
       solr_doc["title_ssm"] = titles
+      solr_doc["alternative_title_ssm"] = alternative_titles
+      solr_doc["all_text_teim"] += solr_doc["alternative_title_ssm"]
       solr_doc["lib_collection_sim"] = collections
       solr_doc["lib_name_sim"] = names
-      solr_doc["lib_name_teim"] = names
-      solr_doc["all_text_teim"] ||= []
+      solr_doc["lib_name_teim"] = solr_doc["lib_name_sim"]
       solr_doc["all_text_teim"] += solr_doc["lib_name_teim"]
+      solr_doc["lib_all_subjects_ssm"] = all_subjects
+      solr_doc["lib_all_subjects_teim"] = solr_doc["lib_all_subjects_ssm"]
+      solr_doc["all_text_teim"] += solr_doc["lib_all_subjects_teim"]
       solr_doc["lib_name_ssm"] = solr_doc["lib_name_sim"]
       solr_doc["lib_author_sim"] = names(:marcrelator, 'aut')
       solr_doc["lib_recipient_sim"] = names(:marcrelator, 'rcp')

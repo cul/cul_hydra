@@ -1,7 +1,19 @@
 <mods xmlns='http://www.loc.gov/mods/v3' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd'>
 <titleInfo>
 	<nonSort>The </nonSort>
-    <title xml:lang="eng">Photographs</title>
+  <title xml:lang="eng">Photographs</title>
+</titleInfo>
+<titleInfo type="alternative">
+	<nonSort>The </nonSort>
+  <title>Alternative Title</title>
+</titleInfo>
+<titleInfo type="abbreviated">
+	<nonSort>The </nonSort>
+  <title>Abbrev. Title</title>
+</titleInfo>
+<titleInfo type="uniform">
+	<nonSort>The </nonSort>
+  <title>Firefighter Title</title>
 </titleInfo>
 <titleInfo type="translated">
 	<nonSort>Los </nonSort>

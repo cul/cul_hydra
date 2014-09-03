@@ -146,4 +146,5 @@ describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable do
       test.names.should_not include('Jay, John 1745-1829')
     end
   end
+
 end

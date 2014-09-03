@@ -384,12 +384,60 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
           solr_doc = mods_item.to_solr
           solr_doc["title_si"].should include("Photographs")
         end
+      end
+      describe "alternative titles" do
+        it "should have all forms of alternative titles" do
+          item_xml = fixture( File.join("CUL_MODS", "mods-titles.xml") )
+          mods_item = descMetadata(@mock_inner, item_xml)
+          solr_doc = mods_item.to_solr
+          solr_doc["alternative_title_ssm"].should == ["The Alternative Title", "The Abbrev. Title", "The Firefighter Title", "Los Fotos"]
+        end
+        it "should not contain the main title" do
+          item_xml = fixture( File.join("CUL_MODS", "mods-titles.xml") )
+          mods_item = descMetadata(@mock_inner, item_xml)
+          solr_doc = mods_item.to_solr
+          solr_doc["alternative_title_ssm"].join(' ').should_not include("Photographs")
+        end
+      end
+      describe "all /mods/titleInfo/title elements" do
+        it "should have the main title and alternative title (among others) in the title field" do
+          item_xml = fixture( File.join("CUL_MODS", "mods-titles.xml") )
+          mods_item = descMetadata(@mock_inner, item_xml)
+          solr_doc = mods_item.to_solr
+          solr_doc["title_ssm"].should include("The Photographs")
+          solr_doc["title_ssm"].should include("The Alternative Title")
+        end
         it "should text all the titles" do
           item_xml = fixture( File.join("CUL_MODS", "mods-titles.xml") )
           mods_item = descMetadata(@mock_inner, item_xml)
           solr_doc = mods_item.to_solr
-          solr_doc["all_text_teim"].join(' ').should include("Fotos")
+          fulltext_text = solr_doc["all_text_teim"].join(' ')
+          fulltext_text.should include("Fotos")
+          fulltext_text.should include("The Alternative Title")
+          fulltext_text.should include("The Abbrev. Title")
+          fulltext_text.should include("The Firefighter Title")
+          fulltext_text.should include("Los Fotos")
         end
+      end
+    end
+    describe "subjects" do
+      it "should have the expected subjects in both stored string and text fields" do
+        item_xml = fixture( File.join("CUL_MODS", "mods-subjects.xml") )
+        mods_item = descMetadata(@mock_inner, item_xml)
+        solr_doc = mods_item.to_solr
+        subjects = ["What A Topic", "Great Geographic Subject", "Jay, John, 1745-1829", "Smith, John, 1440-1540", "So Temporal", "The Best Subject Title I've Ever Seen!", "A Very Accurate Genre"]
+        solr_doc["lib_all_subjects_ssm"].should == subjects
+        solr_doc["lib_all_subjects_teim"].should == subjects
+        solr_doc["all_text_teim"].join(' ').should include("What A Topic")
+        solr_doc["all_text_teim"].join(' ').should include("A Very Accurate Genre")
+      end
+      it "should not be pulling in subjects that we're not interested in, like subject occupation" do
+        item_xml = fixture( File.join("CUL_MODS", "mods-subjects.xml") )
+        mods_item = descMetadata(@mock_inner, item_xml)
+        solr_doc = mods_item.to_solr
+        ignored_subject = 'We Are Currently Ignoring Subject Occupation'
+        solr_doc["lib_all_subjects_ssm"].should_not include(ignored_subject)
+        solr_doc["lib_all_subjects_teim"].should_not include(ignored_subject)
       end
     end
   end
