@@ -110,6 +110,12 @@ describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable do
       test = ModsIndexDatastream.new(@titles_ng)
       test.projects.should == ['Customer Order Project']
     end
+    it "should be able to translate a project title with periods in it" do
+      @test_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-relateditem-project.xml")))
+      @solr_doc = ModsIndexDatastream.new(@test_ng).to_solr
+      @solr_doc["lib_project_short_ssim"].should == ["Lindquist Photographs"]
+      @solr_doc["lib_project_full_ssim"].should == ["G.E.E. Lindquist Native American Photographs"]
+    end
   end
 
   describe ".collections" do

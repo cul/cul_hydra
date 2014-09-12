@@ -70,11 +70,11 @@ module Solrizer::DefaultDescriptors
   end
 
   module Normal
-    SHORT_REPO = "ldpd.short.repo."
-    LONG_REPO  = "ldpd.long.repo."
-    FULL_REPO = "ldpd.full.repo."
-    SHORT_PROJ = "ldpd.short.project."
-    FULL_PROJ = "ldpd.full.project."
+    SHORT_REPO = "ldpd.short.repo"
+    LONG_REPO  = "ldpd.long.repo"
+    FULL_REPO = "ldpd.full.repo"
+    SHORT_PROJ = "ldpd.short.project"
+    FULL_PROJ = "ldpd.full.project"
     def normal(value)
       normal!(value.clone)
     end
@@ -85,9 +85,15 @@ module Solrizer::DefaultDescriptors
     end
     def translate_with_default(prefix, value, default)
       begin
-        return I18n.t(prefix + value, default: default)
+        # Using method below to handle translations because our YAML keys can contain periods and this doesn't play well with the translation dot-syntax
+        translations = HashWithIndifferentAccess.new(I18n.t(prefix))
+        if translations.has_key?(value)
+          return translations[value]
+        else
+          return default
+        end
       rescue
-        return value
+        return default
       end
     end
   end
