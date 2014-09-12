@@ -124,7 +124,17 @@ module Cul::Scv::Hydra::Solrizer
 			else
 				return nil
 			end
+    end
 
+    def repository_text(node=mods)
+      # get the location/physicalLocation[not(@authority)]
+      repo_text_node = node.xpath("./mods:location/mods:physicalLocation[not(@authority)]", MODS_NS).first
+
+      if repo_text_node
+				ScvModsFieldable.normalize(repo_text_node.text)
+			else
+				return nil
+			end
     end
 
     def translate_repo_marc_code(code, type)
@@ -269,6 +279,7 @@ module Cul::Scv::Hydra::Solrizer
 				solr_doc["lib_repo_long_sim"] = [translate_repo_marc_code(repo_marc_code, 'long')]
 				solr_doc["lib_repo_full_ssim"] = [translate_repo_marc_code(repo_marc_code, 'full')]
 			end
+      solr_doc["lib_repo_text_ssm"] = repository_text
 
       project_titles = projects
       unless project_titles.nil?

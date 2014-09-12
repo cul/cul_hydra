@@ -213,6 +213,7 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
           solr_doc["lib_repo_long_sim"].should include('Non-Columbia Location')
           solr_doc["lib_repo_full_ssim"].should include('Non-Columbia Location')
           solr_doc["all_text_teim"].join(' ').should include('Non-Columbia Location')
+          solr_doc["lib_repo_text_ssm"].should == 'Potentially Unpredictable Repo Text Name'
         end
       end
       describe "sublocation" do
