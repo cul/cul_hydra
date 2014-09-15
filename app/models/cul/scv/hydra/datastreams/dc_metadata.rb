@@ -28,7 +28,7 @@ class DCMetadata < ::ActiveFedora::OmDatastream
       :index_as=>[:displayable, :searchable])
     t.dc_format(:path=>"format",
       :namespace_prefix=>"dc",
-      :index_as=>[:displayable, :searchable])
+      :index_as=>[:displayable, :facetable])
     t.dc_identifier(:path=>"identifier",
       :namespace_prefix=>"dc",
       :type=>:string,
@@ -56,7 +56,7 @@ class DCMetadata < ::ActiveFedora::OmDatastream
       :index_as=>[:displayable, :searchable])
     t.dc_type(:path=>"type",
       :namespace_prefix=>"dc",
-      :index_as=>[:displayable, :searchable])
+      :index_as=>[:displayable, :facetable])
   end
 
   def self.xml_template
