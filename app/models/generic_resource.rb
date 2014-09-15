@@ -28,11 +28,11 @@ class GenericResource < ::ActiveFedora::Base
   end
 
   def route_as
-    self.zooming? ? "zoomingimage" : "resource"
+    "resource"
   end
 
   def index_type_label
-    "FILE RESOURCE"
+    "FILE ASSET"
   end
 
   def to_solr(solr_doc = Hash.new, opts={})
