@@ -1,4 +1,4 @@
-APP_ROOT = File.expand_path("#{File.dirname(__FILE__)}/../../")
+APP_ROOT = File.expand_path("#{File.dirname(__FILE__)}/../../") unless defined?(APP_ROOT)
 require 'active-fedora'
 
 def logger

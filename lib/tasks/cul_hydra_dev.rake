@@ -1,4 +1,4 @@
-APP_ROOT = File.expand_path("#{File.dirname(__FILE__)}/../../")
+APP_ROOT = File.expand_path("#{File.dirname(__FILE__)}/../../") unless defined?(APP_ROOT)
 
 require 'jettywrapper'
 JETTY_ZIP_BASENAME = 'master'
@@ -36,7 +36,7 @@ namespace :cul_hydra do
   end
 
   desc "Execute specs with coverage"
-  task :coverage do 
+  task :coverage do
     # Put spec opts in a file named .rspec in root
     ruby_engine = defined?(RUBY_ENGINE) ? RUBY_ENGINE : "ruby"
     ENV['COVERAGE'] = 'true' unless ruby_engine == 'jruby'
