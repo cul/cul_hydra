@@ -63,7 +63,8 @@ class ModsDocument < ::ActiveFedora::OmDatastream
     t.type_of_resource(:path=>"typeOfResource", :index_as=>[:displayable])
     t.physical_description(:path=>"physicalDescription", :index_as=>[]){
       t.form_marc(:path=>"form", :attributes=>{:authority=>"marcform"}, :index_as=>[:displayable])
-      t.form_aat(:path=>"form", :attributes=>{:authority=>"aat"}, :index_as=>[:displayable])
+      t.form_aat(:path=>"form", :attributes=>{:authority=>"aat"}, :index_as=>[:displayable, :facetable])
+      t.form_local(:path=>"form", :attributes=>{:authority=>"local"}, :index_as=>[:displayable, :facetable])
       t.form(:attributes=>{:authority=>:none}, :index_as=>[:displayable])
       t.form_nomarc(:path=>"form[@authority !='marcform']", :index_as=>[])
       t.extent(:path=>"extent", :index_as=>[:searchable, :displayable])
