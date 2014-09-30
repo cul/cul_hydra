@@ -1,5 +1,5 @@
 class ResourceAggregator < ::ActiveFedora::Base
-  include ::ActiveFedora::Finders
+  include ::ActiveFedora::FinderMethods::RepositoryMethods
   include ::ActiveFedora::DatastreamCollections
   include ::Hydra::ModelMethods
   include Cul::Scv::Hydra::Models::Common

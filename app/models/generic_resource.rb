@@ -6,7 +6,7 @@ require "tempfile"
 require "active_fedora_finders"
 class GenericResource < ::ActiveFedora::Base
   extend ActiveModel::Callbacks
-  include ::ActiveFedora::Finders
+  include ::ActiveFedora::FinderMethods::RepositoryMethods
   include ::ActiveFedora::DatastreamCollections
   include ::Hydra::ModelMethods
   include Cul::Scv::Hydra::Models::Common
@@ -21,7 +21,8 @@ class GenericResource < ::ActiveFedora::Base
   LENGTH = RDF::URI(ActiveFedora::Predicates.find_graph_predicate(:image_length))
 
   has_datastream :name => "content", :type=>::ActiveFedora::Datastream, :versionable => true
-
+  has_metadata :name=>"RELS-INT", :type=>ActiveFedora::RelsInt::Datastream
+  
   def assert_content_model
     super
     add_relationship(:rdf_type, Cul::Scv::Hydra::ActiveFedora::RESOURCE_TYPE.to_s)

@@ -4,7 +4,7 @@ require "cul_image_props"
 require "mime/types"
 require "uri"
 class Resource < ActiveFedora::Base
-  include ::ActiveFedora::Finders
+  include ::ActiveFedora::FinderMethods::RepositoryMethods
   include ::ActiveFedora::DatastreamCollections
 #  include ::Hydra::ModelMethods
   include Cul::Scv::Hydra::Models::Common
