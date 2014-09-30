@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe "Cul::Scv::Hydra::Datastreams::DCMetadata" do
+describe "Cul::Scv::Hydra::Datastreams::DCMetadata", type: :unit do
   
   before(:all) do
   end
@@ -49,10 +49,6 @@ describe "Cul::Scv::Hydra::Datastreams::DCMetadata" do
   
   
   describe ".find_by_terms_and_value" do
-    it "should fail gracefully if you try to look up nodes for an undefined property" do
-      pending "better to get an informative error?"
-      @fixture.find_by_terms_and_value(:nobody_home).should == []
-    end
     it "should use Nokogiri to retrieve a NodeSet corresponding to the term pointers" do
       @fixture.find_by_terms_and_value( :dc_title ).length.should == 1
     end
@@ -83,17 +79,10 @@ describe "Cul::Scv::Hydra::Datastreams::DCMetadata" do
     it "should be able to update or add values by pointer" do
       @fixture.update_values([:dc_title]=>"With Billy Burroughs, image")
       @fixture.find_by_terms(:dc_title).first.text.should == "With Billy Burroughs, image"
-      puts "XPATH: " + Cul::Scv::Hydra::Datastreams::DCMetadata.terminology.retrieve_term(:dc_type).xpath_relative
-      puts "TEMPLATE: " + Cul::Scv::Hydra::Datastreams::DCMetadata.terminology.retrieve_term(:dc_type).xml_builder_template
       @fixture.update_indexed_attributes([:dc_type=>0]=>"Text")
-      puts @fixture.ng_xml.to_xml
       @fixture.find_by_terms(:dc_type).first.text.should == "Text"
     end
     
-    it "should return nil if the xpath fails to generate" do
-      pending "Can't decide if it's better to return nil or raise an error.  Choosing informative errors for now."
-      @fixture.find_by_terms( {:foo=>20}, :bar ).should == nil
-    end
     it "should identify presence or absence of terms with shortcut methods" do
       built  = Cul::Scv::Hydra::Datastreams::DCMetadata.from_xml(nil)
       built.update_values({[:dc_title]=>'foo'})
@@ -131,7 +120,6 @@ src
         end
       }
       built.should == true
-      puts doc.to_xml
       opts = { :element_order => false, :normalize_whitespace => true }
       passed = EquivalentXml.equivalent?(doc, dc_ns, opts){ |n1, n2, result|
         unless result
@@ -160,7 +148,6 @@ src
       built.update_values({[:dc_type] => "Collection"})
       built.ng_xml_doesnt_change!
       solr_doc = built.to_solr
-      puts solr_doc.inspect
     end
   end
    

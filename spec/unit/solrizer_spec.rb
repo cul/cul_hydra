@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe "Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer" do
+describe "Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer", type: :unit do
   
   before(:all) do
         
@@ -16,7 +16,7 @@ describe "Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer" do
   end
   
   it "should automatically include the necessary modules" do
-    pending "identification of modules"
+    skip "identification of modules"
     #Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer.included_modules.should include(OM::XML::Validation)
   end
 
@@ -26,7 +26,6 @@ describe "Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer" do
       debug = solr.dup
       debug.delete_if { |k, v| k.to_s =~ /^mods_.*/ }
       debug.delete_if { |k, v| k.to_s =~ /^top_.*/ }
-      puts debug.inspect
       fails = []
       @solr_fixture.each { |key, value_array|
         actual = (solr[key].is_a? Array) ? solr[key].sort : [solr[key]]
@@ -43,7 +42,7 @@ describe "Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer" do
     end
 
     it "should produce equivalent xml when built up programatically" do
-      pending "passing hash comparison"
+      skip "passing hash comparison"
     end
   end
    

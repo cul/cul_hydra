@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
+describe "Cul::Scv::Hydra::Datastreams::ModsDocument", type: :unit do
 
   before(:all) do
 
@@ -56,14 +56,14 @@ src
           parsed = node.namespace.href == 'http://www.w3.org/2001/XMLSchema-instance'
         end
       }
-      parsed.should be_true
+      parsed.should be_truthy
       built = false
       builder.doc.root.attribute_nodes.each { |node|
         if node.name == 'schemaLocation'
           built = node.namespace.href == 'http://www.w3.org/2001/XMLSchema-instance'
         end
       }
-      built.should be_true
+      built.should be_truthy
       opts = { :element_order => false, :normalize_whitespace => true }
       passed = EquivalentXml.equivalent?(builder.doc, mods_ns, opts){ |n1, n2, result|
         unless result

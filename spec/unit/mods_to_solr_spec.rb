@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
+describe "Cul::Scv::Hydra::Datastreams::ModsDocument", type: :unit do
 
   before(:all) do
 

@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
+describe "Cul::Scv::Hydra::Datastreams::ModsDocument", type: :unit do
 
   before(:all) do
 
@@ -52,10 +52,6 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
 
 
   describe ".find_by_terms_and_value" do
-    it "should fail gracefully if you try to look up nodes for an undefined property" do
-      pending "better to get an informative error?"
-      @mods_item.find_by_terms_and_value(:nobody_home).should == []
-    end
     it "should use Nokogiri to retrieve a NodeSet corresponding to the term pointers" do
       @mods_item.find_by_terms_and_value( :lib_project).length.should == 1
     end
@@ -79,7 +75,7 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
       T = C.terminology
       term = T.retrieve_term(:title)
       expect(term.xpath).to eql '//oxns:mods/oxns:titleInfo[not(@type)]/oxns:title'
-      T.has_term?(:title).should be_true
+      T.has_term?(:title).should be_truthy
       doc = @fixturemods.to_solr()
       title = doc["title_display_ssm"]
       expect(title).to eql ["The Manuscript, unidentified"]
@@ -103,17 +99,13 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
       @mods_item.find_by_terms('//oxns:relatedItem[@type="host"][1]//oxns:title[1]').first.text.should == "Project Mapping\nTest"
     end
 
-    it "should return nil if the xpath fails to generate" do
-      pending "Can't decide if it's better to return nil or raise an error.  Choosing informative errors for now."
-      @mods_item.find_by_terms( {:foo=>20}, :bar ).should == nil
-    end
     it "should identify presence or absence of terms with shortcut methods" do
       @mock_inner.stub(:new_record?).and_return(true)
       built  = Cul::Scv::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
       built.ng_xml = Cul::Scv::Hydra::Datastreams::ModsDocument.xml_template
       built.update_values({[:title]=>'foo'})
-      built.title?.should be_true
-      built.clio?.should be_false
+      built.title?.should be_truthy
+      built.clio?.should be_falsey
     end
   end
 end

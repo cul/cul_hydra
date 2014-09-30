@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable do
+describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable, type: :unit do
   MODS_NS = {'mods'=>'http://www.loc.gov/mods/v3'}
 
   before(:all) do

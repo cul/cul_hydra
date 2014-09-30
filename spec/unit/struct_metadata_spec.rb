@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe "Cul::Scv::Hydra::Datastreams::StructMetadata" do
+describe "Cul::Scv::Hydra::Datastreams::StructMetadata", type: :unit do
 
   before(:all) do
 
@@ -31,13 +31,13 @@ describe "Cul::Scv::Hydra::Datastreams::StructMetadata" do
       # it should have the default content
       test_obj.ng_xml.should be_equivalent_to Cul::Scv::Hydra::Datastreams::StructMetadata.xml_template
       # but it shouldn't be "saveable" until you do something
-      expect(test_obj.new?).to be_true
-      expect(test_obj.changed?).to be_false
+      expect(test_obj.new?).to be_truthy
+      expect(test_obj.changed?).to be_falsey
       # like assigning an attribute value
       test_obj = Cul::Scv::Hydra::Datastreams::StructMetadata.new(@mock_inner,
        'structMetadata', :label=>'TEST LABEL')
-      expect(test_obj.new?).to be_true
-      expect(test_obj.changed?).to be_true
+      expect(test_obj.new?).to be_truthy
+      expect(test_obj.changed?).to be_truthy
     end
   end
 
@@ -98,7 +98,7 @@ describe "Cul::Scv::Hydra::Datastreams::StructMetadata" do
       expected = Nokogiri::XML::Document.parse(@rv_fixture.sub(/Sides/,'sediS'))
       test_obj.label = 'sediS'
       test_obj.serialize!
-      test_obj.changed?.should be_true
+      test_obj.changed?.should be_truthy
       Nokogiri::XML::Document.parse(test_obj.content).should be_equivalent_to(expected)
     end
   end
@@ -110,16 +110,16 @@ describe "Cul::Scv::Hydra::Datastreams::StructMetadata" do
       test_obj.recto['CONTENTIDS']="rbml_css_0702r"
       test_obj.verso['CONTENTIDS']="rbml_css_0702v"
       test_obj.ng_xml.should be_equivalent_to(@rv_doc)
-      test_obj.changed?.should be_true
+      test_obj.changed?.should be_truthy
     end
 
     it "should not change content unnecessarily" do
       @mock_repo.stub(:datastream_profile).and_return({:dsID => 'structMetadata'})
       @mock_repo.stub(:datastream_dissemination=>@rv_fixture)
       test_obj = Cul::Scv::Hydra::Datastreams::StructMetadata.new(@mock_inner, 'structMetadata')
-      test_obj.changed?.should be_false
+      test_obj.changed?.should be_falsey
       test_obj.recto_verso!
-      test_obj.changed?.should be_false
+      test_obj.changed?.should be_falsey
     end
   end
 
