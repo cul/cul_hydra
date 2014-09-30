@@ -141,7 +141,7 @@ describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable do
     end
     it "should find name values and ignore roleTerms" do
       test = ModsIndexDatastream.new(@names_ng)
-      test.names.should == ['Name, Inc.', 'Name, Personal 1745-1829', 'Name, Recipient 1829-1745', 'Included Without Attribute', 'Dear Brother']
+      test.names.should == ['Name, Inc.', 'Name, Personal 1745-1829', 'Name, Recipient 1829-1745', 'Included Without Attribute', 'Dear Brother', 'Seminar 401']
     end
     it "should find name values with authority/role pairs" do
       test = ModsIndexDatastream.new(@names_ng)

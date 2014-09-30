@@ -84,11 +84,12 @@ class ModsDocument < ::ActiveFedora::OmDatastream
     t.top_level_location_url(:proxy=>[:mods, :location, :url])
     t.lib_repo(:proxy=>[:location, :lib_repo], :type=>:text,
      :index_as=>[:marc_code_textable])
-    #t.lib_name(
-    #  :path=>'name',:attributes=>{:type=>'personal'},
-    #  :index_as=>[:facetable, :displayable]){
-    #  t.name_part(:path=>'namePart', :index_as=>[])
-    #}
+    t.name_usage_primary(
+      :path=>'name',:attributes=>{:usage=>'primary'},
+      :index_as=>[]){
+      t.name_part(:path=>'namePart', :index_as=>[])
+    }
+    t.primary_name(proxy: [:name_usage_primary,:name_part], index_as: :facetable)
     #t.name_corporate(
     #  :path=>'name',:attributes=>{:type=>'corporate'},
     #  :index_as=>[:facetable, :displayable],

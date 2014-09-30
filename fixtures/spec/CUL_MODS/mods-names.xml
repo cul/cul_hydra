@@ -29,4 +29,7 @@
 				<roleTerm authority="marcrelator" type="code">rcp</roleTerm>
 		 </role>
 	</name>
+  <name usage="primary">
+      <namePart>Seminar 401</namePart>
+  </name>
 </mods>

@@ -256,6 +256,12 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
           solr_doc["all_text_teim"].join(' ').should include("Name, Recipient")
         end
       end
+      it "should index primary names" do
+        names_xml = fixture( File.join("CUL_MODS", "mods-names.xml"))
+        mods = descMetadata(@mock_inner, names_xml)
+        solr_doc = mods.to_solr
+        solr_doc["primary_name_sim"].should == ["Seminar 401"]
+      end
     end
     describe "relatedItem (project)" do
       describe "[@type='Host, @displayLabel='Project']" do
