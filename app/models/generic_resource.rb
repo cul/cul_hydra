@@ -94,7 +94,8 @@ class GenericResource < ::ActiveFedora::Base
       rels.each do |dsuri, props|
         if dsuri =~ /\/content$/ or not props[FORMAT_OF_PREDICATE].blank?
           dsid =  dsuri.split('/')[-1]
-          res = datastream_as_resource(dsid, props)
+          puts props.inspect
+          res = datastream_as_resource(dsid, props.with_indifferent_access)
           results << res
         end
       end
@@ -113,10 +114,10 @@ class GenericResource < ::ActiveFedora::Base
         width_rel = rels_int.relationships(dsuri, :image_width)[0]
         length_rel = rels_int.relationships(dsuri, :image_length)[0]
         extent_rel = rels_int.relationships(dsuri, :extent)[0]
-        props = {EXTENT_PREDICATE => [], WIDTH_PREDICATE => [], LENGTH_PREDICATE => []}
-        props[EXTENT_PREDICATE] << extent_rel.object.to_s unless extent_rel.blank?
-        props[WIDTH_PREDICATE] << width_rel.object.to_s unless width_rel.blank?
-        props[LENGTH_PREDICATE] << length_rel.object.to_s unless length_rel.blank?
+        props = {extent: [], image_width: [], image_length: []}
+        props[:extent] << extent_rel.object.to_s unless extent_rel.blank?
+        props[:image_width] << width_rel.object.to_s unless width_rel.blank?
+        props[:image_length] << length_rel.object.to_s unless length_rel.blank?
         results << datastream_as_resource(dsid, props)
       end
     end
@@ -124,7 +125,7 @@ class GenericResource < ::ActiveFedora::Base
   end
 
   def zooming?
-    !rels_int.relationships(datastreams['content'], :foaf_zooming).first.blank?
+    (zr = rels_int.relationships(datastreams['content'], :foaf_zooming) and not zr.first.blank?)
   end
 
   private
@@ -137,12 +138,12 @@ class GenericResource < ::ActiveFedora::Base
     res[:mime_type] = ds.mimeType
     res[:content_models] = ["Datastream"]
     res[:file_size] = ds.dsSize.to_s
-    if res[:file_size] == "0" and props[EXTENT_PREDICATE]
-      res[:file_size] = (props[EXTENT_PREDICATE].first || "0")
+    if res[:file_size] == "0" and props[:extent]
+      res[:file_size] = (props[:extent].first || "0")
     end
     res[:size] = (res[:file_size].to_i / 1024).to_s + " Kb"
-    res[:width] = props[WIDTH_PREDICATE].first || "0"
-    res[:height] = props[LENGTH_PREDICATE].first || "0"
+    res[:width] = (props[:image_width] and props[:image_width].first) || "0"
+    res[:height] = (props[:image_length] and props[:image_length].first) || "0"
     res[:dimensions] = "#{res[:width]} x #{res[:height]}"
     base_filename = pid.gsub(/\:/,"")
     res[:filename] = base_filename + "." + dsid + "." + ds.mimeType.gsub(/^[^\/]+\//,"")
