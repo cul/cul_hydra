@@ -274,9 +274,6 @@ module Cul::Scv::Hydra::Solrizer
         places_without_uri << ScvModsFieldable.normalize(n.text, true)
       end
 
-			puts 'places_with_uri: ' + places_with_uri.inspect
-			puts 'places_without_uri: ' + places_without_uri.inspect
-
 			return (places_without_uri.length > 0 ? places_without_uri : places_with_uri)
 		end
 
