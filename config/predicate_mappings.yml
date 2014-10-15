@@ -58,6 +58,7 @@
     :extent: extent
     :format: format
     :format_of: isFormatOf
+    :publisher: publisher
   http://www.w3.org/2003/12/exif/ns#:
     :image_width: imageWidth
     :image_length: imageLength

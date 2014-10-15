@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
-describe Cul::Scv::Hydra::Resolver do
+describe Cul::Scv::Hydra::Resolver, type: :unit do
   
   before do
     class TestRig

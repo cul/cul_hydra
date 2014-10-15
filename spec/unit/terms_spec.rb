@@ -46,7 +46,7 @@ class TestTerms < ActiveFedora::OmDatastream
   end
 end
 
-describe "Cul::Scv::Hydra::Controllers::Terms" do
+describe "Cul::Scv::Hydra::Controllers::Terms", type: :unit do
   
   before(:all) do
   end

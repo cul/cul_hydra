@@ -2,7 +2,7 @@ require "active-fedora"
 require "active_fedora_finders"
 class DcDocument < ActiveFedora::Base
   include ::ActiveFedora::Associations
-  include ::ActiveFedora::Finders
+  include ::ActiveFedora::FinderMethods::RepositoryMethods
   include ::ActiveFedora::DatastreamCollections
   include Hydra::ModelMethods
   include Cul::Scv::Hydra::Models::Common

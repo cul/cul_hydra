@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe ContentAggregator do
+describe ContentAggregator, type: :integration do
 
   before(:each) do
     @foxml = fixture( File.join("FOXML", "content-aggregator.xml"))

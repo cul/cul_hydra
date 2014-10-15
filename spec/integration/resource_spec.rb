@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe ::Resource do
+describe ::Resource, type: :integration do
   
   before(:all) do
     ingest("ldpd:ContentAggregator", fixture( File.join("FOXML", "content-cmodel.xml")), true)

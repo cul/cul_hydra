@@ -63,7 +63,8 @@ class ModsDocument < ::ActiveFedora::OmDatastream
     t.type_of_resource(:path=>"typeOfResource", :index_as=>[:displayable])
     t.physical_description(:path=>"physicalDescription", :index_as=>[]){
       t.form_marc(:path=>"form", :attributes=>{:authority=>"marcform"}, :index_as=>[:displayable])
-      t.form_aat(:path=>"form", :attributes=>{:authority=>"aat"}, :index_as=>[:displayable])
+      t.form_aat(:path=>"form", :attributes=>{:authority=>"aat"}, :index_as=>[:displayable, :facetable])
+      t.form_local(:path=>"form", :attributes=>{:authority=>"local"}, :index_as=>[:displayable, :facetable])
       t.form(:attributes=>{:authority=>:none}, :index_as=>[:displayable])
       t.form_nomarc(:path=>"form[@authority !='marcform']", :index_as=>[])
       t.extent(:path=>"extent", :index_as=>[:searchable, :displayable])
@@ -84,11 +85,12 @@ class ModsDocument < ::ActiveFedora::OmDatastream
     t.top_level_location_url(:proxy=>[:mods, :location, :url])
     t.lib_repo(:proxy=>[:location, :lib_repo], :type=>:text,
      :index_as=>[:marc_code_textable])
-    #t.lib_name(
-    #  :path=>'name',:attributes=>{:type=>'personal'},
-    #  :index_as=>[:facetable, :displayable]){
-    #  t.name_part(:path=>'namePart', :index_as=>[])
-    #}
+    t.name_usage_primary(
+      :path=>'name',:attributes=>{:usage=>'primary'},
+      :index_as=>[]){
+      t.name_part(:path=>'namePart', :index_as=>[])
+    }
+    t.primary_name(proxy: [:name_usage_primary,:name_part], index_as: :facetable)
     #t.name_corporate(
     #  :path=>'name',:attributes=>{:type=>'corporate'},
     #  :index_as=>[:facetable, :displayable],

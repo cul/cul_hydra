@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
+describe "Cul::Scv::Hydra::Datastreams::ModsDocument", type: :unit do
 
   before(:all) do
 
@@ -258,6 +258,12 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
           solr_doc["all_text_teim"].join(' ').should include("Name, Recipient")
         end
       end
+      it "should index primary names" do
+        names_xml = fixture( File.join("CUL_MODS", "mods-names.xml"))
+        mods = descMetadata(@mock_inner, names_xml)
+        solr_doc = mods.to_solr
+        solr_doc["primary_name_sim"].should == ["Seminar 401"]
+      end
     end
     describe "relatedItem (project)" do
       describe "[@type='Host, @displayLabel='Project']" do
@@ -330,6 +336,13 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
           solr_doc = @mods_item.to_solr
           solr_doc.should include("all_text_teim")
           solr_doc["all_text_teim"].join(' ').should include("books")
+        end
+        it "should have separate indexes of local and aat" do
+          mods_xml = fixture( File.join("CUL_MODS", "mods-physical-description.xml") )
+          mods_ds = descMetadata(@mock_inner, mods_xml)
+          solr_doc = mods_ds.to_solr
+          solr_doc["physical_description_form_aat_sim"].should eql(["Books"])
+          solr_doc["physical_description_form_local_sim"].should eql(["minutes"])
         end
       end
     end
