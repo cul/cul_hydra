@@ -264,15 +264,19 @@ module Cul::Scv::Hydra::Solrizer
 		end
 
     def origin_info_place_for_display(node=mods)
-			# If there are multiple origin_info place elements, choose only the ones without valueUri attributes.  Otherwise show the others.
+			# If there are multiple origin_info place elements, choose only the ones without valueURI attributes.  Otherwise show the others.
 			places_with_uri = []
 			places_without_uri = []
-			node.xpath("./mods:originInfo/mods:place/mods:placeTerm[@valueUri]", MODS_NS).collect do |n|
+			node.xpath("./mods:originInfo/mods:place/mods:placeTerm[@valueURI]", MODS_NS).collect do |n|
         places_with_uri << ScvModsFieldable.normalize(n.text, true)
       end
-			node.xpath("./mods:originInfo/mods:place/mods:placeTerm[not(@valueUri)]", MODS_NS).collect do |n|
+			node.xpath("./mods:originInfo/mods:place/mods:placeTerm[not(@valueURI)]", MODS_NS).collect do |n|
         places_without_uri << ScvModsFieldable.normalize(n.text, true)
       end
+
+			puts 'places_with_uri: ' + places_with_uri.inspect
+			puts 'places_without_uri: ' + places_without_uri.inspect
+
 			return (places_without_uri.length > 0 ? places_without_uri : places_with_uri)
 		end
 

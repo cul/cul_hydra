@@ -3,7 +3,7 @@
 <originInfo>
 	<publisher>Amazing Publisher</publisher>
 	<place><placeTerm>Such A Great Place</placeTerm></place>
-	<place><placeTerm valueUri="http://www.example.com/value/uri">Such A Great valueUri Place</placeTerm></place>
+	<place><placeTerm valueURI="http://www.example.com/value/uri">Such A Great valueUri Place</placeTerm></place>
 	<edition>First Edition</edition>
 </originInfo>
 </mods>
