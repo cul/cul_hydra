@@ -2,7 +2,8 @@
 <mods xmlns='http://www.loc.gov/mods/v3' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd' version='3.4'>
 <originInfo>
 	<publisher>Amazing Publisher</publisher>
-	<place>Such A Great Place</place>
+	<place><placeTerm>Such A Great Place</placeTerm></place>
+	<place><placeTerm valueUri="http://www.example.com/value/uri">Such A Great valueUri Place</placeTerm></place>
 	<edition>First Edition</edition>
 </originInfo>
 </mods>

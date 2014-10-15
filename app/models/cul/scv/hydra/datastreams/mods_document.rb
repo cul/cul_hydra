@@ -133,7 +133,6 @@ class ModsDocument < ::ActiveFedora::OmDatastream
       t.date_other_textual(:path=>"dateOther", :attributes=>{:encoding=>:none, :keyDate=>:none}, :index_as=>[:textable])
 
       t.publisher(:index_as=>[:displayable])
-      t.place(:index_as=>[:displayable])
       t.edition(:index_as=>[:displayable])
     }
     t.lib_publisher(:proxy=>[:mods, :origin_info, :publisher], :index_as=>[:displayable])

@@ -247,6 +247,22 @@ module Cul::Scv::Hydra::Solrizer
 			return list_of_subjects
 		end
 
+    def origin_info_place(node=mods)
+			places = []
+			node.xpath("./mods:originInfo/mods:place/mods:placeTerm", MODS_NS).collect do |n|
+        places << ScvModsFieldable.normalize(n.text, true)
+      end
+			return places
+		end
+
+    def origin_info_place_without_value_uri(node=mods)
+			places = []
+			node.xpath("./mods:originInfo/mods:place/mods:placeTerm[not(@valueUri)]", MODS_NS).collect do |n|
+        places << ScvModsFieldable.normalize(n.text, true)
+      end
+			return places
+		end
+
     def to_solr(solr_doc={})
       solr_doc = (defined? super) ? super : solr_doc
 
@@ -272,6 +288,8 @@ module Cul::Scv::Hydra::Solrizer
       solr_doc["lib_date_notes_ssm"] = date_notes
       solr_doc["lib_non_date_notes_ssm"] = non_date_notes
       solr_doc["lib_item_in_context_url_ssm"] = item_in_context_url
+      solr_doc["origin_info_place_ssm"] = origin_info_place
+      solr_doc["origin_info_place_without_value_uri_ssm"] = origin_info_place_without_value_uri
 
       repo_marc_code = repository_code
       unless repo_marc_code.nil?
