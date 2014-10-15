@@ -178,9 +178,9 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument", type: :unit do
           mods_item = descMetadata(@mock_inner, item_xml)
           solr_doc = mods_item.to_solr
           solr_doc.should include("origin_info_place_ssm")
-          solr_doc.should include("origin_info_place_without_value_uri_ssm")
+          solr_doc.should include("origin_info_place_for_display_ssm")
           solr_doc["origin_info_place_ssm"].should == ['Such A Great Place', 'Such A Great valueUri Place']
-          solr_doc["origin_info_place_without_value_uri_ssm"].should == ['Such A Great Place']
+          solr_doc["origin_info_place_for_display_ssm"].should == ['Such A Great Place']
         end
       end
       describe "edition" do

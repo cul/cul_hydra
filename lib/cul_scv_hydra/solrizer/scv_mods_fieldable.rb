@@ -263,12 +263,17 @@ module Cul::Scv::Hydra::Solrizer
 			return places
 		end
 
-    def origin_info_place_without_value_uri(node=mods)
-			places = []
-			node.xpath("./mods:originInfo/mods:place/mods:placeTerm[not(@valueUri)]", MODS_NS).collect do |n|
-        places << ScvModsFieldable.normalize(n.text, true)
+    def origin_info_place_for_display(node=mods)
+			# If there are multiple origin_info place elements, choose only the ones without valueUri attributes.  Otherwise show the others.
+			places_with_uri = []
+			places_without_uri = []
+			node.xpath("./mods:originInfo/mods:place/mods:placeTerm[@valueUri]", MODS_NS).collect do |n|
+        places_with_uri << ScvModsFieldable.normalize(n.text, true)
       end
-			return places
+			node.xpath("./mods:originInfo/mods:place/mods:placeTerm[not(@valueUri)]", MODS_NS).collect do |n|
+        places_without_uri << ScvModsFieldable.normalize(n.text, true)
+      end
+			return (places_without_uri.length > 0 ? places_without_uri : places_with_uri)
 		end
 
     def to_solr(solr_doc={})
@@ -298,7 +303,7 @@ module Cul::Scv::Hydra::Solrizer
       solr_doc["lib_item_in_context_url_ssm"] = item_in_context_url
       solr_doc["lib_project_url_ssm"] = project_url
       solr_doc["origin_info_place_ssm"] = origin_info_place
-      solr_doc["origin_info_place_without_value_uri_ssm"] = origin_info_place_without_value_uri
+      solr_doc["origin_info_place_for_display_ssm"] = origin_info_place_for_display
 
       repo_marc_code = repository_code
       unless repo_marc_code.nil?
