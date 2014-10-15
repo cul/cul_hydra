@@ -284,6 +284,15 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument" do
           solr_doc["lib_project_full_ssim"].should include("Some Nonsense Project Name")
           solr_doc["all_text_teim"].join(' ').should include("Some Nonsense Project Name")
         end
+        describe "url" do
+          it "should be stored as a string" do
+            item_xml = fixture( File.join("CUL_MODS", "mods-top-level-location-vs-relateditem-location.xml") )
+            mods_item = descMetadata(@mock_inner, item_xml)
+            solr_doc = mods_item.to_solr
+            solr_doc.should include("lib_project_url_ssm")
+            solr_doc["lib_project_url_ssm"].should == ["http://not-the-item-url.cul.columbia.edu"]
+          end
+        end
       end
     end
     describe "relatedItem (Collection)" do
