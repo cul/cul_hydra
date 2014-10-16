@@ -73,6 +73,11 @@ module Cul::Scv::Hydra::Models::Common
     has_desc
   end
 
+  # set the index type label and any RI-based fields 
+  def set_size_labels(solr_doc={})
+    solr_doc["index_type_label_ssi"] = [self.index_type_label]
+  end
+
   def to_solr(solr_doc = Hash.new, opts={})
     solr_doc = super(solr_doc, opts)
 
@@ -105,7 +110,8 @@ module Cul::Scv::Hydra::Models::Common
       solr_doc["title_display_ssm"].uniq!
     end
     solr_doc["format_ssi"] = [self.route_as]
-    solr_doc["index_type_label_ssi"] = [self.index_type_label]
+
+    set_size_labels(solr_doc)
 
     solr_doc.each_pair {|key, value|
       if value.is_a? Array

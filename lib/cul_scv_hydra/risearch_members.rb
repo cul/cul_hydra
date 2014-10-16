@@ -3,13 +3,12 @@ module Cul::Scv::Hydra::RisearchMembers
   def self.get_recursive_member_pids(pid, verbose_output=false, cmodel_type='all')
 
     recursive_member_query =
-      'select $child $parent $cmodel from <#ri>
+      'select $child $parent from <#ri>
       where
-      walk($child <http://purl.oclc.org/NET/CUL/memberOf> <fedora:' + pid + '> and $child <http://purl.oclc.org/NET/CUL/memberOf> $parent)
-      and
-      $child <fedora-model:hasModel> $cmodel'
+      walk($child <http://purl.oclc.org/NET/CUL/memberOf> <fedora:' + pid + '> and $child <http://purl.oclc.org/NET/CUL/memberOf> $parent)'      
 
     unless cmodel_type == 'all'
+      recursive_member_query += ' and $child <fedora-model:hasModel> $cmodel'
       recursive_member_query += ' and $cmodel <mulgara:is> <info:fedora/ldpd:' + cmodel_type + '>'
     end
 
@@ -29,27 +28,32 @@ module Cul::Scv::Hydra::RisearchMembers
 
   end
 
-  def self.get_direct_member_pids(pid, verbose_output=false)
+  def self.get_direct_member_results(pid, verbose_output=false, format='json')
 
     direct_member_query =
-      'select $pid $cmodel from <#ri>
-      where $pid <http://purl.oclc.org/NET/CUL/memberOf> <fedora:' + pid + '>
-      and $pid <fedora-model:hasModel> $cmodel'
+      'select $pid from <#ri>
+      where $pid <http://purl.oclc.org/NET/CUL/memberOf> <fedora:' + pid + '>'
 
     puts 'Performing query:' if verbose_output
     puts direct_member_query if verbose_output
 
     search_response = JSON(Cul::Scv::Fedora.repository.find_by_itql(direct_member_query, {
       :type => 'tuples',
-      :format => 'json',
+      :format => format,
       :limit => '',
       :stream => 'on'
     }))
 
-    unique_pids = search_response['results'].map{|result| result['pid'].gsub('info:fedora/', '') }.uniq
-
-    return unique_pids
-
+    return search_response['results']
   end
 
+  def self.get_direct_member_pids(pid, verbose_output=false)
+    unique_pids = get_direct_member_results(pid,verbose_output,'json')
+    unique_pids.map{|result| result['pid'].gsub('info:fedora/', '') }.uniq
+  end
+  
+  def self.get_direct_member_count(pid, verbose_output=false)
+    count = get_direct_member_results(pid,verbose_output,'count/json')
+    return count.blank? ? 0 : count[0]['count'].to_i
+  end
 end
