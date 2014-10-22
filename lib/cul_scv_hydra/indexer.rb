@@ -55,7 +55,7 @@ module Cul::Scv::Hydra::Indexer
       active_fedora_object = ActiveFedora::Base.find(pid, :cast => true)
 
       if skip_generic_resources && active_fedora_object.is_a?(GenericResource)
-        puts 'Top level object was skipped because GenericResources are being skipped and it is a GenericResource.'
+        puts 'Object was skipped because GenericResources are being skipped and it is a GenericResource.'
       else
         begin
           active_fedora_object.update_index

@@ -22,7 +22,7 @@ class GenericResource < ::ActiveFedora::Base
 
   has_datastream :name => "content", :type=>::ActiveFedora::Datastream, :versionable => true
   has_metadata :name=>"RELS-INT", :type=>ActiveFedora::RelsInt::Datastream
-  
+
   def assert_content_model
     super
     add_relationship(:rdf_type, Cul::Scv::Hydra::ActiveFedora::RESOURCE_TYPE.to_s)

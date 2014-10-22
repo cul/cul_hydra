@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.name = "cul_scv_hydra"
   s.version = Cul::Scv::Hydra::VERSION
   s.platform = Gem::Platform::RUBY
-  s.authors = ["Benjamin Armintor"]
+  s.authors = ["Benjamin Armintor", "Eric O'Hanlon"]
   s.homepage = "https://github.com/cul/cul_scv_hydra"
   s.email = %q{armintor@gmail.com}
   s.description = "Hydra implementations for CUL Staff Collection Viewer"
@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency('active_fedora_relsint')
   s.add_dependency('cul_image_props')
   s.add_dependency('mods')
-  
+
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "rspec", "~>2.10"
   s.add_development_dependency "rspec-rails", "~>2.10"
