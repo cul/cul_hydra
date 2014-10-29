@@ -12,9 +12,16 @@ namespace :cul_scv_hydra do
       START_TIME = Time.now
 
       ENV["RAILS_ENV"] ||= Rails.env
-      pid = ENV['pid']
-      if ENV['omit']
-        pids_to_omit = ENV['omit'].split(',').map{|pid|pid.strip}
+
+      if ENV['PIDS']
+        pids = ENV['PIDS'].split(',')
+      else
+        puts 'Please specify one or more comma-delimited pids to recurse over (e.g. PIDS=ldpd:123 or PIDS=ldpd:123,ldpd:456)'
+        next
+      end
+
+      if ENV['OMIT']
+        pids_to_omit = ENV['OMIT'].split(',').map{|pid|pid.strip}
       else
         pids_to_omit = nil
       end
@@ -22,7 +29,9 @@ namespace :cul_scv_hydra do
       skip_generic_resources = true if ENV['skip_generic_resources'] == 'true'
 
       begin
-        Cul::Scv::Hydra::Indexer.recursively_index_fedora_objects(pid, pids_to_omit, skip_generic_resources, true)
+        pids.each do |pid|
+          Cul::Scv::Hydra::Indexer.recursively_index_fedora_objects(pid, pids_to_omit, skip_generic_resources, true)
+        end
       rescue => e
         puts 'Error: ' + e.message
         puts e.backtrace

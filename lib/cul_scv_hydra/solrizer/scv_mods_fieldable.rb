@@ -350,17 +350,24 @@ module Cul::Scv::Hydra::Solrizer
 
 				end_date = start_date if end_date.blank?
 
+				puts 'start_date: ' + start_date
+				puts 'end_date: ' + end_date
+
 				year_regex = /^(-?\d{1,4}).*/
 
 				start_year_match = start_date.match(year_regex)
-				start_year = start_year_match.captures[0] if start_year_match
-				start_year = zero_pad_year(start_year)
-				solr_doc["lib_start_date_year_itsi"] = start_year.to_i if start_year # TrieInt version for searches
+				if start_year_match && start_year_match.captures.length > 0
+					start_year = start_year_match.captures[0]
+					start_year = zero_pad_year(start_year)
+					solr_doc["lib_start_date_year_itsi"] = start_year.to_i # TrieInt version for searches
+				end
 
 				end_year_match = end_date.match(year_regex)
-				end_year = end_year_match.captures[0] if end_year_match
-				end_year = zero_pad_year(end_year)
-				solr_doc["lib_end_date_year_itsi"] = end_year.to_i  if end_year # TrieInt version for searches
+				if end_year_match && end_year_match.captures.length > 0
+					end_year = end_year_match.captures[0]
+					end_year = zero_pad_year(end_year)
+					solr_doc["lib_end_date_year_itsi"] = end_year.to_i # TrieInt version for searches
+				end
 
 				solr_doc["lib_date_year_range_si"] = start_year + '-' + end_year if start_year
 
