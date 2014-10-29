@@ -350,9 +350,6 @@ module Cul::Scv::Hydra::Solrizer
 
 				end_date = start_date if end_date.blank?
 
-				puts 'start_date: ' + start_date
-				puts 'end_date: ' + end_date
-
 				year_regex = /^(-?\d{1,4}).*/
 
 				start_year_match = start_date.match(year_regex)
