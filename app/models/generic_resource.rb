@@ -15,7 +15,6 @@ class GenericResource < ::ActiveFedora::Base
   include ::ActiveFedora::RelsInt
 
   has_and_belongs_to_many :containers, :property=>:cul_member_of, :class_name=>'ActiveFedora::Base'
-  has_many :publishers, :property => :publisher, :class_name=>'ActiveFedora::Base'
 
   IMAGE_EXT = {"image/bmp" => 'bmp', "image/gif" => 'gif', "image/jpeg" => 'jpg', "image/png" => 'png', "image/tiff" => 'tif', "image/x-windows-bmp" => 'bmp'}
   WIDTH = RDF::URI(ActiveFedora::Predicates.find_graph_predicate(:image_width))

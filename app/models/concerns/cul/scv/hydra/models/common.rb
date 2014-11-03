@@ -9,6 +9,7 @@ module Cul::Scv::Hydra::Models::Common
     has_metadata :name => "DC", :type=>Cul::Scv::Hydra::Datastreams::DCMetadata, :versionable => true
     has_metadata :name => "descMetadata", :type=>Cul::Scv::Hydra::Datastreams::ModsDocument, :versionable => true
     has_metadata :name => "rightsMetadata", :type=>::Hydra::Datastream::RightsMetadata, :versionable => true
+    has_many :publishers, :property => :publisher, :class_name=>'ActiveFedora::Base'
   end
 
   module ClassMethods
@@ -73,7 +74,7 @@ module Cul::Scv::Hydra::Models::Common
     has_desc
   end
 
-  # set the index type label and any RI-based fields 
+  # set the index type label and any RI-based fields
   def set_size_labels(solr_doc={})
     solr_doc["index_type_label_ssi"] = [self.index_type_label]
   end
