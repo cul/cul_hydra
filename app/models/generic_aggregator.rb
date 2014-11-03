@@ -8,6 +8,7 @@ class GenericAggregator < ::ActiveFedora::Base
   include Cul::Scv::Hydra::Models::Aggregator
 
   has_many :parts, :property => :cul_member_of, :class_name=>'ActiveFedora::Base'
+  has_many :publishers, :property => :publisher, :class_name=>'ActiveFedora::Base'
 
   def route_as
     "multipartitem"
@@ -36,7 +37,7 @@ class GenericAggregator < ::ActiveFedora::Base
     end
   end
 
-  # set the index type label and any RI-based fields 
+  # set the index type label and any RI-based fields
   # overridde
   def set_size_labels(solr_doc={})
     count = Cul::Scv::Hydra::RisearchMembers.get_direct_member_count(pid)

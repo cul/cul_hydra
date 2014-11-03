@@ -6,7 +6,7 @@ class Concept < GenericAggregator
   include ::Hydra::ModelMethods
   include Cul::Scv::Hydra::Models::Common
 
-  has_many :parts, :property => :cul_member_of, :class_name=>'ActiveFedora::Base'
+  has_and_belongs_to_many :containers, :property=>:cul_member_of, :class_name=>'ActiveFedora::Base'
 
   def route_as
     "concept"
