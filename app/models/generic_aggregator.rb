@@ -49,4 +49,20 @@ class GenericAggregator < ::ActiveFedora::Base
     solr_doc
   end
 
+  def proxies
+    datastreams['structMetadata'] ? datastreams['structMetadata'].proxies : []
+  end
+  def update_index
+    super
+    if has_struct_metadata?()
+      conn = ActiveFedora::SolrService.instance.conn
+      # delete by query proxyIn_ssi: internal_uri
+      conn.delete_by_query("proxyIn_ssi:#{RSolr.escape(internal_uri())}")
+
+      # reindex proxies
+      proxy_docs = proxies().collect {|p| p.to_solr}
+      conn.add(proxy_docs, params: {softCommit: true})
+      conn.commit
+    end
+  end
 end

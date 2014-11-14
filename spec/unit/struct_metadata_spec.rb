@@ -22,6 +22,7 @@ describe "Cul::Scv::Hydra::Datastreams::StructMetadata", type: :unit do
     @seq_fixture = fixture( File.join("STRUCTMAP", "structmap-seq.xml")).read
     @seq_doc = Nokogiri::XML::Document.parse(@seq_fixture)
     @unordered_seq_fixture = fixture( File.join("STRUCTMAP", "structmap-unordered-seq.xml")).read
+    @nested_seq_fixture = fixture( File.join("STRUCTMAP", "structmap-nested.xml")).read
   end
 
   describe ".new " do
@@ -137,5 +138,99 @@ describe "Cul::Scv::Hydra::Datastreams::StructMetadata", type: :unit do
 			divs_with_contentids_attr.attr('CONTENTIDS').should == 'prd.custord.060108.001'
 		end
 	end
-
+  describe "Proxies" do
+    before do
+      @digital_object = double('Digital Object')
+      allow(@digital_object).to receive(:pid).and_return('test:0000')
+    end
+    context "for recto/verso" do
+      subject {
+        struct = Cul::Scv::Hydra::Datastreams::StructMetadata.from_xml(@rv_fixture)
+        struct.instance_variable_set(:@digital_object, @digital_object)
+        struct.proxies
+      }
+      it { expect(subject.length).to eql 2 }
+      describe "index as" do
+        let(:solr_docs) { subject.collect{|x| x.to_solr } }
+        it "should be generate solr hashes for all the structure proxies" do
+          missing = solr_docs.detect {|x| x['proxyIn_ssi'] != 'info:fedora/test:0000'}
+          expect(missing).to be_nil
+        end
+        it "should identify the proxy index with index" do
+          docs = solr_docs.sort {|a,b| a['index_ssi'] <=> b['index_ssi']}
+          index_values = docs.collect {|x| x['index_ssi']}
+          expect(index_values).to eql ['1','2']
+        end
+      end
+    end
+    context "for a flat list" do
+      subject {
+        struct = Cul::Scv::Hydra::Datastreams::StructMetadata.from_xml(@unordered_seq_fixture)
+        struct.instance_variable_set(:@digital_object, @digital_object)
+        struct.proxies
+      }
+      it { expect(subject.length).to eql 3 }
+      describe "index as" do
+        let(:solr_docs) { subject.collect{|x| x.to_solr } }
+        it "should be generate solr hashes for all the structure proxies" do
+          missing = solr_docs.detect {|x| x['proxyIn_ssi'] != 'info:fedora/test:0000'}
+          expect(missing).to be_nil
+        end
+        it "should identify the proxy index with index" do
+          docs = solr_docs.sort {|a,b| a['index_ssi'] <=> b['index_ssi']}
+          index_values = docs.collect {|x| x['index_ssi']}
+          expect(index_values).to eql ['1','2','3']
+        end
+      end
+    end
+    context "for a nested structure" do
+      subject {
+        struct = Cul::Scv::Hydra::Datastreams::StructMetadata.from_xml(@nested_seq_fixture)
+        struct.instance_variable_set(:@digital_object, @digital_object)
+        struct.instance_variable_set(:@dsid, 'structDS')
+        struct.proxies
+      }
+      it { expect(subject.length).to eql 6 }
+      describe "index as" do
+        let(:solr_docs) { subject.collect{|x| x.to_solr } }
+        it "should generate solr hashes for all the structure proxies with label, proxyIn and proxyFor" do
+          docs = solr_docs.detect {|x| x['proxyIn_ssi'] != 'info:fedora/test:0000'}
+          expect(docs).to be_nil
+          docs = solr_docs.detect {|x| !x['proxyFor_ssi']}
+          expect(docs).to be_nil
+          docs = solr_docs.detect {|x| !x['label_ssi']}
+          expect(docs).to be_nil
+        end
+        it "should identify the proxy index with index" do
+          docs = solr_docs.sort {|a,b| a['index_ssi'] <=> b['index_ssi']}
+          index_values = docs.collect {|x| x['index_ssi']}
+          expect(index_values).to eql ['1','1','1','2','2','2']
+        end
+        it "should create nfo:file proxies for resources" do
+          folders = solr_docs.select {|d| d['type_ssim'].include? RDF::NFO[:"#Folder"].to_s}
+          files = solr_docs.select {|d| d['type_ssim'].include? RDF::NFO[:"#FileDataObject"].to_s}
+          expect(folders.length).to eql 2
+          expect(files.length).to eql 4
+        end
+        it "should set belongsToContainer appropriately" do
+          aggs = {}
+          solr_docs.each {|d| a = (aggs[d['belongsToContainer_ssi']] ||= []); a << d['id'] }
+          expect(aggs.size).to eql 3
+          leaf1 = "info:fedora/test:0000/structDS/Leaf1"
+          leaf2 = "info:fedora/test:0000/structDS/Leaf2"
+          expect(aggs).to include leaf1
+          expect(aggs[leaf1.to_s].length).to eql 2
+          expect(aggs).to include leaf2
+          expect(aggs[leaf2.to_s].length).to eql 2
+          expect(aggs[nil].sort).to eql [leaf1, leaf2] # sort order of IDs
+          expect(aggs[leaf1].sort).to eql ["#{leaf1}/Recto", "#{leaf1}/Verso"] # sort order of IDs
+          expect(aggs[leaf2].sort).to eql ["#{leaf2}/Recto", "#{leaf2}/Verso"] # sort order of IDs
+        end
+        it "should set isPartOf for all the ancestor segments" do
+          proxy = solr_docs.detect{ |d| d['id'].eql? "info:fedora/test:0000/structDS/Leaf1/Verso"}
+          expect(proxy['isPartOf_ssim']).to eql ["info:fedora/test:0000/structDS/Leaf1"]
+        end
+      end
+    end
+  end
 end

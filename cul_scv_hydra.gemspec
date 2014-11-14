@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency('hydra-head', "~>7")
   s.add_dependency('httpclient')
   s.add_dependency('active-fedora', '~> 7.0')
+  s.add_dependency('active-triples', '~> 0.2.2')
   s.add_dependency('active_fedora_finders', '>=0.5.0')
   s.add_dependency('active_fedora_relsint')
   s.add_dependency('cul_image_props')
