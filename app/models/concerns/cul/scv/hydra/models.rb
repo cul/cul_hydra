@@ -6,8 +6,9 @@ module Cul
 module Scv
 module Hydra
   module Models
-    AGGREGATOR_TYPE = (URI.parse("http://purl.oclc.org/NET/CUL/Aggregator"))
-    RESOURCE_TYPE = (URI.parse("http://purl.oclc.org/NET/CUL/Resource"))
+    AGGREGATOR_TYPE = RDF::CUL.Aggregator
+    RESOURCE_TYPE = RDF::CUL.Resource
+    MEMBER_OF = RDF::CUL.memberOf
     MEMBER_SPARQL = <<-SPARQL
       SELECT ?pid WHERE { ?pid <http://purl.oclc.org/NET/CUL/memberOf> <info:fedora/%PID%> }
     SPARQL
