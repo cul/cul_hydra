@@ -5,121 +5,169 @@ require 'rdf'
 module RDF
   module FCREPO3
     class SYSTEM < RDF::StrictVocabulary("info:fedora/fedora-system:")
+      term :"ContentModel-3.0",
+        comment: %(Base Fedora 3 CModel cModel).freeze,
+        label: "Fedora 3 Content Model".freeze,
+        subClassOf: "info:fedora/fedora-system:def/model#FedoraObject".freeze,
+        type: "info:fedora/fedora-system:def/model#FedoraObject".freeze
       term :"FedoraObject-3.0",
         comment: %(Base Fedora 3 Object cModel).freeze,
         label: "Fedora 3 Object".freeze,
-        subClassOf: "rdfs:Resource".freeze,
-        type: "rdfs:Class".freeze
+        subClassOf: "info:fedora/fedora-system:def/model#FedoraObject".freeze,
+        type: "info:fedora/fedora-system:def/model#FedoraObject".freeze
       term :"ServiceDefinition-3.0",
         comment: %(Fedora 3 Service Definition/BDef cModel).freeze,
         label: "Fedora 3 Service Definition".freeze,
-        subClassOf: "rdfs:Resource".freeze,
-        type: "rdfs:Class".freeze
+        subClassOf: "info:fedora/fedora-system:def/model#FedoraObject".freeze,
+        type: "info:fedora/fedora-system:def/model#FedoraObject".freeze
       term :"ServiceDeployment-3.0",
         comment: %(Fedora 3 Service Deployment/BMech cModel).freeze,
         label: "Fedora 3 Service Deployment".freeze,
-        subClassOf: "rdfs:Resource".freeze,
-        type: "rdfs:Class".freeze
+        subClassOf: "info:fedora/fedora-system:def/model#FedoraObject".freeze,
+        type: "info:fedora/fedora-system:def/model#FedoraObject".freeze
     end
     class MODEL < RDF::StrictVocabulary("info:fedora/fedora-system:def/model#")
       # Class definitions
       term :FedoraObject,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(The base type of all objects in Fedora).freeze,
+        label: "FedoraObject".freeze,
         subClassOf: "rdfs:Resource".freeze,
         type: "rdfs:Class".freeze
+      term :Datastream,
+        comment: %(Binary data associated with a Fedora object).freeze,
+        label: "Datastream".freeze,
+        subClassOf: "rdfs:Resource".freeze,
+        type: "rdfs:Class".freeze
+      term :ExtProperty,
+        comment: %(Reification of an extension property of a Fedora object used in messaging).freeze,
+        label: "ExtProperty".freeze,
+        subClassOf: "rdf:Property".freeze,
+        type: "rdfs:Class".freeze
       term :State,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(The state of a Fedora object or datastream).freeze,
+        label: "State".freeze,
         subClassOf: "rdfs:Resource".freeze,
         type: "rdfs:Class".freeze
       term :Active,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(State of an object available in the repository).freeze,
+        label: "Active".freeze,
         subClassOf: "rdfs:Resource".freeze,
         type: "info:fedora/fedora-system:def/model#State".freeze
       term :Deleted,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(State of an object that should be considered deleted, but is not purged).freeze,
+        label: "Deleted".freeze,
         subClassOf: "rdfs:Resource".freeze,
         type: "info:fedora/fedora-system:def/model#State".freeze
       term :Inactive,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(State of an object that should be considered temporarily unavailable).freeze,
+        label: "Inactive".freeze,
         subClassOf: "rdfs:Resource".freeze,
         type: "info:fedora/fedora-system:def/model#State".freeze
       # Property definitions
       property :altIds,
         comment: %(The alternate IDs for a datastream).freeze,
         label: "Alternate IDs".freeze,
+        domain: "info:fedora/fedora-system:def/model#Datastream",
+        range: "xsd:string".freeze,
         type: "rdf:Property".freeze
       property :controlGroup,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(indicates whether a Datastream's content is inline XML (X), Managed (M), Referenced (R) or External (E)).freeze,
+        label: "controlGroup".freeze,
+        domain: "info:fedora/fedora-system:def/model#Datastream",
+        range: "xsd:string".freeze,
         type: "rdf:Property".freeze
       property :createdDate,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(The UTC datetime an object was created).freeze,
+        label: "createdDate".freeze,
+        domain: "info:fedora/fedora-system:def/model#FedoraObject",
+        range: "xsd:dateTimeStamp".freeze,
         type: "rdf:Property".freeze
       property :definesMethod,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(indicates the name of a service method defined in this interface).freeze,
+        label: "definesMethod".freeze,
+        domain: "info:fedora/fedora-system:ServiceDefinition-3.0".freeze,
+        range: "xsd:NCName".freeze,
         type: "rdf:Property".freeze
       property :digest,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(indicates the checksum digest of a datastream's contents or the keyword 'none').freeze,
+        label: "digest".freeze,
+        domain: "info:fedora/fedora-system:def/model#Datastream",
+        range: "xsd:string".freeze,
         type: "rdf:Property".freeze
       property :digestType,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(indicates either the checksum algorithm or the keyword DISABLED).freeze,
+        label: "digestType".freeze,
+        domain: "info:fedora/fedora-system:def/model#Datastream",
+        range: "xsd:string".freeze,
         type: "rdf:Property".freeze
       property :downloadFilename,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(indicates the name to be used when downloading a datastream's contents).freeze,
+        label: "downloadFilename".freeze,
+        domain: "info:fedora/fedora-system:def/model#Datastream",
+        range: "xsd:string".freeze,
         type: "rdf:Property".freeze
       property :extProperty,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(indicates an extension property of an object in Fedora in messaging).freeze,
+        label: "extProperty".freeze,
+        domain: "info:fedora/fedora-system:def/model#FedoraObject".freeze,
+        range: "info:fedora/fedora-system:def/model#ExtProperty".freeze,
         type: "rdf:Property".freeze
       property :formatURI,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(A URI indicating the format of a datastream's content).freeze,
+        label: "formatURI".freeze,
         type: "rdf:Property".freeze
       property :hasModel,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(Indicates the Fedora 3 CModels for this object).freeze,
+        label: "hasModel".freeze,
+        subPropertyOf: "rdf:type".freeze,
+        domain: "info:fedora/fedora-system:FedoraObject-3.0".freeze,
+        range: "info:fedora/fedora-system:ContentModel-3.0".freeze,
         type: "rdf:Property".freeze
       property :hasService,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(indicates the Fedora 3 Service Definitions applicable to this CModel).freeze,
+        label: "hasService".freeze,
+        domain: "info:fedora/fedora-system:ContentModel-3.0".freeze,
+        range: "info:fedora/fedora-system:ServiceDefinition-3.0".freeze,
         type: "rdf:Property".freeze
       property :isContractorOf,
-        comment: %().freeze,
+        comment: %(indicates the Fedora 3 Content Models this deployment applies to).freeze,
         label: "".freeze,
+        domain: "info:fedora/fedora-system:ServiceDeployment-3.0".freeze,
+        range: "info:fedora/fedora-system:ContentModel-3.0".freeze,
         type: "rdf:Property".freeze
       property :isDeploymentOf,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(indicates the Fedora 3 Service Definitions this deployment implements).freeze,
+        label: "isDeploymentOf".freeze,
+        domain: "info:fedora/fedora-system:ServiceDeployment-3.0".freeze,
+        range: "info:fedora/fedora-system:ServiceDefinition-3.0".freeze,
         type: "rdf:Property".freeze
       property :label,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(The label applied to a Fedora object).freeze,
+        label: "label".freeze,
+        domain: "info:fedora/fedora-system:def/model#FedoraObject".freeze,
+        range: "xsd:string".freeze,
         type: "rdf:Property".freeze
       property :length,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(indicates the length of a datastream's contents).freeze,
+        label: "length".freeze,
+        domain: "info:fedora/fedora-system:def/model#Datastream".freeze,
+        range: "xsd:nonNegativeInteger".freeze,
         type: "rdf:Property".freeze
       property :ownerId,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(indicates the owner of an object).freeze,
+        label: "ownerId".freeze,
         type: "rdf:Property".freeze
       property :state,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(indicates the state of the object or datastream).freeze,
+        label: "state".freeze,
+        domain: ["info:fedora/fedora-system:def/model#FedoraObject".freeze,"info:fedora/fedora-system:def/model#Datastream".freeze],
+        range: "info:fedora/fedora-system:def/model#State".freeze,
         type: "rdf:Property".freeze
       property :versionable,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(indicates whether a datastream's property and contents changes are being tracked as versions).freeze,
+        label: "versionable".freeze,
+        domain: "info:fedora/fedora-system:def/model#Datastream".freeze,
+        range: "xsd:boolean".freeze,
         type: "rdf:Property".freeze
     end
     class RELSEXT < RDF::StrictVocabulary("info:fedora/fedora-system:def/relations-external#")
@@ -242,63 +290,71 @@ module RDF
     end
     class VIEW < RDF::StrictVocabulary("info:fedora/fedora-system:def/view#")
       property :disseminates,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(A property used to indicate that an object contains a datastream).freeze,
+        label: "disseminates".freeze,
+        domain: "info:fedora/fedora-system:FedoraObject-3.0".freeze,
+        range: "info:fedora/fedora-system:def/model#Datastream".freeze,
         type: "rdf:Property".freeze      
       property :disseminationType,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(A property whose object is common to all Datastreams of a given DSID).freeze,
+        label: "dissemination type".freeze,
         type: "rdf:Property".freeze
       property :isVolatile,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(A property indicating that a datastream's content is a reference to content external to the repository).freeze,
+        label: "isVolatile".freeze,
+        domain: "info:fedora/fedora-system:def/model#Datastream".freeze,
+        range: "xsd:boolean".freeze,
         type: "rdf:Property".freeze
       property :lastModifiedDate,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(UTC datetime of the last change to an object or most recent version of this datastream).freeze,
+        label: "lastModifiedDate".freeze,
+        domain: ["info:fedora/fedora-system:def/model#FedoraObject".freeze,"info:fedora/fedora-system:def/model#Datastream".freeze],
+        range: "xsd:dateTimeStamp".freeze,
         type: "rdf:Property".freeze
       property :mimeType,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(The MIME type of this datastream's content).freeze,
+        label: "mimeType".freeze,
+        domain: "info:fedora/fedora-system:def/model#Datastream".freeze,
+        range: "xsd:string".freeze,
         type: "rdf:Property".freeze
       property :version,
-        comment: %().freeze,
-        label: "".freeze,
+        comment: %(indicates Fedora server version in messaging).freeze,
+        label: "Server version".freeze,
         type: "rdf:Property".freeze
     end
   end
   class MULGARA < RDF::StrictVocabulary("http://mulgara.org/mulgara#")
-      property :after,
-        comment: %().freeze,
-        label: "".freeze,
-        type: "rdf:Property".freeze      
-      property :before,
-        comment: %().freeze,
-        label: "".freeze,
-        type: "rdf:Property".freeze
-      property :gt,
-        comment: %().freeze,
-        label: "".freeze,
-        type: "rdf:Property".freeze
-      property :lt,
-        comment: %().freeze,
-        label: "".freeze,
-        type: "rdf:Property".freeze
-      property :is,
-        comment: %().freeze,
-        label: "".freeze,
-        type: "rdf:Property".freeze
-      property :notOccurs,
-        comment: %().freeze,
-        label: "".freeze,
-        type: "rdf:Property".freeze
-      property :occursLessThan,
-        comment: %().freeze,
-        label: "".freeze,
-        type: "rdf:Property".freeze
-      property :occursMoreThan,
-        comment: %().freeze,
-        label: "".freeze,
-        type: "rdf:Property".freeze
-    end
+    property :after,
+      comment: %().freeze,
+      label: "".freeze,
+      type: "rdf:Property".freeze      
+    property :before,
+      comment: %().freeze,
+      label: "".freeze,
+      type: "rdf:Property".freeze
+    property :gt,
+      comment: %().freeze,
+      label: "".freeze,
+      type: "rdf:Property".freeze
+    property :lt,
+      comment: %().freeze,
+      label: "".freeze,
+      type: "rdf:Property".freeze
+    property :is,
+      comment: %().freeze,
+      label: "".freeze,
+      type: "rdf:Property".freeze
+    property :notOccurs,
+      comment: %().freeze,
+      label: "".freeze,
+      type: "rdf:Property".freeze
+    property :occursLessThan,
+      comment: %().freeze,
+      label: "".freeze,
+      type: "rdf:Property".freeze
+    property :occursMoreThan,
+      comment: %().freeze,
+      label: "".freeze,
+      type: "rdf:Property".freeze
+  end
 end
