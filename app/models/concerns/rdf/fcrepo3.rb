@@ -4,6 +4,23 @@
 require 'rdf'
 module RDF
   module FCREPO3
+    class SYSTEM < RDF::StrictVocabulary("info:fedora/fedora-system:")
+      term :"FedoraObject-3.0",
+        comment: %(Base Fedora 3 Object cModel).freeze,
+        label: "Fedora 3 Object".freeze,
+        subClassOf: "rdfs:Resource".freeze,
+        type: "rdfs:Class".freeze
+      term :"ServiceDefinition-3.0",
+        comment: %(Fedora 3 Service Definition/BDef cModel).freeze,
+        label: "Fedora 3 Service Definition".freeze,
+        subClassOf: "rdfs:Resource".freeze,
+        type: "rdfs:Class".freeze
+      term :"ServiceDeployment-3.0",
+        comment: %(Fedora 3 Service Deployment/BMech cModel).freeze,
+        label: "Fedora 3 Service Deployment".freeze,
+        subClassOf: "rdfs:Resource".freeze,
+        type: "rdfs:Class".freeze
+    end
     class MODEL < RDF::StrictVocabulary("info:fedora/fedora-system:def/model#")
       # Class definitions
       term :FedoraObject,
@@ -116,27 +133,33 @@ module RDF
         comment: %(A refinement of the generic descriptive relationship indicating a commentary relationship between fedora objects.  The subject is a fedora object that is being commented on and the predicate is a fedora object that represents an annotation or comment about the subject. ).freeze,
         label: "Has Annotation".freeze,
         subPropertyOf: "info:fedora/fedora-system:def/relations-external#hasDescription".freeze,
+        "owl:inverseOf" => %(info:fedora/fedora-system:def/relations-external#isAnnotationOf).freeze,
         type: "rdf:Property".freeze
       property :hasCollectionMember,
         label: "Has Collection Member".freeze,
         subPropertyOf: "info:fedora/fedora-system:def/relations-external#hasMember".freeze,
+        "owl:inverseOf" => %(info:fedora/fedora-system:def/relations-external#isMemberOfCollection).freeze,
         type: "rdf:Property".freeze
       property :hasConstituent,
         label: "Has Constituent".freeze,
         subPropertyOf: "info:fedora/fedora-system:def/relations-external#hasPart".freeze,
+        "owl:inverseOf" => %(info:fedora/fedora-system:def/relations-external#isConstituentOf).freeze,
         type: "rdf:Property".freeze
       property :hasDependent,
         label: "Has Dependent".freeze,
         subPropertyOf: "info:fedora/fedora-system:def/relations-external#fedoraRelationship".freeze,
+        "owl:inverseOf" => %(info:fedora/fedora-system:def/relations-external#isDependentOf).freeze,
         type: "rdf:Property".freeze
       property :hasDerivation,
         label: "Has Derivation".freeze,
         subPropertyOf: "info:fedora/fedora-system:def/relations-external#fedoraRelationship".freeze,
+        "owl:inverseOf" => %(info:fedora/fedora-system:def/relations-external#isDerivationOf).freeze,
         type: "rdf:Property".freeze
       property :hasDescription,
         comment: %(A generic descriptive relationship between fedora objects.  The subject is a fedora object that is being described in some manner and the predicate is a fedora object that represents a descriptive entity that is about the subject. ).freeze,
         label: "Has Description".freeze,
         subPropertyOf: "info:fedora/fedora-system:def/relations-external#fedoraRelationship".freeze,
+        "owl:inverseOf" => %(info:fedora/fedora-system:def/relations-external#isDescriptionOf).freeze,
         type: "rdf:Property".freeze
       property :hasEquivalent,
         label: "Has Equivalent".freeze,
@@ -145,62 +168,76 @@ module RDF
       property :hasMember,
         label: "Has Member".freeze,
         subPropertyOf: "info:fedora/fedora-system:def/relations-external#hasPart/".freeze,
+        "owl:inverseOf" => %(info:fedora/fedora-system:def/relations-external#isMemberOf).freeze,
         type: "rdf:Property".freeze
       property :hasMetadata,
         comment: %(A refinement of the generic descriptive relationship indicating a metadata relationship between fedora objects.  The subject is a fedora object and the predicate is a fedora object that represents metadata about the subject. ).freeze,
         label: "Has Metadata".freeze,
         subPropertyOf: "info:fedora/fedora-system:def/relations-external#hasDescription".freeze,
+        "owl:inverseOf" => %(info:fedora/fedora-system:def/relations-external#isMetadataFor).freeze,
         type: "rdf:Property".freeze
       property :hasPart,
         label: "Has Part".freeze,
         subPropertyOf: "info:fedora/fedora-system:def/relations-external#fedoraRelationship".freeze,
+        "owl:inverseOf" => %(info:fedora/fedora-system:def/relations-external#isPartOf).freeze,
         type: "rdf:Property".freeze
       property :hasSubset,
         label: "Has Subset".freeze,
         subPropertyOf: "info:fedora/fedora-system:def/relations-external#hasMember".freeze,
+        "owl:inverseOf" => %(info:fedora/fedora-system:def/relations-external#isSubsetOf).freeze,
         type: "rdf:Property".freeze
       property :isAnnotationOf,
         comment: %(A refinement of the generic descriptive relationship indicating a commentary relationship between fedora objects.  The subject is a fedora object that represents an annotation or comment and the predicate is a fedora object that is being commented upon by the subject.).freeze,
         label: "Is Annotation Of".freeze,
         subPropertyOf: "info:fedora/fedora-system:def/relations-external#isDescriptionOf".freeze,
+        "owl:inverseOf" => %(info:fedora/fedora-system:def/relations-external#hasAnnotation).freeze,
         type: "rdf:Property".freeze
       property :isConstituentOf,
         label: "Is Constituent Of".freeze,
         subPropertyOf: "info:fedora/fedora-system:def/relations-external#isPartOf".freeze,
+        "owl:inverseOf" => %(info:fedora/fedora-system:def/relations-external#hasConstituent).freeze,
         type: "rdf:Property".freeze
       property :isDependentOf,
         label: "Is Dependent Of".freeze,
         subPropertyOf: "info:fedora/fedora-system:def/relations-external#fedoraRelationship".freeze,
+        "owl:inverseOf" => %(info:fedora/fedora-system:def/relations-external#hasDependent).freeze,
         type: "rdf:Property".freeze
       property :isDerivationOf,
         label: "Is Derivation Of".freeze,
         subPropertyOf: "info:fedora/fedora-system:def/relations-external#fedoraRelationship".freeze,
+        "owl:inverseOf" => %(info:fedora/fedora-system:def/relations-external#hasDerivation).freeze,
         type: "rdf:Property".freeze
       property :isDescriptionOf,
         comment: %(A generic descriptive relationship between fedora objects.  The subject is a fedora object that represents a descriptive entity and the predicate is a fedora object that is being described in some manner by the subject.).freeze,
         label: "Is Description Of".freeze,
         subPropertyOf: "info:fedora/fedora-system:def/relations-external#fedoraRelationship".freeze,
+        "owl:inverseOf" => %(info:fedora/fedora-system:def/relations-external#hasDescription).freeze,
         type: "rdf:Property".freeze
       property :isMemberOf,
         label: "Is Member Of".freeze,
         subPropertyOf: "info:fedora/fedora-system:def/relations-external#isPartOf".freeze,
+        "owl:inverseOf" => %(info:fedora/fedora-system:def/relations-external#hasMember).freeze,
         type: "rdf:Property".freeze
       property :isMemberOfCollection,
         label: "Is Member Of Collection".freeze,
         subPropertyOf: "info:fedora/fedora-system:def/relations-external#isMemberOf".freeze,
+        "owl:inverseOf" => %(info:fedora/fedora-system:def/relations-external#hasCollectionMember).freeze,
         type: "rdf:Property".freeze
       property :isMetadataFor,
         comment: %(A refinement of the generic descriptive relationship indicating a metadata relationship between fedora objects.  The subject is a fedora object that represents metadata and the predicate is a fedora object for which the subject serves as metadata.).freeze,
         label: "Is Metadata For".freeze,
         subPropertyOf: "info:fedora/fedora-system:def/relations-external#isDescriptionOf".freeze,
+        "owl:inverseOf" => %(info:fedora/fedora-system:def/relations-external#hasMetadata).freeze,
         type: "rdf:Property".freeze
       property :isPartOf,
         label: "Is Part Of".freeze,
         subPropertyOf: "info:fedora/fedora-system:def/relations-external#fedoraRelationship".freeze,
+        "owl:inverseOf" => %(info:fedora/fedora-system:def/relations-external#hasPart).freeze,
         type: "rdf:Property".freeze
       property :isSubsetOf,
         label: "Is Subset Of".freeze,
         subPropertyOf: "info:fedora/fedora-system:def/relations-external#isMemberOf".freeze,
+        "owl:inverseOf" => %(info:fedora/fedora-system:def/relations-external#hasSubset).freeze,
         type: "rdf:Property".freeze
     end
     class VIEW < RDF::StrictVocabulary("info:fedora/fedora-system:def/view#")
