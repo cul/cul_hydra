@@ -29,12 +29,6 @@ module Cul::Scv::Hydra::Models::Common
     super
   end
 
-  def create
-    run_callbacks :create do
-      super
-    end
-  end
-
   def cmodel_pid(klass)
     klass.pid_namespace + ":" + klass.name.split("::")[-1]
   end
