@@ -31,6 +31,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "equivalent-xml", ">= 0.2.4"
   s.add_development_dependency "rbx-require-relative"
 
-  s.files = Dir.glob("{bin,lib,app,config}/**/*")
+  s.files = Dir.glob("{bin,lib,app,config,fixtures}/**/*")
   s.require_paths = ['app','config','lib', 'fixtures']
 end
