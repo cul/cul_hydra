@@ -25,7 +25,7 @@ class GenericResource < ::ActiveFedora::Base
 
   def assert_content_model
     super
-    add_relationship(:rdf_type, Cul::Scv::Hydra::ActiveFedora::RESOURCE_TYPE.to_s)
+    add_relationship(:rdf_type, Cul::Scv::Hydra::Models::RESOURCE_TYPE.to_s)
   end
 
   def route_as
