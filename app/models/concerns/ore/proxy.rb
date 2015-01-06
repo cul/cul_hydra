@@ -1,5 +1,6 @@
 # A named graph describing the location of a Resource in a virtual nested structure
 require 'digest'
+require 'active_triples'
 module ORE
 class Proxy < ActiveTriples::Resource
   include Digest

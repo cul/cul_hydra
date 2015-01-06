@@ -1,3 +1,6 @@
+# -*- encoding: utf-8 -*-
+# This file generated automatically using vocab-fetch from http://www.semanticdesktop.org/ontologies/2007/03/22/nfo
+require 'rdf'
 module RDF
   class CUL < RDF::StrictVocabulary("http://purl.oclc.org/NET/CUL/")
     term :Aggregator,

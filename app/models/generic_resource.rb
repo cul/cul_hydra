@@ -25,7 +25,7 @@ class GenericResource < ::ActiveFedora::Base
 
   def assert_content_model
     super
-    add_relationship(:rdf_type, Cul::Scv::Hydra::Models::RESOURCE_TYPE.to_s)
+    add_relationship(:rdf_type, RDF::CUL.Resource.to_s)
   end
 
   def route_as
@@ -38,8 +38,8 @@ class GenericResource < ::ActiveFedora::Base
 
   def to_solr(solr_doc = Hash.new, opts={})
     super
-    unless solr_doc["extent_ssi"] || self.datastreams["content"].nil?
-      solr_doc["extent_ssi"] = [self.datastreams["content"].size]
+    unless solr_doc["extent_ssim"] || self.datastreams["content"].nil?
+      solr_doc["extent_ssim"] = [self.datastreams["content"].dsSize]
     end
     solr_doc
   end
@@ -57,7 +57,15 @@ class GenericResource < ::ActiveFedora::Base
   def to_solr(solr_doc = Hash.new, opts={})
     solr_doc = super
     unless solr_doc["extent_ssim"] || self.datastreams["content"].nil?
-      solr_doc["extent_ssim"] = [self.datastreams["content"].size]
+      if self.datastreams["content"].dsSize.to_i > 0
+        solr_doc["extent_ssim"] = [self.datastreams["content"].dsSize]
+      else
+        repo = ActiveFedora::Base.connection_for_pid(pid)
+        ds_parms = {pid: pid, dsid: "content", method: :head}
+        repo.datastream_dissemination(ds_parms) do |res|
+          solr_doc["extent_ssim"] = res['Content-Length']
+        end
+      end
     end
     if self.zooming?
       fz = rels_int.relationships(datastreams['content'], :foaf_zooming).first.object.to_s.split('/')[-1]
