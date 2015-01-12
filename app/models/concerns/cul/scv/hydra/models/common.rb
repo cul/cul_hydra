@@ -19,6 +19,12 @@ module Cul::Scv::Hydra::Models::Common
 
   end
 
+  # A Fedora object label can only contain a string values of up to 255 characters.  If we try to
+  # set a longer value, it causes object save errors.  Truncate labels to 255 characters.
+  def label=(new_label)
+    super(new_label[0, 255])
+  end
+
   def rdf_type
     relationships[:rdf_type]
   end
