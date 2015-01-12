@@ -1,7 +1,9 @@
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'lib'))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'app','models'))
 require 'rake/clean'
+require 'rubygems'
 require 'bundler'
+require 'bundler/setup'
 Bundler::GemHelper.install_tasks
 Dir.glob("lib/tasks/*.rake").each do |rakefile|
   load rakefile
