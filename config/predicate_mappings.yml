@@ -65,6 +65,7 @@
     :x_resolution: xResolution
     :y_resolution: yResolution
     :resolution_unit: resolutionUnit
+    :orientation: orientation
   http://xmlns.com/foaf/0.1/:
     :foaf_image: image
     :foaf_thumbnail: thumbnail
