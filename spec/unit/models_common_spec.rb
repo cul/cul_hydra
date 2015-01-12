@@ -12,8 +12,7 @@ describe "Cul::Scv::Hydra::Models::Common", type: :unit do
       long_label =  "This is a very long label with a lot of words in it, but every single one " +
                     "of these words is essential and should remain here for the rest of time because " +
                     "future people from future generations will one day look back and admire the verbosity " +
-                    "and it will profoundly affect them in ways that people from our own time are unlikely to be " +
-                    "able to comprehend"
+                    "and it will profoundly affect them in ways that people from our own time are unlikely to understand."
       test_obj.label = long_label
       expect(test_obj.label).to_not eq(long_label)
       expect(test_obj.label.length).to_not eq(long_label.length)
