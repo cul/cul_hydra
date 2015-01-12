@@ -5,22 +5,17 @@ JETTY_ZIP_BASENAME = 'master'
 Jettywrapper.url = "https://github.com/projecthydra/hydra-jetty/archive/#{JETTY_ZIP_BASENAME}.zip"
 
 namespace :cul_hydra do
-  begin
-    require 'rspec/core/rake_task'
-    RSpec::Core::RakeTask.new(:rspec) do |spec|
-      spec.pattern = FileList['spec/**/*_spec.rb']
-      spec.pattern += FileList['spec/*_spec.rb']
-      spec.rspec_opts = ['--backtrace'] if ENV['CI']
-    end
+  require 'rspec/core/rake_task'
+  RSpec::Core::RakeTask.new(:rspec) do |spec|
+    spec.pattern = FileList['spec/**/*_spec.rb']
+    spec.pattern += FileList['spec/*_spec.rb']
+    spec.rspec_opts = ['--backtrace'] if ENV['CI']
+  end
 
-    RSpec::Core::RakeTask.new(:rcov) do |spec|
-      spec.pattern = FileList['spec/**/*_spec.rb']
-      spec.pattern += FileList['spec/*_spec.rb']
-      spec.rcov = true
-    end
-  rescue Exception => e
-    puts "Exception creating rspec rake tasks: check for development environment?"
-    puts e
+  RSpec::Core::RakeTask.new(:rcov) do |spec|
+    spec.pattern = FileList['spec/**/*_spec.rb']
+    spec.pattern += FileList['spec/*_spec.rb']
+    spec.rcov = true
   end
 
   desc "CI build"
