@@ -1,0 +1,10 @@
+default: &default
+  :url: http://127.0.0.1:8983/fedora
+  :user: fedoraAdmin
+  :password: fedoraAdmin
+development:
+  <<: *default
+test:
+  <<: *default
+production:
+  <<: *default
