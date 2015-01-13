@@ -227,8 +227,13 @@ def as_node(data)
   end
 end
 
+def fedora_config
+  yaml = File.exists?('config/fedora.yml') ?
+    YAML::load(File.open('config/fedora.yml')) :
+    YAML::load(File.open('spec/dummy/config/fedora.yml'))
+end
 def ingest(pid, foxml, force=false)
-  @configs ||= YAML::load(File.open('config/fedora.yml'))
+  @configs ||= fedora_config
   env = ENV['RAILS_ENV'] || 'test'
   opts = @configs[env]
   @rubydora_conn ||= ActiveFedora::RubydoraConnection.new(opts)
