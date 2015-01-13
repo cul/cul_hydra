@@ -24,5 +24,11 @@ describe "Cul::Scv::Hydra::Models::Common", type: :unit do
       test_obj.label = short_label
       expect(test_obj.label).to eq(short_label)
     end
+    it "should also handle an array value (because the original method did) and use the first element" do
+      test_obj = ContentAggregator.new
+      short_label = ['Short label']
+      test_obj.label = short_label
+      expect(test_obj.label).to eq(short_label.first)
+    end
   end
 end
