@@ -27,9 +27,11 @@ end
 RSpec.configure do |config|
   config.use_transactional_fixtures = true
 end
-
+def absolute_fixture_path(file)
+  File.realpath(File.join(File.dirname(__FILE__), '..','fixtures','spec', file))
+end
 def fixture(file)
-  path = File.join(File.dirname(__FILE__), '..','fixtures','spec', file)
+  path = absolute_fixture_path(file)
   raise "No fixture file at #{path}" unless File.exists? path
   File.new(path)
 end
@@ -228,24 +230,29 @@ def as_node(data)
 end
 
 def fedora_config
-  yaml = File.exists?('config/fedora.yml') ?
-    YAML::load(File.open('config/fedora.yml')) :
-    YAML::load(File.open('spec/dummy/config/fedora.yml'))
+  @config ||= begin
+    fc = File.exists?('config/fedora.yml') ? 'config/fedora.yml' : 'spec/dummy/config/fedora.yml'
+    sc = File.exists?('config/solr.yml') ? 'config/solr.yml' : 'spec/dummy/config/solr.yml'
+    {fedora_config_path: fc, solr_config_path: sc}
+  end
+end
+def rubydora_connection
+  @configs ||= fedora_config
+  @rubydora_conn ||= begin
+    ActiveFedora.init(@configs)
+    ActiveFedora::RubydoraConnection.new(ActiveFedora.config.credentials)
+  end
 end
 def ingest(pid, foxml, force=false)
-  @configs ||= fedora_config
-  env = ENV['RAILS_ENV'] || 'test'
-  opts = @configs[env]
-  @rubydora_conn ||= ActiveFedora::RubydoraConnection.new(opts)
-  obj = @rubydora_conn.connection.find_or_initialize(pid)
+  obj = rubydora_connection.connection.find_or_initialize(pid)
   if obj.new?
-    @rubydora_conn.connection.ingest(:pid=>pid, :file=>foxml)
+    rubydora_connection.connection.ingest(:pid=>pid, :file=>foxml)
     return ActiveFedora::Base.find(pid, :cast=>true)
   else
     base = ActiveFedora::Base.find(pid, :cast=>true)
     if force
       base.delete
-      @rubydora_conn.connection.ingest(:pid=>pid, :file=>foxml)
+      rubydora_connection.connection.ingest(:pid=>pid, :file=>foxml)
       return ActiveFedora::Base.find(pid, :cast=>true)
     else
       return base
