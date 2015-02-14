@@ -136,6 +136,46 @@ class GenericResource < ::ActiveFedora::Base
     (zr = rels_int.relationships(datastreams['content'], :foaf_zooming) and not zr.first.blank?)
   end
 
+  def with_content_resource(fedora_content_filesystem_mounted=false, &block)
+
+    content_ds = self.datastreams['content']
+
+    if fedora_content_filesystem_mounted
+      if content_ds.dsLocation =~ /^file:\//
+        dsLocation = content_ds.dsLocation.sub(/^file:\/+/,'/')
+        path = URI.unescape(dsLocation)
+      else
+        path = content_ds.dsLocation
+      end
+
+      yield(path)
+    else
+      internal_uri = "info:fedora/#{self.pid}/content"
+      # No local fedora mount, need to download content over http[s]
+
+      file_basename = File.basename(content_ds.dsLocation.gsub(/^file:/,''))
+      file_extension = File.extname(file_basename)
+
+      # In some cases, we actually do want to know the original extension of the file, so we'll preserve it in the temp file filename
+      temp_file = Tempfile.new([file_basename, file_extension])
+      begin
+        parts = internal_uri.split('/')
+        open(temp_file.path, 'wb') do |blob|
+          repo = ActiveFedora::Base.connection_for_pid(parts[1])
+          repo.datastream_dissemination({:dsid=>parts[2], :pid=>parts[1], :finished=>false}) do |res|
+            res.read_body do |seg|
+              blob << seg
+            end
+          end
+        end
+        yield(temp_file.path)
+      ensure
+        temp_file.unlink
+      end
+    end
+
+  end
+
   private
   def datastream_as_resource(dsid, props={})
     ds = datastreams[dsid]
