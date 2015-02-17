@@ -2,7 +2,7 @@
 module Cul
   module Scv
     module Hydra
-        VERSION = '0.22.0'
+        VERSION = '0.22.1'
         def self.version
           VERSION
         end
