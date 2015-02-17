@@ -36,14 +36,6 @@ class GenericResource < ::ActiveFedora::Base
     "FILE ASSET"
   end
 
-  def to_solr(solr_doc = Hash.new, opts={})
-    super
-    unless solr_doc["extent_ssim"] || self.datastreams["content"].nil?
-      solr_doc["extent_ssim"] = [self.datastreams["content"].dsSize]
-    end
-    solr_doc
-  end
-
   def thumbnail_info
     thumb = relsint.relationships(datastreams['content'],:foaf_thumb).first
     if thumb
@@ -56,6 +48,7 @@ class GenericResource < ::ActiveFedora::Base
 
   def to_solr(solr_doc = Hash.new, opts={})
     solr_doc = super
+
     unless solr_doc["extent_ssim"] || self.datastreams["content"].nil?
       if self.datastreams["content"].dsSize.to_i > 0
         solr_doc["extent_ssim"] = [self.datastreams["content"].dsSize]
@@ -67,6 +60,7 @@ class GenericResource < ::ActiveFedora::Base
         end
       end
     end
+
     if self.zooming?
       fz = rels_int.relationships(datastreams['content'], :foaf_zooming).first.object.to_s.split('/')[-1]
       ds = datastreams[fz]
@@ -75,6 +69,13 @@ class GenericResource < ::ActiveFedora::Base
         solr_doc['rft_id_ss'] = rft_id
       end
     end
+
+    solr_doc["fulltext_teim"] = []
+    unless self.datastreams["fulltext"].nil?
+      solr_doc["fulltext_teim"] << self.datastreams["fulltext"].content
+      solr_doc["fulltext_teim"] << solr_doc["title_display_ssm"] unless solr_doc["title_display_ssm"].nil? or solr_doc["title_display_ssm"].length == 0
+    end
+
     solr_doc
   end
 
