@@ -10,7 +10,7 @@ describe GenericResource, type: :unit do
       o = GenericResource.new(pid:"lol:wut")
       o.add_relationship(:original_name,'/path/to/a/thing',true)
       doc = o.to_solr
-      expect(doc['fulltext_tesim']).to eql(['path to a thing'])
+      expect(doc['original_name_tesim']).to eql(['path to a thing'])
     end
   end
 end

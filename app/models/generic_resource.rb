@@ -76,8 +76,9 @@ class GenericResource < ::ActiveFedora::Base
       solr_doc["fulltext_tesim"] << solr_doc["title_display_ssm"] unless solr_doc["title_display_ssm"].nil? or solr_doc["title_display_ssm"].length == 0
     end
     relationships(:original_name).each do |original_name|
+      solr_doc["original_name_tesim"] ||= []
       original_name = original_name.object.to_s.split('/').join(' ')
-      solr_doc["fulltext_tesim"] << original_name.strip
+      solr_doc["original_name_tesim"] << original_name.strip
     end
 
     solr_doc
