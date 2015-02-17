@@ -98,7 +98,7 @@ describe ::Resource, type: :integration do
     end
 
     it "should be able to find its width" do
-      pred = ActiveFedora::Predicates.find_graph_predicate(:exif_image_width)
+      pred = ActiveFedora::Predicates.find_graph_predicate(:image_width)
       puts "#{pred.class} : #{pred}"
       @newobj.relationships(pred).length.should == 1
     end
