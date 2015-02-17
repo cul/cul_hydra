@@ -113,6 +113,16 @@ module Cul::Scv::Hydra::Models::Common
     if (solr_doc["title_display_ssm"].length > 1)
       solr_doc["title_display_ssm"].uniq!
     end
+
+    if solr_doc["contributor_ssim"].present?
+      if solr_doc["contributor_ssim"].is_a?(Array)
+        solr_doc["contributor_first_si"] = solr_doc["contributor_ssim"].first
+      else
+        solr_doc["contributor_first_si"] = solr_doc["contributor_ssim"]
+      end
+    end
+
+
     solr_doc["format_ssi"] = [self.route_as]
 
     set_size_labels(solr_doc)

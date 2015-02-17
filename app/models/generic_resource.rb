@@ -70,10 +70,10 @@ class GenericResource < ::ActiveFedora::Base
       end
     end
 
-    solr_doc["fulltext_teim"] = []
+    solr_doc["fulltext_tesim"] = []
     unless self.datastreams["fulltext"].nil?
-      solr_doc["fulltext_teim"] << self.datastreams["fulltext"].content
-      solr_doc["fulltext_teim"] << solr_doc["title_display_ssm"] unless solr_doc["title_display_ssm"].nil? or solr_doc["title_display_ssm"].length == 0
+      solr_doc["fulltext_tesim"] << self.datastreams["fulltext"].content
+      solr_doc["fulltext_tesim"] << solr_doc["title_display_ssm"] unless solr_doc["title_display_ssm"].nil? or solr_doc["title_display_ssm"].length == 0
     end
 
     solr_doc
