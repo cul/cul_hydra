@@ -73,7 +73,7 @@ class GenericResource < ::ActiveFedora::Base
     solr_doc["fulltext_tesim"] = []
     unless self.datastreams["fulltext"].nil?
       solr_doc["fulltext_tesim"] << self.datastreams["fulltext"].content
-      solr_doc["fulltext_tesim"] << solr_doc["title_display_ssm"] unless solr_doc["title_display_ssm"].nil? or solr_doc["title_display_ssm"].length == 0
+      solr_doc["fulltext_tesim"] << solr_doc["title_display_ssm"].first unless solr_doc["title_display_ssm"].nil? or solr_doc["title_display_ssm"].length == 0
     end
     relationships(:original_name).each do |original_name|
       solr_doc["original_name_tesim"] ||= []
