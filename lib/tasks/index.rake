@@ -9,8 +9,6 @@ namespace :cul_scv_hydra do
       puts 'Solr URL: ' + ActiveFedora.solr_config[:url]
       puts '---------------------------'
 
-      START_TIME = Time.now
-
       ENV["RAILS_ENV"] ||= Rails.env
 
       if ENV['PIDS']
@@ -54,13 +52,16 @@ namespace :cul_scv_hydra do
         next
       end
 
-      START_TIME = Time.now
+      start_time = Time.now
       pids = Cul::Scv::Hydra::RisearchMembers.get_project_constituent_pids(project_pid, true)
-
-      puts "Found #{pids.length} project members."
+      total = pids.length
+      puts "Found #{total} project members."
+      counter = 0
 
       pids.each do |pid|
         Cul::Scv::Hydra::Indexer.index_pid(pid, false, false)
+        counter += 1
+        puts "Indexed #{counter} of #{total} | #{Time.now - start_time} seconds"
       end
 
     end
