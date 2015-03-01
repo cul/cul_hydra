@@ -40,6 +40,31 @@ namespace :cul_scv_hydra do
 
     end
 
+    task :by_project_pid => :environment do
+
+      puts '---------------------------'
+      puts 'Fedora URL: ' + ActiveFedora.config.credentials[:url]
+      puts 'Solr URL: ' + ActiveFedora.solr_config[:url]
+      puts '---------------------------'
+
+      if ENV['PID']
+        project_pid = ENV['PID']
+      else
+        puts 'Please specify a project PID (e.g. PID=cul:123)'
+        next
+      end
+
+      START_TIME = Time.now
+      pids = Cul::Scv::Hydra::RisearchMembers.get_project_constituent_pids(project_pid, true)
+
+      puts "Found #{pids.length} project members."
+
+      pids.each do |pid|
+        Cul::Scv::Hydra::Indexer.index_pid(pid, false, false)
+      end
+
+    end
+
   end
 
 end
