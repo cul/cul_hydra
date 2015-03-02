@@ -291,6 +291,8 @@ module Cul::Scv::Hydra::Solrizer
     def to_solr(solr_doc={})
       solr_doc = (defined? super) ? super : solr_doc
 
+      return solr_doc if mods.nil? # There is no mods.  Return because there is nothing to process.
+
       solr_doc["all_text_teim"] ||= []
 
       solr_doc["title_si"] = sort_title
