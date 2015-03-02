@@ -58,23 +58,27 @@ module Cul::Hydra::Indexer
   def self.recursively_index_fedora_objects(top_pid, pids_to_omit=nil, skip_generic_resources=false, verbose_output=false)
 
     descend_from(top_pid, pids_to_omit, verbose_output) do |pid|
-
-      # We found an object with the desired PID. Let's reindex it
-      begin
-        active_fedora_object = ActiveFedora::Base.find(pid, :cast => true)
-
-        if skip_generic_resources && active_fedora_object.is_a?(GenericResource)
-          puts 'Object was skipped because GenericResources are being skipped and it is a GenericResource.'
-        else
-          active_fedora_object.update_index
-          puts 'done.' if verbose_output
-        end
-      rescue Exception => e
-        puts "Encountered problem with #{pid}.  Skipping record.  Exception: #{e.message}"
-      end
-
+      self.index_pid(pid, skip_generic_resources, verbose_output)
     end
 
   end
 
+  def self.index_pid(pid, skip_generic_resources=false, verbose_output=false)
+    # We found an object with the desired PID. Let's reindex it
+    begin
+      active_fedora_object = ActiveFedora::Base.find(pid, :cast => true)
+
+      if skip_generic_resources && active_fedora_object.is_a?(GenericResource)
+        puts 'Object was skipped because GenericResources are being skipped and it is a GenericResource.'
+      else
+        active_fedora_object.update_index
+        puts 'done.' if verbose_output
+      end
+    rescue SystemExit, Interrupt => e
+      # Allow system interrupt (ctrl+c)
+      raise e
+    rescue Exception => e
+      puts "Encountered problem with #{pid}.  Skipping record.  Exception: #{e.message}"
+    end
+  end
 end
