@@ -63,7 +63,7 @@ describe StaticImageAggregator, type: :integration do
 
   describe "DC" do
     it "should have a DC datastream" do
-      @fixtureobj.datastreams["DC"].class.should == Cul::Scv::Hydra::Datastreams::DCMetadata
+      expect(@fixtureobj.datastreams["DC"]).to be_a Cul::Hydra::Datastreams::DCMetadata
     end
 
     it "should be able to edit and push new data to Fedora" do

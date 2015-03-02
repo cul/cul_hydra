@@ -43,7 +43,7 @@ describe ::Resource, type: :integration do
 
     subject {@fixtureobj.datastreams['DC']}
     it "should have a DC datastream" do
-      subject.class.name.should == "Cul::Scv::Hydra::Datastreams::DCMetadata"
+      expect(subject).to be_a Cul::Hydra::Datastreams::DCMetadata
     end
 
     it "should be able to edit and push new data to Fedora" do

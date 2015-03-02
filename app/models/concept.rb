@@ -4,7 +4,7 @@ class Concept < GenericAggregator
   include ::ActiveFedora::FinderMethods::RepositoryMethods
   include ::ActiveFedora::DatastreamCollections
   include ::Hydra::ModelMethods
-  include Cul::Scv::Hydra::Models::Common
+  include Cul::Hydra::Models::Common
 
   has_and_belongs_to_many :containers, :property=>:cul_member_of, :class_name=>'ActiveFedora::Base'
 

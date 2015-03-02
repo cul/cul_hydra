@@ -9,9 +9,9 @@ class GenericResource < ::ActiveFedora::Base
   include ::ActiveFedora::FinderMethods::RepositoryMethods
   include ::ActiveFedora::DatastreamCollections
   include ::Hydra::ModelMethods
-  include Cul::Scv::Hydra::Models::Common
-  include Cul::Scv::Hydra::Models::ImageResource
-  include Cul::Scv::Fedora::UrlHelperBehavior
+  include Cul::Hydra::Models::Common
+  include Cul::Hydra::Models::ImageResource
+  include Cul::Hydra::Fedora::UrlHelperBehavior
   include ::ActiveFedora::RelsInt
 
   has_and_belongs_to_many :containers, :property=>:cul_member_of, :class_name=>'ActiveFedora::Base'

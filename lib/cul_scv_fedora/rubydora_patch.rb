@@ -2,13 +2,9 @@ module Cul
   module Scv
     module Fedora
       module RubydoraPatch
-        def find_by_itql query, options = {}
-          begin
-          	self.risearch(query, {:lang => 'itql'}.merge(options))
-          rescue Exception => e
-          	logger.error e if defined?(logger)
-          	"{\"results\":[]}"
-          end
+        extend ActiveSupport::Concern
+        included do
+          include Cul::Hydra::Fedora::RubydoraPatch
         end
       end
     end

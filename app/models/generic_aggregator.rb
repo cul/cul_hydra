@@ -4,8 +4,8 @@ class GenericAggregator < ::ActiveFedora::Base
   include ::ActiveFedora::FinderMethods::RepositoryMethods
   include ::ActiveFedora::DatastreamCollections
   include ::Hydra::ModelMethods
-  include Cul::Scv::Hydra::Models::Common
-  include Cul::Scv::Hydra::Models::Aggregator
+  include Cul::Hydra::Models::Common
+  include Cul::Hydra::Models::Aggregator
 
   has_many :parts, :property => :cul_member_of, :class_name=>'ActiveFedora::Base'
 
@@ -14,9 +14,9 @@ class GenericAggregator < ::ActiveFedora::Base
   end
 
   def index_type_label
-    riquery = Cul::Scv::Hydra::Models::MEMBER_ITQL.gsub(/%PID%/, self.pid)
+    riquery = Cul::Hydra::Models::MEMBER_ITQL.gsub(/%PID%/, self.pid)
     begin
-      docs = Cul::Scv::Fedora.repository.find_by_itql riquery, limit: 2, format: 'count/json'
+      docs = Cul::Fedora.repository.find_by_itql riquery, limit: 2, format: 'count/json'
       docs = JSON.parse(docs)['results']
       size = docs.first && docs.first['count'] && docs.first['count'].to_i
     rescue Exception=>e
@@ -39,7 +39,7 @@ class GenericAggregator < ::ActiveFedora::Base
   # set the index type label and any RI-based fields
   # overridde
   def set_size_labels(solr_doc={})
-    count = Cul::Scv::Hydra::RisearchMembers.get_direct_member_count(pid)
+    count = Cul::Hydra::RisearchMembers.get_direct_member_count(pid)
     solr_doc["index_type_label_ssi"] = [type_label_for(count)]
     solr_doc["cul_number_of_members_isi"] = count
   end

@@ -5,7 +5,7 @@ class DcDocument < ActiveFedora::Base
   include ::ActiveFedora::FinderMethods::RepositoryMethods
   include ::ActiveFedora::DatastreamCollections
   include Hydra::ModelMethods
-  include Cul::Scv::Hydra::Models::Common
+  include Cul::Hydra::Models::Common
   #alias :file_objects :resources
 
   has_and_belongs_to_many :parts, :property => :cul_member_of, :class_name=>'ActiveFedora::Base'

@@ -1,4 +1,4 @@
-module Cul::Scv::Hydra::Controllers::Helpers
+module Cul::Hydra::Controllers::Helpers
 module HydraUploaderHelperBehavior
   
   # Generate the appropriate url for posting uploads to

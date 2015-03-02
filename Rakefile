@@ -20,7 +20,7 @@ task :default => [:ci]
 
 require 'rdoc/task'
 Rake::RDocTask.new do |rdoc|
-  version = Cul::Scv::Hydra::VERSION
+  version = Cul::Hydra::VERSION
 
   rdoc.rdoc_dir = 'rdoc'
   rdoc.title = "cul-hydra #{version}"

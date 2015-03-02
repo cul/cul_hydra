@@ -32,7 +32,7 @@ describe ContentAggregator, type: :integration do
 
   describe "descMetadata" do
     it "should have a descMetadata datastream" do
-      @fixtureobj.datastreams["descMetadata"].class.name.should == "Cul::Scv::Hydra::Datastreams::ModsDocument"
+      expect(@fixtureobj.datastreams["descMetadata"]).to be_a Cul::Hydra::Datastreams::ModsDocument
     end
 
     it "should be able to edit and push new data to Fedora" do
@@ -50,7 +50,7 @@ describe ContentAggregator, type: :integration do
   describe "structMetadata" do
     it "should have a default, stubbed structMetadata datastream" do
       ds = @fixtureobj.datastreams["structMetadata"]
-      ds.class.name.should == "Cul::Scv::Hydra::Datastreams::StructMetadata"
+      expect(ds).to be_a(Cul::Hydra::Datastreams::StructMetadata)
       ds.changed?.should be_false
       expect(@fixtureobj.to_solr[:structured_bsi]).to eql 'false'
     end

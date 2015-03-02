@@ -1,4 +1,4 @@
-module Cul::Scv::Hydra::Controllers::Helpers
+module Cul::Hydra::Controllers::Helpers
 module HydraAutocompleteHelperBehavior
   def autocomplete_fedora_text_field(resource, datastream_name, field_key, opts={})
     field_name = field_name_for(field_key)

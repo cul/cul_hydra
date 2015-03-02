@@ -7,9 +7,9 @@ class Resource < ActiveFedora::Base
   include ::ActiveFedora::FinderMethods::RepositoryMethods
   include ::ActiveFedora::DatastreamCollections
 #  include ::Hydra::ModelMethods
-  include Cul::Scv::Hydra::Models::Common
-  include Cul::Scv::Hydra::Models::Resource
-  include Cul::Scv::Hydra::Models::ImageResource
+  include Cul::Hydra::Models::Common
+  include Cul::Hydra::Models::Resource
+  include Cul::Hydra::Models::ImageResource
 
   belongs_to :container, :property=>:cul_member_of, :class_name=>'ActiveFedora::Base'
 

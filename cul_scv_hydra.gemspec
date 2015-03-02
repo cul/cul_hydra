@@ -2,18 +2,18 @@
 lib = File.expand_path('../lib/', __FILE__)
 $:.unshift lib unless $:.include?(lib)
 
-require 'cul_scv_hydra/version'
+require 'cul_hydra/version'
 
 Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9.3'
   s.name = "cul_scv_hydra"
-  s.version = Cul::Scv::Hydra::VERSION
+  s.version = Cul::Hydra::VERSION
   s.platform = Gem::Platform::RUBY
   s.authors = ["Benjamin Armintor", "Eric O'Hanlon"]
   s.homepage = "https://github.com/cul/cul_scv_hydra"
   s.email = %q{armintor@gmail.com}
-  s.description = "Hydra implementations for CUL Staff Collection Viewer"
-  s.summary = "ActiveFedora, OM, and Solrizer implementations for CUL Staff Collection Viewer"
+  s.description = "Hydra implementations for CUL repository apps"
+  s.summary = "ActiveFedora, OM, and Solrizer implementations for CUL repository apps"
 
   s.add_dependency("blacklight")
   s.add_dependency('hydra-head', "~>7")

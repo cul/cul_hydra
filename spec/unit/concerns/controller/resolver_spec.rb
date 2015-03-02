@@ -30,7 +30,6 @@ describe Cul::Scv::Hydra::Resolver, type: :unit do
     subject.params[:action] = 'widgets'
     subject.stub(:widget_url).and_return('get:lol:wut')
     subject.stub(:redirect_to)
-    subject.stub(:redirect_to)
     subject.get
   end
   it "should resolve resourceful actions correctly" do

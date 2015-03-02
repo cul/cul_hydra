@@ -2,7 +2,7 @@ require 'net/http'
 require 'open-uri'
 require 'tempfile'
 require 'uri'
-module Cul::Scv::Hydra::Controllers::Helpers
+module Cul::Hydra::Controllers::Helpers
 module ResourcesHelperBehavior
   IMAGE_MIME_TYPES = [
     'image/bmp',
