@@ -277,6 +277,17 @@ module Cul::Scv::Hydra::Solrizer
 			return (places_without_uri.length > 0 ? places_without_uri : places_with_uri)
 		end
 
+    def coordinates(node=mods)
+			coordinate_values = []
+			node.xpath("./mods:subject/mods:cartographics/mods:coordinates", MODS_NS).collect do |n|
+        n = ScvModsFieldable.normalize(n.text, true)
+        if n.match(/-*\d+\.\d+\s*,\s*-*\d+\.\d+\s*/) # Expected coordinate format: 40.123456,-73.5678
+					coordinate_values << n
+				end
+      end
+			coordinate_values
+		end
+
     def to_solr(solr_doc={})
       solr_doc = (defined? super) ? super : solr_doc
 
@@ -374,6 +385,9 @@ module Cul::Scv::Hydra::Solrizer
 					solr_doc["lib_date_textual_ssm"] = date_range_to_textual_date(start_year.to_i, end_year.to_i)
 				end
 			end
+
+			# Geo data
+			solr_doc["geo"] = coordinates
 
       solr_doc.each do |k, v|
         if self.class.maps_field? k
