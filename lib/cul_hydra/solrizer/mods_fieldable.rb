@@ -313,7 +313,8 @@ module Cul::Hydra::Solrizer
     def to_solr(solr_doc={})
       solr_doc = (defined? super) ? super : solr_doc
 
-      return solr_doc if mods.nil? # There is no mods.  Return because there is nothing to process.
+      return solr_doc if mods.nil? 	# There is no mods.  Return because there is nothing to process,
+																		# otherwise NoMethodError will be raised by subsequent lines.
 
       solr_doc["all_text_teim"] ||= []
 

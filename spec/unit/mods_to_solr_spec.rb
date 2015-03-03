@@ -31,6 +31,11 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument", type: :unit do
   end
 
   describe ".to_solr" do
+    it "should return early if the descMetadata content does not actually contain a mods element, avoiding raised NoMethodError from future method lines" do
+      non_mods_item = descMetadata(@mock_inner, fixture( File.join("CUL_DC", "dc.xml")))
+      solr_doc = non_mods_item.to_solr
+      solr_doc.should == {}
+    end
     it "should include nonSort text in display title and exclude it from index title" do
       solr_doc = @mods_item.to_solr
       solr_doc["title_display_ssm"].should include('The Manuscript, unidentified')
