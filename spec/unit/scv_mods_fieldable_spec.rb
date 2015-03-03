@@ -153,4 +153,14 @@ describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable, type: :unit do
     end
   end
 
+  describe ".coordinates" do
+    before :all do
+      @subjects_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-subjects.xml")))
+    end
+    it "should find coordinate values" do
+      test = ModsIndexDatastream.new(@subjects_ng)
+      test.coordinates.should == ['40.8075, -73.9619', '40.6892, -74.0444']
+    end
+  end
+
 end

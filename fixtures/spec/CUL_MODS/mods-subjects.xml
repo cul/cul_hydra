@@ -41,4 +41,14 @@
       We Are Currently Ignoring Subject Occupation
     </occupation>
   </subject>
+  <subject>
+    <cartographics>
+      <coordinates>40.8075, -73.9619</coordinates>
+    </cartographics>
+  </subject>
+  <subject>
+    <cartographics>
+      <coordinates>40.6892, -74.0444</coordinates>
+    </cartographics>
+  </subject>
 </mods>
