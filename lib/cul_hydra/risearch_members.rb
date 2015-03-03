@@ -68,7 +68,7 @@ module ClassMethods
     puts 'Performing query:' if verbose_output
     puts project_constituent_query if verbose_output
 
-    search_response = JSON(Cul::Scv::Fedora.repository.find_by_itql(project_constituent_query, {
+    search_response = JSON(Cul::Hydra::Fedora.repository.find_by_itql(project_constituent_query, {
       :type => 'tuples',
       :format => format,
       :limit => '',

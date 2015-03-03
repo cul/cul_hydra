@@ -6,7 +6,7 @@ module Cul
     module Hydra
     end
     module Fedora
-      extend Cul::Hydra::Fedora
+      extend Cul::Hydra::Fedora::ClassMethods
       autoload :DummyObject, 'cul_scv_fedora/dummy_object'
       autoload :RubydoraPatch, 'cul_scv_fedora/rubydora_patch'
       autoload :UrlHelperBehavior, 'cul_scv_fedora/url_helper_behavior'
