@@ -469,6 +469,30 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument", type: :unit do
         solr_doc["lib_all_subjects_ssm"].should_not include(ignored_subject)
         solr_doc["lib_all_subjects_teim"].should_not include(ignored_subject)
       end
+      it "should extract hierarchical subjects" do
+        item_xml = fixture( File.join("CUL_MODS", "mods-subjects.xml") )
+        mods_item = descMetadata(@mock_inner, item_xml)
+        solr_doc = mods_item.to_solr
+        hierarchical_subjects = []
+        expected_places = {
+          'subject_hierarchical_geographic_country_ssim' => ['United States'],
+          'subject_hierarchical_geographic_province_ssim' => ['Nova Scotia'],
+          'subject_hierarchical_geographic_region_ssim' => ['Northeast'],
+          'subject_hierarchical_geographic_state_ssim' => ['New York'],
+          'subject_hierarchical_geographic_county_ssim' => ['Westchester'],
+          'subject_hierarchical_geographic_borough_ssim' => ['Brooklyn'],
+          'subject_hierarchical_geographic_city_ssim' => ['White Plains'],
+          'subject_hierarchical_geographic_neighborhood_ssim' => ['The Backpacking District'],
+          'subject_hierarchical_geographic_zip_code_ssim' => ['10027'],
+          'subject_hierarchical_geographic_street_ssim' => ['123 Broadway'],
+        }
+        expected_places.each {|solr_key, value|
+          solr_doc[solr_key].should == value
+          value.each {|val|
+            solr_doc["all_text_teim"].should include(val)
+          }
+        }
+      end
     end
   end
 end

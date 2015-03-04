@@ -58,6 +58,18 @@ class ModsDocument < ::ActiveFedora::OmDatastream
     t.subject(:index_as=>[:textable]){
       t.topic(:index_as=>[:facetable, :displayable])
       t.geographic(:index_as=>[:facetable])
+      t.hierarchical_geographic(:path=>'hierarchicalGeographic', :index_as=>[]){
+        t.country(:index_as=>[:symbol, :textable])
+        t.province(:index_as=>[:symbol, :textable])
+        t.region(:index_as=>[:symbol, :textable])
+        t.state(:index_as=>[:symbol, :textable])
+        t.county(:index_as=>[:symbol, :textable])
+        t.borough(:path=>'citySection', :attributes=>{:'citySectionType'=>"borough"}, :index_as=>[:symbol, :textable])
+        t.city(:index_as=>[:symbol, :textable])
+        t.neighborhood(:path=>'citySection', :attributes=>{:'citySectionType'=>"neighborhood"}, :index_as=>[:symbol, :textable])
+        t.zip_code(:path=>'citySection', :attributes=>{:'citySectionType'=>"zip code"}, :index_as=>[:symbol, :textable])
+        t.street(:path=>'citySection', :attributes=>{:'citySectionType'=>"street"}, :index_as=>[:symbol, :textable])
+      }
     }
     t.type_of_resource(:path=>"typeOfResource", :index_as=>[:displayable])
     t.physical_description(:path=>"physicalDescription", :index_as=>[]){

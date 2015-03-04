@@ -28,7 +28,7 @@ namespace :cul_scv_hydra do
 
       begin
         pids.each do |pid|
-          Cul::Scv::Hydra::Indexer.recursively_index_fedora_objects(pid, pids_to_omit, skip_generic_resources, true)
+          Cul::Hydra::Indexer.recursively_index_fedora_objects(pid, pids_to_omit, skip_generic_resources, true)
         end
       rescue => e
         puts 'Error: ' + e.message
@@ -59,7 +59,7 @@ namespace :cul_scv_hydra do
       counter = 0
 
       pids.each do |pid|
-        Cul::Scv::Hydra::Indexer.index_pid(pid, false, false)
+        Cul::Hydra::Indexer.index_pid(pid, false, false)
         counter += 1
         puts "Indexed #{counter} of #{total} | #{Time.now - start_time} seconds"
       end

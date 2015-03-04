@@ -51,4 +51,18 @@
       <coordinates>40.6892, -74.0444</coordinates>
     </cartographics>
   </subject>
+  <subject>
+    <hierarchicalGeographic>
+      <country>United States</country>
+      <province>Nova Scotia</province>
+      <region>Northeast</region>
+      <state>New York</state>
+      <county>Westchester</county>
+      <citySection citySectionType="borough">Brooklyn</citySection>
+      <city>White Plains</city>
+      <citySection citySectionType="neighborhood">The Backpacking District</citySection>
+      <citySection citySectionType="zip code">10027</citySection>
+      <citySection citySectionType="street">123 Broadway</citySection>
+    </hierarchicalGeographic>
+  </subject>
 </mods>

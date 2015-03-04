@@ -405,7 +405,6 @@ module Cul::Hydra::Solrizer
 
         # When no textual date is available, fall back to other date data (if available)
         if solr_doc["lib_date_textual_ssm"].blank?
-
           solr_doc["lib_date_textual_ssm"] = date_range_to_textual_date(start_year.to_i, end_year.to_i)
         end
       end
@@ -418,6 +417,7 @@ module Cul::Hydra::Solrizer
           solr_doc[k] = self.class.map_value(k, v)
         end
       end
+
       solr_doc
     end
 
