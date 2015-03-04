@@ -24,7 +24,7 @@ namespace :cul_scv_hydra do
         pids_to_omit = nil
       end
 
-      skip_generic_resources = true if ENV['skip_generic_resources'] == 'true'
+      skip_generic_resources = (ENV['skip_generic_resources'] == 'true')
 
       begin
         pids.each do |pid|
@@ -52,6 +52,8 @@ namespace :cul_scv_hydra do
         next
       end
 
+      skip_generic_resources = (ENV['skip_generic_resources'] == 'true')
+
       start_time = Time.now
       pids = Cul::Scv::Hydra::RisearchMembers.get_project_constituent_pids(project_pid, true)
       total = pids.length
@@ -59,7 +61,7 @@ namespace :cul_scv_hydra do
       counter = 0
 
       pids.each do |pid|
-        Cul::Hydra::Indexer.index_pid(pid, false, false)
+        Cul::Hydra::Indexer.index_pid(pid, skip_generic_resources, false)
         counter += 1
         puts "Indexed #{counter} of #{total} | #{Time.now - start_time} seconds"
       end

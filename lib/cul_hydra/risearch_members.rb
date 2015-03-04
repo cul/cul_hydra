@@ -51,7 +51,7 @@ module ClassMethods
     unique_pids = get_direct_member_results(pid,verbose_output,'json')
     unique_pids.map{|result| result['pid'].gsub('info:fedora/', '') }.uniq
   end
-  
+
   def get_direct_member_count(pid, verbose_output=false)
     count = get_direct_member_results(pid,verbose_output,'count/json')
     return count.blank? ? 0 : count[0]['count'].to_i
