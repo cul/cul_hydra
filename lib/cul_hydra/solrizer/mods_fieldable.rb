@@ -244,6 +244,14 @@ module Cul::Hydra::Solrizer
       item_in_context_url_val
     end
 
+    def non_item_in_context_url(node=mods)
+			non_item_in_context_url_val = []
+      node.xpath("./mods:location/mods:url[not(@access='object in context')]", MODS_NS).collect do |n|
+        non_item_in_context_url_val << ModsFieldable.normalize(n.text, true)
+      end
+      non_item_in_context_url_val
+		end
+
     def project_url(node=mods)
       project_url_val = []
       node.xpath("./mods:relatedItem[@type='host' and @displayLabel='Project']/mods:location/mods:url", MODS_NS).collect do |n|
@@ -337,6 +345,7 @@ module Cul::Hydra::Solrizer
       solr_doc["lib_date_notes_ssm"] = date_notes
       solr_doc["lib_non_date_notes_ssm"] = non_date_notes
       solr_doc["lib_item_in_context_url_ssm"] = item_in_context_url
+      solr_doc["lib_non_item_in_context_url_ssm"] = non_item_in_context_url
       solr_doc["lib_project_url_ssm"] = project_url
       solr_doc["origin_info_place_ssm"] = origin_info_place
       solr_doc["origin_info_place_for_display_ssm"] = origin_info_place_for_display

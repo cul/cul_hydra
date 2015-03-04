@@ -1,11 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <mods xmlns='http://www.loc.gov/mods/v3' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd' version='3.4'>
-<location><physicalLocation authority='marcorg'>NNC-RB</physicalLocation>
-<physicalLocation>Rare Book and Manuscript Library, Columbia University</physicalLocation>
-<shelfLocator>(Box no.
-	057)</shelfLocator>
-<sublocation>exampleSublocation</sublocation>
-<url access="object in context" usage="primary display">http://somewhere.cul.columbia.edu/something/123</url>
+<location>
+	<physicalLocation authority='marcorg'>NNC-RB</physicalLocation>
+	<physicalLocation>Rare Book and Manuscript Library, Columbia University</physicalLocation>
+	<shelfLocator>(Box no.
+		057)</shelfLocator>
+	<sublocation>exampleSublocation</sublocation>
+	<url access="object in context" usage="primary display">http://item-in-context.cul.columbia.edu/something/123</url>
+	<url>http://another-location.cul.columbia.edu/zzz/yyy</url>
+	<url>http://great-url.cul.columbia.edu/ooo</url>
 </location>
 <relatedItem displayLabel="Project" type="host">
 	<titleInfo>

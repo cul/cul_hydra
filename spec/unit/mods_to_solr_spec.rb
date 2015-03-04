@@ -246,12 +246,19 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument", type: :unit do
         end
       end
       describe "url" do
-        it "should be stored as a string" do
+        it "item in context url should be stored as a string in its own field" do
           item_xml = fixture( File.join("CUL_MODS", "mods-top-level-location-vs-relateditem-location.xml") )
           mods_item = descMetadata(@mock_inner, item_xml)
           solr_doc = mods_item.to_solr
           solr_doc.should include("lib_item_in_context_url_ssm")
-          solr_doc["lib_item_in_context_url_ssm"].should == ["http://somewhere.cul.columbia.edu/something/123"]
+          solr_doc["lib_item_in_context_url_ssm"].should == ["http://item-in-context.cul.columbia.edu/something/123"]
+        end
+        it "non-item in context urls should be stored together in a multivalued string field, separate from item in context url" do
+          item_xml = fixture( File.join("CUL_MODS", "mods-top-level-location-vs-relateditem-location.xml") )
+          mods_item = descMetadata(@mock_inner, item_xml)
+          solr_doc = mods_item.to_solr
+          solr_doc.should include("lib_non_item_in_context_url_ssm")
+          solr_doc["lib_non_item_in_context_url_ssm"].should == ["http://another-location.cul.columbia.edu/zzz/yyy", "http://great-url.cul.columbia.edu/ooo"]
         end
       end
     end
