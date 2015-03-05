@@ -392,25 +392,38 @@ module Cul::Hydra::Solrizer
 
       if start_date.present?
 
+				start_year = nil
+				end_year = nil
+
+				start_date = nil if start_date == 'uuuu'
+				end_date = nil if end_date == 'uuuu'
+				start_date = start_date.gsub('u', '0') unless start_date.nil?
+				end_date = end_date.gsub('u', '0') unless end_date.nil?
+
         end_date = start_date if end_date.blank?
+        start_date = end_date if start_date.blank?
 
         year_regex = /^(-?\d{1,4}).*/
 
-        start_year_match = start_date.match(year_regex)
-        if start_year_match && start_year_match.captures.length > 0
-          start_year = start_year_match.captures[0]
-          start_year = zero_pad_year(start_year)
-          solr_doc["lib_start_date_year_itsi"] = start_year.to_i # TrieInt version for searches
-        end
+				unless start_date.blank?
+					start_year_match = start_date.match(year_regex)
+					if start_year_match && start_year_match.captures.length > 0
+						start_year = start_year_match.captures[0]
+						start_year = zero_pad_year(start_year)
+						solr_doc["lib_start_date_year_itsi"] = start_year.to_i # TrieInt version for searches
+					end
+				end
 
-        end_year_match = end_date.match(year_regex)
-        if end_year_match && end_year_match.captures.length > 0
-          end_year = end_year_match.captures[0]
-          end_year = zero_pad_year(end_year)
-          solr_doc["lib_end_date_year_itsi"] = end_year.to_i # TrieInt version for searches
-        end
+				unless end_date.blank?
+					end_year_match = end_date.match(year_regex)
+					if end_year_match && end_year_match.captures.length > 0
+						end_year = end_year_match.captures[0]
+						end_year = zero_pad_year(end_year)
+						solr_doc["lib_end_date_year_itsi"] = end_year.to_i # TrieInt version for searches
+					end
+				end
 
-        solr_doc["lib_date_year_range_si"] = start_year + '-' + end_year if start_year
+        solr_doc["lib_date_year_range_si"] = start_year + '-' + end_year if start_year && end_year
 
         # When no textual date is available, fall back to other date data (if available)
         if solr_doc["lib_date_textual_ssm"].blank?

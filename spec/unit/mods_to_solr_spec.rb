@@ -161,6 +161,32 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument", type: :unit do
           solr_doc["lib_date_year_range_si"].should == '-0099-0025'
           solr_doc["lib_date_textual_ssm"].should == ['Between 99 BCE and 25 CE'] # Derived from key date
         end
+        describe "lib_date_year_range_si generation for years with 'u' characters" do
+          it "replaces 'u' characters with zeroes when they're part of, but not all of, a year's digits" do
+            item_xml = fixture( File.join("CUL_MODS", "mods-dates-with-some-u-characters.xml") )
+            mods_item = descMetadata(@mock_inner, item_xml)
+            solr_doc = mods_item.to_solr
+            solr_doc["lib_date_year_range_si"].should == '1870-1900'
+          end
+          it "uses only the start date when an end date is all 'u' characters" do
+            item_xml = fixture( File.join("CUL_MODS", "mods-date-end-with-all-u-characters.xml") )
+            mods_item = descMetadata(@mock_inner, item_xml)
+            solr_doc = mods_item.to_solr
+            solr_doc["lib_date_year_range_si"].should == '1870-1870'
+          end
+          it "uses only the end date when a start date is all 'u' characters" do
+            item_xml = fixture( File.join("CUL_MODS", "mods-date-start-with-all-u-characters.xml") )
+            mods_item = descMetadata(@mock_inner, item_xml)
+            solr_doc = mods_item.to_solr
+            solr_doc["lib_date_year_range_si"].should == '1920-1920'
+          end
+          it "doesn't populate the lib_date_year_range_si field when both the start and end dates are all 'u' characters" do
+            item_xml = fixture( File.join("CUL_MODS", "mods-dates-with-all-u-characters.xml") )
+            mods_item = descMetadata(@mock_inner, item_xml)
+            solr_doc = mods_item.to_solr
+            solr_doc["lib_date_year_range_si"].should == nil
+          end
+        end
         it "extracts tetual dates (non-key dates)" do
           item_xml = fixture( File.join("CUL_MODS", "mods-textual-date.xml") )
           mods_item = descMetadata(@mock_inner, item_xml)
