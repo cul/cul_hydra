@@ -8,7 +8,7 @@ module Cul::Hydra::Models::Aggregator
   end
 
   def aggregator!
-    add_relationship(:rdf_type, Cul::Scv::Hydra::Models::AGGREGATOR_TYPE.to_s)
+    add_relationship(:rdf_type, Cul::Hydra::Models::AGGREGATOR_TYPE.to_s)
     @metadata_is_dirty = true
     self.save
   end
