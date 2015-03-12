@@ -142,24 +142,28 @@ class GenericResource < ::ActiveFedora::Base
     (zr = rels_int.relationships(datastreams['content'], :foaf_zooming) and not zr.first.blank?)
   end
 
-  def with_content_resource(fedora_content_filesystem_mounted=false, &block)
+  def with_ds_resource(ds_id, fedora_content_filesystem_mounted=false, &block)
 
-    content_ds = self.datastreams['content']
+    ds = self.datastreams[ds_id]
 
-    if fedora_content_filesystem_mounted
-      if content_ds.dsLocation =~ /^file:\//
-        dsLocation = content_ds.dsLocation.sub(/^file:\/+/,'/')
+    puts 'dsLocation.start_with?(self.pid) : ' + ds.dsLocation.start_with?(self.pid).to_s
+
+    # If the dsLocation starts with the pid, that means that we're dealing with an internally-managed ds,
+    # so we can't reference the file directly even if we do have the fedora content filesystem mounted.
+    if ! ds.dsLocation.start_with?(self.pid) && fedora_content_filesystem_mounted
+      if ds.dsLocation =~ /^file:\//
+        dsLocation = ds.dsLocation.sub(/^file:\/+/,'/')
         path = URI.unescape(dsLocation)
       else
-        path = content_ds.dsLocation
+        path = ds.dsLocation
       end
 
       yield(path)
     else
-      internal_uri = "info:fedora/#{self.pid}/content"
+      internal_uri = "info:fedora/#{self.pid}/#{ds_id}"
       # No local fedora mount, need to download content over http[s]
 
-      file_basename = File.basename(content_ds.dsLocation.gsub(/^file:/,''))
+      file_basename = File.basename(ds.dsLocation.gsub(/^file:/,''))
       file_extension = File.extname(file_basename)
 
       # In some cases, we actually do want to know the original extension of the file, so we'll preserve it in the temp file filename

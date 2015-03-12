@@ -21,6 +21,14 @@ module Cul::Hydra::Models::ImageResource
 
   DJATOKA_BASE_URL = "http://iris.cul.columbia.edu:8888/resolve"
 
+  EXIF_ORIENTATION_TO_DEGREES = {
+    'top-left' => 0,
+    'left-bottom' => 90,
+    'bottom-right' => 180,
+    'right-top' => 270
+  }
+  DEGREES_TO_EXIF_ORIENTATIONS = EXIF_ORIENTATION_TO_DEGREES.invert
+
   def long
     @long_side ||= max(width(), length())
   end
@@ -75,4 +83,24 @@ module Cul::Hydra::Models::ImageResource
       return {:asset=>"cul_scv_hydra/crystal/file.png",:mime=>'image/png'}
     end
   end
+
+  # The number of rotational degrees required to display this image as upright
+  def required_rotation_for_upright_display
+    required_rotation_orientation_in_degrees = (360 - self.orientation) % 360
+    return required_rotation_orientation_in_degrees
+  end
+
+  # Allowed degrees arg values: 0, 90, 180, 270
+  def orientation=(degrees)
+    degrees = degrees % 360
+    raise "Invalid value for degrees.  Must be a right angle (0, 90, 180, etc.)" unless (degrees % 90 == 0)
+    self.clear_relationship(:orientation)
+    self.add_relationship(:orientation, DEGREES_TO_EXIF_ORIENTATIONS[degrees], true)
+    return degrees # Hide RDF backing structure and make this look like a simple setter method
+  end
+
+  def orientation
+    self.relationships(:orientation).present? ? EXIF_ORIENTATION_TO_DEGREES[self.relationships(:orientation).first.to_s] : 0
+  end
+
 end
