@@ -1,5 +1,8 @@
 module Cul::Hydra::Indexer
 
+  NUM_FEDORA_RETRY_ATTEMPTS = 3
+  DELAY_BETWEEN_FEDORA_RETRY_ATTEMPTS = 5.seconds
+
   def self.descend_from(pid, pids_to_omit=nil, verbose_output=false)
     if pid.blank?
       raise 'Please supply a pid (e.g. rake recursively_index_fedora_objects pid=ldpd:123)'
@@ -66,7 +69,22 @@ module Cul::Hydra::Indexer
   def self.index_pid(pid, skip_generic_resources=false, verbose_output=false)
     # We found an object with the desired PID. Let's reindex it
     begin
-      active_fedora_object = ActiveFedora::Base.find(pid, :cast => true)
+      active_fedora_object = nil
+
+      NUM_FEDORA_RETRY_ATTEMPTS.times { |i|
+        begin
+          active_fedora_object = ActiveFedora::Base.find(pid, :cast => true)
+          break
+        rescue RestClient::RequestTimeout, Errno::EHOSTUNREACH => e
+          remaining_attempts = (NUM_FEDORA_RETRY_ATTEMPTS-1) - i
+          if remaining_attempts == 0
+            raise e
+          else
+            Rails.logger.error "Error: Could not connect to fedora. (#{e.class.to_s + ': ' + e.message}).  Will retry #{remaining_attempts} more #{remaining_attempts == 1 ? 'time' : 'times'} (after a #{DELAY_BETWEEN_FEDORA_RETRY_ATTEMPTS} second delay)."
+            sleep DELAY_BETWEEN_FEDORA_RETRY_ATTEMPTS
+          end
+        end
+      }
 
       if skip_generic_resources && active_fedora_object.is_a?(GenericResource)
         puts 'Object was skipped because GenericResources are being skipped and it is a GenericResource.'
