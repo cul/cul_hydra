@@ -502,6 +502,14 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument", type: :unit do
         solr_doc["lib_all_subjects_ssm"].should_not include(ignored_subject)
         solr_doc["lib_all_subjects_teim"].should_not include(ignored_subject)
       end
+      it 'should not be pulling in topic subjects with authority="Durst"' do
+        item_xml = fixture( File.join("CUL_MODS", "mods-subjects.xml") )
+        mods_item = descMetadata(@mock_inner, item_xml)
+        solr_doc = mods_item.to_solr
+        ignored_subject = 'Durst subject that should be ignored'
+        solr_doc["lib_all_subjects_ssm"].should_not include(ignored_subject)
+        solr_doc["lib_all_subjects_teim"].should_not include(ignored_subject)
+      end
       it "should extract hierarchical subjects" do
         item_xml = fixture( File.join("CUL_MODS", "mods-subjects.xml") )
         mods_item = descMetadata(@mock_inner, item_xml)

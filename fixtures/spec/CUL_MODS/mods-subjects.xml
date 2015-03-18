@@ -20,6 +20,11 @@
       What A Topic
     </topic>
   </subject>
+  <subject authority="Durst">
+    <topic>
+      Durst subject that should be ignored
+    </topic>
+  </subject>
   <subject>
     <temporal>
       So Temporal

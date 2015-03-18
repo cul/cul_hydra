@@ -263,7 +263,7 @@ module Cul::Hydra::Solrizer
     def all_subjects(node=mods)
       list_of_subjects = []
 
-      node.xpath("./mods:subject/mods:topic", MODS_NS).collect do |n|
+      node.xpath("./mods:subject[not(@authority) or @authority != 'Durst']/mods:topic", MODS_NS).collect do |n|
         list_of_subjects << ModsFieldable.normalize(n.text, true)
       end
       node.xpath("./mods:subject/mods:geographic", MODS_NS).collect do |n|
