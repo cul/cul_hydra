@@ -296,11 +296,12 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument", type: :unit do
           solr_doc["all_text_teim"].join(' ').should include("Name, Recipient")
         end
       end
-      it "should index primary names" do
+      it "should index and store primary names" do
         names_xml = fixture( File.join("CUL_MODS", "mods-names.xml"))
         mods = descMetadata(@mock_inner, names_xml)
         solr_doc = mods.to_solr
         solr_doc["primary_name_sim"].should == ["Seminar 401"]
+        solr_doc["primary_name_ssm"].should == ["Seminar 401"]
       end
     end
     describe "relatedItem (project)" do

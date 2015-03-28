@@ -101,7 +101,7 @@ class ModsDocument < ::ActiveFedora::OmDatastream
       :index_as=>[]){
       t.name_part(:path=>'namePart', :index_as=>[])
     }
-    t.primary_name(proxy: [:name_usage_primary,:name_part], index_as: :facetable)
+    t.primary_name(proxy: [:name_usage_primary,:name_part], index_as: [:facetable, :displayable])
     #t.name_corporate(
     #  :path=>'name',:attributes=>{:type=>'corporate'},
     #  :index_as=>[:facetable, :displayable],
