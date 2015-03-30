@@ -424,6 +424,7 @@ module Cul::Hydra::Solrizer
 				end
 
         solr_doc["lib_date_year_range_si"] = start_year + '-' + end_year if start_year && end_year
+        solr_doc["lib_date_year_range_ss"] = solr_doc["lib_date_year_range_si"]
 
         # When no textual date is available, fall back to other date data (if available)
         if solr_doc["lib_date_textual_ssm"].blank?
