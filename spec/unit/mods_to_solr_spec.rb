@@ -408,7 +408,7 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument", type: :unit do
         solr_doc = mods_item.to_solr
         solr_doc["all_text_teim"].join(' ').should include("Original PRD customer order number")
       end
-      it "collects date notes and non-date notes" do
+      it "collects date notes and non-date notes, and prepends appropriate text before certain note types" do
         item_xml = fixture( File.join("CUL_MODS", "mods-notes.xml") )
         mods_item = descMetadata(@mock_inner, item_xml)
         solr_doc = mods_item.to_solr
@@ -418,7 +418,8 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument", type: :unit do
         solr_doc["all_text_teim"].should include("Date note")
         solr_doc["all_text_teim"].should include("Date source note")
 
-        solr_doc["lib_non_date_notes_ssm"].should == ["Basic note", "Banana note"]
+
+        solr_doc["lib_non_date_notes_ssm"].should == ["Basic note", "Banana note", "View Direction: WEST"]
         solr_doc["lib_date_notes_ssm"].should == ["Date note", "Date source note"]
       end
     end

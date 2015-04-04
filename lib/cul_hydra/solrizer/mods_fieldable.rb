@@ -231,7 +231,13 @@ module Cul::Hydra::Solrizer
     def non_date_notes(node=mods)
       non_date_notes = []
       node.xpath("./mods:note[not(@type) or (@type != 'date' and @type != 'date source')]", MODS_NS).collect do |n|
-        non_date_notes << ModsFieldable.normalize(n.text, true)
+				if n.attr('type') == 'view direction'
+					non_date_notes << 'View Direction: ' + ModsFieldable.normalize(n.text, true)
+				else
+					non_date_notes << ModsFieldable.normalize(n.text, true)
+				end
+
+
       end
       return non_date_notes
     end
