@@ -291,6 +291,14 @@ module Cul::Hydra::Solrizer
       return list_of_subjects
     end
 
+    def durst_subjects(node=mods)
+      list_of_subjects = []
+      node.xpath("./mods:subject[@authority='Durst']/mods:topic", MODS_NS).collect do |n|
+        list_of_subjects << ModsFieldable.normalize(n.text, true)
+      end
+      return list_of_subjects
+    end
+
     def origin_info_place(node=mods)
       places = []
       node.xpath("./mods:originInfo/mods:place/mods:placeTerm", MODS_NS).collect do |n|
@@ -340,6 +348,7 @@ module Cul::Hydra::Solrizer
       solr_doc["lib_name_teim"] = solr_doc["lib_name_sim"]
       solr_doc["all_text_teim"] += solr_doc["lib_name_teim"]
       solr_doc["lib_all_subjects_ssm"] = all_subjects
+      solr_doc["durst_subjects_ssim"] = durst_subjects
       solr_doc["lib_all_subjects_teim"] = solr_doc["lib_all_subjects_ssm"]
       solr_doc["all_text_teim"] += solr_doc["lib_all_subjects_teim"]
       solr_doc["lib_name_ssm"] = solr_doc["lib_name_sim"]
