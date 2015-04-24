@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
   s.add_dependency('cul_image_props')
   s.add_dependency('mods')
   s.add_dependency('rdf', '>=1.1.5')
+  s.add_dependency('sparql', '1.1.4') # 1.1.5 breaks Ruby 1.9.3 compatibility
 
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "rspec", "~>2.10"
