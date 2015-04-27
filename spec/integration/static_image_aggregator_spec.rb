@@ -72,7 +72,7 @@ describe StaticImageAggregator, type: :integration do
       ds.update_indexed_attributes({[:dc_identifier] => new_value})
       ds.changed?.should be_true
       @fixtureobj.save
-      ds.changed?.should be_false
+      ds.changed?.should be_falsey
       updated = StaticImageAggregator.find(@fixtureobj.pid)
       found = false
       ds.find_by_terms(:dc_identifier).each { |node|

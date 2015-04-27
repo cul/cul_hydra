@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe "Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer", type: :unit do
+describe "Cul::Hydra::Solrizer::TerminologyBasedSolrizer", type: :unit do
   
   before(:all) do
         
@@ -17,7 +17,7 @@ describe "Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer", type: :unit do
   
   it "should automatically include the necessary modules" do
     skip "identification of modules"
-    #Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer.included_modules.should include(OM::XML::Validation)
+    #Cul::Hydra::Solrizer::TerminologyBasedSolrizer.included_modules.should include(OM::XML::Validation)
   end
 
   describe ".to_solr" do

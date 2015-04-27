@@ -164,7 +164,7 @@ module Cul::Hydra::Models::Common
   end
 
   def thumbnail_info
-    {:asset=>("cul_scv_hydra/crystal/kmultiple.png"),:mime_type=>"image/png"}
+    {:asset=>("cul_hydra/crystal/kmultiple.png"),:mime_type=>"image/png"}
   end
 
   private

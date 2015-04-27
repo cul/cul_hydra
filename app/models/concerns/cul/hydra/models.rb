@@ -1,5 +1,5 @@
 require "active-fedora"
-require "cul_scv_hydra/om"
+require "cul_hydra/om"
 require 'uri'
 require 'rdf'
 module Cul

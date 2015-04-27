@@ -24,7 +24,7 @@ class StaticImageAggregator < ResourceAggregator
       end
     end
     if candidate.nil?
-      return {:url=>image_url("cul_scv_hydra/crystal/file_broken.png"),:mime=>'image/png'}
+      return {:url=>image_url("cul_hydra/crystal/file_broken.png"),:mime=>'image/png'}
     else
       return {:url=>"#{ActiveFedora.fedora_config[:url]}/objects/#{candidate.pid}/datastreams/CONTENT/content",:mime=>candidate.datastreams['CONENT'].mimeType}
     end

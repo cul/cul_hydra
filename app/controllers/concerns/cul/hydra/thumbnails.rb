@@ -1,10 +1,10 @@
 require 'httpclient'
 module Cul::Hydra::Thumbnails
   # some thumbnail urls
-  NO_THUMB = "cul_scv_hydra/crystal/file.png"
-  BROKEN_THUMB = "cul_scv_hydra/crystal/file_broken.png"
-  COLLECTION_THUMB = "cul_scv_hydra/crystal/kmultiple.png"
-  AUDIO_THUMB = "cul_scv_hydra/crystal/sound.png"
+  NO_THUMB = "cul_hydra/crystal/file.png"
+  BROKEN_THUMB = "cul_hydra/crystal/file_broken.png"
+  COLLECTION_THUMB = "cul_hydra/crystal/kmultiple.png"
+  AUDIO_THUMB = "cul_hydra/crystal/sound.png"
   # some rel predicates
   FORMAT = "http://purl.org/dc/elements/1.1/format"
   MEMBER_OF = "http://purl.oclc.org/NET/CUL/memberOf"

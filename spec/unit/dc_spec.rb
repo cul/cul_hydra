@@ -1,12 +1,12 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe "Cul::Scv::Hydra::Datastreams::DCMetadata", type: :unit do
+describe "Cul::Hydra::Datastreams::DCMetadata", type: :unit do
   
   before(:all) do
   end
   
   before(:each) do
-    @fixture = Cul::Scv::Hydra::Datastreams::DCMetadata.from_xml( fixture( File.join("CUL_DC", "dc.xml") ) )
+    @fixture = Cul::Hydra::Datastreams::DCMetadata.from_xml( fixture( File.join("CUL_DC", "dc.xml") ) )
     @fixture.digital_object = @mock_inner
     @mock_inner = double('Rubydora::DigitalObject')
     @mock_repo = double('Rubydora::Repository')
@@ -22,9 +22,9 @@ describe "Cul::Scv::Hydra::Datastreams::DCMetadata", type: :unit do
   end
   
   it "should automatically include the necessary modules" do
-    Cul::Scv::Hydra::Datastreams::DCMetadata.included_modules.should include(OM::XML::Container)
-    Cul::Scv::Hydra::Datastreams::DCMetadata.included_modules.should include(OM::XML::TermValueOperators)
-    Cul::Scv::Hydra::Datastreams::DCMetadata.included_modules.should include(OM::XML::Validation)
+    Cul::Hydra::Datastreams::DCMetadata.included_modules.should include(OM::XML::Container)
+    Cul::Hydra::Datastreams::DCMetadata.included_modules.should include(OM::XML::TermValueOperators)
+    Cul::Hydra::Datastreams::DCMetadata.included_modules.should include(OM::XML::Validation)
   end
   
   describe ".ox_namespaces" do
@@ -84,7 +84,7 @@ describe "Cul::Scv::Hydra::Datastreams::DCMetadata", type: :unit do
     end
     
     it "should identify presence or absence of terms with shortcut methods" do
-      built  = Cul::Scv::Hydra::Datastreams::DCMetadata.from_xml(nil)
+      built  = Cul::Hydra::Datastreams::DCMetadata.from_xml(nil)
       built.update_values({[:dc_title]=>'foo'})
       built.dc_title?.should == true
       built.clio_id?.should == false
@@ -93,10 +93,10 @@ describe "Cul::Scv::Hydra::Datastreams::DCMetadata", type: :unit do
   describe ".xml_serialization" do
     it "should serialize new documents to xml" do
       @mock_inner.stub(:"new_record?").and_return(true)
-      Cul::Scv::Hydra::Datastreams::DCMetadata.new(@mock_inner,'DC').to_xml
+      Cul::Hydra::Datastreams::DCMetadata.new(@mock_inner,'DC').to_xml
     end
     it "should parse and build namespaces identically" do
-      doc = Cul::Scv::Hydra::Datastreams::DCMetadata.from_xml(nil).ng_xml
+      doc = Cul::Hydra::Datastreams::DCMetadata.from_xml(nil).ng_xml
       # namespaced attributes must be added after root node construction for namespace to be handled correctly
       dc_ns = Nokogiri::XML::Document.parse(<<-src
 <oai_dc:dc
@@ -130,7 +130,7 @@ src
 
     it "should produce equivalent xml when built up programatically" do
       @mock_inner.stub(:"new_record?").and_return(true)
-      built = Cul::Scv::Hydra::Datastreams::DCMetadata.new(@mock_inner,'DC')
+      built = Cul::Hydra::Datastreams::DCMetadata.new(@mock_inner,'DC')
       built.update_values({[:dc_identifier] => "prd.custord.070103a"})
       built.update_values({[:dc_title] => "With William Burroughs, image"})
       built.update_values({[:dc_type] => "Collection"})
@@ -142,7 +142,7 @@ src
   describe ".to_solr" do
     it "should create the right map for Solr indexing" do
       @mock_inner.stub(:"new_record?").and_return(true)
-      built = Cul::Scv::Hydra::Datastreams::DCMetadata.new(@mock_inner,'DC')
+      built = Cul::Hydra::Datastreams::DCMetadata.new(@mock_inner,'DC')
       built.update_values({[:dc_identifier] => "prd.custord.070103a"})
       built.update_values({[:dc_title] => "With William Burroughs, image"})
       built.update_values({[:dc_type] => "Collection"})

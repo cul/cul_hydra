@@ -59,7 +59,7 @@ describe Cul::Hydra::Fedora::UrlHelperBehavior, type: :unit do
   context 'test deprecated form' do
     before do
       class TestOld
-        include Cul::Scv::Fedora::UrlHelperBehavior
+        include Cul::Hydra::Fedora::UrlHelperBehavior
       end
     end
     after do

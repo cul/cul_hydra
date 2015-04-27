@@ -21,7 +21,7 @@ module Cul::Hydra::StructMetadataHelperBehavior
   def struct_metadata_ds(doc)
     pid = base_id_for(doc)
     xml = rubydora.datastream_dissemination(:pid=>pid, :dsid=>'structMetadata')
-    Cul::Scv::Hydra::Datastreams::StructMetadata.from_xml(xml)
+    Cul::Hydra::Datastreams::StructMetadata.from_xml(xml)
   end
   def struct_metadata_file_system_cache_key(doc)
     File.join(doc['id'],'structMetadata','fs-html',doc['system_modified_dtsi'])

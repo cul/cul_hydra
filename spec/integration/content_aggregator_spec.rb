@@ -51,7 +51,7 @@ describe ContentAggregator, type: :integration do
     it "should have a default, stubbed structMetadata datastream" do
       ds = @fixtureobj.datastreams["structMetadata"]
       expect(ds).to be_a(Cul::Hydra::Datastreams::StructMetadata)
-      ds.changed?.should be_false
+      ds.changed?.should be_falsey
       expect(@fixtureobj.to_solr[:structured_bsi]).to eql 'false'
     end
 

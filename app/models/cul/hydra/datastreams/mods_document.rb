@@ -1,6 +1,6 @@
 require 'active-fedora'
 require 'solrizer'
-require 'cul_scv_hydra/solrizer'
+require 'cul_hydra/solrizer'
 module Cul
 module Hydra
 module Datastreams

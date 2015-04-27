@@ -5,7 +5,7 @@ module Cul::Hydra::Controllers
 module Terms
   extend ActiveSupport::Concern
   included do
-    include ::Blacklight::SolrHelper
+    include ::Blacklight::SearchHelper
     #include MediaShelf::ActiveFedoraHelper
   end
 

@@ -68,7 +68,7 @@ class Resource < ActiveFedora::Base
       url = {:url=>"#{ActiveFedora.fedora_config[:url]}/objects/#{self.pid}/datastreams/CONTENT/content", :mime=>mime}
     else
       if object_relations[MEMBER_OF].blank?
-        return {:url=>image_url("cul_scv_hydra/crystal/file.png"),:mime=>'image/png'}
+        return {:url=>image_url("cul_hydra/crystal/file.png"),:mime=>'image/png'}
       else
         url = ActiveFedora::Base.find(parents.first, :cast => true).thumbnail_info
       end

@@ -3,7 +3,7 @@ require File.expand_path('../boot', __FILE__)
 require 'rails/all'
 
 Bundler.require(*Rails.groups)
-require "cul_scv_hydra"
+require "cul_hydra"
 
 module Dummy
   class Application < Rails::Application

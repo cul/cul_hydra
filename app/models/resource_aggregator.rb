@@ -17,6 +17,6 @@ class ResourceAggregator < ::ActiveFedora::Base
   end
   
   def thumbnail_info
-    return {:url=>image_url("cul_scv_hydra/crystal/file.png"),:mime=>'image/png'}
+    return {:url=>image_url("cul_hydra/crystal/file.png"),:mime=>'image/png'}
   end
 end

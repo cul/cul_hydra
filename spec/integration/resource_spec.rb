@@ -82,7 +82,7 @@ describe ::Resource, type: :integration do
 
     it "should have a datastream called CONTENT" do
       test = Resource.find(@newobj.pid)
-      test.datastreams['CONTENT'].nil?.should be_false
+      test.datastreams['CONTENT'].nil?.should be_falsey
       (test.datastreams['CONTENT'].is_a? ActiveFedora::Datastream).should be_true
     end
 

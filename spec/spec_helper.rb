@@ -8,7 +8,7 @@ ENGINE_RAILS_ROOT=File.join(File.dirname(__FILE__), '../')
 require 'bundler/setup'
 require 'rspec/rails'
 require 'rspec/autorun'
-require 'cul_scv_hydra'
+require 'cul_hydra'
 require 'equivalent-xml/rspec_matchers'
 
 include EquivalentXml::RSpecMatchers
@@ -203,14 +203,14 @@ def same_namespace?(node_1, node_2)
 end
 
 def descMetadata(inner_object, file)
-  tmpl = Cul::Scv::Hydra::Datastreams::ModsDocument.new(inner_object, 'descMetadata')
+  tmpl = Cul::Hydra::Datastreams::ModsDocument.new(inner_object, 'descMetadata')
   tmpl.ng_xml = Nokogiri::XML::Document.parse(file)
   tmpl.ng_xml_doesnt_change!
   tmpl
 end
 
 def structMetadata(inner_object, file)
-  tmpl = Cul::Scv::Hydra::Datastreams::StructMetadata.new(inner_object, 'structMetadata')
+  tmpl = Cul::Hydra::Datastreams::StructMetadata.new(inner_object, 'structMetadata')
   tmpl.ng_xml = Nokogiri::XML::Document.parse(file)
   tmpl.ng_xml_doesnt_change!
   tmpl

@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe "Cul::Scv::Hydra::Datastreams::ModsDocument", type: :unit do
+describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
 
   before(:all) do
 
@@ -32,7 +32,7 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument", type: :unit do
   describe ".xml_serialization" do
     it "should serialize new documents to xml" do
       @mock_inner.stub(:new_record?).and_return(true)
-      Cul::Scv::Hydra::Datastreams::ModsDocument.new(@mock_inner,'descMetadata').to_xml
+      Cul::Hydra::Datastreams::ModsDocument.new(@mock_inner,'descMetadata').to_xml
     end
     it "should parse and build namespaces identically" do
       builder = Nokogiri::XML::Builder.new do |xml|
@@ -73,8 +73,8 @@ src
     end
     it "should produce equivalent xml when built up programatically" do
       @mock_inner.stub(:new_record?).and_return(false)
-      built = Cul::Scv::Hydra::Datastreams::ModsDocument.new(@mock_inner,'descMetadata')
-      built.ng_xml = Cul::Scv::Hydra::Datastreams::ModsDocument.xml_template
+      built = Cul::Hydra::Datastreams::ModsDocument.new(@mock_inner,'descMetadata')
+      built.ng_xml = Cul::Hydra::Datastreams::ModsDocument.xml_template
       built.update_values({[:identifier] => "prd.custord.040148"})
       built.update_values({[:mods, :main_title_info, :non_sort] => "The "})
       built.update_values({[:mods, :main_title_info, :main_title] => "Manuscript, unidentified"})
@@ -109,8 +109,8 @@ ml
     end
     it "should produce equivalent xml for recordInfo" do
       @mock_inner.stub(:new_record?).and_return(false)
-      built = Cul::Scv::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
-      built.ng_xml = Cul::Scv::Hydra::Datastreams::ModsDocument.xml_template
+      built = Cul::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
+      built.ng_xml = Cul::Hydra::Datastreams::ModsDocument.xml_template
       built.update_values({[:record_info, :record_creation_date] => "2010-07-12"})
       built.update_values({[:record_info, :language_of_cataloging, :language_code] => "eng"})
       built.update_values({[:record_info,:record_content_source]=> "NNC"})
@@ -123,8 +123,8 @@ ml
     end
     it "should produce equivalent xml for physical location" do
       @mock_inner.stub(:new_record?).and_return(false)
-      built = Cul::Scv::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
-      built.ng_xml = Cul::Scv::Hydra::Datastreams::ModsDocument.xml_template
+      built = Cul::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
+      built.ng_xml = Cul::Hydra::Datastreams::ModsDocument.xml_template
       built.update_values({[:location, :lib_repo] => "NNC-RB"})
       built.update_values({[:location, :repo_text] => "Rare Book and Manuscript Library, Columbia University"})
       built.update_values({[:location, :shelf_locator] => "(Box no.\n        057)"})
@@ -134,8 +134,8 @@ ml
     end
     it "should produce equivalent xml for a single dateIssued value" do
       @mock_inner.stub(:new_record?).and_return(false)
-      built = Cul::Scv::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
-      built.ng_xml = Cul::Scv::Hydra::Datastreams::ModsDocument.xml_template
+      built = Cul::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
+      built.ng_xml = Cul::Hydra::Datastreams::ModsDocument.xml_template
       built.update_values({[:origin_info, :date_issued]=>"1700"})
       parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-date-issued-single.xml")))
       built.ng_xml.should be_equivalent_to(parsed)
@@ -143,8 +143,8 @@ ml
     end
     it "should produce equivalent xml for a single dateCreated value" do
       @mock_inner.stub(:new_record?).and_return(false)
-      built = Cul::Scv::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
-      built.ng_xml = Cul::Scv::Hydra::Datastreams::ModsDocument.xml_template
+      built = Cul::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
+      built.ng_xml = Cul::Hydra::Datastreams::ModsDocument.xml_template
       built.update_values({[:origin_info, :date_created]=>"1800"})
       parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-date-created-single.xml")))
       built.ng_xml.should be_equivalent_to(parsed)
@@ -152,8 +152,8 @@ ml
     end
     it "should produce equivalent xml for a single dateOther value" do
       @mock_inner.stub(:new_record?).and_return(false)
-      built = Cul::Scv::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
-      built.ng_xml = Cul::Scv::Hydra::Datastreams::ModsDocument.xml_template
+      built = Cul::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
+      built.ng_xml = Cul::Hydra::Datastreams::ModsDocument.xml_template
       built.update_values({[:origin_info, :date_other]=>"1900"})
       parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-date-other-single.xml")))
       built.ng_xml.should be_equivalent_to(parsed)
@@ -161,8 +161,8 @@ ml
     end
     it "should produce equivalent xml for a dateIssued range" do
       @mock_inner.stub(:new_record?).and_return(false)
-      built = Cul::Scv::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
-      built.ng_xml = Cul::Scv::Hydra::Datastreams::ModsDocument.xml_template
+      built = Cul::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
+      built.ng_xml = Cul::Hydra::Datastreams::ModsDocument.xml_template
       built.update_values({[:origin_info, :date_issued_start]=>"1701"})
       built.update_values({[:origin_info, :date_issued_end]=>"1702"})
       parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-date-issued-range.xml")))
@@ -171,8 +171,8 @@ ml
     end
     it "should produce equivalent xml for a dateCreated range" do
       @mock_inner.stub(:new_record?).and_return(false)
-      built = Cul::Scv::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
-      built.ng_xml = Cul::Scv::Hydra::Datastreams::ModsDocument.xml_template
+      built = Cul::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
+      built.ng_xml = Cul::Hydra::Datastreams::ModsDocument.xml_template
       built.update_values({[:origin_info, :date_created_start]=>"1801"})
       built.update_values({[:origin_info, :date_created_end]=>"1802"})
       parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-date-created-range.xml")))
@@ -181,8 +181,8 @@ ml
     end
     it "should produce equivalent xml for a dateOther range" do
       @mock_inner.stub(:new_record?).and_return(false)
-      built = Cul::Scv::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
-      built.ng_xml = Cul::Scv::Hydra::Datastreams::ModsDocument.xml_template
+      built = Cul::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
+      built.ng_xml = Cul::Hydra::Datastreams::ModsDocument.xml_template
       built.update_values({[:origin_info, :date_other_start]=>"1901"})
       built.update_values({[:origin_info, :date_other_end]=>"1902"})
       parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-date-other-range.xml")))

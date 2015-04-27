@@ -5,7 +5,7 @@ class ControllerHarness
 end
 
 class TermsHarness < ControllerHarness
-  include Cul::Scv::Hydra::Controllers::Terms
+  include Cul::Hydra::Controllers::Terms
   
   def initialize(field_name)
     @field_name = field_name
@@ -46,7 +46,7 @@ class TestTerms < ActiveFedora::OmDatastream
   end
 end
 
-describe "Cul::Scv::Hydra::Controllers::Terms", type: :unit do
+describe "Cul::Hydra::Controllers::Terms", type: :unit do
   
   before(:all) do
   end

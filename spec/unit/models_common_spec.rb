@@ -1,6 +1,6 @@
 require File.expand_path(File.join(File.dirname(__FILE__),'..','spec_helper'))
 
-describe "Cul::Scv::Hydra::Models::Common", type: :unit do
+describe "Cul::Hydra::Models::Common", type: :unit do
 
   before(:all) do
 

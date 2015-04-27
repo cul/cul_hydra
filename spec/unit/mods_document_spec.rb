@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe "Cul::Scv::Hydra::Datastreams::ModsDocument", type: :unit do
+describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
 
   before(:all) do
 
@@ -30,9 +30,9 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument", type: :unit do
   end
 
   it "should automatically include the necessary modules" do
-    Cul::Scv::Hydra::Datastreams::ModsDocument.included_modules.should include(OM::XML::Container)
-    Cul::Scv::Hydra::Datastreams::ModsDocument.included_modules.should include(OM::XML::TermValueOperators)
-    Cul::Scv::Hydra::Datastreams::ModsDocument.included_modules.should include(OM::XML::Validation)
+    Cul::Hydra::Datastreams::ModsDocument.included_modules.should include(OM::XML::Container)
+    Cul::Hydra::Datastreams::ModsDocument.included_modules.should include(OM::XML::TermValueOperators)
+    Cul::Hydra::Datastreams::ModsDocument.included_modules.should include(OM::XML::Validation)
   end
 
   describe ".ox_namespaces" do
@@ -71,7 +71,7 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument", type: :unit do
   end
   describe ".find_by_terms" do
     it "should find the right terms for title" do
-      C = Cul::Scv::Hydra::Datastreams::ModsDocument
+      C = Cul::Hydra::Datastreams::ModsDocument
       T = C.terminology
       term = T.retrieve_term(:title)
       expect(term.xpath).to eql '//oxns:mods/oxns:titleInfo[not(@type)]/oxns:title'
@@ -85,7 +85,7 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument", type: :unit do
     it "should use Nokogiri to retrieve a NodeSet corresponding to the combination of term pointers and array/nodeset indexes" do
       @mods_item.find_by_terms( :access_condition ).length.should == 1
       @mods_item.find_by_terms( {:access_condition=>0} ).first.text.should == @mods_part.ng_xml.xpath('//oxns:accessCondition[@type="useAndReproduction"][1]', "oxns"=>"http://www.loc.gov/mods/v3").first.text
-      Cul::Scv::Hydra::Datastreams::ModsDocument.terminology.xpath_with_indexes( :mods, {:main_title_info=>0}, :main_title ).should == '//oxns:mods/oxns:titleInfo[not(@type)][1]/oxns:title'
+      Cul::Hydra::Datastreams::ModsDocument.terminology.xpath_with_indexes( :mods, {:main_title_info=>0}, :main_title ).should == '//oxns:mods/oxns:titleInfo[not(@type)][1]/oxns:title'
       # Nokogiri behaves unexpectedly
       #@mods_item.find_by_terms( {:title_info=>0}, :title ).length.should == 1
       @mods_item.find_by_terms(:title ).class.should == Nokogiri::XML::NodeSet
@@ -101,8 +101,8 @@ describe "Cul::Scv::Hydra::Datastreams::ModsDocument", type: :unit do
 
     it "should identify presence or absence of terms with shortcut methods" do
       @mock_inner.stub(:new_record?).and_return(true)
-      built  = Cul::Scv::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
-      built.ng_xml = Cul::Scv::Hydra::Datastreams::ModsDocument.xml_template
+      built  = Cul::Hydra::Datastreams::ModsDocument.new(@mock_inner, 'descMetadata')
+      built.ng_xml = Cul::Hydra::Datastreams::ModsDocument.xml_template
       built.update_values({[:title]=>'foo'})
       built.title?.should be_truthy
       built.clio?.should be_falsey

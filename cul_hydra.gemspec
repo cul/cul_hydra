@@ -6,11 +6,11 @@ require 'cul_hydra/version'
 
 Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9.3'
-  s.name = "cul_scv_hydra"
+  s.name = "cul_hydra"
   s.version = Cul::Hydra::VERSION
   s.platform = Gem::Platform::RUBY
   s.authors = ["Benjamin Armintor", "Eric O'Hanlon"]
-  s.homepage = "https://github.com/cul/cul_scv_hydra"
+  s.homepage = "https://github.com/cul/cul_hydra"
   s.email = %q{armintor@gmail.com}
   s.description = "Hydra implementations for CUL repository apps"
   s.summary = "ActiveFedora, OM, and Solrizer implementations for CUL repository apps"

@@ -3,7 +3,7 @@ require "active_fedora_finders"
 class GenericAggregator < ::ActiveFedora::Base
   include ::ActiveFedora::FinderMethods::RepositoryMethods
   include ::ActiveFedora::DatastreamCollections
-  include ::Hydra::ModelMethods
+  include Hydra::ModelMethods
   include Cul::Hydra::Models::Common
   include Cul::Hydra::Models::Aggregator
 
@@ -16,7 +16,7 @@ class GenericAggregator < ::ActiveFedora::Base
   def index_type_label
     riquery = Cul::Hydra::Models::MEMBER_ITQL.gsub(/%PID%/, self.pid)
     begin
-      docs = Cul::Fedora.repository.find_by_itql riquery, limit: 2, format: 'count/json'
+      docs = Cul::Hydra::Fedora.repository.find_by_itql riquery, limit: 2, format: 'count/json'
       docs = JSON.parse(docs)['results']
       size = docs.first && docs.first['count'] && docs.first['count'].to_i
     rescue Exception=>e

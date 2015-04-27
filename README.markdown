@@ -9,7 +9,7 @@ bundle exec rake cul_hydra:ci
 bundle exec rspec spec/unit
 ```
 ## Additions to Solr
-###Cul::Scv::Hydra::Solrizer::TerminologyBasedSolrizer
+###Cul::Hydra::Solrizer::TerminologyBasedSolrizer
 This Solrizer is basically a clone of the default implementation with a couple of bugfixes and two added features:
 #### 1. Collecting terms
 Specifying a value for :variant_of[:field_base] in your term definition will cause the term's solr field value to be duplicated in another field whose name will be a combination of the :field_base value and the suffix appropriate to the term's :index_as values

@@ -1,3 +1,3 @@
 source 'http://rubygems.org'
-# See cul_scv_hydra.gemspec for dependency info
+# See cul_hydra.gemspec for dependency info
 gemspec

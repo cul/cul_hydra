@@ -77,7 +77,7 @@ module Cul::Hydra::OreProxiesHelperBehavior
   end
 
   def proxy_to_download(node, args={})
-    dl_proxy = Cul::Scv::DownloadProxy.new(args)
+    dl_proxy = Cul::DownloadProxy.new(args)
     dl_proxy.content_models = node[hasModel_name()]
     dl_proxy.mime_type = node['format']
     dl_proxy.publisher = node[publisher_name()]

@@ -1,11 +1,11 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable, type: :unit do
+describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
   MODS_NS = {'mods'=>'http://www.loc.gov/mods/v3'}
 
   before(:all) do
     class ModsIndexDatastream
-      include Cul::Scv::Hydra::Solrizer::ScvModsFieldable
+      include Cul::Hydra::Solrizer::ModsFieldable
 
       attr_accessor :ng_xml
       def initialize(ng_xml)
@@ -78,21 +78,21 @@ describe Cul::Scv::Hydra::Solrizer::ScvModsFieldable, type: :unit do
     it "should strip trailing and leading whitespace and normalize remaining space" do
       d = "   Foo \n Bar "
       e = "Foo Bar"
-      a = Cul::Scv::Hydra::Solrizer::ScvModsFieldable.normalize(d)
+      a = Cul::Hydra::Solrizer::ModsFieldable.normalize(d)
       a.should == e
     end
 
     it "should only strip punctuation when asked to" do
       d = "   'Foo \n Bar\" "
       e = "'Foo Bar\""
-      a = Cul::Scv::Hydra::Solrizer::ScvModsFieldable.normalize(d)
+      a = Cul::Hydra::Solrizer::ModsFieldable.normalize(d)
       a.should == e
       e = "Foo Bar\""
-      a = Cul::Scv::Hydra::Solrizer::ScvModsFieldable.normalize(d, true)
+      a = Cul::Hydra::Solrizer::ModsFieldable.normalize(d, true)
       a.should == e
       d = "<Jay, John (Pres. of Cong.)>"
       e = "Jay, John (Pres. of Cong.)"
-      a = Cul::Scv::Hydra::Solrizer::ScvModsFieldable.normalize(d, true)
+      a = Cul::Hydra::Solrizer::ModsFieldable.normalize(d, true)
       a.should == e
 
     end

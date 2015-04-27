@@ -80,7 +80,7 @@ module Cul::Hydra::Models::ImageResource
       url = "#{DJATOKA_BASE_URL}?#{options.map { |key, value|  "#{CGI::escape(key.to_s)}=#{CGI::escape(value.to_s)}"}.join("&")  }"
       {:url => url, :mime => t_parms["svc.format"]}
     else
-      return {:asset=>"cul_scv_hydra/crystal/file.png",:mime=>'image/png'}
+      return {:asset=>"cul_hydra/crystal/file.png",:mime=>'image/png'}
     end
   end
 

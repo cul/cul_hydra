@@ -3,7 +3,7 @@ module Cul::Hydra::Models::Aggregator
 
   included do
     has_and_belongs_to_many :containers, :property=>:cul_member_of, :class_name=>'ActiveFedora::Base'
-    has_metadata :name => "structMetadata", :type=>Cul::Scv::Hydra::Datastreams::StructMetadata, :versionable => true, :controlGroup => 'M'
+    has_metadata :name => "structMetadata", :type=>Cul::Hydra::Datastreams::StructMetadata, :versionable => true, :controlGroup => 'M'
     after_create :aggregator!
   end
 
@@ -52,7 +52,7 @@ module Cul::Hydra::Models::Aggregator
   def thumbnail_info
     members = solr_members
     if members.length == 0
-      thumb = {:asset=>"cul_scv_hydra/crystal/file.png",:mime=>'image/png'}
+      thumb = {:asset=>"cul_hydra/crystal/file.png",:mime=>'image/png'}
     else
       thumb = nil
       unless datastreams['structMetadata'].new?
@@ -61,7 +61,7 @@ module Cul::Hydra::Models::Aggregator
         thumb =  thumb_from_members(members)
       end
     end
-    return thumb || {:asset=>"cul_scv_hydra/crystal/file.png",:mime=>'image/png'}
+    return thumb || {:asset=>"cul_hydra/crystal/file.png",:mime=>'image/png'}
   end
 
   private

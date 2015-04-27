@@ -7,6 +7,6 @@ class StaticAudioAggregator < ResourceAggregator
   end
   
   def thumbnail_info
-    return {:url=>image_url("cul_scv_hydra/crystal/mp3.png"),:mime=>'image/png'}
+    return {:url=>image_url("cul_hydra/crystal/mp3.png"),:mime=>'image/png'}
   end
 end

@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
-describe Cul::Scv::Hydra::Resolver, type: :unit do
+describe Cul::Hydra::Resolver, type: :unit do
   
   before do
     class TestRig
@@ -9,7 +9,7 @@ describe Cul::Scv::Hydra::Resolver, type: :unit do
       def self.rescue_from(*args)
       end
       
-      include Cul::Scv::Hydra::Resolver
+      include Cul::Hydra::Resolver
 
       def initialize(id, params={})
         @document = {id: id}

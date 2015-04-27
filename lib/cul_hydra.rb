@@ -1,3 +1,5 @@
+require 'hydra/head'
+require 'active_fedora_relsint'
 require 'cul_hydra/solrizer_patch'
 module Cul
   module Hydra

@@ -42,7 +42,7 @@ class GenericResource < ::ActiveFedora::Base
       t_dsid = thumb.object.to_s.split('/')[-1]
       return {:url=>"#{ActiveFedora.fedora_config[:url]}/objects/#{pid}/datastreams/#{t_dsid}/content",:mime=>datastreams[t_dsid].mimeType}
     else
-      return {:url=>image_url("cul_scv_hydra/crystal/file.png"),:mime=>'image/png'}
+      return {:url=>image_url("cul_hydra/crystal/file.png"),:mime=>'image/png'}
     end
   end
 
@@ -96,7 +96,7 @@ class GenericResource < ::ActiveFedora::Base
       url = "#{DJATOKA_BASE_URL}?#{options.map { |key, value|  "#{CGI::escape(key.to_s)}=#{CGI::escape(value.to_s)}"}.join("&")  }"
       {:url => url, :mime => t_parms["svc.format"]}
     else
-      return {:asset => "cul_scv_hydra/crystal/file.png",:mime=>'image/png'}
+      return {:asset => "cul_hydra/crystal/file.png",:mime=>'image/png'}
     end
   end
 
