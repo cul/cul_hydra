@@ -67,6 +67,36 @@ namespace :cul_hydra do
       end
 
     end
+    
+    task :by_publish_target_pid => :environment do
+
+      puts '---------------------------'
+      puts 'Fedora URL: ' + ActiveFedora.config.credentials[:url]
+      puts 'Solr URL: ' + ActiveFedora.solr_config[:url]
+      puts '---------------------------'
+
+      if ENV['PID']
+        publish_target_pid = ENV['PID']
+      else
+        puts 'Please specify a publish target PID (e.g. PID=cul:123)'
+        next
+      end
+
+      skip_generic_resources = (ENV['skip_generic_resources'] == 'true')
+
+      start_time = Time.now
+      pids = Cul::Hydra::RisearchMembers.get_publish_target_member_pids(publish_target_pid, true)
+      total = pids.length
+      puts "Found #{total} publish target members."
+      counter = 0
+
+      pids.each do |pid|
+        Cul::Hydra::Indexer.index_pid(pid, skip_generic_resources, false)
+        counter += 1
+        puts "Indexed #{counter} of #{total} | #{Time.now - start_time} seconds"
+      end
+
+    end
 
   end
 
