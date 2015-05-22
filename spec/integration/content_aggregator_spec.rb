@@ -59,7 +59,7 @@ describe ContentAggregator, type: :integration do
       ds = @fixtureobj.datastreams["structMetadata"]
       ds.label = "Test Label"
       ds.changed?.should be_true
-      puts "structMetadata: #{ds.content}"
+      #puts "structMetadata: #{ds.content}"
       ds.save
       expect(@fixtureobj.to_solr[:structured_bsi]).to eql 'true'
     end

@@ -135,8 +135,63 @@ module Cul::Hydra::Models::Common
       end
     }
     solr_doc[:structured_bsi] = 'false' unless solr_doc.has_key? :structured_bsi
+    
+    representative_child = get_representative_generic_resource
+    solr_doc['representative_generic_resource_pid_ssi'] = representative_child.pid unless representative_child.nil?
 
     solr_doc
+  end
+  
+  def get_representative_generic_resource
+
+    return self if self.is_a?(GenericResource)
+    return nil unless self.is_a?(Cul::Hydra::Models::Aggregator) # Only Aggregators have struct metadata
+
+    # If we're here, then the object was not a Generic resource.
+    # Try to get child info from a structMat datastream, and fall back to
+    # the first :cul_member_of child if a structMap isn't present
+
+    # Check for the presence of a structMap and get first GenericResource in that structMap
+    if self.has_struct_metadata?
+      struct = Cul::Hydra::Datastreams::StructMetadata.from_xml(self.datastreams['structMetadata'].content)
+      ng_div = struct.first_ordered_content_div #Nokogiri node response
+      found_struct_div = (! ng_div.nil?)
+    else
+      found_struct_div = false
+    end
+    
+    if found_struct_div
+      content_ids = ng_div.attr('CONTENTIDS').split(' ') # Get all space-delimited content ids
+      child_obj = nil
+      content_ids.each do |content_id|
+        child_obj ||= GenericAggregator.search_repo.find_by(identifier: content_id) # We don't know what type of aggregator we'll be getting back, but all we need is the pid
+      end
+      # If we didn't find the child object through an identifier search, we might be working with a PID instead.
+      # Do a pid-based search
+      if child_obj.nil?
+        content_ids.each do |content_id|
+          child_obj ||= ActiveFedora::Base.exists?(content_id) ? ActiveFedora::Base.find(content_id) : nil
+        end
+      end
+      
+      if child_obj
+        # Recursion!  Woo!
+        return child_obj.get_representative_generic_resource
+      else
+        #Rails.logger.error "No object for dc:identifier in #{content_ids.inspect}"
+        return nil
+      end
+    else
+      # If there isn't a structMap, just get the first child
+      member_pids = Cul::Hydra::RisearchMembers.get_direct_member_pids(self.pid)
+      if member_pids.first
+        child_obj = ActiveFedora::Base.find(member_pids.first)
+        return child_obj.get_representative_generic_resource
+      else
+        #Rails.logger.error "No child objects or resources for #{self.pid}"
+        return nil
+      end
+    end
   end
 
   def update_datastream_attributes(params={}, opts={})
