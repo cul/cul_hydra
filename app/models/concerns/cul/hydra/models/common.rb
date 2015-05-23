@@ -142,8 +142,8 @@ module Cul::Hydra::Models::Common
     solr_doc
   end
   
-  def get_representative_generic_resource
-
+  # This method generally shouldn't be called with any parameters (unless we're doing testing)
+  def get_representative_generic_resource(force_use_of_non_pid_identifier=false)
     return self if self.is_a?(GenericResource)
     return nil unless self.is_a?(Cul::Hydra::Models::Aggregator) # Only Aggregators have struct metadata
 
@@ -163,20 +163,33 @@ module Cul::Hydra::Models::Common
     if found_struct_div
       content_ids = ng_div.attr('CONTENTIDS').split(' ') # Get all space-delimited content ids
       child_obj = nil
-      content_ids.each do |content_id|
-        child_obj ||= GenericAggregator.search_repo.find_by(identifier: content_id) # We don't know what type of aggregator we'll be getting back, but all we need is the pid
-      end
-      # If we didn't find the child object through an identifier search, we might be working with a PID instead.
-      # Do a pid-based search
-      if child_obj.nil?
+      
+      # Try to do a PID lookup first
+      unless force_use_of_non_pid_identifier
         content_ids.each do |content_id|
           child_obj ||= ActiveFedora::Base.exists?(content_id) ? ActiveFedora::Base.find(content_id) : nil
         end
       end
       
+      # Then fall back to identifier lookup
+      if child_obj.nil?
+        child_pid = nil
+        content_ids.each do |content_id|
+          child_pid ||= Cul::Hydra::RisearchMembers.get_pid_for_identifier(content_id)
+          if force_use_of_non_pid_identifier && child_pid && content_id == child_pid
+            # This really only runs when we're doing testing, if we want to specifically ensure that we're searching by a non-pid identifier
+            child_pid = nil
+          end
+        end
+        
+        if child_pid
+          child_obj = ActiveFedora::Base.find(child_pid)
+        end
+      end
+      
       if child_obj
         # Recursion!  Woo!
-        return child_obj.get_representative_generic_resource
+        return child_obj.get_representative_generic_resource(force_use_of_non_pid_identifier)
       else
         #Rails.logger.error "No object for dc:identifier in #{content_ids.inspect}"
         return nil

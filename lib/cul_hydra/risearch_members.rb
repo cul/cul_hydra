@@ -1,3 +1,4 @@
+# TODO: Eventually change this class name from RisearchMembers to RisearchHelpers
 module Cul::Hydra::RisearchMembers
 module ClassMethods
   def get_recursive_member_pids(pid, verbose_output=false, cmodel_type='all')
@@ -117,6 +118,27 @@ module ClassMethods
   def get_publish_target_member_count(pid, verbose_output=false)
     count = get_publish_target_member_results(pid,verbose_output,'count/json')
     return count.blank? ? 0 : count[0]['count'].to_i
+  end
+  
+  def get_pid_for_identifier(identifier)
+    
+    find_by_identifier_query = "select $pid from <#ri>
+    where $pid <http://purl.org/dc/elements/1.1/identifier> $identifier
+    and $identifier <mulgara:is> '#{identifier}'"
+    
+    search_response = JSON(Cul::Hydra::Fedora.repository.find_by_itql(find_by_identifier_query, {
+      :type => 'tuples',
+      :format => 'json',
+      :limit => '1',
+      :stream => 'on'
+    }))
+    
+    if search_response['results'].present?
+      return search_response['results'].first['pid'].gsub('info:fedora/', '')
+    else
+      return nil
+    end
+    
   end
   
 end
