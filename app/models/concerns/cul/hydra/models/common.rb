@@ -153,7 +153,12 @@ module Cul::Hydra::Models::Common
 
     # Check for the presence of a structMap and get first GenericResource in that structMap
     if self.has_struct_metadata?
-      struct = Cul::Hydra::Datastreams::StructMetadata.from_xml(self.datastreams['structMetadata'].content)
+      begin
+        struct = Cul::Hydra::Datastreams::StructMetadata.from_xml(self.datastreams['structMetadata'].content)
+      rescue Rubydora::FedoraInvalidRequest => e
+        Rails.logger.error "Error: Problem accessing struct datastream data in #{self.pid}" # More specific error notice
+        raise e
+      end
       ng_div = struct.first_ordered_content_div #Nokogiri node response
       found_struct_div = (! ng_div.nil?)
     else
