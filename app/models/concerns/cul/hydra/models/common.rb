@@ -167,6 +167,7 @@ module Cul::Hydra::Models::Common
       # Try to do a PID lookup first
       unless force_use_of_non_pid_identifier
         content_ids.each do |content_id|
+          next unless content_id.match(/^([A-Za-z0-9]|-|\.)+:(([A-Za-z0-9])|-|\.|~|_|(%[0-9A-F]{2}))+$/) # Don't do a lookup on identifiers that can't possibly be valid PID (otherwise we'd encounter an error)
           child_obj ||= ActiveFedora::Base.exists?(content_id) ? ActiveFedora::Base.find(content_id) : nil
         end
       end

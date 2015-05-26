@@ -21,8 +21,8 @@ describe Cul::Hydra::Models::Common, type: :integration do
     @struct_member_generic_resource_2.save
     
     struct_ds = Cul::Hydra::Datastreams::StructMetadata.new(nil, 'structMetadata', label:'Sequence', type:'logical')
-    struct_ds.create_div_node(nil, {order: 2, label: "Item 2", contentids: @struct_member_generic_resource_2.pid})
-    struct_ds.create_div_node(nil, {order: 1, label: "Item 1", contentids: @struct_member_generic_resource_1.pid})
+    struct_ds.create_div_node(nil, {order: 2, label: "Item 2", contentids: 'test:g_res_struct_2'})
+    struct_ds.create_div_node(nil, {order: 1, label: "Item 1", contentids: 'test:g_res_struct_1'})
     @content_aggregator_with_struct_children_1.datastreams['structMetadata'].ng_xml = struct_ds.ng_xml
     @content_aggregator_with_struct_children_1.save
     
@@ -32,7 +32,7 @@ describe Cul::Hydra::Models::Common, type: :integration do
     
     @struct_member_generic_resource_a = GenericResource.new(pid: 'test:g_res_struct_a')
     @struct_member_generic_resource_a.save
-    @struct_member_generic_resource_a.datastreams["DC"].dc_identifier = 'identifier_for_test:g_res_struct_a'
+    @struct_member_generic_resource_a.datastreams["DC"].dc_identifier = 'apt://some/uri-like/identifier/for/g_res_struct_a'
     @struct_member_generic_resource_a.save
     
     @struct_member_generic_resource_b = GenericResource.new(pid: 'test:g_res_struct_b')
@@ -41,8 +41,8 @@ describe Cul::Hydra::Models::Common, type: :integration do
     @struct_member_generic_resource_b.save
     
     struct_ds = Cul::Hydra::Datastreams::StructMetadata.new(nil, 'structMetadata', label:'Sequence', type:'logical')
-    struct_ds.create_div_node(nil, {order: 2, label: "Item 2", contentids: @struct_member_generic_resource_b.datastreams["DC"].dc_identifier.join(' ')})
-    struct_ds.create_div_node(nil, {order: 1, label: "Item 1", contentids: @struct_member_generic_resource_a.datastreams["DC"].dc_identifier.join(' ')})
+    struct_ds.create_div_node(nil, {order: 2, label: "Item 2", contentids: 'identifier_for_test:g_res_struct_b'})
+    struct_ds.create_div_node(nil, {order: 1, label: "Item 1", contentids: 'apt://some/uri-like/identifier/for/g_res_struct_a'})
     @content_aggregator_with_struct_children_a.datastreams['structMetadata'].ng_xml = struct_ds.ng_xml
     @content_aggregator_with_struct_children_a.save
     
@@ -82,10 +82,10 @@ describe Cul::Hydra::Models::Common, type: :integration do
       representative_generic_resource.should be_kind_of(GenericResource)
     end
     
-    it "should return the first structmap member when a dc:identifier is present in the structMap rather than PID" do
+    it "should return the first structmap member when a dc:identifier is present in the structMap rather than PID (and that dc:identifier can be a uri that would not be a valid fedora identifier)" do
       
       10.times {
-        break if Cul::Hydra::RisearchMembers.get_pid_for_identifier('identifier_for_test:g_res_struct_a') != nil
+        break if Cul::Hydra::RisearchMembers.get_pid_for_identifier('apt://some/uri-like/identifier/for/g_res_struct_a') != nil
         puts 'Waiting for ResourceIndex to update...'
         sleep 1
       }
