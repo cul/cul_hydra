@@ -21,6 +21,7 @@ describe "Cul::Hydra::Datastreams::StructMetadata", type: :unit do
     @struct_fixture = structMetadata(@mock_inner, @rv_fixture)
     @seq_fixture = fixture( File.join("STRUCTMAP", "structmap-seq.xml")).read
     @seq_doc = Nokogiri::XML::Document.parse(@seq_fixture)
+    @unlabeled_seq_fixture = fixture( File.join("STRUCTMAP", "structmap-unlabeled-seq.xml")).read
     @unordered_seq_fixture = fixture( File.join("STRUCTMAP", "structmap-unordered-seq.xml")).read
     @nested_seq_fixture = fixture( File.join("STRUCTMAP", "structmap-nested.xml")).read
   end
@@ -180,6 +181,29 @@ describe "Cul::Hydra::Datastreams::StructMetadata", type: :unit do
           docs = solr_docs.sort {|a,b| a['index_ssi'] <=> b['index_ssi']}
           index_values = docs.collect {|x| x['index_ssi']}
           expect(index_values).to eql ['1','2','3']
+        end
+      end
+    end
+    context "for a flat list without labels" do
+      subject {
+        struct = Cul::Hydra::Datastreams::StructMetadata.from_xml(@unlabeled_seq_fixture)
+        struct.instance_variable_set(:@digital_object, @digital_object)
+        struct.proxies
+      }
+      it { expect(subject.length).to eql 2 }
+      describe "index as" do
+        let(:solr_docs) { subject.collect{|x| x.to_solr } }
+        it "should generate solr_docs with ids" do
+          solr_docs.each {|solr_doc| expect(solr_doc['id']).not_to be_nil}
+        end
+        it "should be generate solr hashes for all the structure proxies" do
+          missing = solr_docs.detect {|x| x['proxyIn_ssi'] != 'info:fedora/test:0000'}
+          expect(missing).to be_nil
+        end
+        it "should identify the proxy index with index" do
+          docs = solr_docs.sort {|a,b| a['index_ssi'] <=> b['index_ssi']}
+          index_values = docs.collect {|x| x['index_ssi']}
+          expect(index_values).to eql ['1','2']
         end
       end
     end
