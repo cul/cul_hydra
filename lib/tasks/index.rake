@@ -1,3 +1,5 @@
+require 'thread/pool'
+
 namespace :cul_hydra do
 
   namespace :index do
@@ -51,20 +53,57 @@ namespace :cul_hydra do
         puts 'Please specify a project PID (e.g. PID=cul:123)'
         next
       end
+      
+      if ENV['THREADS'].present?
+        thread_pool_size = ENV['THREADS'].to_i
+        puts "Number of threads: #{thread_pool_size}"
+      else
+        thread_pool_size = 1
+        puts "Number of threads: #{thread_pool_size}"
+      end
 
       skip_generic_resources = (ENV['skip_generic_resources'] == 'true')
+      
+      ### Stop excessive ActiveFedora logging ###
+      # initialize the fedora connection if necessary
+      connection = (ActiveFedora::Base.fedora_connection[0] ||= ActiveFedora::RubydoraConnection.new(ActiveFedora.config.credentials)).connection
+      # the logger accessor is private
+      (connection.api.send :logger).level = Logger::INFO
 
       start_time = Time.now
       pids = Cul::Hydra::RisearchMembers.get_project_constituent_pids(project_pid, true)
       total = pids.length
       puts "Found #{total} project members."
       counter = 0
+      
+      # We run into autoloading issues when running in a multithreaded context,
+      # so we'll have the application eager load all classes now.
+      Rails.application.eager_load!
+      # Hack: Force load of classes that are giving autoload errors by referencing them below
+      BagAggregator.to_s
+      ContentAggregator.to_s
+      GenericResource.to_s
+      
+      ###########################################
+      pool = Thread.pool(thread_pool_size)
+      mutex = Mutex.new
 
       pids.each do |pid|
-        Cul::Hydra::Indexer.index_pid(pid, skip_generic_resources, false)
-        counter += 1
-        puts "Indexed #{counter} of #{total} | #{Time.now - start_time} seconds"
+        pool.process {
+          
+          Cul::Hydra::Indexer.index_pid(pid, skip_generic_resources, false)
+          
+          mutex.synchronize do
+            counter += 1
+            puts "Indexed #{counter} of #{total} | #{Time.now - start_time} seconds"
+          end
+        }
       end
+
+      pool.shutdown
+      ###########################################
+      
+      puts 'Done'
 
     end
     

@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency('active_fedora_relsint')
   s.add_dependency('cul_image_props')
   s.add_dependency('mods')
+  s.add_dependency('thread')
   s.add_dependency('rdf', '>=1.1.5')
   s.add_dependency('sparql', '1.1.4') # 1.1.5 breaks Ruby 1.9.3 compatibility
 
