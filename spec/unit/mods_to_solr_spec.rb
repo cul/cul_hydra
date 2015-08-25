@@ -108,12 +108,9 @@ describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
           expect(subject["lib_date_textual_ssm"]).to eql ['1800'] # Derived from key date
         end
       end 
-      context "with date created (range)" do
+      context "with date created (range) as iso8601" do
         let(:mods_src) { fixture( File.join("CUL_MODS", "mods-date-created-range.xml") ) }
         it do
-          expect(subject["origin_info_date_created_ssm"]).to eql ['1801']
-          expect(subject["origin_info_date_created_start_ssm"]).to eql ['1801']
-          expect(subject["origin_info_date_created_end_ssm"]).to eql ['1802']
           expect(subject["lib_start_date_year_itsi"]).to eql 1801
           expect(subject["lib_end_date_year_itsi"]).to eql 1802
           expect(subject["lib_date_year_range_si"]).to eql '1801-1802'

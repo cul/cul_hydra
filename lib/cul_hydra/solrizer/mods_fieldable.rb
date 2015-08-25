@@ -4,6 +4,7 @@ module Cul::Hydra::Solrizer
     include Solrizer::DefaultDescriptors::Normal
 
     MODS_NS = {'mods'=>'http://www.loc.gov/mods/v3'}
+    ORIGIN_INFO_DATES = ["dateCreated", "dateIssued", "dateOther"]
 
     module ClassMethods
       def value_mapper(maps=nil)
@@ -28,16 +29,19 @@ module Cul::Hydra::Solrizer
         n_t.gsub!(/\s+/, ' ')
         # pull off paired punctuation, and any leading punctuation
         if strip_punctuation
+          # strip brackets
           n_t = n_t.sub(/^\((.*)\)$/, "\\1")
           n_t = n_t.sub(/^\{(.*)\}$/, "\\1")
           n_t = n_t.sub(/^\[(.*)\]$/, "\\1")
+          n_t = n_t.sub(/^<(.*)>$/, "\\1")
+          # strip quotes
           n_t = n_t.sub(/^"(.*)"$/, "\\1")
           n_t = n_t.sub(/^'(.*)'$/, "\\1")
-          n_t = n_t.sub(/^<(.*)>$/, "\\1")
-          #n_t = n_t.sub(/^\p{Ps}(.*)\p{Pe}/u, "\\1")
+          is_negative_number = n_t =~ /^-\d+$/
           n_t = n_t.sub(/^[[:punct:]]+/, '')
           # this may have 'created' leading/trailing space, so strip
           n_t.strip!
+          n_t = '-' + n_t if is_negative_number
         end
         n_t
       end
@@ -193,16 +197,32 @@ module Cul::Hydra::Solrizer
 
     def textual_dates(node=mods)
       dates = []
-      node.xpath("./mods:originInfo/mods:dateCreated[not(@keyDate) and not(@point) and not(@w3cdtf)]", MODS_NS).collect do |n|
-        dates << ModsFieldable.normalize(n.text, true)
-      end
-      node.xpath("./mods:originInfo/mods:dateIssued[not(@keyDate) and not(@point) and not(@w3cdtf)]", MODS_NS).collect do |n|
-        dates << ModsFieldable.normalize(n.text, true)
-      end
-      node.xpath("./mods:originInfo/mods:dateOther[not(@keyDate) and not(@point) and not(@w3cdtf)]", MODS_NS).collect do |n|
-        dates << ModsFieldable.normalize(n.text, true)
+      ORIGIN_INFO_DATES.each do |element|
+        node.xpath("./mods:originInfo/mods:#{element}[not(@keyDate) and not(@point) and not(@encoding)]", MODS_NS).collect do |n|
+          dates << ModsFieldable.normalize(n.text, true)
+        end
       end
       return dates
+    end
+
+    def key_date_range(node=mods)
+      dates = []
+      encodings = ['w3cdtf','iso8601']
+      ORIGIN_INFO_DATES.each do |element|
+        encodings.each do |encoding|
+          xpath = "./mods:originInfo/mods:#{element}[(@keyDate) and (@encoding = '#{encoding}')]"
+          node.xpath(xpath, MODS_NS).collect do |n|
+            range = [ModsFieldable.normalize(n.text, true)]
+            if n['point'] != 'end'
+              n.xpath("../mods:#{element}[(@encoding = '#{encoding}' and @point = 'end')]", MODS_NS).each do |ep|
+                range << ModsFieldable.normalize(ep.text, true)
+              end
+            end
+            dates << range
+          end
+        end
+      end
+      return dates.first || dates
     end
 
     def date_range_to_textual_date(start_year, end_year)
@@ -386,24 +406,9 @@ module Cul::Hydra::Solrizer
       end
 
       # Create convenient start and end date values based on one of the many possible originInfo/dateX elements.
-      possible_start_date_fields = ['origin_info_date_issued_ssm', 'origin_info_date_issued_start_ssm', 'origin_info_date_created_ssm', 'origin_info_date_created_start_ssm', 'origin_info_date_other_ssm', 'origin_info_date_other_start_ssm']
-      possible_end_date_fields = ['origin_info_date_issued_end_ssm', 'origin_info_date_created_end_ssm', 'origin_info_date_other_end_ssm']
-      start_date = nil
-      end_date = nil
+      start_date, end_date = key_date_range
       start_year = nil
       end_year = nil
-      possible_start_date_fields.each{|key|
-        if solr_doc.has_key?(key)
-            start_date = solr_doc[key][0]
-          break
-        end
-      }
-      possible_end_date_fields.each{|key|
-        if solr_doc.has_key?(key)
-            end_date = solr_doc[key][0]
-          break
-        end
-      }
 
       if start_date.present?
 
