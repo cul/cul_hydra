@@ -175,7 +175,7 @@ ml
       built.ng_xml = Cul::Hydra::Datastreams::ModsDocument.xml_template
       built.update_values({[:origin_info, :date_created_start]=>"1801"})
       built.update_values({[:origin_info, :date_created_end]=>"1802"})
-      parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-date-created-range.xml")))
+      parsed = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-date-created-range.xml")).read.gsub('iso8601','w3cdtf'))
       built.ng_xml.should be_equivalent_to(parsed)
       equivalent?(built.ng_xml,parsed)
     end
