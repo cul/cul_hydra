@@ -3,7 +3,8 @@ cache: bundler
 sudo: false
 rvm:
   - 2.2
-
+jdk:
+  - oraclejdk8
 matrix:
   include:
     - rvm: 2.1
