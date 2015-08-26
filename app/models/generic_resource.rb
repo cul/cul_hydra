@@ -36,16 +36,6 @@ class GenericResource < ::ActiveFedora::Base
     "FILE ASSET"
   end
 
-  def thumbnail_info
-    thumb = relsint.relationships(datastreams['content'],:foaf_thumb).first
-    if thumb
-      t_dsid = thumb.object.to_s.split('/')[-1]
-      return {:url=>"#{ActiveFedora.fedora_config[:url]}/objects/#{pid}/datastreams/#{t_dsid}/content",:mime=>datastreams[t_dsid].mimeType}
-    else
-      return {:url=>image_url("cul_hydra/crystal/file.png"),:mime=>'image/png'}
-    end
-  end
-
   def to_solr(solr_doc = Hash.new, opts={})
     solr_doc = super
 
@@ -139,7 +129,14 @@ class GenericResource < ::ActiveFedora::Base
   end
 
   def zooming?
-    (zr = rels_int.relationships(datastreams['content'], :foaf_zooming) and not zr.first.blank?)
+    content = datastreams['content']
+    return false unless content
+    zr = rels_int.relationships(content, :foaf_zooming)
+    if (zr && zr.first)
+      return !zr.first.blank?
+    else
+      false
+    end
   end
 
   def with_ds_resource(ds_id, fedora_content_filesystem_mounted=false, &block)
