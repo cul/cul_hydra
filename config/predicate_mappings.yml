@@ -77,3 +77,12 @@
     :rdf_type: type
   http://www.loc.gov/premis/rdf/v1#:
     :original_name: hasOriginalName
+  http://pcdm.org/models#:
+    :pcdm_has_file: hasFile
+    :pcdm_file_of: fileOf
+    :pcdm_has_member: hasMember
+    :pcdm_member_of: memberOf
+    :pcdm_has_related_file: hasRelatedFile
+    :pcdm_related_file_of: relatedFileOf
+    :pcdm_has_related_object: hasRelatedObject
+    :pcdm_related_object_of: relatedObjectOf
