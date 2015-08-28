@@ -10,14 +10,30 @@ module Cul::Hydra::Models::Common
     has_metadata :name => "descMetadata", :type=>Cul::Hydra::Datastreams::ModsDocument, :versionable => true
     has_metadata :name => "rightsMetadata", :type=>::Hydra::Datastream::RightsMetadata, :versionable => true
     has_many :publishers, :property => :publisher, :class_name=>'ActiveFedora::Base'
+    after_create :rdf_types!
   end
 
   module ClassMethods
     def pid_namespace
       'ldpd'
     end
-
+    def rdf_types(type=nil)
+      @rdf_types ||= []
+      if type
+        @rdf_types << type unless @rdf_types.include? type
+      end
+      @rdf_types
+    end
   end
+
+  def rdf_types!
+    self.class.rdf_types.each do |type|
+      add_relationship(:rdf_type, type.to_s)
+    end
+    @metadata_is_dirty = true
+    self.save
+  end
+
 
   # A Fedora object label can only contain a string value of up to 255 characters.  If we try to
   # set a longer value, it causes errors upon object save.  Truncate labels to 255 characters.

@@ -1,16 +1,8 @@
 module Cul::Hydra::Models::Aggregator
   extend ActiveSupport::Concern
-
   included do
     has_and_belongs_to_many :containers, :property=>:cul_member_of, :class_name=>'ActiveFedora::Base'
     has_metadata :name => "structMetadata", :type=>Cul::Hydra::Datastreams::StructMetadata, :versionable => true, :controlGroup => 'M'
-    after_create :aggregator!
-  end
-
-  def aggregator!
-    add_relationship(:rdf_type, Cul::Hydra::Models::AGGREGATOR_TYPE.to_s)
-    @metadata_is_dirty = true
-    self.save
   end
 
   def add_member(member, container=self)
