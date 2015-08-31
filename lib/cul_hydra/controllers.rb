@@ -2,6 +2,7 @@ module Cul::Hydra
   module Controllers
     autoload :Aggregates, 'cul_hydra/controllers/aggregates'
     autoload :Catalog, 'cul_hydra/controllers/catalog'
+    autoload :Collections, 'cul_hydra/controllers/collections'
     autoload :ContentAggregators, 'cul_hydra/controllers/content_aggregators'
     autoload :Datastreams, 'cul_hydra/controllers/datastreams'
     autoload :Helpers, 'cul_hydra/controllers/helpers'
