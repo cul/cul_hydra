@@ -24,10 +24,10 @@ module Cul::Hydra::OreProxiesHelperBehavior
     proxy_in = opts[:id]
     proxy_uri = "info:fedora/#{proxy_in}"
     proxy_id = opts[:proxy_id]
-    proxy_in_query = "proxyIn_ssi:#{RSolr.escape(proxy_uri)}"
+    proxy_in_query = "proxyIn_ssi:#{RSolr.solr_escape(proxy_uri)}"
     f = [proxy_in_query]
     if proxy_id
-      f << "belongsToContainer_ssi:#{RSolr.escape(proxy_id)}"
+      f << "belongsToContainer_ssi:#{RSolr.solr_escape(proxy_id)}"
     else
       f << "-belongsToContainer_ssi:*"
     end
@@ -112,7 +112,7 @@ module Cul::Hydra::OreProxiesHelperBehavior
       # the first three parts are proxied graph prefixes "info:fedora/PID/DSID/..."
       3.upto(parts.size - 2).each do |ix|
         f_id = parts[0..ix].join('/')
-        yield( {id: id, proxy_id: URI.escape(f_id), label: parts[ix]})
+        yield( {id: id, proxy_id: (f_id), label: parts[ix]})
       end
     end
   end
