@@ -41,18 +41,22 @@ describe ContentAggregator, type: :unit do
     context 'an aggregated resource has a fulltext index' do
       let(:aggregator) {
         agg = ContentAggregator.new
-        allow(agg).to receive(:members).and_return([part])
+        allow(agg).to receive(:members).and_return([part_doc])
         allow(agg).to receive(:get_representative_generic_resource).and_return(part)
         allow(agg).to receive(:set_size_labels)
         agg
       }
       let(:fulltext) { ['fulltext'] }
+      let(:part_doc) { {'id' => 'foo'} }
       let(:part) {
         part = GenericResource.new
         allow(part).to receive(:to_solr).and_return("fulltext_tesim" => fulltext)
         part
       }
       subject { aggregator.to_solr }
+      before do
+        allow(ActiveFedora::Base).to receive(:find).with('foo').and_return(part)
+      end
       it do
         is_expected.to include('fulltext_tesim')
         expect(subject['fulltext_tesim']).to eql(fulltext)
