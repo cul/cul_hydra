@@ -16,6 +16,10 @@ class AdministrativeSet < ::ActiveFedora::Base
     "administrative_set"
   end
 
+  def index_type_label
+    "MULTIPART"
+  end
+
   def has_struct_metadata?
     false
   end

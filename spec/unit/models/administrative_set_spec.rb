@@ -37,4 +37,15 @@ describe AdministrativeSet, type: :unit do
       expect(subject.relationships(:rdf_type)).not_to include(RDF::PCDM.Object.to_s)
     end
   end
+  describe '#to_solr' do
+    let(:aggregator) {
+      agg = AdministrativeSet.new
+      allow(agg).to receive(:save).and_return(agg)
+      agg
+    }
+    subject { aggregator }
+    it do
+      expect(subject.to_solr).to be_a(Hash)
+    end
+  end
 end
