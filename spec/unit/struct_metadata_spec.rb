@@ -256,5 +256,26 @@ describe "Cul::Hydra::Datastreams::StructMetadata", type: :unit do
         end
       end
     end
+    context "when composing from several sources" do
+      let(:source1) do
+        src = fixture( File.join("STRUCTMAP", "structmap-nested.xml")).read
+        Cul::Hydra::Datastreams::StructMetadata.from_xml(src)
+      end
+      let(:source2) do
+        src = fixture( File.join("STRUCTMAP", "structmap-nested2.xml")).read
+        Cul::Hydra::Datastreams::StructMetadata.from_xml(src)
+      end
+      let(:combined) do
+        Nokogiri::XML(fixture( File.join("STRUCTMAP", "structmap-nested3.xml")).read)
+      end
+      subject do
+        ds = Cul::Hydra::Datastreams::StructMetadata.new
+        ds.merge(source1, source2)
+      end
+      it "should be equivalent to the composite source" do
+        expect(subject.ng_xml).to be_equivalent_to(combined)
+        expect(subject.changed?).to be
+      end
+    end
   end
 end

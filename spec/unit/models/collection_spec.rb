@@ -57,4 +57,31 @@ describe Collection, type: :unit do
       end
     end
   end
+  context "when composing from several sources" do
+    let(:source1) do
+      src = fixture( File.join("STRUCTMAP", "structmap-nested.xml")).read
+      Cul::Hydra::Datastreams::StructMetadata.from_xml(src)
+      o = Collection.new
+      o.structMetadata.content = src
+      o
+    end
+    let(:source2) do
+      src = fixture( File.join("STRUCTMAP", "structmap-nested2.xml")).read
+      o = Collection.new
+      o.structMetadata.content = src
+      o
+    end
+    let(:combined) do
+      Nokogiri::XML(fixture( File.join("STRUCTMAP", "structmap-nested3.xml")).read)
+    end
+    subject do
+      o = Collection.new
+      o.compose_from(source1, source2)
+    end
+    it "should be equivalent to the composite source" do
+      expect(subject.ng_xml).to be_equivalent_to(combined)
+      expect(subject.changed?).to be
+    end
+  end
+
 end

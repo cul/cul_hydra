@@ -151,7 +151,37 @@ class StructMetadata < ::ActiveFedora::Datastream
     end
   end
 
+  def merge(*parts)
+    if bad_part = parts.detect {|p| !p.is_a? StructMetadata}
+      raise "Can only compose from other StructMetadata datastreams (#{bad_part.class})"
+    end
+
+    parts.each do |part|
+      part.struct_map.attributes.each do |att|
+        struct_map[att[0]] = att[1]
+      end
+      combine(part.struct_map,struct_map)
+    end
+    ng_xml_will_change!
+    self
+  end
+
   private
+  def combine(src, target)
+    src.children.each do |child|
+
+      if child['CONTENTIDS'] and c = target.children.detect {|n| n['CONTENTIDS'].eql?child['CONTENTIDS']}
+        child.attributes.each do |att|
+          c[att[0]] = c[att[1]]
+        end
+        combine(child,c)
+      elsif c = target.children.detect {|n| n['LABEL'].eql?child['LABEL'] and !n['CONTENTIDS']}
+        combine(child,c)
+      else
+        target.add_child(child.dup.unlink)
+      end
+    end
+  end
   def ancestors(node)
     current = node
     labels = []
