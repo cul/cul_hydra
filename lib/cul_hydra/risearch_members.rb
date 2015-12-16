@@ -120,8 +120,8 @@ module ClassMethods
     return count.blank? ? 0 : count[0]['count'].to_i
   end
   
+  # Returns the pid of the first object found with the given identifier
   def get_pid_for_identifier(identifier)
-    
     find_by_identifier_query = "select $pid from <#ri>
     where $pid <http://purl.org/dc/elements/1.1/identifier> $identifier
     and $identifier <mulgara:is> '#{identifier}'"
@@ -138,7 +138,35 @@ module ClassMethods
     else
       return nil
     end
+  end
+  
+  # Returns the pids of ALL objects found with the given identifier
+  def get_all_pids_for_identifier(identifier)
     
+    find_by_identifier_query = "select $pid from <#ri>
+    where $pid <http://purl.org/dc/elements/1.1/identifier> $identifier
+    and $identifier <mulgara:is> '#{identifier}'"
+    
+    search_response = JSON(Cul::Hydra::Fedora.repository.find_by_itql(find_by_identifier_query, {
+      :type => 'tuples',
+      :format => 'json',
+      :limit => '',
+      :stream => 'on'
+    }))
+    
+    puts 'searching for: ' + identifier.inspect
+    puts 'with query: ' + find_by_identifier_query.inspect
+    puts 'search_response: ' + search_response.inspect
+    
+    pids_to_return = []
+    
+    if search_response['results'].present?
+      search_response['results'].each do |result|
+        pids_to_return << result['pid'].gsub('info:fedora/', '')
+      end
+    end
+    
+    return pids_to_return
   end
   
 end
