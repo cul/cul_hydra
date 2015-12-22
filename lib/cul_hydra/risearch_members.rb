@@ -154,10 +154,6 @@ module ClassMethods
       :stream => 'on'
     }))
     
-    puts 'searching for: ' + identifier.inspect
-    puts 'with query: ' + find_by_identifier_query.inspect
-    puts 'search_response: ' + search_response.inspect
-    
     pids_to_return = []
     
     if search_response['results'].present?
