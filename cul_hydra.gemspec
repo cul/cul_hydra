@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
   
   # Two dependencies below are locked to allow continued support for Ruby 1.9
   s.add_dependency('cancancan', '~>1.12.0')
-  s.add_dependency('autoprefixer-rails', '6.1.1')
+  s.add_dependency('autoprefixer-rails', '<= 6.1.1')
 
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "rspec", "~>2.10"
