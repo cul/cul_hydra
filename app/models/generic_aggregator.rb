@@ -57,7 +57,14 @@ class GenericAggregator < ::ActiveFedora::Base
     if has_struct_metadata?()
       conn = ActiveFedora::SolrService.instance.conn
       # delete by query proxyIn_ssi: internal_uri
-      conn.delete_by_query("proxyIn_ssi:#{RSolr.escape(internal_uri())}")
+      
+      if RSolr.respond_to?(:solr_escape)
+        # Use newer escape method, assuming the app including the cul_hydra engine is using a newer version of RSolr
+        conn.delete_by_query("proxyIn_ssi:#{RSolr.solr_escape(internal_uri())}")
+      else
+        # Older escape method can throw deprecation warnings
+        conn.delete_by_query("proxyIn_ssi:#{RSolr.escape(internal_uri())}")
+      end
 
       # reindex proxies
       proxy_docs = proxies().collect {|p| p.to_solr}
