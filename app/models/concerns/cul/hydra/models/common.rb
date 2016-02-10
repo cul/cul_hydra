@@ -218,7 +218,7 @@ module Cul::Hydra::Models::Common
       end
     else
       # If there isn't a structMap, just get the first child
-      member_pids = Cul::Hydra::RisearchMembers.get_direct_member_pids(self.pid)
+      member_pids = Cul::Hydra::RisearchMembers.get_direct_member_pids(self.pid, true)
       if member_pids.first
         child_obj = ActiveFedora::Base.find(member_pids.first)
         return child_obj.get_representative_generic_resource

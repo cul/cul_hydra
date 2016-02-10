@@ -65,12 +65,6 @@ describe Cul::Hydra::Models::Common, type: :integration do
     end
     
     it "should return the :cul_member_of child of the given content_aggregator when no struct map is present" do
-      # Need to wait because the resource index takes time to update (because immediate updates aren't enabled by default).  Wait for maximum of 10 seconds.
-      10.times {
-        break if @content_aggregator_with_direct_child.get_representative_generic_resource != nil
-        puts 'Waiting for ResourceIndex to update...'
-        sleep 1
-      }
       representative_generic_resource = @content_aggregator_with_direct_child.get_representative_generic_resource
       expect(representative_generic_resource).to eq(@direct_member_generic_resource)
       representative_generic_resource.should be_kind_of(GenericResource)
@@ -83,13 +77,6 @@ describe Cul::Hydra::Models::Common, type: :integration do
     end
     
     it "should return the first structmap member when a dc:identifier is present in the structMap rather than PID (and that dc:identifier can be a uri that would not be a valid fedora identifier)" do
-      
-      10.times {
-        break if Cul::Hydra::RisearchMembers.get_pid_for_identifier('apt://some/uri-like/identifier/for/g_res_struct_a') != nil
-        puts 'Waiting for ResourceIndex to update...'
-        sleep 1
-      }
-      
       representative_generic_resource = @content_aggregator_with_struct_children_a.get_representative_generic_resource(true)
       expect(representative_generic_resource).to eq(@struct_member_generic_resource_a)
       representative_generic_resource.should be_kind_of(GenericResource)

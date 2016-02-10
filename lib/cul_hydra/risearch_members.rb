@@ -29,7 +29,7 @@ module ClassMethods
 
   end
 
-  def get_direct_member_results(pid, verbose_output=false, format='json')
+  def get_direct_member_results(pid, flush_resource_index_before_query=false, verbose_output=false, format='json')
 
     direct_member_query =
       'select $pid from <#ri>
@@ -42,19 +42,20 @@ module ClassMethods
       :type => 'tuples',
       :format => format,
       :limit => '',
-      :stream => 'on'
+      :stream => 'on',
+      :flush => flush_resource_index_before_query.to_s
     }))
 
     return search_response['results']
   end
 
-  def get_direct_member_pids(pid, verbose_output=false)
-    unique_pids = get_direct_member_results(pid,verbose_output,'json')
+  def get_direct_member_pids(pid, flush_resource_index_before_query=false, verbose_output=false)
+    unique_pids = get_direct_member_results(pid,flush_resource_index_before_query,verbose_output,'json')
     unique_pids.map{|result| result['pid'].gsub('info:fedora/', '') }.uniq
   end
 
-  def get_direct_member_count(pid, verbose_output=false)
-    count = get_direct_member_results(pid,verbose_output,'count/json')
+  def get_direct_member_count(pid, flush_resource_index_before_query=false, verbose_output=false)
+    count = get_direct_member_results(pid,flush_resource_index_before_query,verbose_output,'count/json')
     return count.blank? ? 0 : count[0]['count'].to_i
   end
 
@@ -121,7 +122,7 @@ module ClassMethods
   end
   
   # Returns the pid of the first object found with the given identifier
-  def get_pid_for_identifier(identifier)
+  def get_pid_for_identifier(identifier, flush_resource_index_before_query=false)
     find_by_identifier_query = "select $pid from <#ri>
     where $pid <http://purl.org/dc/elements/1.1/identifier> $identifier
     and $identifier <mulgara:is> '#{identifier}'"
@@ -130,7 +131,8 @@ module ClassMethods
       :type => 'tuples',
       :format => 'json',
       :limit => '1',
-      :stream => 'on'
+      :stream => 'on',
+      :flush => flush_resource_index_before_query.to_s
     }))
     
     if search_response['results'].present?
