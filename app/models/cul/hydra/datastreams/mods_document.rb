@@ -89,7 +89,7 @@ class ModsDocument < ::ActiveFedora::OmDatastream
       t.lib_repo(:path=>"physicalLocation",
         :attributes=>{:authority=>"marcorg"},
         :index_as=>[:textable])
-      t.shelf_locator(:path=>"shelfLocator", :index_as=>[:textable, :displayable])
+      t.shelf_locator(:path=>"shelfLocator", :index_as=>[:displayable])
       t.sublocation(:path=>"sublocation", :index_as=>[:textable, :displayable])
       t.url
     }

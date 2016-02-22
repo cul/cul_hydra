@@ -172,9 +172,8 @@ describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
       context "with a shelfLocator" do
         subject { solr_doc['location_shelf_locator_ssm'] }
         it do
-          is_expected.to be
-          is_expected.to include("(Box no.\n\t057)")
-          expect(all_text_joined).to include("(Box no. 057)")
+          is_expected.to eq(["Box no. 057"])
+          expect(all_text_joined).to include("Box no. 057")
         end
       end
       context "with a non-Columbia repository" do
@@ -188,6 +187,17 @@ describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
           expect(subject["lib_repo_full_ssim"]).to include('Non-Columbia Location')
           expect(subject["lib_repo_text_ssm"]).to eql 'Potentially Unpredictable Repo Text Name'
           expect(all_text_joined).to include('Non-Columbia Location')
+        end
+      end
+    end
+    context "has physical location with shelfLocation in two different places" do
+      let(:mods_src) { fixture( File.join("CUL_MODS", "mods-physical-location-with-dual-location-shelflocator.xml") ) }
+      context "shelfLocator is extracted from both <location><shelfLocator> and <location><holdingSimpleholding><copyInformation><shelfLocator>" do
+        subject { solr_doc['location_shelf_locator_ssm'] }
+        it do
+          is_expected.to eq(["Box no. 057", "Folder no. 5"])
+          expect(all_text_joined).to include("Box no. 057")
+          expect(all_text_joined).to include("Folder no. 5")
         end
       end
     end
@@ -379,7 +389,7 @@ describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
             expect(all_text).to include("Date note")
             expect(all_text).to include("Date source note")
 
-
+            expect(subject["lib_non_date_notes_ssm"]).to_not include('filename_to_be_excluded.tif') # filename notes should be excluded
             expect(subject["lib_non_date_notes_ssm"]).to eql ["Basic note", "Banana note", "View Direction: WEST"]
             expect(subject["lib_date_notes_ssm"]).to eql ["Date note", "Date source note"]
           end

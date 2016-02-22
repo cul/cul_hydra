@@ -190,9 +190,13 @@ module Cul::Hydra::Solrizer
     end
 
     def shelf_locators(node=mods)
-      node.xpath("./mods:location/mods:shelfLocator", MODS_NS).collect do |n|
+      values = node.xpath("./mods:location/mods:shelfLocator", MODS_NS).collect do |n|
         ModsFieldable.normalize(n.text, true)
       end
+      values += node.xpath("./mods:location/mods:holdingSimple/mods:copyInformation/mods:shelfLocator", MODS_NS).collect do |n|
+        ModsFieldable.normalize(n.text, true)
+      end
+      values
     end
 
     def textual_dates(node=mods)
@@ -250,14 +254,12 @@ module Cul::Hydra::Solrizer
 
     def non_date_notes(node=mods)
       non_date_notes = []
-      node.xpath("./mods:note[not(@type) or (@type != 'date' and @type != 'date source')]", MODS_NS).collect do |n|
+      node.xpath("./mods:note[not(@type) or (@type != 'date' and @type != 'date source' and @type != 'filename')]", MODS_NS).collect do |n|
 				if n.attr('type') == 'view direction'
 					non_date_notes << 'View Direction: ' + ModsFieldable.normalize(n.text, true)
 				else
 					non_date_notes << ModsFieldable.normalize(n.text, true)
 				end
-
-
       end
       return non_date_notes
     end
@@ -376,6 +378,8 @@ module Cul::Hydra::Solrizer
       solr_doc["lib_recipient_sim"] = names(:marcrelator, 'rcp')
       solr_doc["lib_format_sim"] = formats
       solr_doc["lib_shelf_sim"] = shelf_locators
+      solr_doc['location_shelf_locator_ssm'] = solr_doc["lib_shelf_sim"]
+      solr_doc["all_text_teim"] += solr_doc["lib_shelf_sim"]
       solr_doc["lib_date_textual_ssm"] = textual_dates
       solr_doc["lib_date_notes_ssm"] = date_notes
       solr_doc["lib_non_date_notes_ssm"] = non_date_notes
