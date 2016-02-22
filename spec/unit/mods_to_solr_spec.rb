@@ -190,14 +190,22 @@ describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
         end
       end
     end
-    context "has physical location with shelfLocation in two different places" do
-      let(:mods_src) { fixture( File.join("CUL_MODS", "mods-physical-location-with-dual-location-shelflocator.xml") ) }
+    context "has physical location with shelfLocation and sublocation in two different places" do
+      let(:mods_src) { fixture( File.join("CUL_MODS", "mods-physical-location-with-dual-location-shelflocator-and-sublocation.xml") ) }
       context "shelfLocator is extracted from both <location><shelfLocator> and <location><holdingSimpleholding><copyInformation><shelfLocator>" do
         subject { solr_doc['location_shelf_locator_ssm'] }
         it do
           is_expected.to eq(["Box no. 057", "Folder no. 5"])
           expect(all_text_joined).to include("Box no. 057")
           expect(all_text_joined).to include("Folder no. 5")
+        end
+      end
+      context "sublocation is extracted from both <location><sublocation> and <location><holdingSimpleholding><copyInformation><sublocation>" do
+        subject { solr_doc['lib_sublocation_ssm'] }
+        it do
+          is_expected.to eq(["exampleSublocation", "Avery Classics Collection"])
+          expect(all_text_joined).to include("exampleSublocation")
+          expect(all_text_joined).to include("Avery Classics Collection")
         end
       end
     end

@@ -90,7 +90,7 @@ class ModsDocument < ::ActiveFedora::OmDatastream
         :attributes=>{:authority=>"marcorg"},
         :index_as=>[:textable])
       t.shelf_locator(:path=>"shelfLocator", :index_as=>[:displayable])
-      t.sublocation(:path=>"sublocation", :index_as=>[:textable, :displayable])
+      t.sublocation(:path=>"sublocation", :index_as=>[:displayable])
       t.url
     }
     t.top_level_location_url(:proxy=>[:mods, :location, :url])

@@ -198,6 +198,16 @@ module Cul::Hydra::Solrizer
       end
       values
     end
+    
+    def sublocation(node=mods)
+      values = node.xpath("./mods:location/mods:sublocation", MODS_NS).collect do |n|
+        ModsFieldable.normalize(n.text, true)
+      end
+      values += node.xpath("./mods:location/mods:holdingSimple/mods:copyInformation/mods:sublocation", MODS_NS).collect do |n|
+        ModsFieldable.normalize(n.text, true)
+      end
+      values
+    end
 
     def textual_dates(node=mods)
       dates = []
@@ -380,6 +390,9 @@ module Cul::Hydra::Solrizer
       solr_doc["lib_shelf_sim"] = shelf_locators
       solr_doc['location_shelf_locator_ssm'] = solr_doc["lib_shelf_sim"]
       solr_doc["all_text_teim"] += solr_doc["lib_shelf_sim"]
+      solr_doc['lib_sublocation_sim'] = sublocation
+      solr_doc['lib_sublocation_ssm'] = solr_doc['lib_sublocation_sim']
+      solr_doc["all_text_teim"] += solr_doc['lib_sublocation_sim']
       solr_doc["lib_date_textual_ssm"] = textual_dates
       solr_doc["lib_date_notes_ssm"] = date_notes
       solr_doc["lib_non_date_notes_ssm"] = non_date_notes
