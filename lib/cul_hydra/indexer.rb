@@ -71,9 +71,15 @@ module Cul::Hydra::Indexer
     begin
       active_fedora_object = nil
 
-      NUM_FEDORA_RETRY_ATTEMPTS.times { |i|
+      NUM_FEDORA_RETRY_ATTEMPTS.times do |i|
         begin
           active_fedora_object = ActiveFedora::Base.find(pid, :cast => true)
+          if skip_generic_resources && active_fedora_object.is_a?(GenericResource)
+            puts 'Object was skipped because GenericResources are being skipped and it is a GenericResource.'
+          else
+            active_fedora_object.update_index
+            puts 'done.' if verbose_output
+          end
           break
         rescue RestClient::RequestTimeout, Errno::EHOSTUNREACH => e
           remaining_attempts = (NUM_FEDORA_RETRY_ATTEMPTS-1) - i
@@ -83,20 +89,23 @@ module Cul::Hydra::Indexer
             Rails.logger.error "Error: Could not connect to fedora. (#{e.class.to_s + ': ' + e.message}).  Will retry #{remaining_attempts} more #{remaining_attempts == 1 ? 'time' : 'times'} (after a #{DELAY_BETWEEN_FEDORA_RETRY_ATTEMPTS} second delay)."
             sleep DELAY_BETWEEN_FEDORA_RETRY_ATTEMPTS
           end
+        rescue RuntimeError => e
+          if e.message.index('Circular dependency detected while autoloading')
+            # The RuntimeError 'Circular dependency detected while autoloading CLASSNAME' comes up when
+            # we're doing multithreaded indexing. The solution to this problem is to just wait a few
+            # seconds for the class to autoload and then to continue, so a retry is appropriate here.
+            sleep 5
+          else
+            # Other RuntimeErrors should be passed on
+            raise e
+          end
         end
-      }
-
-      if skip_generic_resources && active_fedora_object.is_a?(GenericResource)
-        puts 'Object was skipped because GenericResources are being skipped and it is a GenericResource.'
-      else
-        active_fedora_object.update_index
-        puts 'done.' if verbose_output
       end
     rescue SystemExit, Interrupt => e
       # Allow system interrupt (ctrl+c)
       raise e
     rescue Exception => e
-      puts "Encountered problem with #{pid}.  Skipping record.  Exception: #{e.message}"
+      puts "Encountered problem with #{pid}.  Skipping record.  Exception class: #{e.class.name}.  Message: #{e.message}"
     end
   end
 end

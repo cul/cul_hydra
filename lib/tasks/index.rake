@@ -64,11 +64,14 @@ namespace :cul_hydra do
 
       skip_generic_resources = (ENV['skip_generic_resources'] == 'true')
       
-      ### Stop excessive ActiveFedora logging ###
-      # initialize the fedora connection if necessary
-      connection = (ActiveFedora::Base.fedora_connection[0] ||= ActiveFedora::RubydoraConnection.new(ActiveFedora.config.credentials)).connection
-      # the logger accessor is private
-      (connection.api.send :logger).level = Logger::INFO
+      # Update (2016-02-22): (connection.api.send :logger) returns nil, but we aren't
+      # seeing debug level ActiveFedora logging anymore, so we should be okay without this.
+      
+      #### Stop excessive ActiveFedora logging ###
+      ## initialize the fedora connection if necessary
+      #connection = (ActiveFedora::Base.fedora_connection[0] ||= ActiveFedora::RubydoraConnection.new(ActiveFedora.config.credentials)).connection
+      ## the logger accessor is private
+      #(connection.api.send :logger).level = Logger::INFO
 
       start_time = Time.now
       pids = Cul::Hydra::RisearchMembers.get_project_constituent_pids(project_pid, true)
