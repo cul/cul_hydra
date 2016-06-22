@@ -138,7 +138,7 @@ xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.opena
           <wsdl:binding name="lamp_http" type="this:aggregatorPortType">
             <http:binding verb="GET"></http:binding>
             <wsdl:operation name="listMembers">
-              <http:operation location="/fedora-svc/aggregator/listMembers/dynamic-aggregator.php?dyn=(dyn)&amp;riquery=(RIQUERY)&amp;format=(format)&amp;objuri=(objuri)&amp;max=(max)&amp;start=(start)&amp;callback=(callback)"></http:operation>
+              <http:operation location="/aggregator/listMembers/dynamic-aggregator.php?dyn=(dyn)&amp;riquery=(RIQUERY)&amp;format=(format)&amp;objuri=(objuri)&amp;max=(max)&amp;start=(start)&amp;callback=(callback)"></http:operation>
               <wsdl:input>
                 <http:urlReplacement></http:urlReplacement>
               </wsdl:input>
@@ -147,7 +147,7 @@ xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.opena
               </wsdl:output>
             </wsdl:operation>
             <wsdl:operation name="getSize">
-              <http:operation location="/fedora-svc/aggregator/getSize/dynamic-aggregator.php?riquery=(RIQUERY)&amp;format=(format)&amp;objuri=(objuri)&amp;max=(max)&amp;start=(start)&amp;callback=(callback)"></http:operation>
+              <http:operation location="/aggregator/getSize/dynamic-aggregator.php?riquery=(RIQUERY)&amp;format=(format)&amp;objuri=(objuri)&amp;max=(max)&amp;start=(start)&amp;callback=(callback)"></http:operation>
               <wsdl:input>
                 <http:urlReplacement></http:urlReplacement>
               </wsdl:input>

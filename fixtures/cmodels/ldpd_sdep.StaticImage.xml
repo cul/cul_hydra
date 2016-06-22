@@ -152,7 +152,7 @@ xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.opena
           </wsdl:portType>
           <wsdl:service name="img">
             <wsdl:port binding="this:img_http" name="img_port">
-              <http:address location="$php_server$/fedora-svc/image/"></http:address>
+              <http:address location="$php_server$/image/"></http:address>
             </wsdl:port>
           </wsdl:service>
           <wsdl:binding name="img_http" type="this:imgPortType">
