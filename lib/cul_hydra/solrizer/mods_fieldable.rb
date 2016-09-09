@@ -213,7 +213,7 @@ module Cul::Hydra::Solrizer
       dates = []
       ORIGIN_INFO_DATES.each do |element|
         node.xpath("./mods:originInfo/mods:#{element}[not(@keyDate) and not(@point) and not(@encoding)]", MODS_NS).collect do |n|
-          dates << ModsFieldable.normalize(n.text, true)
+          dates << n.text.strip
         end
       end
       return dates

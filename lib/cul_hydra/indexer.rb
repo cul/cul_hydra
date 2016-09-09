@@ -92,8 +92,8 @@ module Cul::Hydra::Indexer
         rescue RuntimeError => e
           if e.message.index('Circular dependency detected while autoloading')
             # The RuntimeError 'Circular dependency detected while autoloading CLASSNAME' comes up when
-            # we're doing multithreaded indexing. The solution to this problem is to just wait a few
-            # seconds for the class to autoload and then to continue, so a retry is appropriate here.
+            # we're doing multithreaded indexing. Waiting a few seconds for the class to autoload and then
+            # retrying seems to help with this.
             sleep 5
           else
             # Other RuntimeErrors should be passed on

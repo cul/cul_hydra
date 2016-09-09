@@ -58,7 +58,7 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
     it "should have normalized facet values" do
       @solr_doc["lib_collection_sim"].should == ['Collection Facet Normalization Test']
     end
-
+    
     it "should facet on corporate and personal names, ignoring roleTerms" do
       @solr_doc["lib_name_sim"].should == ['Name, Inc.', 'Name, Personal 1745-1829', 'Name, Recipient 1829-1745','Included Without Attribute']
       @solr_doc["lib_name_ssm"].should == ['Name, Inc.', 'Name, Personal 1745-1829', 'Name, Recipient 1829-1745','Included Without Attribute']
@@ -132,6 +132,16 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
     end
     it "should find the shelf locators" do
       @solr_doc["lib_shelf_sim"].should == ["Box no. 057"]
+    end
+  end
+  
+  describe ".textual_dates" do
+    before :all do
+      @test_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-textual-dates-with-unusual-chars.xml")))
+      @solr_doc = ModsIndexDatastream.new(@test_ng).to_solr
+    end
+    it "should not change the textual date, other than removing leading or trailing whitespace" do
+      @solr_doc["lib_date_textual_ssm"].sort.should == ['-12 BCE', 'Circa 1940', '[19]22?']
     end
   end
 
