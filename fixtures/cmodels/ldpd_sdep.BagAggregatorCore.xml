@@ -178,7 +178,7 @@ xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.opena
               </wsdl:output>
             </wsdl:operation>
             <wsdl:operation name="rmap">
-              <http:operation location="$php_server$/fedora-svc/core/rmap/bag-aggregator.php?nullbind=(NULLBIND)&amp;format=json&amp;objuri=(objuri)"></http:operation>
+              <http:operation location="$php_server$/core/rmap/bag-aggregator.php?nullbind=(NULLBIND)&amp;format=json&amp;objuri=(objuri)"></http:operation>
               <wsdl:input>
                 <http:urlReplacement></http:urlReplacement>
               </wsdl:input>
@@ -187,7 +187,7 @@ xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.opena
               </wsdl:output>
             </wsdl:operation>
             <wsdl:operation name="describedBy">
-              <http:operation location="$php_server$/fedora-svc/core/describedBy/default.php?nullbind=(NULLBIND)&amp;format=(format)&amp;objuri=(objuri)&amp;max=(max)&amp;start=(start)"></http:operation>
+              <http:operation location="$php_server$/core/describedBy/default.php?nullbind=(NULLBIND)&amp;format=(format)&amp;objuri=(objuri)&amp;max=(max)&amp;start=(start)"></http:operation>
               <wsdl:input>
                 <http:urlReplacement></http:urlReplacement>
               </wsdl:input>
@@ -196,7 +196,7 @@ xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.opena
               </wsdl:output>
             </wsdl:operation>
             <wsdl:operation name="getViewer">
-              <http:operation location="$php_server$/fedora-svc/core/getViewer/bag-aggregator.php?nullbind=(NULLBIND)&amp;format=(format)&amp;objuri=(objuri)"></http:operation>
+              <http:operation location="$php_server$/core/getViewer/bag-aggregator.php?nullbind=(NULLBIND)&amp;format=(format)&amp;objuri=(objuri)"></http:operation>
               <wsdl:input>
                 <http:urlReplacement></http:urlReplacement>
               </wsdl:input>
@@ -205,7 +205,7 @@ xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.opena
               </wsdl:output>
             </wsdl:operation>
             <wsdl:operation name="getIndex">
-              <http:operation location="$php_server$/fedora-svc/core/getIndex/dispatch.php?nullbind=(NULLBIND)&amp;profile=(profile)&amp;objuri=(objuri)&amp;format=Collection"></http:operation>
+              <http:operation location="$php_server$/core/getIndex/dispatch.php?nullbind=(NULLBIND)&amp;profile=(profile)&amp;objuri=(objuri)&amp;format=Collection"></http:operation>
               <wsdl:input>
                 <http:urlReplacement></http:urlReplacement>
               </wsdl:input>

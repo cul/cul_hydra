@@ -145,7 +145,7 @@ xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.opena
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="listMembers">
-      <http:operation location="$php_server$/fedora-svc/aggregator/listMembers/bag-aggregator.php?nullbind=(NULLBIND)&amp;path=fedora&amp;format=(format)&amp;objuri=(objuri)&amp;max=(max)&amp;start=(start)&amp;callback=(callback)"></http:operation>
+      <http:operation location="$php_server$/aggregator/listMembers/bag-aggregator.php?nullbind=(NULLBIND)&amp;path=fedora&amp;format=(format)&amp;objuri=(objuri)&amp;max=(max)&amp;start=(start)&amp;callback=(callback)"></http:operation>
       <wsdl:input>
         <http:urlReplacement></http:urlReplacement>
       </wsdl:input>

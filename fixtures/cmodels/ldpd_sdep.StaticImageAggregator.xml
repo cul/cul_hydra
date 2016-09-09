@@ -158,7 +158,7 @@ xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.opena
 
             <http:binding verb="GET"></http:binding>
             <wsdl:operation name="listMembers">
-              <http:operation location="$php_server$/fedora-svc/aggregator/listMembers/static-image.php?nullbind=(NULLBIND)&amp;format=(format)&amp;objuri=(objuri)&amp;max=(max)&amp;start=(start)&amp;callback=(callback)"></http:operation>
+              <http:operation location="$php_server$/aggregator/listMembers/static-image.php?nullbind=(NULLBIND)&amp;format=(format)&amp;objuri=(objuri)&amp;max=(max)&amp;start=(start)&amp;callback=(callback)"></http:operation>
               <wsdl:input>
                 <http:urlReplacement></http:urlReplacement>
               </wsdl:input>
@@ -169,7 +169,7 @@ xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.opena
             </wsdl:operation>
 
             <wsdl:operation name="getSize">
-              <http:operation location="$php_server$/fedora-svc/aggregator/getSize/default.php?nullbind=(NULLBIND)&amp;format=(format)&amp;objuri=(objuri)&amp;max=(max)&amp;start=(start)&amp;callback=(callback)"></http:operation>
+              <http:operation location="$php_server$/aggregator/getSize/default.php?nullbind=(NULLBIND)&amp;format=(format)&amp;objuri=(objuri)&amp;max=(max)&amp;start=(start)&amp;callback=(callback)"></http:operation>
               <wsdl:input>
                 <http:urlReplacement></http:urlReplacement>
               </wsdl:input>

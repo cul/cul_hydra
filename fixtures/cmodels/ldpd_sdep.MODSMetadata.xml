@@ -141,7 +141,7 @@ xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.opena
 
             </wsdl:operation>
             <wsdl:operation name="describes">
-              <http:operation location="$php_server$/fedora-svc/metadata/describes/metadata.php?host=local.fedora.server&amp;port=8080&amp;path=fedora&amp;format=(format)&amp;objuri=(objuri)&amp;max=(max)&amp;start=(start)"></http:operation>
+              <http:operation location="$php_server$/metadata/describes/metadata.php?host=local.fedora.server&amp;port=8080&amp;path=fedora&amp;format=(format)&amp;objuri=(objuri)&amp;max=(max)&amp;start=(start)"></http:operation>
               <wsdl:input>
                 <http:urlReplacement></http:urlReplacement>
               </wsdl:input>

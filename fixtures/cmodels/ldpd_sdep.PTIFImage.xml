@@ -163,7 +163,7 @@ xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.opena
           </wsdl:portType>
           <wsdl:service name="FedoraDjatoka">
             <wsdl:port binding="this:FedoraDjatoka_http" name="FedoraDjatoka_port">
-              <http:address location="$php_server$/fedora-svc/"/>
+              <http:address location="$php_server$/"/>
             </wsdl:port>
           </wsdl:service>
           <wsdl:binding name="FedoraDjatoka_http" type="this:FedoraDjatokaPortType">
