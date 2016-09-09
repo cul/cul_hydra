@@ -5,7 +5,7 @@ $:.unshift lib unless $:.include?(lib)
 require 'cul_hydra/version'
 
 Gem::Specification.new do |s|
-  s.required_ruby_version = '>= 1.9.3'
+  s.required_ruby_version = '>= 2.1'
   s.name = "cul_hydra"
   s.version = Cul::Hydra::VERSION
   s.platform = Gem::Platform::RUBY
