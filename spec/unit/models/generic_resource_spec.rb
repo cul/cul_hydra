@@ -73,6 +73,28 @@ describe GenericResource, type: :unit do
       end
     end
 
+    describe '#service_datastream' do
+      let(:service_ds) { 'svc' }
+      subject { o.service_datastream }
+      context 'object has a service datastream and RELS-INT to indicate it' do
+        before do
+          s = RDF::URI.new("info:fedora/gad:zooks/svc")
+          o.rels_int.add_relationship(s,:format_of,RDF::URI.new("#{o.internal_uri}/content"))
+          o.rels_int.add_relationship(s,:rdf_type,"http://pcdm.org/use#ServiceFile")
+          o.add_datastream(o.create_datastream(ActiveFedora::Datastream, service_ds))
+        end
+        it { is_expected.not_to be_nil }
+        it { expect(subject.dsid).to eql(service_ds) }
+      end
+      context 'object has RELS-INT to indicate service datastream but no datastream' do
+        before do
+          s = RDF::URI.new("info:fedora/gad:zooks/svc")
+          o.rels_int.add_relationship(s,:format_of,RDF::URI.new("#{o.internal_uri}/content"))
+          o.rels_int.add_relationship(s,:rdf_type,"http://pcdm.org/use#ServiceFile")
+        end
+        it { is_expected.to be_nil }
+      end              
+    end
   end
 
 end
