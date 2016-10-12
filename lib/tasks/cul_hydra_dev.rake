@@ -34,6 +34,7 @@ namespace :cul_hydra do
     ENV['environment'] = "test"
     #Rake::Task["active_fedora:configure_jetty"].invoke
     jetty_params = Jettywrapper.load_config
+    Rake::Task["jetty:clean"].invoke
     error = Jettywrapper.wrap(jetty_params) do
       Rake::Task["cul_hydra:cmodel:reload_all"].invoke
       Rake::Task['cul_hydra:coverage'].invoke

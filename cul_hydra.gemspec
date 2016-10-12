@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
   s.add_dependency('thread')
   s.add_dependency('rdf', '>=1.1.5')
   s.add_dependency('sparql', '1.1.4') # 1.1.5 breaks Ruby 1.9.3 compatibility
+  s.add_dependency('json', '>=1.8.3')
   
   # Two dependencies below are locked to allow continued support for Ruby 1.9
   s.add_dependency('cancancan', '~>1.12.0')
