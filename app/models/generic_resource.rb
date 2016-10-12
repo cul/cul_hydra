@@ -63,6 +63,9 @@ class GenericResource < ::ActiveFedora::Base
       end
     end
 
+    if (service_ds = self.service_datastream)
+      solr_doc['service_dslocation_ss'] = service_ds.dsLocation
+    end
     solr_doc["fulltext_tesim"] = []
     unless self.datastreams["fulltext"].nil?
       solr_doc["fulltext_tesim"].concat(solr_doc["title_display_ssm"]) unless solr_doc["title_display_ssm"].nil? or solr_doc["title_display_ssm"].length == 0
