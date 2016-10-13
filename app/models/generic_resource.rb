@@ -63,6 +63,9 @@ class GenericResource < ::ActiveFedora::Base
       end
     end
 
+    if (service_ds = self.service_datastream)
+      solr_doc['service_dslocation_ss'] = service_ds.dsLocation
+    end
     solr_doc["fulltext_tesim"] = []
     unless self.datastreams["fulltext"].nil?
       solr_doc["fulltext_tesim"].concat(solr_doc["title_display_ssm"]) unless solr_doc["title_display_ssm"].nil? or solr_doc["title_display_ssm"].length == 0
@@ -140,6 +143,23 @@ class GenericResource < ::ActiveFedora::Base
     else
       false
     end
+  end
+
+  def service_datastream
+    # we have to 'manually' query the graph because rels_int doesn't support subject pattern matching
+    args = [:s, rels_int.to_predicate(:format_of), RDF::URI.new("#{internal_uri}/content")]
+    query = RDF::Query.new { |q| q << args }
+    candidates = query.execute(rels_int.graph).map(&:to_hash).map do |hash|
+      hash[:s]
+    end
+    args = [:s, rels_int.to_predicate(:rdf_type), RDF::URI.new("http://pcdm.org/use#ServiceFile")]
+    query = RDF::Query.new { |q| q << args }
+    candidates &= query.execute(rels_int.graph).map(&:to_hash).map do |hash|
+      hash[:s]
+    end
+    candidate_dsid = candidates.first && candidates.first.to_s.split('/')[-1]
+    return datastreams[candidate_dsid] if datastreams.keys.include? candidate_dsid
+    return nil
   end
 
   def with_ds_resource(ds_id, fedora_content_filesystem_mounted=false, &block)
