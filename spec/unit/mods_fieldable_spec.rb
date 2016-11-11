@@ -51,8 +51,9 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
     end
 
     it "should have a single sortable title" do
-      @solr_doc["title_si"] = 'Manuscript, Unidentified'
-      @solr_doc["title_display_ssm"] = ['The Manuscript, Unidentified']
+      expect(@solr_doc).to include("title_si" => 'Manuscript, unidentified')
+      # title_display_ssm is assigned in the ModsDocument OM selector
+      expect(@solr_doc).to include("title_ssm" => ['The Manuscript, unidentified'])
     end
 
     it "should have normalized facet values" do

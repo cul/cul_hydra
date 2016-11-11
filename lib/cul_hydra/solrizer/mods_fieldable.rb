@@ -276,7 +276,7 @@ module Cul::Hydra::Solrizer
 
     def item_in_context_url(node=mods)
       item_in_context_url_val = []
-      node.xpath("./mods:location/mods:url[@access='object in context' and @usage='primary display']", MODS_NS).collect do |n|
+      node.xpath("./mods:location/mods:url[@access='object in context']", MODS_NS).collect do |n|
         item_in_context_url_val << ModsFieldable.normalize(n.text, true)
       end
       item_in_context_url_val
