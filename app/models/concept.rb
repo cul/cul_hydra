@@ -60,6 +60,16 @@ class Concept < GenericAggregator
     end
   end
 
+  # a human readable PREMIS restriction ('Onsite', etc.)
+  # http://www.bbc.co.uk/ontologies/coreconcepts/slug
+  def restriction
+    get_singular_rel(:restriction)
+  end
+
+  def restriction=(val)
+    set_singular_rel(:restriction, val, true)
+  end
+
   # a human readable URI segment for this concept
   # http://www.bbc.co.uk/ontologies/coreconcepts/slug
   def slug
@@ -119,7 +129,7 @@ class Concept < GenericAggregator
   end
   class SingularRelValidator < ActiveModel::Validator
     def validate(record)
-      [:abstract, :alternative, :slug, :source, :title].each do |rel|
+      [:abstract, :alternative, :restriction, :slug, :source, :title].each do |rel|
         record.errors[rel] << "#{rel} must have 0 or 1 values" unless record.relationships(rel).length < 2
       end
     end

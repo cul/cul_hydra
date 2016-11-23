@@ -82,6 +82,7 @@
     :rdf_type: type
   http://www.loc.gov/premis/rdf/v1#:
     :original_name: hasOriginalName
+    :restriction: hasRestriction
   http://pcdm.org/models#:
     :pcdm_has_file: hasFile
     :pcdm_file_of: fileOf

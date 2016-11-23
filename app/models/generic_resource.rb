@@ -104,7 +104,6 @@ class GenericResource < ::ActiveFedora::Base
       rels.each do |dsuri, props|
         if dsuri =~ /\/content$/ or not props[FORMAT_OF_PREDICATE].blank?
           dsid =  dsuri.split('/')[-1]
-          puts props.inspect
           res = datastream_as_resource(dsid, props.with_indifferent_access)
           results << res
         end
@@ -163,10 +162,7 @@ class GenericResource < ::ActiveFedora::Base
   end
 
   def with_ds_resource(ds_id, fedora_content_filesystem_mounted=false, &block)
-
     ds = self.datastreams[ds_id]
-
-    puts 'dsLocation.start_with?(self.pid) : ' + ds.dsLocation.start_with?(self.pid).to_s
 
     # If the dsLocation starts with the pid, that means that we're dealing with an internally-managed ds,
     # so we can't reference the file directly even if we do have the fedora content filesystem mounted.

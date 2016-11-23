@@ -68,7 +68,7 @@ describe Concept, type: :unit do
       end
     end
     describe 'zero or one values for singular rels-ext attributes' do
-      [:abstract, :short_title, :slug, :source, :title].each do |att|
+      [:abstract, :restriction, :short_title, :slug, :source, :title].each do |att|
         context att.to_s do
           let(att) { 'http://test_value' }
           before do
