@@ -114,16 +114,6 @@ class Concept < GenericAggregator
     set_singular_rel(:short_title, val, true)
   end
 
-  # the full title
-  # http://purl.org/dc/terms/title
-  def title
-    get_singular_rel(:title)
-  end
-
-  def title=(val)
-    set_singular_rel(:title, val, true)
-  end
-
   def get_singular_rel(predicate)
     property = relationships(predicate).first
     return nil unless property
@@ -143,7 +133,7 @@ class Concept < GenericAggregator
   end
   class SingularRelValidator < ActiveModel::Validator
     def validate(record)
-      [:abstract, :alternative, :restriction, :slug, :source, :title, :schema_image].each do |rel|
+      [:abstract, :alternative, :restriction, :slug, :source, :schema_image].each do |rel|
         record.errors[rel] << "#{rel} must have 0 or 1 values" unless record.relationships(rel).length < 2
       end
     end

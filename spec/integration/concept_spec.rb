@@ -41,6 +41,5 @@ describe Concept, type: :integration do
     expect(solr_doc["description_text_ssm"]).to include("Digital content in the DLC website comes almost exclusively from Columbia")
     expect(solr_doc).to include("restriction_ssim" => "Onsite")
     expect(solr_doc).to include("slug_ssim" => "catalog")
-    expect(solr_doc).to include("title_ssim" => "Digital Library Collections")
   end
 end
