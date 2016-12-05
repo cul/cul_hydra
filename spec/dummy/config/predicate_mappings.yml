@@ -98,3 +98,7 @@
     :slug: slug
   https://schema.org/:
     :schema_image: image
+  http://www.openarchives.org/ore/terms/:
+    :lineage: lineage
+  http://www.w3.org/ns/ldp#:
+    :ldp_contains: contains

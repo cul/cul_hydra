@@ -25,6 +25,11 @@ describe Concept, type: :integration do
   	@fixture_obj.save
   	expect(ActiveFedora::Base.find(@pid).slug).to eql('other')
   end
+  it "should be able to removerestriction via #remove_restriction" do
+  	expect(@fixture_obj.restriction).to eql('Onsite')
+  	@fixture_obj.remove_restriction
+  	expect(@fixture_obj.restriction).to eql(nil)
+  end
   it "should index correctly" do
     @fixture_obj.update_index
     solr_doc = @fixture_obj.to_solr
@@ -34,6 +39,7 @@ describe Concept, type: :integration do
     expect(solr_doc["abstract_ssim"]).to include("The Digital Library Collections (DLC)")
     expect(solr_doc["description_ssim"]).to eql("info:fedora/cul:vmcvdnck2d/description")
     expect(solr_doc["description_text_ssm"]).to include("Digital content in the DLC website comes almost exclusively from Columbia")
+    expect(solr_doc).to include("restriction_ssim" => "Onsite")
     expect(solr_doc).to include("slug_ssim" => "catalog")
     expect(solr_doc).to include("title_ssim" => "Digital Library Collections")
   end

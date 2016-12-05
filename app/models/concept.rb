@@ -61,13 +61,27 @@ class Concept < GenericAggregator
   end
 
   # a human readable PREMIS restriction ('Onsite', etc.)
-  # http://www.bbc.co.uk/ontologies/coreconcepts/slug
+  # http://www.loc.gov/premis/rdf/v1#hasRestriction
   def restriction
     get_singular_rel(:restriction)
   end
 
   def restriction=(val)
     set_singular_rel(:restriction, val, true)
+  end
+  
+  def remove_restriction
+    clear_relationship(:restriction)
+  end
+  
+  # a representative image URI for this concept
+  # https://schema.org/image
+  def representative_image
+    get_singular_rel(:schema_image)
+  end
+
+  def representative_image=(val)
+    set_singular_rel(:schema_image, val)
   end
 
   # a human readable URI segment for this concept
@@ -129,7 +143,7 @@ class Concept < GenericAggregator
   end
   class SingularRelValidator < ActiveModel::Validator
     def validate(record)
-      [:abstract, :alternative, :restriction, :slug, :source, :title].each do |rel|
+      [:abstract, :alternative, :restriction, :slug, :source, :title, :schema_image].each do |rel|
         record.errors[rel] << "#{rel} must have 0 or 1 values" unless record.relationships(rel).length < 2
       end
     end
