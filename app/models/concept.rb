@@ -49,8 +49,7 @@ class Concept < GenericAggregator
   end
 
   def description=(value)
-    return unless value
-    blob = (value.is_a? String) ? StringIO.new(value) : value
+    value = '' if value.nil?
     ds = description_ds
     if ds
       ds.content = value
@@ -68,10 +67,6 @@ class Concept < GenericAggregator
 
   def restriction=(val)
     set_singular_rel(:restriction, val, true)
-  end
-  
-  def remove_restriction
-    clear_relationship(:restriction)
   end
   
   # a representative image URI for this concept
@@ -123,7 +118,7 @@ class Concept < GenericAggregator
   def set_singular_rel(predicate, value, literal=false)
     raise "#{predicate} is a singular property" if value.respond_to? :each
     clear_relationship(predicate)
-    add_relationship(predicate, value, literal)
+    add_relationship(predicate, value, literal) unless value.nil? || value.empty?
   end
 
   def to_solr(solr_doc = Hash.new, opts={})

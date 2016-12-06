@@ -25,11 +25,6 @@ describe Concept, type: :integration do
   	@fixture_obj.save
   	expect(ActiveFedora::Base.find(@pid).slug).to eql('other')
   end
-  it "should be able to removerestriction via #remove_restriction" do
-  	expect(@fixture_obj.restriction).to eql('Onsite')
-  	@fixture_obj.remove_restriction
-  	expect(@fixture_obj.restriction).to eql(nil)
-  end
   it "should index correctly" do
     @fixture_obj.update_index
     solr_doc = @fixture_obj.to_solr
