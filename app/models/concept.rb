@@ -49,13 +49,20 @@ class Concept < GenericAggregator
   end
 
   def description=(value)
-    value = '' if value.nil?
     ds = description_ds
-    if ds
-      ds.content = value
+    if value.nil? || value.empty?
+      if ds
+        # Datastreams don't allow empty content, so we need to delete the datastream
+        datastreams['descriptionText'].delete
+        clear_relationship(:description)
+      end
     else
-      add_relationship(:description, internal_uri.to_s + "/descriptionText")
-      datastreams['descriptionText'].content =  value
+      if ds
+        ds.content = value
+      else
+        add_relationship(:description, internal_uri.to_s + "/descriptionText")
+        datastreams['descriptionText'].content =  value
+      end
     end
   end
 

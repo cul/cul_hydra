@@ -113,11 +113,16 @@ describe Concept, type: :unit do
       concept = Concept.new
       concept
     }
-    it "sets the description to an empty string if nil is passed as an argument", focus: true do
-      concept.description = 'Some description'
-      expect(concept.description).to eq('Some description')
-      concept.description = nil
-      expect(concept.description).to eq('')
+    it "when passed a nil or empty string value, removes the :description relationship and deletes the associated description datastream", focus: true do
+      [nil, ''].each do |val|
+        concept.description = 'Some description'
+        expect(concept.description).to eq('Some description')
+        expect(concept.relationships(:description).length).to eq(1)
+        concept.description = val
+        expect(concept.description).to eq(nil)
+        expect(concept.relationships(:description).length).to eq(0)
+        expect(concept.description_ds).to eq(nil)
+      end
     end
   end
 end
