@@ -64,6 +64,18 @@ module Cul::Hydra::Solrizer
         ModsFieldable.normalize(main_title(p_node), true)
       end
     end
+    
+    def languages_iso639_2_text
+      mods.xpath("./mods:language/mods:languageTerm[@type='text' and @authority='iso639-2']", MODS_NS).collect do |n|
+        ModsFieldable.normalize(n.text, true)
+      end
+    end
+    
+    def languages_iso639_2_code
+      mods.xpath("./mods:language/mods:languageTerm[@type='code' and @authority='iso639-2']", MODS_NS).collect do |n|
+        ModsFieldable.normalize(n.text, true)
+      end
+    end
 
     def sort_title(node=mods)
       # include only the untyped [!@type] titleInfo, exclude noSort
@@ -471,6 +483,14 @@ module Cul::Hydra::Solrizer
 
       # Geo data
       solr_doc["geo"] = coordinates
+      
+      ## Handle alternate form of language authority for language_language_term_text_ssim
+      ## We already capture elements when authority="iso639-2b", but we want to additionally
+      ## capture language elements when authority="iso639-2".
+      solr_doc['language_language_term_text_ssim'] ||= []
+      solr_doc['language_language_term_text_ssim'] += languages_iso639_2_text
+      solr_doc['language_language_term_code_ssim'] ||= []
+      solr_doc['language_language_term_code_ssim'] +=languages_iso639_2_code
 
       solr_doc.each do |k, v|
         if self.class.maps_field? k

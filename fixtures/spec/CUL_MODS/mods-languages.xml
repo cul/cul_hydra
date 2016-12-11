@@ -1,0 +1,14 @@
+
+<mods:mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mods="http://www.loc.gov/mods/v3" version="3.6" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd">
+  <mods:titleInfo>
+    <mods:title>Esempio Lingua documento</mods:title>
+  </mods:titleInfo>
+  <mods:language>
+    <mods:languageTerm type="text" valueURI="http://id.loc.gov/vocabulary/iso639-2/ita" authority="iso639-2">Italian</mods:languageTerm>
+    <mods:languageTerm type="code" valueURI="http://id.loc.gov/vocabulary/iso639-2/ita" authority="iso639-2">ita</mods:languageTerm>
+  </mods:language>
+  <mods:language>
+    <mods:languageTerm type="text" valueURI="http://id.loc.gov/vocabulary/iso639-2/eng" authority="iso639-2b">English</mods:languageTerm>
+    <mods:languageTerm type="code" valueURI="http://id.loc.gov/vocabulary/iso639-2/eng" authority="iso639-2b">eng</mods:languageTerm>
+  </mods:language>
+</mods:mods>

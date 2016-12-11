@@ -366,6 +366,13 @@ describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
         end
       end
     end
+    context "handles iso639-2 and iso639-2b language authority variations" do
+      let(:mods_src) { fixture( File.join("CUL_MODS", "mods-languages.xml") ) }
+      it "should capture languages with authority='iso639-2' and languages with athority='iso639-2b'" do
+        expect(subject["language_language_term_text_ssim"].sort).to eq(['English', 'Italian'])
+        expect(subject["language_language_term_code_ssim"].sort).to eq(['eng', 'ita'])
+      end
+    end
     context "has authority values for form under physicalDescription" do
       let(:mods_src) { fixture( File.join("CUL_MODS", "mods-physical-description.xml") ) }
       context "from a local authority" do

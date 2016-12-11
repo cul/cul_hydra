@@ -145,7 +145,7 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
       @solr_doc["lib_date_textual_ssm"].sort.should == ['-12 BCE', 'Circa 1940', '[19]22?']
     end
   end
-
+  
   describe ".names" do
     before :all do
       @names_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-names.xml")))
