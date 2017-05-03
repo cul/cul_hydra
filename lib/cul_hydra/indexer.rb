@@ -66,7 +66,7 @@ module Cul::Hydra::Indexer
 
   end
 
-  def self.index_pid(pid, skip_generic_resources=false, verbose_output=false)
+  def self.index_pid(pid, skip_generic_resources=false, verbose_output=false, softcommit=true)
     # We found an object with the desired PID. Let's reindex it
     begin
       active_fedora_object = nil
@@ -77,7 +77,12 @@ module Cul::Hydra::Indexer
           if skip_generic_resources && active_fedora_object.is_a?(GenericResource)
             puts 'Object was skipped because GenericResources are being skipped and it is a GenericResource.'
           else
-            active_fedora_object.update_index
+            if softcommit
+              active_fedora_object.update_index
+            else
+              # Using direct solr query to update document without soft commiting
+              ActiveFedora::SolrService.add(active_fedora_object.to_solr)
+            end
             puts 'done.' if verbose_output
           end
           break

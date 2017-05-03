@@ -151,13 +151,18 @@ module Cul::Hydra::Models::Common
       end
     }
     solr_doc[:structured_bsi] = 'false' unless solr_doc.has_key? :structured_bsi
-    
+
     representative_child = get_representative_generic_resource
     solr_doc['representative_generic_resource_pid_ssi'] = representative_child.pid unless representative_child.nil?
 
+    # Index URI form of pid to facilitate solr joins
+    solr_doc['fedora_pid_uri_ssi'] = 'info:fedora/' + self.pid if self.pid.present?
+    #solr_doc['fedora_pid_uri_ssi'] = 'info:fedora/' + solr_doc['id'] if solr_doc['id'].present?
+    #solr_doc['fedora_pid_uri_ssi'] = ''
+
     solr_doc
   end
-  
+
   # This method generally shouldn't be called with any parameters (unless we're doing testing)
   def get_representative_generic_resource(force_use_of_non_pid_identifier=false)
     return self if self.is_a?(GenericResource)
@@ -180,11 +185,11 @@ module Cul::Hydra::Models::Common
     else
       found_struct_div = false
     end
-    
+
     if found_struct_div
       content_ids = ng_div.attr('CONTENTIDS').split(' ') # Get all space-delimited content ids
       child_obj = nil
-      
+
       # Try to do a PID lookup first
       unless force_use_of_non_pid_identifier
         content_ids.each do |content_id|
@@ -192,7 +197,7 @@ module Cul::Hydra::Models::Common
           child_obj ||= ActiveFedora::Base.exists?(content_id) ? ActiveFedora::Base.find(content_id) : nil
         end
       end
-      
+
       # Then fall back to identifier lookup
       if child_obj.nil?
         child_pid = nil
@@ -203,12 +208,12 @@ module Cul::Hydra::Models::Common
             child_pid = nil
           end
         end
-        
+
         if child_pid
           child_obj = ActiveFedora::Base.find(child_pid)
         end
       end
-      
+
       if child_obj
         # Recursion!  Woo!
         return child_obj.get_representative_generic_resource(force_use_of_non_pid_identifier)
