@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<mods xmlns='http://www.loc.gov/mods/v3' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd' version='3.4'>
+<mods xmlns='http://www.loc.gov/mods/v3' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd' version='3.6'>
   <subject authority="lcsh" valueURI="http://id.loc.gov/authorities/names/n79088877">
     <name authority="naf">
       <namePart>Jay, John, 1745-1829</namePart>
@@ -68,6 +68,7 @@
       <citySection citySectionType="neighborhood">The Backpacking District</citySection>
       <citySection citySectionType="zip code">10027</citySection>
       <citySection citySectionType="street">123 Broadway</citySection>
+      <area>The good part of town</citySection>
     </hierarchicalGeographic>
   </subject>
 </mods>

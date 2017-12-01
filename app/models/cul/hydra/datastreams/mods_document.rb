@@ -68,6 +68,7 @@ class ModsDocument < ::ActiveFedora::OmDatastream
         t.city(:index_as=>[:symbol, :textable])
         t.neighborhood(:path=>'citySection', :attributes=>{:'citySectionType'=>"neighborhood"}, :index_as=>[:symbol, :textable])
         t.zip_code(:path=>'citySection', :attributes=>{:'citySectionType'=>"zip code"}, :index_as=>[:symbol, :textable])
+        t.area(:index_as=>[:symbol, :textable])
         t.street(:path=>'citySection', :attributes=>{:'citySectionType'=>"street"}, :index_as=>[:symbol, :textable])
       }
     }

@@ -83,7 +83,7 @@ describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
           expect(subject["lib_date_year_range_si"]).to eql '1700-1700'
           expect(subject["lib_date_textual_ssm"]).to eql ['1700'] # Derived from key date
         end
-      end 
+      end
       context "with date issued (range)" do
         let(:mods_src) { fixture( File.join("CUL_MODS", "mods-date-issued-range.xml") ) }
         it do
@@ -95,7 +95,7 @@ describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
           expect(subject["lib_date_year_range_si"]).to eql '1701-1702'
           expect(subject["lib_date_textual_ssm"]).to eql ['Between 1701 and 1702'] # Derived from key date
         end
-      end 
+      end
       context "with date created (single)" do
         let(:mods_src) { fixture( File.join("CUL_MODS", "mods-date-created-single.xml") ) }
         it do
@@ -107,7 +107,7 @@ describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
           expect(subject["lib_date_year_range_si"]).to eql '1800-1800'
           expect(subject["lib_date_textual_ssm"]).to eql ['1800'] # Derived from key date
         end
-      end 
+      end
       context "with date created (range) as iso8601" do
         let(:mods_src) { fixture( File.join("CUL_MODS", "mods-date-created-range.xml") ) }
         it do
@@ -116,7 +116,7 @@ describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
           expect(subject["lib_date_year_range_si"]).to eql '1801-1802'
           expect(subject["lib_date_textual_ssm"]).to eql ['Between 1801 and 1802'] # Derived from key date
         end
-      end 
+      end
       context "with date other (single)" do
         let(:mods_src) { fixture( File.join("CUL_MODS", "mods-date-other-single.xml") ) }
         it do
@@ -128,7 +128,7 @@ describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
           expect(subject["lib_date_year_range_si"]).to eql '1900-1900'
           expect(subject["lib_date_textual_ssm"]).to eql ['1900'] # Derived from key date
         end
-      end 
+      end
       context "with date other (range)" do
         let(:mods_src) { fixture( File.join("CUL_MODS", "mods-date-other-range.xml") ) }
         it do
@@ -487,6 +487,7 @@ describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
           'subject_hierarchical_geographic_neighborhood_ssim' => ['The Backpacking District'],
           'subject_hierarchical_geographic_zip_code_ssim' => ['10027'],
           'subject_hierarchical_geographic_street_ssim' => ['123 Broadway'],
+          'subject_hierarchical_geographic_area_ssim' => ['The good part of town'],
         }
         expected_places.each {|solr_key, value|
           expect(subject[solr_key]).to eql value
