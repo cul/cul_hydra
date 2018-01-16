@@ -41,13 +41,13 @@ describe ContentAggregator, type: :unit do
     context 'an aggregated resource has a fulltext index' do
       let(:aggregator) {
         agg = ContentAggregator.new
-        allow(agg).to receive(:members).and_return([part_doc])
+        allow(Cul::Hydra::Fedora.repository).to receive(:find_by_itql).and_return(risearch_response)
         allow(agg).to receive(:get_representative_generic_resource).and_return(part)
         allow(agg).to receive(:set_size_labels)
         agg
       }
       let(:fulltext) { ['fulltext'] }
-      let(:part_doc) { {'id' => 'foo'} }
+      let(:risearch_response) { '{"results":[{"pid":"info:fedora/ldpd:123", "k0":"1"}]}' }
       let(:part) {
         part = GenericResource.new
         allow(part).to receive(:to_solr).and_return("fulltext_tesim" => fulltext)
@@ -55,7 +55,7 @@ describe ContentAggregator, type: :unit do
       }
       subject { aggregator.to_solr }
       before do
-        allow(ActiveFedora::Base).to receive(:find).with('foo').and_return(part)
+        allow(ActiveFedora::Base).to receive(:find).with('ldpd:123').and_return(part)
       end
       it do
         is_expected.to include('fulltext_tesim')

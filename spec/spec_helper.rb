@@ -26,6 +26,16 @@ end
 
 RSpec.configure do |config|
   config.use_transactional_fixtures = true
+
+  # Remove the line below when we update to rspec 3
+  config.treat_symbols_as_metadata_keys_with_true_values = true
+
+  # These two settings work together to allow you to limit a spec run
+  # to individual examples or groups you care about by tagging them with
+  # `:focus` metadata. When nothing is tagged with `:focus`, all examples
+  # get run.
+  config.filter_run :focus
+  config.run_all_when_everything_filtered = true
 end
 def absolute_fixture_path(file)
   File.realpath(File.join(File.dirname(__FILE__), '..','fixtures','spec', file))

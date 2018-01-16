@@ -101,7 +101,7 @@ describe Concept, type: :unit do
       concept = Concept.new
       concept
     }
-    it "clears a relationship if nil or empty value is passed as an argument", focus: true do
+    it "clears a relationship if nil or empty value is passed as an argument" do
       concept.abstract = 'Some abstract'
       expect(concept.relationships(:abstract).length).to eq(1)
       concept.set_singular_rel(:abstract, nil, true)
@@ -113,7 +113,7 @@ describe Concept, type: :unit do
       concept = Concept.new
       concept
     }
-    it "when passed a nil or empty string value, removes the :description relationship and deletes the associated description datastream", focus: true do
+    it "when passed a nil or empty string value, removes the :description relationship and deletes the associated description datastream" do
       [nil, ''].each do |val|
         concept.description = 'Some description'
         expect(concept.description).to eq('Some description')

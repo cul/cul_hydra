@@ -64,13 +64,13 @@ module Cul::Hydra::Solrizer
         ModsFieldable.normalize(main_title(p_node), true)
       end
     end
-    
+
     def languages_iso639_2_text
       mods.xpath("./mods:language/mods:languageTerm[@type='text' and @authority='iso639-2']", MODS_NS).collect do |n|
         ModsFieldable.normalize(n.text, true)
       end
     end
-    
+
     def languages_iso639_2_code
       mods.xpath("./mods:language/mods:languageTerm[@type='code' and @authority='iso639-2']", MODS_NS).collect do |n|
         ModsFieldable.normalize(n.text, true)
@@ -210,7 +210,7 @@ module Cul::Hydra::Solrizer
       end
       values
     end
-    
+
     def sublocation(node=mods)
       values = node.xpath("./mods:location/mods:sublocation", MODS_NS).collect do |n|
         ModsFieldable.normalize(n.text, true)
@@ -483,7 +483,7 @@ module Cul::Hydra::Solrizer
 
       # Geo data
       solr_doc["geo"] = coordinates
-      
+
       ## Handle alternate form of language authority for language_language_term_text_ssim
       ## We already capture elements when authority="iso639-2b", but we want to additionally
       ## capture language elements when authority="iso639-2".
