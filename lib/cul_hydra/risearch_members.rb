@@ -70,7 +70,6 @@ module ClassMethods
       count( select $ds from <#ri> where  $pid <fedora-view:disseminates> $ds and $ds <fedora-view:disseminationType> <info:fedora/*/#{dsid}>)
       from <#ri>
       where $pid <http://purl.oclc.org/NET/CUL/memberOf> <info:fedora/#{pid}>
-      and $pid <fedora-view:disseminates> $ds
       having $k0 <http://mulgara.org/mulgara#occursMoreThan> '0.0'^^<http://www.w3.org/2001/XMLSchema#double>;"
 
       puts 'Performing query:' if verbose_output
