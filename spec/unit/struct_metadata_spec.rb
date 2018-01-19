@@ -212,9 +212,10 @@ describe "Cul::Hydra::Datastreams::StructMetadata", type: :unit do
         struct = Cul::Hydra::Datastreams::StructMetadata.from_xml(@nested_seq_fixture)
         struct.instance_variable_set(:@digital_object, @digital_object)
         struct.instance_variable_set(:@dsid, 'structDS')
+        expect(struct.dsid).to eql('structDS')
         struct.proxies
       }
-      it { expect(subject.length).to eql 6 }
+      it { expect(subject.length).to eql 8 }
       describe "index as" do
         let(:solr_docs) { subject.collect{|x| x.to_solr } }
         it "should generate solr hashes for all the structure proxies with label, proxyIn and proxyFor" do
@@ -228,25 +229,26 @@ describe "Cul::Hydra::Datastreams::StructMetadata", type: :unit do
         it "should identify the proxy index with index" do
           docs = solr_docs.sort {|a,b| a['index_ssi'] <=> b['index_ssi']}
           index_values = docs.collect {|x| x['index_ssi']}
-          expect(index_values).to eql ['1','1','1','2','2','2']
+          expect(index_values).to eql ['1','1','1','1','2','2','2','2']
         end
         it "should create nfo:file proxies for resources" do
           folders = solr_docs.select {|d| d['type_ssim'].include? RDF::NFO[:"#Folder"].to_s}
           files = solr_docs.select {|d| d['type_ssim'].include? RDF::NFO[:"#FileDataObject"].to_s}
-          expect(folders.length).to eql 2
-          expect(files.length).to eql 4
+          expect(folders.length).to eql 3
+          expect(files.length).to eql 5
         end
         it "should set belongsToContainer appropriately" do
-          aggs = {}
-          solr_docs.each {|d| a = (aggs[d['belongsToContainer_ssi']] ||= []); a << d['id'] }
-          expect(aggs.size).to eql 3
+          aggs = Hash.new {|h,k| h[k] = []}
+          solr_docs.each {|d| aggs[d['belongsToContainer_ssi']] << d['id'] }
+          expect(aggs.size).to eql 4
           leaf1 = "info:fedora/test:0000/structDS/Leaf1"
           leaf2 = "info:fedora/test:0000/structDS/Leaf2"
+          leaf3 = "info:fedora/test:0000/structDS/Leaf3"
           expect(aggs).to include leaf1
           expect(aggs[leaf1.to_s].length).to eql 2
           expect(aggs).to include leaf2
           expect(aggs[leaf2.to_s].length).to eql 2
-          expect(aggs[nil].sort).to eql [leaf1, leaf2] # sort order of IDs
+          expect(aggs[nil].sort).to eql [leaf1, leaf2, leaf3] # sort order of IDs
           expect(aggs[leaf1].sort).to eql ["#{leaf1}/Recto", "#{leaf1}/Verso"] # sort order of IDs
           expect(aggs[leaf2].sort).to eql ["#{leaf2}/Recto", "#{leaf2}/Verso"] # sort order of IDs
         end

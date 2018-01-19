@@ -195,12 +195,12 @@ class StructMetadata < ::ActiveFedora::Datastream
   end
   def proxy_uri_chain_for(node)
     uris = []
-    ancestors(node).inject(RDF::URI("info:fedora/#{self.pid}/#{self.dsid}")) {|m,a| (uris << m/a).last}
+    ancestors(node).inject(RDF::URI("info:fedora/#{self.pid}/#{self.dsid}")) {|m,a| (uris << m + "/#{a}").last}
     uris
   end
   def proxy_uri_for(node)
     # uri = segments.inject(base_uri) {|m,a| m/a}
-    ancestors(node).inject(RDF::URI("info:fedora/#{self.pid}/#{self.dsid}")) {|m,a| m/a} 
+    ancestors(node).inject(RDF::URI("info:fedora/#{self.pid}/#{self.dsid}")) {|m,a| m + "/#{a}"}
   end
 end
 end

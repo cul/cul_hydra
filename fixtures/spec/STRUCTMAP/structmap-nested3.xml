@@ -4,14 +4,16 @@
     <mets:div ORDER="2" LABEL="Verso" CONTENTIDS="rbml_css_0701v" />
     <mets:div ORDER="1" LABEL="Recto" CONTENTIDS="rbml_css_0702r" />
     <mets:div ORDER="2" LABEL="Verso" CONTENTIDS="rbml_css_0702v" />
-</div>
+</mets:div>
 <mets:div ORDER="2" LABEL="Leaf2">
     <mets:div ORDER="1" LABEL="Recto" CONTENTIDS="rbml_css_0703r" />
     <mets:div ORDER="2" LABEL="Verso" CONTENTIDS="rbml_css_0703v" />
     <mets:div ORDER="1" LABEL="Recto" CONTENTIDS="rbml_css_0704r" />
     <mets:div ORDER="2" LABEL="Verso" CONTENTIDS="rbml_css_0704v" />
-</div>
+</mets:div>
 <mets:div ORDER="2" LABEL="Leaf3">
+    <mets:div ORDER="1" LABEL="recto:verso" CONTENTIDS="rbml_css_0704rv" />
     <mets:div ORDER="1" LABEL="Recto" CONTENTIDS="rbml_css_0705r" />
     <mets:div ORDER="2" LABEL="Verso" CONTENTIDS="rbml_css_0705v" />
-</div>
+</mets:div>
+</mets:structMap>

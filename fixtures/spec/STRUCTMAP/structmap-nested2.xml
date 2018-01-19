@@ -2,13 +2,13 @@
 <mets:div ORDER="1" LABEL="Leaf1">
     <mets:div ORDER="1" LABEL="Recto" CONTENTIDS="rbml_css_0701r" />
     <mets:div ORDER="2" LABEL="Verso" CONTENTIDS="rbml_css_0701v" />
-</div>
+</mets:div>
 <mets:div ORDER="2" LABEL="Leaf2">
     <mets:div ORDER="1" LABEL="Recto" CONTENTIDS="rbml_css_0704r" />
     <mets:div ORDER="2" LABEL="Verso" CONTENTIDS="rbml_css_0704v" />
-</div>
+</mets:div>
 <mets:div ORDER="2" LABEL="Leaf3">
     <mets:div ORDER="1" LABEL="Recto" CONTENTIDS="rbml_css_0705r" />
     <mets:div ORDER="2" LABEL="Verso" CONTENTIDS="rbml_css_0705v" />
-</div>
+</mets:div>
 </mets:structMap>
