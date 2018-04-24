@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <mods xmlns='http://www.loc.gov/mods/v3' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd' version='3.4'>
   <identifier type='local'>prd.custord.040148</identifier>
+  <identifier type='CLIO'>12381225</identifier>
   <titleInfo>
     <nonSort>The </nonSort>
     <title>Manuscript, unidentified</title>
@@ -23,6 +24,7 @@
       <title>Collection Facet Normalization
   Test</title>
     </titleInfo>
+    <identifier type="CLIO">4080189</identifier>
   </relatedItem>
   <relatedItem type='host' displayLabel='Project'>
     <titleInfo>

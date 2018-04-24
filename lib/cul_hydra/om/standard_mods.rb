@@ -11,7 +11,6 @@ module Om
              :xmlns=>"http://www.loc.gov/mods/v3",
              :schema=>"http://www.loc.gov/standards/mods/v3/mods-3-4.xsd")
       t.identifier(:path=>"identifier", :attributes=>{:type=>"local"}, :data_type=>:symbol)
-      t.clio(:path=>"identifier", :attributes=>{:type=>"CLIO"}, :data_type=>:symbol)
       t.title_info(:path=>"titleInfo", :index_as=>[:not_searchable]) {
         t.main_title(:path=>"title", :index_as=>[:not_searchable])
       }

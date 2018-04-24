@@ -115,6 +115,12 @@ module Cul::Hydra::Solrizer
       end
     end
 
+		def clio_ids(node=mods)
+      node.xpath('./mods:identifier[@type="CLIO"]', MODS_NS).collect do |t|
+        ModsFieldable.normalize(t.text)
+      end
+    end
+
     def names(role_authority=nil, role=nil)
       # get all the name nodes
       # keep all child text except the role terms
@@ -387,6 +393,7 @@ module Cul::Hydra::Solrizer
       solr_doc["title_ssm"] = titles
       solr_doc["alternative_title_ssm"] = alternative_titles
       solr_doc["all_text_teim"] += solr_doc["alternative_title_ssm"]
+			solr_doc["clio_ssim"] = clio_ids
       solr_doc["lib_collection_sim"] = collections
       solr_doc["lib_name_sim"] = names
       solr_doc["lib_name_teim"] = solr_doc["lib_name_sim"]

@@ -59,7 +59,7 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
     it "should have normalized facet values" do
       @solr_doc["lib_collection_sim"].should == ['Collection Facet Normalization Test']
     end
-    
+
     it "should facet on corporate and personal names, ignoring roleTerms" do
       @solr_doc["lib_name_sim"].should == ['Name, Inc.', 'Name, Personal 1745-1829', 'Name, Recipient 1829-1745','Included Without Attribute']
       @solr_doc["lib_name_ssm"].should == ['Name, Inc.', 'Name, Personal 1745-1829', 'Name, Recipient 1829-1745','Included Without Attribute']
@@ -68,6 +68,11 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
     it "should not include /mods/subject/name elements in the list of /mods/name elements" do
       @solr_doc["lib_name_sim"].should_not include('Jay, John, 1745-1829')
       @solr_doc["lib_name_ssm"].should_not include('Jay, John, 1745-1829')
+    end
+
+    it "should not include /mods/relatedItem/identifier[type='CLIO'] elements in the list of clio_identifier elements" do
+      @solr_doc["clio_ssim"].should include('12381225')
+      @solr_doc["clio_ssim"].should_not include('4080189')
     end
 
     it "should facet on the special library format values" do
@@ -135,7 +140,7 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
       @solr_doc["lib_shelf_sim"].should == ["Box no. 057"]
     end
   end
-  
+
   describe ".textual_dates" do
     before :all do
       @test_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-textual-dates-with-unusual-chars.xml")))
@@ -145,7 +150,7 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
       @solr_doc["lib_date_textual_ssm"].sort.should == ['-12 BCE', 'Circa 1940', '[19]22?']
     end
   end
-  
+
   describe ".names" do
     before :all do
       @names_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-names.xml")))
