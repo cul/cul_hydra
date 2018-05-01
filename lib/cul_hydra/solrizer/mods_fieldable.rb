@@ -22,6 +22,7 @@ module Cul::Hydra::Solrizer
       def maps_field?(field_key)
         value_mapper.maps_field? field_key
       end
+
       def normalize(t, strip_punctuation=false)
         # strip whitespace
         n_t = t.dup.strip
@@ -45,6 +46,11 @@ module Cul::Hydra::Solrizer
         end
         n_t
       end
+
+			def role_text_to_solr_field_name(role_text)
+				role_text = normalize(role_text, false)
+				('role_' + role_text.gsub(/[^A-z]/, '_').downcase + '_ssim').gsub(/_+/, '_')
+			end
     end
 
     extend ClassMethods
@@ -382,6 +388,28 @@ module Cul::Hydra::Solrizer
       coordinate_values
     end
 
+		def add_names_by_text_role!(solr_doc)
+			# Note: These roles usually come from http://www.loc.gov/marc/relators/relaterm.html,
+			# but there are known cases when non-marc relator values are used (e.g. 'Owner/Agent'),
+			# and those roles won't have marcrelator codes.
+			# e.g. author_ssim = ['Author 1', 'Author 2'] or project_director_ssim = ['Director 1', 'Director 2']
+			roleterm_xpath_segment = "mods:roleTerm[@type='text' and string-length(text()) > 0]"
+			names_with_roles_xpath = "./mods:name/mods:role/#{roleterm_xpath_segment}/ancestor::mods:name"
+      mods.xpath(names_with_roles_xpath, MODS_NS).collect do |node|
+        name_text = node.xpath('./mods:namePart', MODS_NS).collect { |c| c.text }.join(' ')
+        name_text = ModsFieldable.normalize(name_text, true)
+				solr_role_fields = Set.new
+				node.xpath("./mods:role/#{roleterm_xpath_segment}", MODS_NS).collect do |role_node|
+					solr_role_fields << ModsFieldable.role_text_to_solr_field_name(role_node.text)
+				end
+
+				solr_role_fields.each do |solr_field_name|
+					solr_doc[solr_field_name] ||= []
+					solr_doc[solr_field_name] << name_text
+				end
+      end
+		end
+
     def to_solr(solr_doc={})
       solr_doc = (defined? super) ? super : solr_doc
 
@@ -498,6 +526,9 @@ module Cul::Hydra::Solrizer
       solr_doc['language_language_term_text_ssim'] += languages_iso639_2_text
       solr_doc['language_language_term_code_ssim'] ||= []
       solr_doc['language_language_term_code_ssim'] +=languages_iso639_2_code
+
+			# Add names to role-derived keys
+			add_names_by_text_role!(solr_doc)
 
       solr_doc.each do |k, v|
         if self.class.maps_field? k
