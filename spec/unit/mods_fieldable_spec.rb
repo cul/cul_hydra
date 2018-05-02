@@ -104,6 +104,23 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
     end
   end
 
+  describe '.role_text_to_solr_field_name' do
+    let(:expected_values) do
+      {
+        'Author' => 'role_author_ssim',
+        'Owner/Agent' => 'role_owner_agent_ssim',
+        'Mixed case Role with Spaces' => 'role_mixed_case_role_with_spaces_ssim',
+        'WAYYY      too much       space' => 'role_wayyy_too_much_space_ssim',
+        '!! Adjacent Replaced Characters !!! collapsed into one' => 'role_adjacent_replaced_characters_collapsed_into_one_ssim'
+      }
+    end
+    it "converts as expected" do
+      expected_values.each do |role, expected_value|
+        expect(described_class.role_text_to_solr_field_name(role)).to eq(expected_value)
+      end
+    end
+  end
+
   describe ".main_title" do
     it "should find the top-level titles" do
       test = ModsIndexDatastream.new(@titles_ng)
@@ -166,6 +183,21 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
     it "should not find subject names" do
       test = ModsIndexDatastream.new(@names_ng)
       test.names.should_not include('Jay, John 1745-1829')
+    end
+  end
+
+  describe ".add_names_by_text_role!" do
+    before :all do
+      @names_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-names.xml")))
+    end
+    it "should index names by role" do
+      test = ModsIndexDatastream.new(@names_ng)
+      doc = {}
+      test.add_names_by_text_role!(doc)
+      expect(doc).to include({
+        'role_addressee_ssim' => ["Name, Recipient 1829-1745", "Dear Brother"],
+        'role_owner_agent_ssim' => ["Name, Recipient 1829-1745"]
+      })
     end
   end
 

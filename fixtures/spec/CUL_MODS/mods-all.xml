@@ -45,6 +45,7 @@
     <namePart type="date">1829-1745</namePart>
     <role>
       <roleTerm authority="marcrelator" type="code">rcp</roleTerm>
+      <roleTerm authority="marcrelator" type="text">Addressee</roleTerm>
     </role>
   </name>
   <name>
