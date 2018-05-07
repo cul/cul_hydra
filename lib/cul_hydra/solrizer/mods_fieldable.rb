@@ -363,6 +363,14 @@ module Cul::Hydra::Solrizer
       return places
     end
 
+		def classification_other(node=mods)
+			classification_other_values = []
+      node.xpath("./mods:classification[@authority='z']", MODS_NS).collect do |n|
+        classification_other_values << ModsFieldable.normalize(n.text, true)
+      end
+      return classification_other_values
+		end
+
     def origin_info_place_for_display(node=mods)
       # If there are multiple origin_info place elements, choose only the ones without valueURI attributes.  Otherwise show the others.
       places_with_uri = []
@@ -448,6 +456,7 @@ module Cul::Hydra::Solrizer
       solr_doc["lib_project_url_ssm"] = project_url
       solr_doc["origin_info_place_ssm"] = origin_info_place
       solr_doc["origin_info_place_for_display_ssm"] = origin_info_place_for_display
+			solr_doc["classification_other"] = classification_other
 
       repo_marc_code = repository_code
       unless repo_marc_code.nil?

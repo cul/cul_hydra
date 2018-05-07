@@ -211,4 +211,14 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
     end
   end
 
+  describe ".coordinates" do
+    before :all do
+      @all_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-all.xml")))
+    end
+    it "should find classification values with authority 'z', meaning 'other'" do
+      test = ModsIndexDatastream.new(@all_ng)
+      test.classification_other.should == ['AB.CD.EF.G.123', 'AB.CD.EF.G.456']
+    end
+  end
+
 end
