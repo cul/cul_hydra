@@ -497,5 +497,11 @@ describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
         }
       end
     end
+    context "has classification other cataloged" do
+      let(:mods_src) { fixture( File.join("CUL_MODS", "mods-all.xml") ) }
+      it "should only extract classifications with type='z' (other)" do
+        expect(subject["classification_other_ssim"]).to eq(['AB.CD.EF.G.123', 'AB.CD.EF.G.456'])
+      end
+    end
   end
 end

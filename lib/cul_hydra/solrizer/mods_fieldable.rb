@@ -456,7 +456,7 @@ module Cul::Hydra::Solrizer
       solr_doc["lib_project_url_ssm"] = project_url
       solr_doc["origin_info_place_ssm"] = origin_info_place
       solr_doc["origin_info_place_for_display_ssm"] = origin_info_place_for_display
-			solr_doc["classification_other"] = classification_other
+			solr_doc["classification_other_ssim"] = classification_other
 
       repo_marc_code = repository_code
       unless repo_marc_code.nil?

@@ -211,7 +211,7 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
     end
   end
 
-  describe ".coordinates" do
+  describe ".classification_other" do
     before :all do
       @all_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-all.xml")))
     end
