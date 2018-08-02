@@ -56,6 +56,17 @@ module Cul::Hydra::Models::Aggregator
     return thumb || {:asset=>"cul_hydra/crystal/file.png",:mime=>'image/png'}
   end
 
+  # a representative image URI for this concept
+  # defined by the predicate https://schema.org/image
+  # @return [String, URI]
+  def representative_image
+    get_singular_rel(:schema_image)
+  end
+
+  def representative_image=(val)
+    set_singular_rel(:schema_image, val)
+  end
+
   private
   def thumb_from_struct(members)
     puts "thumb thumb_from_struct"
