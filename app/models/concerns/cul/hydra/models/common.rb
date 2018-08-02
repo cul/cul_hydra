@@ -240,6 +240,8 @@ module Cul::Hydra::Models::Common
         return nil
       end
     end
+  rescue ActiveFedora::ObjectNotFoundError
+    logger.warn "#{get_singular_rel(:schema_image)} not found in repository for #{self.id}"
   end
 
   def update_datastream_attributes(params={}, opts={})
