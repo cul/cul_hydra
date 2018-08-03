@@ -30,7 +30,7 @@ module Cul::Hydra::Models::Common
           @symbols = symbols
         end
         def self.symbols
-          @symbols
+          @symbols ||= []
         end
         def validate(record)
           self.class.symbols.each do |rel|
