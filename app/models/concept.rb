@@ -76,16 +76,6 @@ class Concept < GenericAggregator
     set_singular_rel(:restriction, val, true)
   end
   
-  # a representative image URI for this concept
-  # https://schema.org/image
-  def representative_image
-    get_singular_rel(:schema_image)
-  end
-
-  def representative_image=(val)
-    set_singular_rel(:schema_image, val)
-  end
-
   # a human readable URI segment for this concept
   # http://www.bbc.co.uk/ontologies/coreconcepts/slug
   def slug
@@ -116,30 +106,12 @@ class Concept < GenericAggregator
     set_singular_rel(:short_title, val, true)
   end
 
-  def get_singular_rel(predicate)
-    property = relationships(predicate).first
-    return nil unless property
-    return (property.kind_of? RDF::Literal) ? property.value : property
-  end
-
-  def set_singular_rel(predicate, value, literal=false)
-    raise "#{predicate} is a singular property" if value.respond_to? :each
-    clear_relationship(predicate)
-    add_relationship(predicate, value, literal) unless value.nil? || value.empty?
-  end
-
   def to_solr(solr_doc = Hash.new, opts={})
     solr_doc = super(solr_doc, opts)
     solr_doc[::ActiveFedora::SolrService.solr_name(:description_text, :displayable)] = description
     solr_doc
   end
-  class SingularRelValidator < ActiveModel::Validator
-    def validate(record)
-      [:abstract, :alternative, :restriction, :slug, :source, :schema_image].each do |rel|
-        record.errors[rel] << "#{rel} must have 0 or 1 values" unless record.relationships(rel).length < 2
-      end
-    end
-  end
 
-  validates_with SingularRelValidator
+  # validators built for [0..1] RELS properties
+  validates_with singular_rel_validator([:abstract, :alternative, :restriction, :slug, :source])
 end

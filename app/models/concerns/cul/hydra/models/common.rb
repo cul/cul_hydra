@@ -24,6 +24,23 @@ module Cul::Hydra::Models::Common
       end
       @rdf_types
     end
+    def singular_rel_validator(symbols = [])
+      r = Class.new(ActiveModel::Validator) do
+        def self.symbols=(symbols)
+          @symbols = symbols
+        end
+        def self.symbols
+          @symbols ||= []
+        end
+        def validate(record)
+          self.class.symbols.each do |rel|
+            record.errors[rel] << "#{rel} must have 0 or 1 values" unless record.relationships(rel).length < 2
+          end
+        end
+      end
+      r.symbols = symbols
+      r
+    end
   end
 
   def rdf_types!
@@ -163,11 +180,18 @@ module Cul::Hydra::Models::Common
     solr_doc
   end
 
+  # Return a representative file resource for the object
+  # @param force_use_of_non_pid_identifier [Boolean] switch to require use of application id in struct map parsing
+  # @return [GenericResource] a representative file resource
   # This method generally shouldn't be called with any parameters (unless we're doing testing)
   def get_representative_generic_resource(force_use_of_non_pid_identifier=false)
     return self if self.is_a?(GenericResource)
-    return nil unless self.is_a?(Cul::Hydra::Models::Aggregator) # Only Aggregators have struct metadata
 
+    # if there's an explicit assignment of representative image, return it
+    assigned_image = get_singular_rel(:schema_image)
+    return ActiveFedora::Base.find(assigned_image.split('/')[-1]) if assigned_image
+
+    return nil unless self.is_a?(Cul::Hydra::Models::Aggregator) # Only Aggregators have struct metadata
     # If we're here, then the object was not a Generic resource.
     # Try to get child info from a structMat datastream, and fall back to
     # the first :cul_member_of child if a structMap isn't present
@@ -233,6 +257,9 @@ module Cul::Hydra::Models::Common
         return nil
       end
     end
+  rescue ActiveFedora::ObjectNotFoundError
+    logger.warn "#{get_singular_rel(:schema_image)} not found in repository for #{self.pid}"
+    return nil
   end
 
   def update_datastream_attributes(params={}, opts={})
@@ -261,6 +288,18 @@ module Cul::Hydra::Models::Common
 
   def thumbnail_info
     {:asset=>("cul_hydra/crystal/kmultiple.png"),:mime_type=>"image/png"}
+  end
+
+  def get_singular_rel(predicate)
+    property = relationships(predicate).first
+    return nil unless property
+    return (property.kind_of? RDF::Literal) ? property.value : property
+  end
+
+  def set_singular_rel(predicate, value, literal=false)
+    raise "#{predicate} is a singular property" if value.respond_to? :each
+    clear_relationship(predicate)
+    add_relationship(predicate, value, literal) unless value.nil? || value.empty?
   end
 
   private

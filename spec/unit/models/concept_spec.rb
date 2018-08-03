@@ -96,18 +96,6 @@ describe Concept, type: :unit do
       end
     end
   end
-  describe "#set_singular_rel" do
-    let(:concept) {
-      concept = Concept.new
-      concept
-    }
-    it "clears a relationship if nil or empty value is passed as an argument" do
-      concept.abstract = 'Some abstract'
-      expect(concept.relationships(:abstract).length).to eq(1)
-      concept.set_singular_rel(:abstract, nil, true)
-      expect(concept.relationships(:abstract).length).to eq(0)
-    end
-  end
   describe "#description=" do
     let(:concept) {
       concept = Concept.new
