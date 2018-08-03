@@ -24,6 +24,15 @@ module Cul::Hydra::Models::Common
       end
       @rdf_types
     end
+    def singular_rel_validator(symbols = [])
+      Class.new(ActiveModel::Validator) do
+        def validate(record)
+          symbols.each do |rel|
+            record.errors[rel] << "#{rel} must have 0 or 1 values" unless record.relationships(rel).length < 2
+          end
+        end
+      end
+    end
   end
 
   def rdf_types!

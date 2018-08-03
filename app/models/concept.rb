@@ -111,13 +111,7 @@ class Concept < GenericAggregator
     solr_doc[::ActiveFedora::SolrService.solr_name(:description_text, :displayable)] = description
     solr_doc
   end
-  class SingularRelValidator < ActiveModel::Validator
-    def validate(record)
-      [:abstract, :alternative, :restriction, :slug, :source, :schema_image].each do |rel|
-        record.errors[rel] << "#{rel} must have 0 or 1 values" unless record.relationships(rel).length < 2
-      end
-    end
-  end
 
-  validates_with SingularRelValidator
+  # validators built for [0..1] RELS properties
+  validates_with singular_rel_validator([:abstract, :alternative, :restriction, :slug, :source])
 end

@@ -72,4 +72,7 @@ class GenericAggregator < ::ActiveFedora::Base
       conn.commit
     end
   end
+
+  # validators built for [0..1] RELS properties
+  validates_with singular_rel_validator([:schema_image])
 end
