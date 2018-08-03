@@ -38,6 +38,8 @@ module Cul::Hydra::Models::Common
           end
         end
       end
+      r.symbols = symbols
+      r
     end
   end
 
