@@ -76,6 +76,7 @@ src
       built = Cul::Hydra::Datastreams::ModsDocument.new(@mock_inner,'descMetadata')
       built.ng_xml = Cul::Hydra::Datastreams::ModsDocument.xml_template
       built.update_values({[:identifier] => "prd.custord.040148"})
+      built.update_values({[:accession_number] => "GB0090"})
       built.update_values({[:mods, :main_title_info, :non_sort] => "The "})
       built.update_values({[:mods, :main_title_info, :main_title] => "Manuscript, unidentified"})
       built.update_values({[:type_of_resource] => "text"})

@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <mods xmlns='http://www.loc.gov/mods/v3' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd' version='3.4'>
 <identifier type='local'>prd.custord.040148</identifier>
+<identifier type='accession_number'>GB0090</identifier>
 <titleInfo><nonSort>The </nonSort><title>Manuscript, unidentified</title></titleInfo>
 <typeOfResource>text</typeOfResource>
 <physicalDescription><form authority='marcform'>electronic</form>

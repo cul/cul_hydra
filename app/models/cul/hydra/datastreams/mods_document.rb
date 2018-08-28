@@ -52,6 +52,7 @@ class ModsDocument < ::ActiveFedora::OmDatastream
     t.lib_part(:proxy=>[:part,:part_title_info], :index_as=>[:displayable, :textable])
     # pattern matches
     t.identifier(:path=>"identifier", :attributes=>{:type=>"local"}, :type=>:string, :index_as=>[:symbol, :textable])
+    t.accession_number(:path=>"identifier", :attributes=>{:type=>"accession_number"}, :type=>:string, :index_as=>[:textable])
     t.clio(:path=>"identifier", :attributes=>{:type=>"CLIO"}, :data_type=>:symbol, :index_as=>[:symbol, :textable])
     t.abstract(:index_as=>[:displayable, :textable])
     t.table_of_contents(:path=>"tableOfContents", :index_as=>[:displayable, :textable])

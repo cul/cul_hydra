@@ -1,5 +1,6 @@
 <mods xmlns='http://www.loc.gov/mods/v3' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd'>
 <identifier type='local'>prd.custord.070017</identifier>
+<identifier type='accession_number'>AN070017</identifier>
 <titleInfo><nonSort>The </nonSort><title xml:lang="eng">Photographs</title></titleInfo>
 <name type='personal'><namePart>Kennerly, David</namePart></name>
 <typeOfResource>still image</typeOfResource>

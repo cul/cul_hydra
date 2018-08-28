@@ -1,6 +1,7 @@
 #format: ['multipartitem']
 identifier_ssim: ['prd.custord.070017']
-all_text_teim: ['prd.custord.070017',
+all_text_teim: [ "AN070017",
+"prd.custord.070017",
 "Box 8, JP2 Feature Photography",
 "Customer Order Collection",
 "Pres Orders Customer Order Collection",
