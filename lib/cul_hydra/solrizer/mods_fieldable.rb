@@ -322,6 +322,15 @@ module Cul::Hydra::Solrizer
       project_url_val
     end
 
+    # Create a list of attribute hashes for top-level URL locations
+    # @param node [Nokogiri::XML::Node] search context
+    # @return [Array<Hash>] array of url locations as attribute hashes
+    def url_locations(node=mods)
+      node.xpath("./mods:location/mods:url", MODS_NS).map do |n|
+        {access: n['access'], usage: n['usage'], displayLabel: n['displayLabel'], url: n.text.strip }.compact
+      end
+    end
+
     def all_subjects(node=mods)
       list_of_subjects = []
 
@@ -453,6 +462,7 @@ module Cul::Hydra::Solrizer
       solr_doc["lib_non_date_notes_ssm"] = non_date_notes
       solr_doc["lib_item_in_context_url_ssm"] = item_in_context_url
       solr_doc["lib_non_item_in_context_url_ssm"] = non_item_in_context_url
+      solr_doc["lib_url_locations_ss"] = JSON.generate(url_locations)
       solr_doc["lib_project_url_ssm"] = project_url
       solr_doc["origin_info_place_ssm"] = origin_info_place
       solr_doc["origin_info_place_for_display_ssm"] = origin_info_place_for_display

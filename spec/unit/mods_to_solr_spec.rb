@@ -242,6 +242,16 @@ describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
           is_expected.to eql ["http://another-location.cul.columbia.edu/zzz/yyy", "http://great-url.cul.columbia.edu/ooo"]
         end
       end
+      context "for item URL hash" do
+        subject { JSON.load(solr_doc['lib_url_locations_ss']) }
+        it do
+          is_expected.to be_a Array
+          is_expected.not_to be_empty
+          local = subject.detect {|n| n['displayLabel']}
+          expect(local['url']).to eql "http://great-url.cul.columbia.edu/ooo"
+          expect(local['displayLabel']).to eql "Great URL"
+        end
+      end
     end
     context "has names cataloged" do
       let(:mods_src) { fixture( File.join("CUL_MODS", "mods-names.xml") ) }
