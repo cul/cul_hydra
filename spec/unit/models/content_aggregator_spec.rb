@@ -47,6 +47,7 @@ describe ContentAggregator, type: :unit do
         agg
       }
       let(:fulltext) { ['fulltext'] }
+      let(:datastream_ids) { aggregator.datastreams.keys.map {|k| k.to_s}.sort }
       let(:risearch_response) { '{"results":[{"pid":"info:fedora/ldpd:123", "k0":"1"}]}' }
       let(:part) {
         part = GenericResource.new
@@ -60,6 +61,9 @@ describe ContentAggregator, type: :unit do
       it do
         is_expected.to include('fulltext_tesim')
         expect(subject['fulltext_tesim']).to eql(fulltext)
+      end
+      it do
+        expect(subject['disseminates_ssim']).to eql(datastream_ids)
       end
     end
   end

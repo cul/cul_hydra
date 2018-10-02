@@ -14,6 +14,7 @@ describe GenericResource, type: :unit do
     ft = double('Datastream', content: 'foo', to_solr: {})
     ft
   }
+  let(:datastream_ids) { o.datastreams.keys.map {|k| k.to_s}.sort }
   describe '#rdf_types!' do
     subject { o.rdf_types! }
     it do
@@ -34,6 +35,9 @@ describe GenericResource, type: :unit do
       fdoc = {"title_display_ssm" => ["Test title"]}
       doc = o.to_solr(fdoc, model_only: true)
       expect(doc['fulltext_tesim']).to eql(['Test title','foo'])
+    end
+    it do
+      expect(o.to_solr['disseminates_ssim']).to eql(datastream_ids)
     end
   end
 
