@@ -174,7 +174,7 @@ module Cul::Hydra::Models::Common
 
     # Index URI form of pid to facilitate solr joins
     solr_doc['fedora_pid_uri_ssi'] = 'info:fedora/' + self.pid if self.pid.present?
-    solr_doc['disseminates_ssim'] = self.datastreams.keys.map {|k| k.to_s }.sort
+    solr_doc['datastreams_ssim'] = self.datastreams.keys.map {|k| k.to_s }.sort
 
     solr_doc
   end

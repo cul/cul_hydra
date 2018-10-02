@@ -462,7 +462,7 @@ module Cul::Hydra::Solrizer
       solr_doc["lib_non_date_notes_ssm"] = non_date_notes
       solr_doc["lib_item_in_context_url_ssm"] = item_in_context_url
       solr_doc["lib_non_item_in_context_url_ssm"] = non_item_in_context_url
-      solr_doc["lib_url_locations_ss"] = JSON.generate(url_locations)
+      solr_doc["location_url_json_ss"] = JSON.generate(url_locations)
       solr_doc["lib_project_url_ssm"] = project_url
       solr_doc["origin_info_place_ssm"] = origin_info_place
       solr_doc["origin_info_place_for_display_ssm"] = origin_info_place_for_display

@@ -37,7 +37,7 @@ describe GenericResource, type: :unit do
       expect(doc['fulltext_tesim']).to eql(['Test title','foo'])
     end
     it do
-      expect(o.to_solr['disseminates_ssim']).to eql(datastream_ids)
+      expect(o.to_solr['datastreams_ssim']).to eql(datastream_ids)
     end
   end
 

@@ -63,7 +63,7 @@ describe ContentAggregator, type: :unit do
         expect(subject['fulltext_tesim']).to eql(fulltext)
       end
       it do
-        expect(subject['disseminates_ssim']).to eql(datastream_ids)
+        expect(subject['datastreams_ssim']).to eql(datastream_ids)
       end
     end
   end

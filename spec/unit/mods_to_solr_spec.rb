@@ -243,7 +243,7 @@ describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
         end
       end
       context "for item URL hash" do
-        subject { JSON.load(solr_doc['lib_url_locations_ss']) }
+        subject { JSON.load(solr_doc['location_url_json_ss']) }
         it do
           is_expected.to be_a Array
           is_expected.not_to be_empty
