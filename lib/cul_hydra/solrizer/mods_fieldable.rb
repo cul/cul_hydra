@@ -405,6 +405,12 @@ module Cul::Hydra::Solrizer
       coordinate_values
     end
 
+    def archive_org_identifier(node=mods)
+      node.xpath('./mods:identifier[@type="archive.org"]', MODS_NS).collect do |t|
+        ModsFieldable.normalize(t.text)
+      end.first
+    end
+
 		def add_names_by_text_role!(solr_doc)
 			# Note: These roles usually come from http://www.loc.gov/marc/relators/relaterm.html,
 			# but there are known cases when non-marc relator values are used (e.g. 'Owner/Agent'),
@@ -439,6 +445,7 @@ module Cul::Hydra::Solrizer
       solr_doc["alternative_title_ssm"] = alternative_titles
       solr_doc["all_text_teim"] += solr_doc["alternative_title_ssm"]
 			solr_doc["clio_ssim"] = clio_ids
+      solr_doc["archive_org_identifier_ssi"] = archive_org_identifier
       solr_doc["lib_collection_sim"] = collections
       solr_doc["lib_name_sim"] = names
       solr_doc["lib_name_teim"] = solr_doc["lib_name_sim"]
