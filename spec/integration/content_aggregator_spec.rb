@@ -39,7 +39,7 @@ describe ContentAggregator, type: :integration do
       new_value = "new.id.value"
       ds = @fixtureobj.datastreams["descMetadata"]
       ds.update_values({[:identifier] => new_value})
-      expect(ds.changed?).to be_true
+      expect(ds.changed?).to be_truthy
       @fixtureobj.save
       updated = ContentAggregator.find(@fixtureobj.pid)
       expect(ds.find_by_terms(:identifier).first.text).to eql new_value
@@ -58,7 +58,7 @@ describe ContentAggregator, type: :integration do
     it "should correctly index as structured if there is structMetadata content" do
       ds = @fixtureobj.datastreams["structMetadata"]
       ds.label = "Test Label"
-      ds.changed?.should be_true
+      ds.changed?.should be_truthy
       #puts "structMetadata: #{ds.content}"
       ds.save
       expect(@fixtureobj.to_solr[:structured_bsi]).to eql 'true'

@@ -70,7 +70,7 @@ describe StaticImageAggregator, type: :integration do
       new_value = "new.test.id.value"
       ds = @fixtureobj.datastreams["DC"]
       ds.update_indexed_attributes({[:dc_identifier] => new_value})
-      ds.changed?.should be_true
+      ds.changed?.should be_truthy
       @fixtureobj.save
       ds.changed?.should be_falsey
       updated = StaticImageAggregator.find(@fixtureobj.pid)
@@ -78,12 +78,12 @@ describe StaticImageAggregator, type: :integration do
       ds.find_by_terms(:dc_identifier).each { |node|
         found ||= node.text == new_value
       }
-      found.should be_true
+      found.should be_truthy
       found = false
       updated.datastreams["DC"].find_by_terms(:dc_identifier).each { |node|
         found ||= node.text == new_value
       }
-      found.should be_true
+      found.should be_truthy
     end
   end
 
