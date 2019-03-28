@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
-
+describe Cul::Hydra::Datastreams::ModsDocument, type: :unit do
+  let(:terminology) { described_class.terminology }
   let(:ds_fixture) { descMetadata(mock_inner, xml_fixture) }
   let(:ng_fixture) { Nokogiri::XML::Document.parse(xml_fixture) }
 
@@ -63,11 +63,9 @@ describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
   describe ".find_by_terms" do
     let(:xml_fixture) { item_xml }
     it "should find the right terms for title" do
-      C = Cul::Hydra::Datastreams::ModsDocument
-      T = C.terminology
-      term = T.retrieve_term(:title)
+      term = terminology.retrieve_term(:title)
       expect(term.xpath).to eql '//oxns:mods/oxns:titleInfo[not(@type)]/oxns:title'
-      T.has_term?(:title).should be_truthy
+      terminology.has_term?(:title).should be_truthy
       doc = ds_fixture.to_solr()
       title = doc["title_display_ssm"]
       expect(title).to eql ["The Manuscript, unidentified"]
@@ -76,7 +74,7 @@ describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
     it "should use Nokogiri to retrieve a NodeSet corresponding to the combination of term pointers and array/nodeset indexes" do
       ds_fixture.find_by_terms( :access_condition ).length.should == 1
       ds_fixture.find_by_terms( {:access_condition=>0} ).first.text.should == mods_part.ng_xml.xpath('//oxns:accessCondition[@type="useAndReproduction"][1]', "oxns"=>"http://www.loc.gov/mods/v3").first.text
-      Cul::Hydra::Datastreams::ModsDocument.terminology.xpath_with_indexes( :mods, {:main_title_info=>0}, :main_title ).should == '//oxns:mods/oxns:titleInfo[not(@type)][1]/oxns:title'
+      terminology.xpath_with_indexes( :mods, {:main_title_info=>0}, :main_title ).should == '//oxns:mods/oxns:titleInfo[not(@type)][1]/oxns:title'
       ds_fixture.find_by_terms(:title ).class.should == Nokogiri::XML::NodeSet
       ds_fixture.find_by_terms(:title ).first.text.should == "Manuscript, unidentified"
     end
@@ -90,8 +88,8 @@ describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
 
     it "should identify presence or absence of terms with shortcut methods" do
       mock_inner.stub(:new_record?).and_return(true)
-      built  = Cul::Hydra::Datastreams::ModsDocument.new(mock_inner, 'descMetadata')
-      built.ng_xml = Cul::Hydra::Datastreams::ModsDocument.xml_template
+      built  = described_class.new(mock_inner, 'descMetadata')
+      built.ng_xml = described_class.xml_template
       built.update_values({[:title]=>'foo'})
       built.title?.should be_truthy
       built.clio?.should be_falsey
