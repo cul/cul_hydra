@@ -433,6 +433,42 @@ module Cul::Hydra::Solrizer
       end
 		end
 
+    def archival_context_json(node=mods)
+      node.xpath("./mods:relatedItem[@displayLabel='Collection']", MODS_NS).map do |collection|
+        collection_title = collection.xpath("./mods:titleInfo/mods:title", MODS_NS).text
+        collection_id = collection.xpath("./mods:titleInfo/@valueURI", MODS_NS).text
+        collection_bib_id = collection.xpath("./mods:identifier[@type='CLIO']", MODS_NS).text
+        collection_org = collection.xpath("./mods:part/mods:detail/mods:title", MODS_NS).map do |title|
+          {
+            'ead:level' => title[:level],
+            'dc:type' => title[:type],
+            'dc:title' => title.text
+          }
+        end
+        unless collection_org.empty?
+          collection_org.sort! { |a,b| a['ead:level'] <=> b['ead:level'] }
+          collection_org.each_with_index {|node, ix| node['@id'] = "_:n#{ix}"}
+          collection_org[0].delete('ead:level')
+          while collection_org.length > 1 do
+            collection_org[-1].delete('ead:level')
+            tail = collection_org.pop
+            tail.delete('ead:level')
+            collection_org[-1]['dc:hasPart'] = tail
+          end
+        end
+        {
+          '@context': {'dc': "http://purl.org/dc/terms/"},
+          '@id' => collection_id,
+          'dc:title' => collection_title,
+          'dc:bibliographicCitation' => {
+            '@id' => "https://clio.columbia.edu/catalog/#{collection_bib_id}",
+            '@type' => 'dc:BibliographicResource'
+          },
+          'dc:coverage' => collection_org
+        }
+      end
+    end
+
     def to_solr(solr_doc={})
       solr_doc = (defined? super) ? super : solr_doc
 
@@ -552,6 +588,10 @@ module Cul::Hydra::Solrizer
       solr_doc['language_language_term_text_ssim'] += languages_iso639_2_text
       solr_doc['language_language_term_code_ssim'] ||= []
       solr_doc['language_language_term_code_ssim'] +=languages_iso639_2_code
+
+      archival_context = archival_context_json
+      solr_doc['archival_context_json_ss'] = JSON.generate(archival_context) if archival_context.present?
+
 
 			# Add names to role-derived keys
 			add_names_by_text_role!(solr_doc)

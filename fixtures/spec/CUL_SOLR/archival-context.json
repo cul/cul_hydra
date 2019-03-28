@@ -1,0 +1,26 @@
+[
+  {
+    "@context": {
+      "dc": "http://purl.org/dc/terms/"
+    },
+    "@id": "http://id.library.columbia.edu/term/72fcfd07-f7db-4a18-bdb2-beb0abce071c",
+    "@type": "fixture",
+    "dc:title": "Carnegie Corporation of New York Records",
+    "dc:bibliographicCitation": {
+      "@id": "https://clio.columbia.edu/catalog/4079753",
+      "@type": "dc:BibliographicResource"
+    },
+    "dc:coverage": [
+      {
+        "dc:type": "series",
+        "dc:title": "Series II. Files on Microfilm",
+        "@id": "_:n0",
+        "dc:hasPart": {
+          "dc:type": "subseries",
+          "dc:title": "Subseries II.C: Carnegie-Myrdal Study, The Negro in America: Correspondence and research memoranda for use in the preparation of Gunnar Myrdal's An American Dilemma 1939-1953",
+          "@id": "_:n1"
+        }
+      }
+    ]
+  }
+]

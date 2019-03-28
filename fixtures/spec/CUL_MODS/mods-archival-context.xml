@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<mods:mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mods="http://www.loc.gov/mods/v3" version="3.6" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd">
+  <mods:titleInfo>
+    <mods:title>Agreement between Gunnar Myrdal and Harper &amp; Brothers for the publication of "An American Dilemma," January 8, 1943</mods:title>
+  </mods:titleInfo>
+  <mods:relatedItem type="host" displayLabel="Project">
+    <mods:titleInfo>
+      <mods:title>Carnegie Digital Past and Future</mods:title>
+    </mods:titleInfo>
+  </mods:relatedItem>
+  <mods:relatedItem type="host" displayLabel="Collection">
+    <mods:titleInfo valueURI="http://id.library.columbia.edu/term/72fcfd07-f7db-4a18-bdb2-beb0abce071c">
+      <mods:title>Carnegie Corporation of New York Records</mods:title>
+    </mods:titleInfo>
+    <mods:identifier type="CLIO">4079753</mods:identifier>
+    <mods:part>
+      <mods:detail>
+        <mods:title type="series" level="1">Series II. Files on Microfilm</mods:title>
+      </mods:detail>
+      <mods:detail>
+        <mods:title type="subseries" level="2">Subseries II.C: Carnegie-Myrdal Study, The Negro in America: Correspondence and research memoranda for use in the preparation of Gunnar Myrdal's An American Dilemma 1939-1953</mods:title>
+      </mods:detail>
+    </mods:part>
+  </mods:relatedItem>
+</mods:mods>

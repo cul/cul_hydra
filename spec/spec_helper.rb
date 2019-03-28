@@ -8,6 +8,7 @@ ENGINE_RAILS_ROOT=File.join(File.dirname(__FILE__), '../')
 require 'bundler/setup'
 require 'rspec/rails'
 require 'rspec/autorun'
+require 'rspec/json_expectations'
 require 'cul_hydra'
 require 'equivalent-xml/rspec_matchers'
 

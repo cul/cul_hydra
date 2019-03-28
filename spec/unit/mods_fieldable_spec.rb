@@ -229,4 +229,18 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
       test.archive_org_identifier.should == 'internet_archive_id_value'
     end
   end
+  describe ".archival_context_json" do
+    before :all do
+      @all_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-archival-context.xml")))
+    end
+    let(:expected) { JSON.load(File.read(fixture( File.join("CUL_solr", "archival-context.json")))) }
+    it "should produce json-ld for the archival context" do
+      test = ModsIndexDatastream.new(@all_ng)
+      expect(expected[0]).to include_json(test.archival_context_json[0])
+    end
+    it "should add it to the solr document" do
+      test = ModsIndexDatastream.new(@all_ng)
+      expect(test.to_solr).to have_key('archival_context_json_ss')
+    end
+  end
 end
