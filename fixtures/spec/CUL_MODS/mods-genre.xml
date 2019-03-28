@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<mods:mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mods="http://www.loc.gov/mods/v3" version="3.6" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd">
+  <mods:genre type="text" valueURI="http://id.loc.gov/authorities/genreForms/gf2014026163" authority="lcgft">Records (Documents)</mods:genre>
+</mods:mods>

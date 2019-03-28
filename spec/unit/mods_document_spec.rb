@@ -16,6 +16,7 @@ describe Cul::Hydra::Datastreams::ModsDocument, type: :unit do
 
   let(:item_xml) { fixture( File.join("CUL_MODS", "mods-item.xml") ) }
   let(:part_xml) { fixture( File.join("CUL_MODS", "mods-part.xml") ) }
+  let(:genre_xml) { fixture( File.join("CUL_MODS", "mods-genre.xml") ) }
 
   let(:mods_part) { descMetadata(mock_inner, part_xml) }
 
@@ -70,7 +71,17 @@ describe Cul::Hydra::Datastreams::ModsDocument, type: :unit do
       title = doc["title_display_ssm"]
       expect(title).to eql ["The Manuscript, unidentified"]
     end
-
+    context "for genre" do
+      let(:xml_fixture) { genre_xml }
+      it "should find the right terms for genre" do
+        term = terminology.retrieve_term(:lib_genre)
+        expect(term.xpath).to eql '//oxns:mods/oxns:genre[@authority]'
+        terminology.has_term?(:lib_genre).should be_truthy
+        doc = ds_fixture.to_solr()
+        genre = doc["lib_genre_sim"]
+        expect(genre).to eql ["Records (Documents)"]
+      end
+    end
     it "should use Nokogiri to retrieve a NodeSet corresponding to the combination of term pointers and array/nodeset indexes" do
       ds_fixture.find_by_terms( :access_condition ).length.should == 1
       ds_fixture.find_by_terms( {:access_condition=>0} ).first.text.should == mods_part.ng_xml.xpath('//oxns:accessCondition[@type="useAndReproduction"][1]', "oxns"=>"http://www.loc.gov/mods/v3").first.text
