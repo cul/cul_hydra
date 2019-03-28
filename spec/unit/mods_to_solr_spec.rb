@@ -414,8 +414,9 @@ describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
             expect(all_text).to include("Date note")
             expect(all_text).to include("Date source note")
 
-            expect(subject["lib_non_date_notes_ssm"]).to_not include('filename_to_be_excluded.tif') # filename notes should be excluded
-            expect(subject["lib_non_date_notes_ssm"]).to eql ["Basic note", "Banana note", "View Direction: WEST"]
+            expect(subject["lib_filename_notes_ssm"]).to eql ['filename_to_be_excluded.tif']
+            expect(subject["lib_untyped_notes_ssm"]).to eql ["Basic note"]
+            expect(subject["lib_view_direction_notes_ssm"]).to eql ["WEST"]
             expect(subject["lib_date_notes_ssm"]).to eql ["Date note", "Date source note"]
           end
         end

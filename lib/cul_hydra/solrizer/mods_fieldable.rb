@@ -1,5 +1,5 @@
 module Cul::Hydra::Solrizer
-	module ModsFieldable
+  module ModsFieldable
     extend ActiveSupport::Concern
     include Solrizer::DefaultDescriptors::Normal
 
@@ -47,10 +47,10 @@ module Cul::Hydra::Solrizer
         n_t
       end
 
-			def role_text_to_solr_field_name(role_text)
-				role_text = normalize(role_text, false)
-				('role_' + role_text.gsub(/[^A-z]/, '_').downcase + '_ssim').gsub(/_+/, '_')
-			end
+      def role_text_to_solr_field_name(role_text)
+        role_text = normalize(role_text, false)
+        ('role_' + role_text.gsub(/[^A-z]/, '_').downcase + '_ssim').gsub(/_+/, '_')
+      end
     end
 
     extend ClassMethods
@@ -121,7 +121,7 @@ module Cul::Hydra::Solrizer
       end
     end
 
-		def clio_ids(node=mods)
+    def clio_ids(node=mods)
       node.xpath('./mods:identifier[@type="CLIO"]', MODS_NS).collect do |t|
         ModsFieldable.normalize(t.text)
       end
@@ -278,24 +278,27 @@ module Cul::Hydra::Solrizer
       end
     end
 
-    def date_notes(node=mods)
-      date_notes = []
-      node.xpath("./mods:note[@type = 'date' or @type = 'date source']", MODS_NS).collect do |n|
-        date_notes << ModsFieldable.normalize(n.text, true)
+    def notes_by_type(node=mods)
+      results = {}
+      normal_date_types = ['date','date_source']
+      node.xpath("./mods:note", MODS_NS).collect do |n|
+        type = n.attr('type')
+        type = 'untyped' if type.blank?
+        normal_type = type.downcase
+        normal_type.gsub!(/\s/,'_')
+        normal_type = 'date' if normal_date_types.include?(normal_type)
+        field_name = "lib_#{normal_type}_notes_ssm"
+        results[field_name] ||= []
+        results[field_name] << ModsFieldable.normalize(n.text, true)
       end
-      return date_notes
+      results
     end
 
-    def non_date_notes(node=mods)
-      non_date_notes = []
-      node.xpath("./mods:note[not(@type) or (@type != 'date' and @type != 'date source' and @type != 'filename')]", MODS_NS).collect do |n|
-				if n.attr('type') == 'view direction'
-					non_date_notes << 'View Direction: ' + ModsFieldable.normalize(n.text, true)
-				else
-					non_date_notes << ModsFieldable.normalize(n.text, true)
-				end
+    def add_notes_by_type!(solr_doc, node=mods)
+      notes_by_type(mods).each do |solr_field_name, values|
+        solr_doc[solr_field_name] ||= []
+        solr_doc[solr_field_name].concat(values)
       end
-      return non_date_notes
     end
 
     def item_in_context_url(node=mods)
@@ -307,12 +310,12 @@ module Cul::Hydra::Solrizer
     end
 
     def non_item_in_context_url(node=mods)
-			non_item_in_context_url_val = []
+      non_item_in_context_url_val = []
       node.xpath("./mods:location/mods:url[not(@access='object in context')]", MODS_NS).collect do |n|
         non_item_in_context_url_val << ModsFieldable.normalize(n.text, true)
       end
       non_item_in_context_url_val
-		end
+    end
 
     def project_url(node=mods)
       project_url_val = []
@@ -372,13 +375,13 @@ module Cul::Hydra::Solrizer
       return places
     end
 
-		def classification_other(node=mods)
-			classification_other_values = []
+    def classification_other(node=mods)
+      classification_other_values = []
       node.xpath("./mods:classification[@authority='z']", MODS_NS).collect do |n|
         classification_other_values << ModsFieldable.normalize(n.text, true)
       end
       return classification_other_values
-		end
+    end
 
     def origin_info_place_for_display(node=mods)
       # If there are multiple origin_info place elements, choose only the ones without valueURI attributes.  Otherwise show the others.
@@ -411,27 +414,27 @@ module Cul::Hydra::Solrizer
       end.first
     end
 
-		def add_names_by_text_role!(solr_doc)
-			# Note: These roles usually come from http://www.loc.gov/marc/relators/relaterm.html,
-			# but there are known cases when non-marc relator values are used (e.g. 'Owner/Agent'),
-			# and those roles won't have marcrelator codes.
-			# e.g. author_ssim = ['Author 1', 'Author 2'] or project_director_ssim = ['Director 1', 'Director 2']
-			roleterm_xpath_segment = "mods:roleTerm[@type='text' and string-length(text()) > 0]"
-			names_with_roles_xpath = "./mods:name/mods:role/#{roleterm_xpath_segment}/ancestor::mods:name"
+    def add_names_by_text_role!(solr_doc)
+      # Note: These roles usually come from http://www.loc.gov/marc/relators/relaterm.html,
+      # but there are known cases when non-marc relator values are used (e.g. 'Owner/Agent'),
+      # and those roles won't have marcrelator codes.
+      # e.g. author_ssim = ['Author 1', 'Author 2'] or project_director_ssim = ['Director 1', 'Director 2']
+      roleterm_xpath_segment = "mods:roleTerm[@type='text' and string-length(text()) > 0]"
+      names_with_roles_xpath = "./mods:name/mods:role/#{roleterm_xpath_segment}/ancestor::mods:name"
       mods.xpath(names_with_roles_xpath, MODS_NS).collect do |node|
         name_text = node.xpath('./mods:namePart', MODS_NS).collect { |c| c.text }.join(' ')
         name_text = ModsFieldable.normalize(name_text, true)
-				solr_role_fields = Set.new
-				node.xpath("./mods:role/#{roleterm_xpath_segment}", MODS_NS).collect do |role_node|
-					solr_role_fields << ModsFieldable.role_text_to_solr_field_name(role_node.text)
-				end
+        solr_role_fields = Set.new
+        node.xpath("./mods:role/#{roleterm_xpath_segment}", MODS_NS).collect do |role_node|
+          solr_role_fields << ModsFieldable.role_text_to_solr_field_name(role_node.text)
+        end
 
-				solr_role_fields.each do |solr_field_name|
-					solr_doc[solr_field_name] ||= []
-					solr_doc[solr_field_name] << name_text
-				end
+        solr_role_fields.each do |solr_field_name|
+          solr_doc[solr_field_name] ||= []
+          solr_doc[solr_field_name] << name_text
+        end
       end
-		end
+    end
 
     def archival_context_json(node=mods)
       node.xpath("./mods:relatedItem[@displayLabel='Collection']", MODS_NS).map do |collection|
@@ -472,7 +475,7 @@ module Cul::Hydra::Solrizer
     def to_solr(solr_doc={})
       solr_doc = (defined? super) ? super : solr_doc
 
-      return solr_doc if mods.nil? 	# There is no mods.  Return because there is nothing to process, otherwise NoMethodError will be raised by subsequent lines.
+      return solr_doc if mods.nil?  # There is no mods.  Return because there is nothing to process, otherwise NoMethodError will be raised by subsequent lines.
 
       solr_doc["all_text_teim"] ||= []
 
@@ -480,7 +483,7 @@ module Cul::Hydra::Solrizer
       solr_doc["title_ssm"] = titles
       solr_doc["alternative_title_ssm"] = alternative_titles
       solr_doc["all_text_teim"] += solr_doc["alternative_title_ssm"]
-			solr_doc["clio_ssim"] = clio_ids
+      solr_doc["clio_ssim"] = clio_ids
       solr_doc["archive_org_identifier_ssi"] = archive_org_identifier
       solr_doc["lib_collection_sim"] = collections
       solr_doc["lib_name_sim"] = names
@@ -501,15 +504,13 @@ module Cul::Hydra::Solrizer
       solr_doc['lib_sublocation_ssm'] = solr_doc['lib_sublocation_sim']
       solr_doc["all_text_teim"] += solr_doc['lib_sublocation_sim']
       solr_doc["lib_date_textual_ssm"] = textual_dates
-      solr_doc["lib_date_notes_ssm"] = date_notes
-      solr_doc["lib_non_date_notes_ssm"] = non_date_notes
       solr_doc["lib_item_in_context_url_ssm"] = item_in_context_url
       solr_doc["lib_non_item_in_context_url_ssm"] = non_item_in_context_url
       solr_doc["location_url_json_ss"] = JSON.generate(url_locations)
       solr_doc["lib_project_url_ssm"] = project_url
       solr_doc["origin_info_place_ssm"] = origin_info_place
       solr_doc["origin_info_place_for_display_ssm"] = origin_info_place_for_display
-			solr_doc["classification_other_ssim"] = classification_other
+      solr_doc["classification_other_ssim"] = classification_other
 
       repo_marc_code = repository_code
       unless repo_marc_code.nil?
@@ -538,36 +539,36 @@ module Cul::Hydra::Solrizer
 
       if start_date.present?
 
-				start_year = nil
-				end_year = nil
+        start_year = nil
+        end_year = nil
 
-				start_date = nil if start_date == 'uuuu'
-				end_date = nil if end_date == 'uuuu'
-				start_date = start_date.gsub('u', '0') unless start_date.nil?
-				end_date = end_date.gsub('u', '0') unless end_date.nil?
+        start_date = nil if start_date == 'uuuu'
+        end_date = nil if end_date == 'uuuu'
+        start_date = start_date.gsub('u', '0') unless start_date.nil?
+        end_date = end_date.gsub('u', '0') unless end_date.nil?
 
         end_date = start_date if end_date.blank?
         start_date = end_date if start_date.blank?
 
         year_regex = /^(-?\d{1,4}).*/
 
-				unless start_date.blank?
-					start_year_match = start_date.match(year_regex)
-					if start_year_match && start_year_match.captures.length > 0
-						start_year = start_year_match.captures[0]
-						start_year = zero_pad_year(start_year)
-						solr_doc["lib_start_date_year_itsi"] = start_year.to_i # TrieInt version for searches
-					end
-				end
+        unless start_date.blank?
+          start_year_match = start_date.match(year_regex)
+          if start_year_match && start_year_match.captures.length > 0
+            start_year = start_year_match.captures[0]
+            start_year = zero_pad_year(start_year)
+            solr_doc["lib_start_date_year_itsi"] = start_year.to_i # TrieInt version for searches
+          end
+        end
 
-				unless end_date.blank?
-					end_year_match = end_date.match(year_regex)
-					if end_year_match && end_year_match.captures.length > 0
-						end_year = end_year_match.captures[0]
-						end_year = zero_pad_year(end_year)
-						solr_doc["lib_end_date_year_itsi"] = end_year.to_i # TrieInt version for searches
-					end
-				end
+        unless end_date.blank?
+          end_year_match = end_date.match(year_regex)
+          if end_year_match && end_year_match.captures.length > 0
+            end_year = end_year_match.captures[0]
+            end_year = zero_pad_year(end_year)
+            solr_doc["lib_end_date_year_itsi"] = end_year.to_i # TrieInt version for searches
+          end
+        end
 
         solr_doc["lib_date_year_range_si"] = start_year + '-' + end_year if start_year && end_year
         solr_doc["lib_date_year_range_ss"] = solr_doc["lib_date_year_range_si"]
@@ -593,8 +594,11 @@ module Cul::Hydra::Solrizer
       solr_doc['archival_context_json_ss'] = JSON.generate(archival_context) if archival_context.present?
 
 
-			# Add names to role-derived keys
-			add_names_by_text_role!(solr_doc)
+      # Add names to role-derived keys
+      add_names_by_text_role!(solr_doc)
+
+      # Add names to type-derived keys
+      add_notes_by_type!(solr_doc)
 
       solr_doc.each do |k, v|
         if self.class.maps_field? k
