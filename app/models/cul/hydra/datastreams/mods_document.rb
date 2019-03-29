@@ -152,7 +152,7 @@ class ModsDocument < ::ActiveFedora::OmDatastream
     }
     t.lib_publisher(:proxy=>[:mods, :origin_info, :publisher], :index_as=>[:displayable])
     t.genre(:path=>"genre[@authority]",:index_as=>[])
-    t.lib_genre(:proxy=>[:mods,:genre],:index_as=>[:facetable, :textable])
+    t.lib_genre(:proxy=>[:mods,:genre],:index_as=>[:symbol, :textable])
   end
 
   def self.xml_template

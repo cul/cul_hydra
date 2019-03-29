@@ -78,7 +78,7 @@ describe Cul::Hydra::Datastreams::ModsDocument, type: :unit do
         expect(term.xpath).to eql '//oxns:mods/oxns:genre[@authority]'
         terminology.has_term?(:lib_genre).should be_truthy
         doc = ds_fixture.to_solr()
-        genre = doc["lib_genre_sim"]
+        genre = doc["lib_genre_ssim"]
         expect(genre).to eql ["Records (Documents)"]
       end
     end
