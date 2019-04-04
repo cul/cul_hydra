@@ -400,9 +400,10 @@ module Cul::Hydra::Solrizer
     def coordinates(node=mods)
       coordinate_values = []
       node.xpath("./mods:subject/mods:cartographics/mods:coordinates", MODS_NS).collect do |n|
-        n = ModsFieldable.normalize(n.text, true)
-        if n.match(/-*\d+\.\d+\s*,\s*-*\d+\.\d+\s*/) # Expected coordinate format: 40.123456,-73.5678
-          coordinate_values << n
+        nt = ModsFieldable.normalize(n.text, true)
+        if nt.match(/-*\d+\.\d+\s*,\s*-*\d+\.\d+\s*/) # Expected coordinate format: 40.123456,-73.5678
+          nt = "-#{nt}" if n.text[n.text.index(nt) - 1] == '-'
+          coordinate_values << nt
         end
       end
       coordinate_values

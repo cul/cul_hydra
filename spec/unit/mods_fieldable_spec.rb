@@ -207,7 +207,7 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
     end
     it "should find coordinate values" do
       test = ModsIndexDatastream.new(@subjects_ng)
-      test.coordinates.should == ['40.8075, -73.9619', '40.6892, -74.0444']
+      test.coordinates.should == ['40.8075, -73.9619', '40.6892, -74.0444', '-40.6892, 74.0444']
     end
   end
 
