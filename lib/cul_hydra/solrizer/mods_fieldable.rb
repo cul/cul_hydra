@@ -409,10 +409,14 @@ module Cul::Hydra::Solrizer
       coordinate_values
     end
 
-    def archive_org_identifier(node=mods)
+    def archive_org_identifiers(node=mods)
       node.xpath('./mods:identifier[@type="archive.org"]', MODS_NS).collect do |t|
         ModsFieldable.normalize(t.text)
-      end.first
+      end
+    end
+
+    def archive_org_identifier(node=mods)
+      archive_org_identifiers(node).first
     end
 
     def add_names_by_text_role!(solr_doc)
@@ -486,6 +490,7 @@ module Cul::Hydra::Solrizer
       solr_doc["all_text_teim"] += solr_doc["alternative_title_ssm"]
       solr_doc["clio_ssim"] = clio_ids
       solr_doc["archive_org_identifier_ssi"] = archive_org_identifier
+      solr_doc["archive_org_identifier_ssim"] = archive_org_identifiers
       solr_doc["lib_collection_sim"] = collections
       solr_doc["lib_name_sim"] = names
       solr_doc["lib_name_teim"] = solr_doc["lib_name_sim"]

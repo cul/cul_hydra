@@ -220,6 +220,15 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
       test.classification_other.should == ['AB.CD.EF.G.123', 'AB.CD.EF.G.456']
     end
   end
+  describe ".archive_org_identifiers" do
+    before :all do
+      @all_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-all.xml")))
+    end
+    it "should index an archive.org identifier" do
+      test = ModsIndexDatastream.new(@all_ng)
+      test.archive_org_identifiers.should == ['internet_archive_id_value']
+    end
+  end
   describe ".archive_org_identifier" do
     before :all do
       @all_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-all.xml")))
