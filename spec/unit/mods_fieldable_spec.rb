@@ -226,7 +226,9 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
     end
     it "should index an archive.org identifier" do
       test = ModsIndexDatastream.new(@all_ng)
-      test.archive_org_identifiers.should == ['internet_archive_id_value']
+      test.archive_org_identifiers.should == [
+        { id: 'internet_archive_id_value', displayLabel: 'internet_archive_id_label' }
+      ]
     end
   end
   describe ".archive_org_identifier" do

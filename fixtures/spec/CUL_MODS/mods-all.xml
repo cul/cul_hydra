@@ -2,7 +2,7 @@
 <mods xmlns='http://www.loc.gov/mods/v3' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd' version='3.4'>
   <identifier type='local'>prd.custord.040148</identifier>
   <identifier type='CLIO'>12381225</identifier>
-  <identifier type='archive.org'>internet_archive_id_value</identifier>
+  <identifier type='archive.org' displayLabel='internet_archive_id_label'>internet_archive_id_value</identifier>
   <classification authority='loc'>LOC.123.456</classification>
   <classification authority='z'>AB.CD.EF.G.123</classification>
   <classification authority='z'>AB.CD.EF.G.456</classification>

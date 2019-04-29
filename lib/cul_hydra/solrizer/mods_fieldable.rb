@@ -411,12 +411,17 @@ module Cul::Hydra::Solrizer
 
     def archive_org_identifiers(node=mods)
       node.xpath('./mods:identifier[@type="archive.org"]', MODS_NS).collect do |t|
-        ModsFieldable.normalize(t.text)
+        {
+          displayLabel: t['displayLabel'] || ModsFieldable.normalize(t.text),
+          id: ModsFieldable.normalize(t.text)
+        }.compact
       end
     end
 
     def archive_org_identifier(node=mods)
-      archive_org_identifiers(node).first
+      node.at_xpath('./mods:identifier[@type="archive.org"]', MODS_NS)&.tap do |t|
+        return ModsFieldable.normalize(t.text)
+      end
     end
 
     def add_names_by_text_role!(solr_doc)
@@ -490,7 +495,7 @@ module Cul::Hydra::Solrizer
       solr_doc["all_text_teim"] += solr_doc["alternative_title_ssm"]
       solr_doc["clio_ssim"] = clio_ids
       solr_doc["archive_org_identifier_ssi"] = archive_org_identifier
-      solr_doc["archive_org_identifier_ssim"] = archive_org_identifiers
+      solr_doc["archive_org_identifiers_json_ss"] = JSON.generate(archive_org_identifiers)
       solr_doc["lib_collection_sim"] = collections
       solr_doc["lib_name_sim"] = names
       solr_doc["lib_name_teim"] = solr_doc["lib_name_sim"]
