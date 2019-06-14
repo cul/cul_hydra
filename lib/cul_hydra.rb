@@ -8,6 +8,7 @@ module Cul
     autoload :Fedora, 'cul_hydra/fedora'
     autoload :Om, 'cul_hydra/om'
     autoload :Solrizer, 'cul_hydra/solrizer'
+    autoload :AccessLevels, 'cul_hydra/access_levels'
   end
 end
 
