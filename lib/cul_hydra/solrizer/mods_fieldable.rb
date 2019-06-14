@@ -525,6 +525,7 @@ module Cul::Hydra::Solrizer
 
       repo_marc_code = repository_code
       unless repo_marc_code.nil?
+        solr_doc["lib_repo_code_ssim"] = [repo_marc_code]
         solr_doc["lib_repo_short_ssim"] = [translate_repo_marc_code(repo_marc_code, 'short')]
         solr_doc["lib_repo_long_sim"] = [translate_repo_marc_code(repo_marc_code, 'long')]
         solr_doc["lib_repo_full_ssim"] = [translate_repo_marc_code(repo_marc_code, 'full')]
