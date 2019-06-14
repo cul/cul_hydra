@@ -21,7 +21,7 @@ module Cul::Hydra::Solrizer
       return solr_doc if policy.nil?  # Return because there is nothing to process
       solr_doc['access_control_levels_ssim'] = access_levels
       solr_doc['access_control_permissions_bsi'] = permissions_indicated?
-      solr_doc['access_control_embargo_dtsi'] = permit_after_date.first
+      solr_doc['access_control_embargo_dtsi'] = permit_after_date
       solr_doc['access_control_affiliations_ssim'] = permit_affiliations
       solr_doc['access_control_locations_ssim'] = permit_locations
       solr_doc
@@ -70,7 +70,7 @@ module Cul::Hydra::Solrizer
             condition.xpath("./xacml:AttributeValue[@DataType='#{TYPE_DATE}']", XACML_NS).text
           end
         end
-      end.compact
+      end.compact.first
     end
   end
 end
