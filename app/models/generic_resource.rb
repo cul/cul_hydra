@@ -21,6 +21,7 @@ class GenericResource < ::ActiveFedora::Base
   LENGTH = RDF::URI(ActiveFedora::Predicates.find_graph_predicate(:image_length))
 
   has_datastream :name => "content", :type=>::ActiveFedora::Datastream, :versionable => true
+  has_datastream :name => "accessControlMetadata", :type=>Cul::Hydra::Datastreams::AccessControlMetadata, :versionable => false
   has_metadata :name=>"RELS-INT", :type=>ActiveFedora::RelsInt::Datastream
 
   rdf_types(RDF::CUL.Resource)
