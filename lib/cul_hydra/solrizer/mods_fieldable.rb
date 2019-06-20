@@ -482,6 +482,12 @@ module Cul::Hydra::Solrizer
       end
     end
 
+    def copyright_statement(node=mods)
+      node.at_xpath('./mods:accessCondition[@type="use and reproduction"]', MODS_NS)&.tap do |t|
+        return t['xlink:href']
+      end
+    end
+
     def to_solr(solr_doc={})
       solr_doc = (defined? super) ? super : solr_doc
 
@@ -611,6 +617,8 @@ module Cul::Hydra::Solrizer
 
       # Add names to type-derived keys
       add_notes_by_type!(solr_doc)
+
+      solr_doc['copyright_statement_ssi'] = copyright_statement
 
       solr_doc.each do |k, v|
         if self.class.maps_field? k

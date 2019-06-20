@@ -254,4 +254,15 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
       expect(test.to_solr).to have_key('archival_context_json_ss')
     end
   end
+  describe ".copyright_statement" do
+    before :all do
+      @all_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-access-condition.xml")))
+    end
+    let(:expected) { 'http://rightsstatements.org/vocab/InC/1.0/' }
+    it "should index a copyright statement" do
+      test = ModsIndexDatastream.new(@all_ng)
+      test.copyright_statement.should == expected
+      test.to_solr['copyright_statement_ssi'].should == expected
+    end
+  end
 end
