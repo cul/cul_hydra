@@ -356,7 +356,7 @@ module Cul::Hydra::Solrizer
         list_of_subjects << ModsFieldable.normalize(n.text, true)
       end
 
-      return list_of_subjects
+      return list_of_subjects.uniq
     end
 
     def durst_subjects(node=mods)
@@ -364,7 +364,7 @@ module Cul::Hydra::Solrizer
       node.xpath("./mods:subject[@authority='Durst']/mods:topic", MODS_NS).collect do |n|
         list_of_subjects << ModsFieldable.normalize(n.text, true)
       end
-      return list_of_subjects
+      return list_of_subjects.uniq
     end
 
     def origin_info_place(node=mods)
