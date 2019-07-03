@@ -599,6 +599,7 @@ module Cul::Hydra::Solrizer
 
       # Geo data
       solr_doc["geo"] = coordinates
+      solr_doc["has_geo_bsi"] = true if solr_doc["geo"].present?
 
       ## Handle alternate form of language authority for language_language_term_text_ssim
       ## We already capture elements when authority="iso639-2b", but we want to additionally
