@@ -126,6 +126,23 @@ describe GenericResource, type: :unit do
         it { expect(o.to_solr[solr_field]).to be_nil }
       end              
     end
+
+    describe '#closed?' do
+      before { o.datastreams['accessControlMetadata'].content = ds_content }
+      let(:actual) { o.closed? }
+      context 'no access control metadata' do
+        let(:ds_content) { "" }
+        it { expect(actual).to be false }
+      end
+      context 'access control metadata is not closed' do
+        let(:ds_content) { fixture(File.join("CUL_ACCESS", "access-conditions.xml")) }
+        it { expect(actual).to be false }
+      end
+      context 'access control metadata includes closed' do
+        let(:ds_content) { fixture(File.join("CUL_ACCESS", "access-closed.xml")) }
+        it { expect(actual).to be true }
+      end
+    end
   end
 
 end

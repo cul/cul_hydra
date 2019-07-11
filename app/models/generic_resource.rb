@@ -145,6 +145,16 @@ class GenericResource < ::ActiveFedora::Base
     end
   end
 
+  def closed?
+    return access_levels.map(&:downcase).include?('closed')
+  end
+
+  def access_levels
+    acm = datastreams['accessControlMetadata']
+    return [] if acm.content.blank?
+    return acm.to_solr.fetch('access_control_levels_ssim', [])
+  end
+
   def service_datastream
     # we have to 'manually' query the graph because rels_int doesn't support subject pattern matching
     args = [:s, rels_int.to_predicate(:format_of), RDF::URI.new("#{internal_uri}/content")]
