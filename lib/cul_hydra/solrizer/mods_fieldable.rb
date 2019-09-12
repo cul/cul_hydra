@@ -514,6 +514,7 @@ module Cul::Hydra::Solrizer
       solr_doc["lib_author_sim"] = names(:marcrelator, 'aut')
       solr_doc["lib_recipient_sim"] = names(:marcrelator, 'rcp')
       solr_doc["lib_format_sim"] = formats
+      solr_doc["lib_genre_ssim"] = solr_doc["lib_format_sim"].dup if solr_doc["lib_genre_ssim"].blank?
       solr_doc["lib_shelf_sim"] = shelf_locators
       solr_doc['location_shelf_locator_ssm'] = solr_doc["lib_shelf_sim"]
       solr_doc["all_text_teim"] += solr_doc["lib_shelf_sim"]
