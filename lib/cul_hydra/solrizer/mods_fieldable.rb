@@ -3,7 +3,7 @@ module Cul::Hydra::Solrizer
     extend ActiveSupport::Concern
     include Solrizer::DefaultDescriptors::Normal
 
-    MODS_NS = {'mods'=>'http://www.loc.gov/mods/v3'}
+    MODS_NS = {'mods'=>'http://www.loc.gov/mods/v3', 'cul' => 'http://id.library.columbia.edu/property/'}
     ORIGIN_INFO_DATES = ["dateCreated", "dateIssued", "dateOther"]
 
     module ClassMethods
@@ -488,6 +488,14 @@ module Cul::Hydra::Solrizer
       end
     end
 
+    def reading_room_locations(node=mods)
+      node.xpath("./mods:extension/cul:readingRoom", MODS_NS).map { |room_node| room_node.attr('valueUri') }
+    end
+
+    def search_scope(node=mods)
+      node.xpath("./mods:extension/cul:searchScope", MODS_NS).map { |scope_node| scope_node.attr('value') }
+    end
+
     def to_solr(solr_doc={})
       solr_doc = (defined? super) ? super : solr_doc
 
@@ -621,6 +629,10 @@ module Cul::Hydra::Solrizer
       add_notes_by_type!(solr_doc)
 
       solr_doc['copyright_statement_ssi'] = copyright_statement
+
+      # Publish Target/Site fields for location indexes
+      solr_doc['search_scope_ssi'] = search_scope.first
+      solr_doc['reading_room_ssim'] = reading_room_locations
 
       solr_doc.each do |k, v|
         if self.class.maps_field? k

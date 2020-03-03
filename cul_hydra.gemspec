@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
   s.add_dependency('json', '>=1.8.3')
   s.add_dependency('rake', '<= 11.3') # Rake >= 11.3 breaks tests
   s.add_dependency('rubydora', '~> 2.0.0') # rubydora 2.1.0 breaks tests
-  
+  s.add_dependency('sprockets', '~>3.0') # sprockets 4 breaks tests
   s.add_development_dependency "sqlite3", "~> 1.3.9"
   s.add_development_dependency 'rspec-rails', '~> 3.4.0'
   s.add_development_dependency 'rspec-json_expectations'

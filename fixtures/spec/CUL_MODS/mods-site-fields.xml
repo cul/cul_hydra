@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<mods:mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mods="http://www.loc.gov/mods/v3" version="3.6" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd">
+  <mods:titleInfo>
+    <mods:title>Thomas de Waal Interviews</mods:title>
+  </mods:titleInfo>
+  <mods:relatedItem type="host" displayLabel="Project">
+    <mods:titleInfo>
+      <mods:title>Publish Targets</mods:title>
+    </mods:titleInfo>
+  </mods:relatedItem>
+  <mods:location>
+    <mods:physicalLocation valueURI="http://id.library.columbia.edu/term/d2142d01-deaa-4a39-8dbd-72c4f148353f" authority="marcorg">NNC-RB</mods:physicalLocation>
+  </mods:location>
+  <mods:recordInfo>
+    <mods:languageOfCataloging>
+      <mods:languageTerm valueURI="http://id.loc.gov/vocabulary/iso639-2/eng" authority="iso639-2b">eng</mods:languageTerm>
+    </mods:languageOfCataloging>
+    <mods:recordCreationDate encoding="w3cdtf">2017-07-17T18:27:48Z</mods:recordCreationDate>
+    <mods:recordChangeDate encoding="w3cdtf">2020-03-03T18:36:48Z</mods:recordChangeDate>
+  </mods:recordInfo>
+  <mods:extension xmlns:cul="http://id.library.columbia.edu/property/">
+    <cul:searchScope value="project"/>
+  </mods:extension>
+  <mods:extension xmlns:cul="http://id.library.columbia.edu/property/">
+    <cul:readingRoom valueUri="http://id.library.columbia.edu/term/45487bbd-97ef-44b4-9468-dda47594bc60">Reading Room, Rare Book &amp; Manuscript Library, Columbia University</cul:readingRoom>
+  </mods:extension>
+  <mods:identifier type="DOI">10.7916/D8Z611H9</mods:identifier>
+</mods:mods>

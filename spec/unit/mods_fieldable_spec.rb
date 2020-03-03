@@ -265,4 +265,26 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
       test.to_solr['copyright_statement_ssi'].should == expected
     end
   end
+  describe ".reading_room_locations" do
+    before :all do
+      @all_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-site-fields.xml")))
+    end
+    let(:expected) { ['http://id.library.columbia.edu/term/45487bbd-97ef-44b4-9468-dda47594bc60'] }
+    it "should index a copyright statement" do
+      test = ModsIndexDatastream.new(@all_ng)
+      test.reading_room_locations.should == expected
+      test.to_solr['reading_room_ssim'].should == expected
+    end
+  end
+  describe ".search_scope" do
+    before :all do
+      @all_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-site-fields.xml")))
+    end
+    let(:expected) { 'project' }
+    it "should index a copyright statement" do
+      test = ModsIndexDatastream.new(@all_ng)
+      test.search_scope.should == [expected]
+      test.to_solr['search_scope_ssi'].should == expected
+    end
+  end
 end
