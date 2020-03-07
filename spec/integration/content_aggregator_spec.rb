@@ -5,14 +5,14 @@ describe ContentAggregator, type: :integration do
   before(:each) do
     @foxml = fixture( File.join("FOXML", "content-aggregator.xml"))
     ingest("test:c_agg", fixture( File.join("FOXML", "content-aggregator.xml")), true)
-    @memberobj = ingest("test:si_agg", fixture( File.join("FOXML", "static-image-aggregator.xml")), true)
+    @memberobj = ingest("test:thumb_image", fixture( File.join("FOXML", "resource-thumb.xml")), true)
     @memberobj.send :update_index
     @fixtureobj = ContentAggregator.search_repo.find_by!(identifier: "prd.custord.070103a")
     @fixtureobj.send :update_index
   end
 
   after(:each) do
-    ActiveFedora::Base.find("test:si_agg", :cast=>false).delete
+    ActiveFedora::Base.find("test:thumb_image", :cast=>false).delete
     ActiveFedora::Base.find("test:c_agg", :cast=>false).delete
   end
 
