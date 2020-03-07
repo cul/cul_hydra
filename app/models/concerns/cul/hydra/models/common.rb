@@ -8,7 +8,6 @@ module Cul::Hydra::Models::Common
     define_model_callbacks :create
     has_metadata :name => "DC", :type=>Cul::Hydra::Datastreams::DCMetadata, :versionable => true
     has_metadata :name => "descMetadata", :type=>Cul::Hydra::Datastreams::ModsDocument, :versionable => true
-    has_metadata :name => "rightsMetadata", :type=>::Hydra::Datastream::RightsMetadata, :versionable => true
     has_many :publishers, :property => :publisher, :class_name=>'ActiveFedora::Base'
     after_create :rdf_types!
   end
