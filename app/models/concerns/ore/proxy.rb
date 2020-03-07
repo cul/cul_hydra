@@ -5,7 +5,7 @@ module ORE
 class Proxy < ActiveTriples::Resource
   include Digest
   include Solrizer::Common
-  include ActiveFedora::Rdf::Indexing
+  include ActiveFedora::RDF::Indexing
 
   module Id
     class Descriptor < Solrizer::Descriptor
@@ -22,7 +22,7 @@ class Proxy < ActiveTriples::Resource
   def self.type
     RDF::ORE.Proxy
   end
-  property :id, predicate: RDF.nodeID, multivalue: false do |ix|
+  property :id_node, predicate: RDF.nodeID, multivalue: false do |ix|
     ix.as Id::Descriptor.new
   end
   property :isAggregatedBy, predicate: RDF::ORE.isAggregatedBy, multivalue: false do |ix|
@@ -119,6 +119,5 @@ class Proxy < ActiveTriples::Resource
       config
     end
   end
-
 end
 end
