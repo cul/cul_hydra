@@ -8,11 +8,10 @@ class GenericResource < ::ActiveFedora::Base
   extend ActiveModel::Callbacks
   include ::ActiveFedora::FinderMethods::RepositoryMethods
   include ::ActiveFedora::DatastreamCollections
-  include ::Hydra::ModelMethods
   include Cul::Hydra::Models::Common
   include Cul::Hydra::Models::ImageResource
+  include Cul::Hydra::Models::RelsInt
   include Cul::Hydra::Fedora::UrlHelperBehavior
-  include ::ActiveFedora::RelsInt
 
   has_and_belongs_to_many :containers, :property=>:cul_member_of, :class_name=>'ActiveFedora::Base'
 
@@ -22,7 +21,6 @@ class GenericResource < ::ActiveFedora::Base
 
   has_datastream :name => "content", :type=>::ActiveFedora::Datastream, :versionable => true
   has_metadata :name => "accessControlMetadata", :type=>Cul::Hydra::Datastreams::AccessControlMetadata, :versionable => false
-  has_metadata :name=>"RELS-INT", :type=>ActiveFedora::RelsInt::Datastream
 
   rdf_types(RDF::CUL.Resource)
   rdf_types(RDF::PCDM.Object)

@@ -102,3 +102,6 @@
     :lineage: lineage
   http://www.w3.org/ns/ldp#:
     :ldp_contains: contains
+  http://projecthydra.org/ns/relations#:
+    :is_governed_by: isGovernedBy
+    :asserts: asserts

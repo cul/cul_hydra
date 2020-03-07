@@ -3,7 +3,6 @@ require "active_fedora_finders"
 class GenericAggregator < ::ActiveFedora::Base
   include ::ActiveFedora::FinderMethods::RepositoryMethods
   include ::ActiveFedora::DatastreamCollections
-  include Hydra::ModelMethods
   include Cul::Hydra::Models::Common
   include Cul::Hydra::Models::Aggregator
 
