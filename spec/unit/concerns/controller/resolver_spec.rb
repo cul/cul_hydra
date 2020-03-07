@@ -28,14 +28,14 @@ describe Cul::Hydra::Resolver, type: :unit do
   subject { TestRig.new('lol:wut') }
   it "should resolve resourceful actions correctly" do
     subject.params[:action] = 'widgets'
-    subject.stub(:widget_url).and_return('get:lol:wut')
-    subject.stub(:redirect_to)
+    expect(subject).to receive(:widget_url).and_return('get:lol:wut')
+    expect(subject).to receive(:redirect_to)
     subject.get
   end
   it "should resolve resourceful actions correctly" do
     subject.params[:action] = 'spaceship'
-    subject.stub(:spaceship_url).and_return('get:lol:wut')
-    subject.stub(:redirect_to)
+    expect(subject).to receive(:spaceship_url).and_return('get:lol:wut')
+    expect(subject).to receive(:redirect_to)
     subject.get
   end
 end

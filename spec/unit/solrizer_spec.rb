@@ -36,9 +36,8 @@ describe "Cul::Hydra::Solrizer::TerminologyBasedSolrizer", type: :unit do
           puts "<< #{actual.inspect}" if solr[key]
           puts ">> #{expected.inspect}"
         end
-        #solr[key].should == value_array
       }
-      fails.should == []
+      expect(fails).to be_empty
     end
 
     it "should produce equivalent xml when built up programatically" do

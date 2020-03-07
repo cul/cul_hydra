@@ -4,12 +4,16 @@ describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
   describe "#to_solr" do
     let(:mock_inner) do
       mock = double('inner object')
-      mock.stub(:"new_record?" => false, :repository => mock_repo, :pid => nil)
+      allow(mock).to receive(:new_record?).and_return(false)
+      allow(mock).to receive(:repository).and_return(mock_repo)
+      allow(mock).to receive(:pid).and_return(nil)
       mock
     end
     let(:mock_repo) do
       mock = double('repository')
-      mock.stub(config: {}, datastream_profile: {}, datastream_dissemination: 'My Content')
+      allow(mock).to receive(:config).and_return({})
+      allow(mock).to receive(:datastream_profile).and_return({})
+      allow(mock).to receive(:datastream_dissemination).and_return('My Content')
       mock
     end
     let(:mods_ds) { descMetadata(mock_inner, mods_src) }
@@ -424,13 +428,13 @@ describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
       context "the abstract" do
         it "should be texted and stored" do
           expect(subject["abstract_ssm"]).to include("This is the abstract")
-          all_text_joined.should include("This is the abstract")
+          expect(all_text_joined).to include("This is the abstract")
         end
       end
       context "the tableOfContents" do
         it "should be texted and stored" do
           expect(subject["table_of_contents_ssm"]).to include("This is the table\nof\ncontents")
-          all_text_joined.should include("This is the table of contents")
+          expect(all_text_joined).to include("This is the table of contents")
         end
       end
     end

@@ -7,7 +7,6 @@ ENGINE_RAILS_ROOT=File.join(File.dirname(__FILE__), '../')
 
 require 'bundler/setup'
 require 'rspec/rails'
-require 'rspec/autorun'
 require 'rspec/json_expectations'
 require 'cul_hydra'
 require 'equivalent-xml/rspec_matchers'
@@ -27,9 +26,6 @@ end
 
 RSpec.configure do |config|
   config.use_transactional_fixtures = true
-
-  # Remove the line below when we update to rspec 3
-  config.treat_symbols_as_metadata_keys_with_true_values = true
 
   # These two settings work together to allow you to limit a spec run
   # to individual examples or groups you care about by tagging them with

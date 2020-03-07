@@ -9,8 +9,8 @@ describe Cul::Hydra::Datastreams::ModsDocument, type: :unit do
 
   let(:mock_inner) do
     mock_inner = double('inner object')
-    mock_inner.stub(:"new_record?").and_return(false)
-    mock_inner.stub(:pid)
+    allow(mock_inner).to receive(:"new_record?").and_return(false)
+    allow(mock_inner).to receive(:pid)
     mock_inner
   end
 
@@ -21,15 +21,15 @@ describe Cul::Hydra::Datastreams::ModsDocument, type: :unit do
   let(:mods_part) { descMetadata(mock_inner, part_xml) }
 
   it "should automatically include the necessary modules" do
-    Cul::Hydra::Datastreams::ModsDocument.included_modules.should include(OM::XML::Container)
-    Cul::Hydra::Datastreams::ModsDocument.included_modules.should include(OM::XML::TermValueOperators)
-    Cul::Hydra::Datastreams::ModsDocument.included_modules.should include(OM::XML::Validation)
+    expect(Cul::Hydra::Datastreams::ModsDocument.included_modules).to include(OM::XML::Container)
+    expect(Cul::Hydra::Datastreams::ModsDocument.included_modules).to include(OM::XML::TermValueOperators)
+    expect(Cul::Hydra::Datastreams::ModsDocument.included_modules).to include(OM::XML::Validation)
   end
 
   describe ".ox_namespaces" do
     let(:xml_fixture) { item_xml }
     it "should merge terminology namespaces with document namespaces" do
-      ds_fixture.ox_namespaces.should == {"oxns"=>"http://www.loc.gov/mods/v3", "xmlns:xsi"=>"http://www.w3.org/2001/XMLSchema-instance", "xmlns"=>"http://www.loc.gov/mods/v3"}
+      expect(ds_fixture.ox_namespaces).to eql({"oxns"=>"http://www.loc.gov/mods/v3", "xmlns:xsi"=>"http://www.w3.org/2001/XMLSchema-instance", "xmlns"=>"http://www.loc.gov/mods/v3"})
     end
     it "should correctly namespace attributes" do
       result = false
@@ -38,26 +38,26 @@ describe Cul::Hydra::Datastreams::ModsDocument, type: :unit do
           result =  node.namespace.href == 'http://www.w3.org/2001/XMLSchema-instance'
         end
       }
-      result.should == true
+      expect(result).to be true
     end
   end
 
   describe ".find_by_terms_and_value" do
     let(:xml_fixture) { item_xml }
     it "should use Nokogiri to retrieve a NodeSet corresponding to the term pointers" do
-      ds_fixture.find_by_terms_and_value( :lib_project).length.should == 1
+      expect(ds_fixture.find_by_terms_and_value( :lib_project).length).to eql 1
     end
 
     it "should allow you to search by term pointer" do
-      ds_fixture.ng_xml.should_receive(:xpath).with('//oxns:location/oxns:physicalLocation[@authority="marcorg"]', ds_fixture.ox_namespaces)
+      expect(ds_fixture.ng_xml).to receive(:xpath).with('//oxns:location/oxns:physicalLocation[@authority="marcorg"]', ds_fixture.ox_namespaces)
       ds_fixture.find_by_terms_and_value(:location, :lib_repo)
     end
     it "should allow you to constrain your searches" do
-      ds_fixture.ng_xml.should_receive(:xpath).with('//oxns:location/oxns:physicalLocation[@authority="marcorg" and contains(., "NNC-RB")]', ds_fixture.ox_namespaces)
+      expect(ds_fixture.ng_xml).to receive(:xpath).with('//oxns:location/oxns:physicalLocation[@authority="marcorg" and contains(., "NNC-RB")]', ds_fixture.ox_namespaces)
       ds_fixture.find_by_terms_and_value(:location,:lib_repo, "NNC-RB")
     end
     it "should allow you to use complex constraints" do
-      ds_fixture.ng_xml.should_receive(:xpath).with('//oxns:recordInfo/oxns:recordCreationDate[@encoding="w3cdtf" and contains(., "2010-07-12")]', ds_fixture.ox_namespaces)
+      expect(ds_fixture.ng_xml).to receive(:xpath).with('//oxns:recordInfo/oxns:recordCreationDate[@encoding="w3cdtf" and contains(., "2010-07-12")]', ds_fixture.ox_namespaces)
       ds_fixture.find_by_terms_and_value(:record_info, :record_creation_date=>"2010-07-12")
     end
   end
@@ -66,7 +66,7 @@ describe Cul::Hydra::Datastreams::ModsDocument, type: :unit do
     it "should find the right terms for title" do
       term = terminology.retrieve_term(:title)
       expect(term.xpath).to eql '//oxns:mods/oxns:titleInfo[not(@type)]/oxns:title'
-      terminology.has_term?(:title).should be_truthy
+      expect(terminology.has_term?(:title)).to be_truthy
       doc = ds_fixture.to_solr()
       title = doc["title_display_ssm"]
       expect(title).to eql ["The Manuscript, unidentified"]
@@ -76,34 +76,34 @@ describe Cul::Hydra::Datastreams::ModsDocument, type: :unit do
       it "should find the right terms for genre" do
         term = terminology.retrieve_term(:lib_genre)
         expect(term.xpath).to eql '//oxns:mods/oxns:genre[@authority]'
-        terminology.has_term?(:lib_genre).should be_truthy
+        expect(terminology.has_term?(:lib_genre)).to be_truthy
         doc = ds_fixture.to_solr()
         genre = doc["lib_genre_ssim"]
         expect(genre).to eql ["Records (Documents)"]
       end
     end
     it "should use Nokogiri to retrieve a NodeSet corresponding to the combination of term pointers and array/nodeset indexes" do
-      ds_fixture.find_by_terms( :access_condition ).length.should == 1
-      ds_fixture.find_by_terms( {:access_condition=>0} ).first.text.should == mods_part.ng_xml.xpath('//oxns:accessCondition[@type="useAndReproduction"][1]', "oxns"=>"http://www.loc.gov/mods/v3").first.text
-      terminology.xpath_with_indexes( :mods, {:main_title_info=>0}, :main_title ).should == '//oxns:mods/oxns:titleInfo[not(@type)][1]/oxns:title'
-      ds_fixture.find_by_terms(:title ).class.should == Nokogiri::XML::NodeSet
-      ds_fixture.find_by_terms(:title ).first.text.should == "Manuscript, unidentified"
+      expect(ds_fixture.find_by_terms( :access_condition ).length).to eql  1
+      expect(ds_fixture.find_by_terms( {:access_condition=>0} ).first.text).to eql  mods_part.ng_xml.xpath('//oxns:accessCondition[@type="useAndReproduction"][1]', "oxns"=>"http://www.loc.gov/mods/v3").first.text
+      expect(terminology.xpath_with_indexes( :mods, {:main_title_info=>0}, :main_title )).to eql  '//oxns:mods/oxns:titleInfo[not(@type)][1]/oxns:title'
+      expect(ds_fixture.find_by_terms(:title ).class).to eql  Nokogiri::XML::NodeSet
+      expect(ds_fixture.find_by_terms(:title ).first.text).to eql  "Manuscript, unidentified"
     end
     it "should find a NodeSet where a terminology attribute has been set to :none" do
-      ds_fixture.find_by_terms(:location, :repo_text).first.text.should == "Rare Book and Manuscript Library, Columbia University"
+      expect(ds_fixture.find_by_terms(:location, :repo_text).first.text).to eql "Rare Book and Manuscript Library, Columbia University"
     end
 
     it "should support xpath queries as the pointer" do
-      ds_fixture.find_by_terms('//oxns:relatedItem[@type="host"][1]//oxns:title[1]').first.text.should == "Project Mapping\nTest"
+      expect(ds_fixture.find_by_terms('//oxns:relatedItem[@type="host"][1]//oxns:title[1]').first.text).to eql "Project Mapping\nTest"
     end
 
     it "should identify presence or absence of terms with shortcut methods" do
-      mock_inner.stub(:new_record?).and_return(true)
+      allow(mock_inner).to receive(:new_record?).and_return(true)
       built  = described_class.new(mock_inner, 'descMetadata')
       built.ng_xml = described_class.xml_template
       built.update_values({[:title]=>'foo'})
-      built.title?.should be_truthy
-      built.clio?.should be_falsey
+      expect(built.title?).to be_truthy
+      expect(built.clio?).to be_falsey
     end
   end
 end
