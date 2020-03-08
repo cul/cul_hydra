@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.description = "Hydra implementations for CUL repository apps"
   s.summary = "ActiveFedora, OM, and Solrizer implementations for CUL repository apps"
 
+  s.add_dependency("rails", "~>4.2.10")
   s.add_dependency("bootstrap-sass", "~>3.3.7")
   s.add_dependency("blacklight", "~>6.0")
   s.add_dependency('httpclient')
