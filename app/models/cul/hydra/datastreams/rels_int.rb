@@ -13,7 +13,7 @@ module Hydra
 
       def serialize!
         self.content = to_rels_int() if changed_attributes.include? 'relationships'
-        changed_attributes.delete 'relationships'
+        clear_attribute_changes 'relationships'
       end
 
       def relationships_will_change!
@@ -114,7 +114,7 @@ module Hydra
           g << stmt
         end
         self.relationships_loaded = true
-        changed_attributes.delete 'relationships'
+        clear_attribute_changes 'relationships'
         @graph = g
       end
 
