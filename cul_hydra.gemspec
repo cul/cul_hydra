@@ -16,13 +16,12 @@ Gem::Specification.new do |s|
   s.summary = "ActiveFedora, OM, and Solrizer implementations for CUL repository apps"
 
   s.add_dependency("bootstrap-sass", "~>3.3.7")
-  s.add_dependency("blacklight")
-  s.add_dependency('hydra-head', "~>7")
+  s.add_dependency("blacklight", "~>6.0")
   s.add_dependency('httpclient')
-  s.add_dependency('active-fedora', '>= 7.3.1')
-  s.add_dependency('active-triples', '~> 0.2.2')
+  # AF 8.7.0 removes ActiveFedora::RDF::Indexing
+  s.add_dependency('active-fedora', '>= 8.0', '< 8.7.0')
+  s.add_dependency('active-triples', '~> 0.4.0')
   s.add_dependency('active_fedora_finders', '>=0.5.0')
-  s.add_dependency('active_fedora_relsint', '~>0.4')
   s.add_dependency('cul_image_props')
   s.add_dependency('mods')
   s.add_dependency('thread')

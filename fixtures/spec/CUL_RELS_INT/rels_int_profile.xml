@@ -1,0 +1,19 @@
+<datastreamProfile xmlns="http://www.fedora.info/definitions/1/0/management/"
+xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.fedora.info/definitions/1/0/management/ http://www.fedora.info/definitions/1/0/datastreamProfile.xsd"
+pid="test:relsint" dsID="RELS-INT">
+<dsLabel>Mock Profile Response</dsLabel>
+<dsVersionID>RELS-INT.0</dsVersionID>
+<dsCreateDate>2012-07-23T21:56:16.636Z</dsCreateDate>
+<dsState>A</dsState>
+<dsMIME>application/rdf+xml</dsMIME>
+<dsFormatURI />
+<dsControlGroup>X</dsControlGroup>
+<dsSize>802</dsSize>
+<dsVersionable>true</dsVersionable>
+<dsInfoType/>
+<dsLocation>mocked+object</dsLocation>
+<dsLocationType/>
+<dsChecksumType>DISABLED</dsChecksumType>
+<dsChecksum>none</dsChecksum>
+</datastreamProfile>

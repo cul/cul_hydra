@@ -1,0 +1,12 @@
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+	<rdf:Description rdf:about="info:fedora/test:relsint/DC">
+		<isMetadataFor rdf:resource="info:fedora/test:relsint/RELS-INT" xmlns="info:fedora/fedora-system:def/relations-external#"/>
+		<isMetadataFor rdf:resource="info:fedora/test:relsint/RELS-EXT" xmlns="info:fedora/fedora-system:def/relations-external#"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="info:fedora/test:relsint/RELS-EXT">
+		<asserts xmlns="http://projecthydra.org/ns/relations#">FOO</asserts>
+	</rdf:Description>
+	<rdf:Description rdf:about="info:fedora/test:relsint/RELS-INT">
+		<asserts xmlns="http://projecthydra.org/ns/relations#">BAR</asserts>
+	</rdf:Description>
+</rdf:RDF>
