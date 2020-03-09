@@ -243,7 +243,7 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
     before :all do
       @all_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-archival-context.xml")))
     end
-    let(:expected) { JSON.load(File.read(fixture( File.join("CUL_solr", "archival-context.json")))) }
+    let(:expected) { JSON.load(File.read(fixture( File.join("CUL_SOLR", "archival-context.json")))) }
     it "should produce json-ld for the archival context" do
       test = ModsIndexDatastream.new(@all_ng)
       expect(expected[0]).to include_json(test.archival_context_json[0])
