@@ -1,14 +1,14 @@
 APP_ROOT = File.expand_path("#{File.dirname(__FILE__)}/../../") unless defined?(APP_ROOT)
 
-require 'jettywrapper'
-JETTY_ZIP_BASENAME = 'fedora-3.8.1-with-risearch'
-Jettywrapper.url = "https://github.com/cul/hydra-jetty/archive/#{JETTY_ZIP_BASENAME}.zip"
-
 namespace :cul_hydra do
 
   begin
     # This code is in a begin/rescue block so that the Rakefile is usable
     # in an environment where RSpec is unavailable (i.e. production).
+
+    require 'jettywrapper'
+    JETTY_ZIP_BASENAME = 'fedora-3.8.1-with-risearch'
+    Jettywrapper.url = "https://github.com/cul/hydra-jetty/archive/#{JETTY_ZIP_BASENAME}.zip"
 
     require 'rspec/core/rake_task'
 
@@ -25,7 +25,7 @@ namespace :cul_hydra do
     end
 
   rescue LoadError => e
-    puts "[Warning] Exception creating rspec rake tasks.  This message can be ignored in environments that intentionally do not pull in the RSpec gem (i.e. production)."
+    puts "[Warning] Exception creating rspec rake tasks or loading jettywrapper.  This message can be ignored in environments that intentionally do not pull in the RSpec gem (i.e. production)."
     puts e
   end
 
