@@ -76,6 +76,8 @@ class GenericResource < ::ActiveFedora::Base
       solr_doc["original_name_tesim"] << original_name.strip
     end
 
+    solr_doc['access_control_levels_ssim'] ||= [Cul::Hydra::AccessLevels::ACCESS_LEVEL_PUBLIC]
+    solr_doc['access_control_permissions_bsi'] = !!solr_doc['access_control_permissions_bsi']
     solr_doc
   end
 

@@ -36,6 +36,11 @@ describe GenericResource, type: :unit do
       doc = o.to_solr(fdoc, model_only: true)
       expect(doc['fulltext_tesim']).to eql(['Test title','foo'])
     end
+    it 'has no access control data' do
+      doc = o.to_solr({}, model_only: true)
+      expect(doc['access_control_levels_ssim']).to eql(['Public Access'])
+      expect(doc['access_control_permissions_bsi']).to eql(false)
+    end
     it do
       expect(o.to_solr['datastreams_ssim']).to eql(datastream_ids)
     end
