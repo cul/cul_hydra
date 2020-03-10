@@ -1,11 +1,8 @@
 module Cul::Hydra::ApplicationIdBehavior
   extend ActiveSupport::Concern
-  included do
-    include Blacklight::SolrHelper
-  end
 
   def find_for_params(path,solr_params)
-    res = blacklight_solr.send_and_receive(path, {key=>solr_params.to_hash, method:blacklight_config.http_method})
+    res = blacklight_config.repository.send_and_receive(path, {key=>solr_params.to_hash, method:blacklight_config.http_method})
     Blacklight::SolrResponse.new(res, solr_params, solr_document_model: blacklight_config.solr_document_model)
   end
 
@@ -19,7 +16,8 @@ module Cul::Hydra::ApplicationIdBehavior
     p[:fq] = "identifier_ssim:#{(id)}"
     p[:fl] ||= '*'
     #p[:qt] ||= blacklight_config.document_solr_request_handler
-    solr_response = find(blacklight_config.document_solr_path, p)
+    repository = blacklight_config.repository_class.new(blacklight_config)
+    solr_response = repository.search(p)
     raise Blacklight::Exceptions::InvalidSolrID.new(id) if solr_response.docs.empty?
     document = SolrDocument.new(solr_response.docs.first, solr_response)
     @response, @document = [solr_response, document]
@@ -35,7 +33,8 @@ module Cul::Hydra::ApplicationIdBehavior
     p[:fq] = "dc_identifier_ssim:#{(id)}"
     p[:fl] ||= '*'
     #p[:qt] ||= blacklight_config.document_solr_request_handler
-    solr_response = find(blacklight_config.document_solr_path, p)
+    repository = blacklight_config.repository_class.new(blacklight_config)
+    solr_response = repository.search(p)
     raise Blacklight::Exceptions::InvalidSolrID.new(id) if solr_response.docs.empty?
     document = SolrDocument.new(solr_response.docs.first, solr_response)
     @response, @document = [solr_response, document]

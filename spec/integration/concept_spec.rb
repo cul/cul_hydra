@@ -17,7 +17,7 @@ describe Concept, type: :integration do
   end
 
   it "should produce the correct CModel PID" do
-    @fixture_obj.cmodel_pid(@fixture_obj.class).should == "ldpd:Concept"
+    expect(@fixture_obj.cmodel_pid(@fixture_obj.class)).to eql "ldpd:Concept"
   end
   it "should have the slug available via accessor" do
   	expect(@fixture_obj.slug).to eql('catalog')

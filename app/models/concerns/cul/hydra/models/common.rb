@@ -8,7 +8,6 @@ module Cul::Hydra::Models::Common
     define_model_callbacks :create
     has_metadata :name => "DC", :type=>Cul::Hydra::Datastreams::DCMetadata, :versionable => true
     has_metadata :name => "descMetadata", :type=>Cul::Hydra::Datastreams::ModsDocument, :versionable => true
-    has_metadata :name => "rightsMetadata", :type=>::Hydra::Datastream::RightsMetadata, :versionable => true
     has_many :publishers, :property => :publisher, :class_name=>'ActiveFedora::Base'
     after_create :rdf_types!
   end
@@ -247,7 +246,7 @@ module Cul::Hydra::Models::Common
     else
       # If there isn't a structMap, just get the first child
       member_pids = Cul::Hydra::RisearchMembers.get_direct_member_pids(self.pid, true)
-      logger.warn "Warning: #{self.pid} is a member of itself!" if member_pids.include?(self.pid)
+      Rails.logger.warn "Warning: #{self.pid} is a member of itself!" if member_pids.include?(self.pid)
       if member_pids.first
         child_obj = ActiveFedora::Base.find(member_pids.first)
         return child_obj.get_representative_generic_resource
@@ -257,12 +256,12 @@ module Cul::Hydra::Models::Common
       end
     end
   rescue ActiveFedora::ObjectNotFoundError
-    logger.warn "#{get_singular_rel(:schema_image)} not found in repository for #{self.pid}"
+    Rails.logger.warn "#{get_singular_rel(:schema_image)} not found in repository for #{self.pid}"
     return nil
   end
 
   def update_datastream_attributes(params={}, opts={})
-    logger.debug "Common.update_datastream_attributes"
+    Rails.logger.debug "Common.update_datastream_attributes"
     result = params.dup
     params.each_pair do |dsid, ds_params|
       if datastreams.include?(dsid)
@@ -272,12 +271,12 @@ module Cul::Hydra::Models::Common
           changed ||= value_changed?(datastreams[dsid],pointer,values)
         }
         if changed
-          logger.debug "Common.update_datastream_attributes calling update_indexed_attributes"
+          Rails.logger.debug "Common.update_datastream_attributes calling update_indexed_attributes"
           result[dsid] = datastreams[dsid].update_indexed_attributes(ds_params)
         else
           result[dsid] = no_update(ds_params)
         end
-        logger.debug "change detected? #{changed} digital_object? #{datastreams[dsid].changed?}"
+        Rails.logger.debug "change detected? #{changed} digital_object? #{datastreams[dsid].changed?}"
       else
         result.delete(dsid)
       end
@@ -308,7 +307,7 @@ module Cul::Hydra::Models::Common
     else
       values = {"0"=>values}
     end
-    logger.debug "submitted values for #{pointer.inspect} : #{values.inspect}"
+    Rails.logger.debug "submitted values for #{pointer.inspect} : #{values.inspect}"
     return true if values["-1"]
     changed = false
     old_values = ds.get_values(pointer)
@@ -316,10 +315,10 @@ module Cul::Hydra::Models::Common
     old_values.each_index {|ix| indexed_values[ix.to_s] = old_values[ix] }
     indexed_values.each {|k,v|
       new_val = values.delete(k)
-      logger.debug "old: #{v} new: #{new_val} changed? #{!(v.eql? new_val)}"
+      Rails.logger.debug "old: #{v} new: #{new_val} changed? #{!(v.eql? new_val)}"
       changed ||= !(v.eql? new_val)
     }
-    logger.debug "remaining values! #{values.inspect}" if values.length > 0
+    Rails.logger.debug "remaining values! #{values.inspect}" if values.length > 0
     changed || (values.length > 0)
   end
 

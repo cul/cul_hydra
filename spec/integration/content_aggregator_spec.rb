@@ -5,19 +5,19 @@ describe ContentAggregator, type: :integration do
   before(:each) do
     @foxml = fixture( File.join("FOXML", "content-aggregator.xml"))
     ingest("test:c_agg", fixture( File.join("FOXML", "content-aggregator.xml")), true)
-    @memberobj = ingest("test:si_agg", fixture( File.join("FOXML", "static-image-aggregator.xml")), true)
+    @memberobj = ingest("test:thumb_image", fixture( File.join("FOXML", "resource-thumb.xml")), true)
     @memberobj.send :update_index
     @fixtureobj = ContentAggregator.search_repo.find_by!(identifier: "prd.custord.070103a")
     @fixtureobj.send :update_index
   end
 
   after(:each) do
-    ActiveFedora::Base.find("test:si_agg", :cast=>false).delete
+    ActiveFedora::Base.find("test:thumb_image", :cast=>false).delete
     ActiveFedora::Base.find("test:c_agg", :cast=>false).delete
   end
 
   it "should produce the correct CModel PID" do
-    @fixtureobj.cmodel_pid(@fixtureobj.class).should == "ldpd:ContentAggregator"
+    expect(@fixtureobj.cmodel_pid(@fixtureobj.class)).to eql "ldpd:ContentAggregator"
   end
 
   describe "aggregation functions" do
@@ -51,15 +51,14 @@ describe ContentAggregator, type: :integration do
     it "should have a default, stubbed structMetadata datastream" do
       ds = @fixtureobj.datastreams["structMetadata"]
       expect(ds).to be_a(Cul::Hydra::Datastreams::StructMetadata)
-      ds.changed?.should be_falsey
+      expect(ds.changed?).to be_falsey
       expect(@fixtureobj.to_solr[:structured_bsi]).to eql 'false'
     end
 
     it "should correctly index as structured if there is structMetadata content" do
       ds = @fixtureobj.datastreams["structMetadata"]
       ds.label = "Test Label"
-      ds.changed?.should be_truthy
-      #puts "structMetadata: #{ds.content}"
+      expect(ds.changed?).to be_truthy
       ds.save
       expect(@fixtureobj.to_solr[:structured_bsi]).to eql 'true'
     end

@@ -17,15 +17,15 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
   before(:each) do
     @mock_repo = double('repository')
     @mock_ds = double('datastream')
-    @mock_repo.stub(:config).and_return({})
-    @mock_repo.stub(:datastream_profile).and_return({})
-    @mock_repo.stub(:datastream).and_return('<datastreamProfile />')
-    @mock_repo.stub(:datastream_dissemination=>'My Content')
+    allow(@mock_repo).to receive(:config).and_return({})
+    allow(@mock_repo).to receive(:datastream_profile).and_return({})
+    allow(@mock_repo).to receive(:datastream).and_return('<datastreamProfile />')
+    allow(@mock_repo).to receive(:datastream_dissemination).and_return('My Content')
 
     @mock_inner = double('inner object')
-    @mock_inner.stub(:"new_record?").and_return(false)
-    @mock_inner.stub(:repository).and_return(@mock_repo)
-    @mock_inner.stub(:pid)
+    allow(@mock_inner).to receive(:"new_record?").and_return(false)
+    allow(@mock_inner).to receive(:repository).and_return(@mock_repo)
+    allow(@mock_inner).to receive(:pid)
     @item_xml = fixture( File.join("CUL_MODS", "mods-item.xml") ).read
     @item_om = descMetadata(@mock_inner, @item_xml)
 
@@ -47,7 +47,7 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
     end
 
     it "should produce a hash" do
-      @solr_doc.should be_a Hash
+      expect(@solr_doc).to be_a Hash
     end
 
     it "should have a single sortable title" do
@@ -57,26 +57,26 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
     end
 
     it "should have normalized facet values" do
-      @solr_doc["lib_collection_sim"].should == ['Collection Facet Normalization Test']
+      expect(@solr_doc["lib_collection_sim"]).to eql ['Collection Facet Normalization Test']
     end
 
     it "should facet on corporate and personal names, ignoring roleTerms" do
-      @solr_doc["lib_name_sim"].should == ['Name, Inc.', 'Name, Personal 1745-1829', 'Name, Recipient 1829-1745','Included Without Attribute']
-      @solr_doc["lib_name_ssm"].should == ['Name, Inc.', 'Name, Personal 1745-1829', 'Name, Recipient 1829-1745','Included Without Attribute']
+      expect(@solr_doc["lib_name_sim"]).to eql ['Name, Inc.', 'Name, Personal 1745-1829', 'Name, Recipient 1829-1745','Included Without Attribute']
+      expect(@solr_doc["lib_name_sim"]).to eql ['Name, Inc.', 'Name, Personal 1745-1829', 'Name, Recipient 1829-1745','Included Without Attribute']
     end
 
     it "should not include /mods/subject/name elements in the list of /mods/name elements" do
-      @solr_doc["lib_name_sim"].should_not include('Jay, John, 1745-1829')
-      @solr_doc["lib_name_ssm"].should_not include('Jay, John, 1745-1829')
+      expect(@solr_doc["lib_name_sim"]).not_to include('Jay, John, 1745-1829')
+      expect(@solr_doc["lib_name_sim"]).not_to include('Jay, John, 1745-1829')
     end
 
     it "should not include /mods/relatedItem/identifier[type='CLIO'] elements in the list of clio_identifier elements" do
-      @solr_doc["clio_ssim"].should include('12381225')
-      @solr_doc["clio_ssim"].should_not include('4080189')
+      expect(@solr_doc["clio_ssim"]).to include('12381225')
+      expect(@solr_doc["clio_ssim"]).not_to include('4080189')
     end
 
     it "should facet on the special library format values" do
-      @solr_doc["lib_format_sim"].should == ['books']
+      expect(@solr_doc["lib_format_sim"]).to eql ['books']
     end
   end
 
@@ -85,22 +85,21 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
       d = "   Foo \n Bar "
       e = "Foo Bar"
       a = Cul::Hydra::Solrizer::ModsFieldable.normalize(d)
-      a.should == e
+      expect(a).to eql e
     end
 
     it "should only strip punctuation when asked to" do
       d = "   'Foo \n Bar\" "
       e = "'Foo Bar\""
       a = Cul::Hydra::Solrizer::ModsFieldable.normalize(d)
-      a.should == e
+      expect(a).to eql e
       e = "Foo Bar\""
       a = Cul::Hydra::Solrizer::ModsFieldable.normalize(d, true)
-      a.should == e
+      expect(a).to eql e
       d = "<Jay, John (Pres. of Cong.)>"
       e = "Jay, John (Pres. of Cong.)"
       a = Cul::Hydra::Solrizer::ModsFieldable.normalize(d, true)
-      a.should == e
-
+      expect(a).to eql e
     end
   end
 
@@ -124,27 +123,27 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
   describe ".main_title" do
     it "should find the top-level titles" do
       test = ModsIndexDatastream.new(@titles_ng)
-      test.main_title.should == 'The Photographs'
+      expect(test.main_title).to eql 'The Photographs'
     end
   end
 
   describe ".projects" do
     it "should find the project titles for faceting" do
       test = ModsIndexDatastream.new(@titles_ng)
-      test.projects.should == ['Customer Order Project']
+      expect(test.projects).to eql ['Customer Order Project']
     end
     it "should be able to translate a project title with periods in it" do
       @test_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-relateditem-project.xml")))
       @solr_doc = ModsIndexDatastream.new(@test_ng).to_solr
-      @solr_doc["lib_project_short_ssim"].should == ["Lindquist Photographs"]
-      @solr_doc["lib_project_full_ssim"].should == ["G.E.E. Lindquist Native American Photographs"]
+      expect(@solr_doc["lib_project_short_ssim"]).to eql ["Lindquist Photographs"]
+      expect(@solr_doc["lib_project_full_ssim"]).to eql ["G.E.E. Lindquist Native American Photographs"]
     end
   end
 
   describe ".collections" do
     it "should find the collection titles for faceting" do
       test = ModsIndexDatastream.new(@titles_ng)
-      test.collections.should == ['The Pulitzer Prize Photographs']
+      expect(test.collections).to eql ['The Pulitzer Prize Photographs']
     end
   end
 
@@ -154,7 +153,7 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
       @solr_doc = ModsIndexDatastream.new(@test_ng).to_solr
     end
     it "should find the shelf locators" do
-      @solr_doc["lib_shelf_sim"].should == ["Box no. 057"]
+      expect(@solr_doc["lib_shelf_sim"]).to eql ["Box no. 057"]
     end
   end
 
@@ -164,7 +163,7 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
       @solr_doc = ModsIndexDatastream.new(@test_ng).to_solr
     end
     it "should not change the textual date, other than removing leading or trailing whitespace" do
-      @solr_doc["lib_date_textual_ssm"].sort.should == ['-12 BCE', 'Circa 1940', '[19]22?']
+      expect(@solr_doc["lib_date_textual_ssm"].sort).to eql ['-12 BCE', 'Circa 1940', '[19]22?']
     end
   end
 
@@ -174,15 +173,15 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
     end
     it "should find name values and ignore roleTerms" do
       test = ModsIndexDatastream.new(@names_ng)
-      test.names.should == ['Name, Inc.', 'Name, Personal 1745-1829', 'Name, Recipient 1829-1745', 'Included Without Attribute', 'Dear Brother', 'Seminar 401']
+      expect(test.names).to eql ['Name, Inc.', 'Name, Personal 1745-1829', 'Name, Recipient 1829-1745', 'Included Without Attribute', 'Dear Brother', 'Seminar 401']
     end
     it "should find name values with authority/role pairs" do
       test = ModsIndexDatastream.new(@names_ng)
-      test.names(:marcrelator, 'rcp').should == ['Name, Recipient 1829-1745', 'Dear Brother']
+      expect(test.names(:marcrelator, 'rcp')).to eql ['Name, Recipient 1829-1745', 'Dear Brother']
     end
     it "should not find subject names" do
       test = ModsIndexDatastream.new(@names_ng)
-      test.names.should_not include('Jay, John 1745-1829')
+      expect(test.names).not_to include('Jay, John 1745-1829')
     end
   end
 
@@ -207,7 +206,7 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
     end
     it "should find coordinate values" do
       test = ModsIndexDatastream.new(@subjects_ng)
-      test.coordinates.should == ['40.8075, -73.9619', '40.6892, -74.0444', '-40.6892, 74.0444']
+      expect(test.coordinates).to eql ['40.8075, -73.9619', '40.6892, -74.0444', '-40.6892, 74.0444']
     end
   end
 
@@ -217,7 +216,7 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
     end
     it "should find classification values with authority 'z', meaning 'other'" do
       test = ModsIndexDatastream.new(@all_ng)
-      test.classification_other.should == ['AB.CD.EF.G.123', 'AB.CD.EF.G.456']
+      expect(test.classification_other).to eql ['AB.CD.EF.G.123', 'AB.CD.EF.G.456']
     end
   end
   describe ".archive_org_identifiers" do
@@ -226,7 +225,7 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
     end
     it "should index an archive.org identifier" do
       test = ModsIndexDatastream.new(@all_ng)
-      test.archive_org_identifiers.should == [
+      expect(test.archive_org_identifiers).to eql [
         { id: 'internet_archive_id_value', displayLabel: 'internet_archive_id_label' }
       ]
     end
@@ -237,14 +236,14 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
     end
     it "should index an archive.org identifier" do
       test = ModsIndexDatastream.new(@all_ng)
-      test.archive_org_identifier.should == 'internet_archive_id_value'
+      expect(test.archive_org_identifier).to eql 'internet_archive_id_value'
     end
   end
   describe ".archival_context_json" do
     before :all do
       @all_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-archival-context.xml")))
     end
-    let(:expected) { JSON.load(File.read(fixture( File.join("CUL_solr", "archival-context.json")))) }
+    let(:expected) { JSON.load(File.read(fixture( File.join("CUL_SOLR", "archival-context.json")))) }
     it "should produce json-ld for the archival context" do
       test = ModsIndexDatastream.new(@all_ng)
       expect(expected[0]).to include_json(test.archival_context_json[0])
@@ -261,8 +260,8 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
     let(:expected) { 'http://rightsstatements.org/vocab/InC/1.0/' }
     it "should index a copyright statement" do
       test = ModsIndexDatastream.new(@all_ng)
-      test.copyright_statement.should == expected
-      test.to_solr['copyright_statement_ssi'].should == expected
+      expect(test.copyright_statement).to eql expected
+      expect(test.to_solr['copyright_statement_ssi']).to eql expected
     end
   end
   describe ".reading_room_locations" do
@@ -272,8 +271,8 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
     let(:expected) { ['http://id.library.columbia.edu/term/45487bbd-97ef-44b4-9468-dda47594bc60'] }
     it "should index a copyright statement" do
       test = ModsIndexDatastream.new(@all_ng)
-      test.reading_room_locations.should == expected
-      test.to_solr['reading_room_ssim'].should == expected
+      expect(test.reading_room_locations).to eql expected
+      expect(test.to_solr['reading_room_ssim']).to eql expected
     end
   end
   describe ".search_scope" do
@@ -283,8 +282,8 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
     let(:expected) { 'project' }
     it "should index a copyright statement" do
       test = ModsIndexDatastream.new(@all_ng)
-      test.search_scope.should == [expected]
-      test.to_solr['search_scope_ssi'].should == expected
+      expect(test.search_scope).to eql [expected]
+      expect(test.to_solr['search_scope_ssi']).to eql expected
     end
   end
 end

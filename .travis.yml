@@ -3,10 +3,7 @@ cache: bundler
 sudo: false
 rvm:
   - 2.3.0
-jdk: 'oraclejdk8'
-matrix:
-  include:
-    - rvm: 2.2.4
+jdk: 'openjdk8'
 
 notifications:
   irc: "irc.freenode.org#ldpddev"
@@ -14,3 +11,6 @@ notifications:
 env:
   global:
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+before_install:
+    - gem install -v 1.17.2 bundler
+    - bundle _1.17.2_ install

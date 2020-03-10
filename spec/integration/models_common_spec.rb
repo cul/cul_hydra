@@ -67,19 +67,19 @@ describe Cul::Hydra::Models::Common, type: :integration do
     it "should return the :cul_member_of child of the given content_aggregator when no struct map is present" do
       representative_generic_resource = @content_aggregator_with_direct_child.get_representative_generic_resource
       expect(representative_generic_resource).to eq(@direct_member_generic_resource)
-      representative_generic_resource.should be_kind_of(GenericResource)
+      expect(representative_generic_resource).to be_kind_of(GenericResource)
     end
     
     it "should return the first structmap member when a PID is present in the structMap rather than a dc:identifier" do
       representative_generic_resource = @content_aggregator_with_struct_children_1.get_representative_generic_resource
       expect(representative_generic_resource).to eq(@struct_member_generic_resource_1)
-      representative_generic_resource.should be_kind_of(GenericResource)
+      expect(representative_generic_resource).to be_kind_of(GenericResource)
     end
     
     it "should return the first structmap member when a dc:identifier is present in the structMap rather than PID (and that dc:identifier can be a uri that would not be a valid fedora identifier)" do
       representative_generic_resource = @content_aggregator_with_struct_children_a.get_representative_generic_resource(true)
       expect(representative_generic_resource).to eq(@struct_member_generic_resource_a)
-      representative_generic_resource.should be_kind_of(GenericResource)
+      expect(representative_generic_resource).to be_kind_of(GenericResource)
     end
   end
   
