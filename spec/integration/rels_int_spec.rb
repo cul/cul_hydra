@@ -13,6 +13,6 @@ describe Cul::Hydra::Models::RelsInt, type: :integration do
 
   it "should load from solr" do
     f = Foo.create
-    Foo.load_instance_from_solr(f.id).should_not be_nil
+    expect(Foo.load_instance_from_solr(f.id)).not_to be_nil
   end
 end
