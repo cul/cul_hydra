@@ -9,7 +9,7 @@ class Concept < GenericAggregator
   rdf_types(RDF::CUL.Aggregator)
   rdf_types(RDF::PCDM.Object)
 
-  has_file_datastream :name => "descriptionText", :type=>::ActiveFedora::Datastream,
+  has_file_datastream :name => "descriptionText", :type=>Cul::Hydra::Datastreams::EncodedTextDatastream,
                  :versionable => false, :label => 'Textual Description of Concept',
                  :mimeType => 'text/markdown'
 
@@ -107,7 +107,15 @@ class Concept < GenericAggregator
 
   def to_solr(solr_doc = Hash.new, opts={})
     solr_doc = super(solr_doc, opts)
-    solr_doc[::ActiveFedora::SolrService.solr_name(:description_text, :displayable)] = description
+    description.tap do |description_value|
+      if description_value
+        unless description_ds.is_a? Cul::Hydra::Datastreams::EncodedTextDatastream
+          description_value = Cul::Hydra::Datastreams::EncodedTextDatastream.utf8able!(description_value).encode(Encoding::UTF_8)
+        end
+        description_field_name = ::ActiveFedora::SolrService.solr_name(:description_text, :displayable)
+        solr_doc[description_field_name] = description_value
+      end
+    end
     solr_doc
   end
 

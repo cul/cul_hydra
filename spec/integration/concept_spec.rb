@@ -37,4 +37,12 @@ describe Concept, type: :integration do
     expect(solr_doc).to include("restriction_ssim" => "Onsite")
     expect(solr_doc).to include("slug_ssim" => "catalog")
   end
+  it "should index utf8 descriptions correctly" do
+    @fixture_obj.description = fixture( File.join("BLOB", "description-utf8.txt") ).read
+    expect(@fixture_obj.description.encoding).to be Encoding::UTF_8
+    solr_doc = @fixture_obj.to_solr
+    expect(solr_doc["description_text_ssm"]).to include(fixture( File.join("BLOB", "description-utf8.txt") ).read)
+    @fixture_obj.save
+    @fixture_obj.update_index
+  end
 end
