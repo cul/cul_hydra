@@ -49,7 +49,8 @@ describe Concept, type: :unit do
       allow(concept).to receive(:set_size_labels)
       concept
     }
-    subject { concept.to_solr }
+    let(:solr_doc) { concept.to_solr }
+    subject { solr_doc }
     context 'zero or one abstract values' do
       before {
         concept.abstract = abstract
@@ -89,10 +90,20 @@ describe Concept, type: :unit do
         concept.description = description
         expect(concept.description_ds).not_to be_nil
       }
-      let(:description) { '#Test Concept' }
-      it do
-        expect(concept.description).to eql(description)
-        is_expected.to include('description_text_ssm' => description)
+      context 'in ASCII' do
+        let(:description) { '#Test Concept' }
+        it do
+          expect(concept.description).to eql(description)
+          is_expected.to include('description_text_ssm' => description)
+        end
+      end
+      context 'in UTF8' do
+        let(:description) { fixture( File.join("BLOB", "description-utf8.txt") ).read }
+        it do
+          expect(concept.description).to eql(description)
+          is_expected.to include('description_text_ssm' => description)
+          expect(solr_doc['description_text_ssm'].encoding).to eql Encoding::UTF_8
+        end
       end
     end
   end
