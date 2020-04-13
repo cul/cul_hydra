@@ -2,11 +2,13 @@ module Cul
 module Hydra
 module Datastreams
 class EncodedTextDatastream < ::ActiveFedora::Datastream
-  DEFAULT_PRIORITIES = [ Encoding::UTF_8, Encoding::ISO_8859_1, Encoding::WINDOWS_1252 ]
+  DEFAULT_PRIORITIES = [ Encoding::UTF_8, Encoding::WINDOWS_1252, Encoding::ISO_8859_1 ]
+
   def initialize(digital_object=nil, dsid=nil, options={})
     @encoding_priorities = options.delete(:encodings) || DEFAULT_PRIORITIES
     super
   end
+
   def content=(value)
     super(utf8able!(value).encode!(Encoding::UTF_8))
   end
@@ -21,6 +23,7 @@ class EncodedTextDatastream < ::ActiveFedora::Datastream
 
   def self.utf8able!(data, encoding_priorities = DEFAULT_PRIORITIES)
     return unless data
+    data = data.read if data.is_a? IO
     content_encoding = encoding_priorities.detect do |enc|
       begin
         data.force_encoding(enc).valid_encoding?
@@ -29,7 +32,6 @@ class EncodedTextDatastream < ::ActiveFedora::Datastream
       end
     end
     raise "could not encode text datastream content" unless content_encoding
-    puts "using encoding #{content_encoding}"
     data.force_encoding(content_encoding)
   end
 end

@@ -91,10 +91,13 @@ describe Concept, type: :unit do
         expect(concept.description_ds).not_to be_nil
       }
       context 'in ASCII' do
-        let(:description) { '#Test Concept' }
+        let(:utf8) { '#Test Concept'.encode(Encoding::UTF_8) }
+        let(:description) { utf8.encode(Encoding.find("US-ASCII")) }
+
         it do
           expect(concept.description).to eql(description)
-          is_expected.to include('description_text_ssm' => description)
+          is_expected.to include('description_text_ssm' => utf8)
+          expect(solr_doc['description_text_ssm'].encoding).to eql Encoding::UTF_8
         end
       end
       context 'in UTF8' do
@@ -102,6 +105,15 @@ describe Concept, type: :unit do
         it do
           expect(concept.description).to eql(description)
           is_expected.to include('description_text_ssm' => description)
+          expect(solr_doc['description_text_ssm'].encoding).to eql Encoding::UTF_8
+        end
+      end
+      context 'in cp1252' do
+        let(:utf8) { fixture( File.join("BLOB", "description-utf8.txt") ).read }
+        let(:description) { fixture( File.join("BLOB", "description-cp1252.txt") ).read }
+        it 'encodes cp1252 input as utf8 for indexing' do
+          expect(concept.description).to eql(description)
+          is_expected.to include('description_text_ssm' => utf8)
           expect(solr_doc['description_text_ssm'].encoding).to eql Encoding::UTF_8
         end
       end

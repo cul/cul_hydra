@@ -44,6 +44,25 @@ describe GenericResource, type: :unit do
     it do
       expect(o.to_solr['datastreams_ssim']).to eql(datastream_ids)
     end
+    context "it has fulltext" do
+      let(:ds_content) { fixture(File.join("BLOB", "description-cp1252.txt")) }
+      let(:utf8_content) do
+        blob = fixture(File.join("BLOB", "description-utf8.txt"))
+        blob.set_encoding(Encoding::UTF_8)
+        blob.read
+      end
+      let(:solr_doc) { o.to_solr }
+      before do
+        o.datastreams['fulltext'] = ::ActiveFedora::Datastream.new
+        o.datastreams['fulltext'].content = ds_content.read
+      end
+      it "converts windows to utf8 for indexing" do
+        expect(utf8_content.encoding).to eql(Encoding::UTF_8)
+        expect(utf8_content.valid_encoding?).to be true
+        expect(solr_doc['fulltext_tesim'][0].encoding).to eql(Encoding::UTF_8)
+        expect(solr_doc['fulltext_tesim'][0].codepoints).to eql(utf8_content.codepoints)
+      end
+    end
     context "it has accessControlMetadata" do
       let(:ds_content) { fixture(File.join("CUL_ACCESS", "access-conditions.xml")) }
       let(:solr_doc) { o.to_solr }
