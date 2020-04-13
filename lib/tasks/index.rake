@@ -91,10 +91,11 @@ namespace :cul_hydra do
       pool = Thread.pool(thread_pool_size)
       mutex = Mutex.new
 
+      index_opts = { skip_generic_resources: skip_generic_resources, verbose_output: false }
       pids.each do |pid|
         pool.process {
           
-          Cul::Hydra::Indexer.index_pid(pid, skip_generic_resources, false)
+          Cul::Hydra::Indexer.index_pid(pid, index_opts)
           
           mutex.synchronize do
             counter += 1
@@ -124,7 +125,8 @@ namespace :cul_hydra do
         next
       end
 
-      skip_generic_resources = (ENV['skip_generic_resources'] == 'true')
+      index_opts = { verbose_output: false }
+      index_opts[:skip_generic_resources] = (ENV['skip_generic_resources'] == 'true')
 
       start_time = Time.now
       pids = Cul::Hydra::RisearchMembers.get_publish_target_member_pids(publish_target_pid, true)
@@ -133,7 +135,7 @@ namespace :cul_hydra do
       counter = 0
 
       pids.each do |pid|
-        Cul::Hydra::Indexer.index_pid(pid, skip_generic_resources, false)
+        Cul::Hydra::Indexer.index_pid(pid, index_opts)
         counter += 1
         puts "Indexed #{counter} of #{total} | #{Time.now - start_time} seconds"
       end
