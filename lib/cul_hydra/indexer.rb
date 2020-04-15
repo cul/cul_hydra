@@ -2,7 +2,9 @@ module Cul::Hydra::Indexer
 
   NUM_FEDORA_RETRY_ATTEMPTS = 3
   DELAY_BETWEEN_FEDORA_RETRY_ATTEMPTS = 5.seconds
-
+  DEFAULT_INDEX_OPTS = {
+    skip_resources: false, verbose_output: false, softcommit: true, reraise: false
+  }.freeze
   def self.descend_from(pid, pids_to_omit=nil, verbose_output=false)
     if pid.blank?
       raise 'Please supply a pid (e.g. rake recursively_index_fedora_objects pid=ldpd:123)'
@@ -60,14 +62,37 @@ module Cul::Hydra::Indexer
   end
   def self.recursively_index_fedora_objects(top_pid, pids_to_omit=nil, skip_generic_resources=false, verbose_output=false)
 
+    index_opts = { skip_generic_resources: skip_generic_resources, verbose_output: verbose_output }
     descend_from(top_pid, pids_to_omit, verbose_output) do |pid|
-      self.index_pid(pid, skip_generic_resources, verbose_output)
+      self.index_pid(pid, index_opts)
     end
-
   end
 
-  def self.index_pid(pid, skip_generic_resources=false, verbose_output=false, softcommit=true)
+  # this is a compatibility method for bridging the previously used postional arguments to
+  # keyword arguments by extracting an opts hash from varargs
+  # legacy positional opts signature: skip_resources = false, verbose_output = false, softcommit = true
+  # keyword defaults are in DEFAULT_INDEX_OPTS
+  # @param args [Array] a list of arguments ending with an options hash
+  # @return options hash
+  def self.extract_index_opts(args)
+    args = args.dup # do not modify the original list
+    # extract opts hash
+    index_opts = (args.last.is_a? Hash) ? args.pop : {}
+    # symbolize keys and reverse merge defaults
+    index_opts = index_opts.map {|k,v| [k.to_sym, v] }.to_h
+    index_opts = DEFAULT_INDEX_OPTS.merge(index_opts)
+    # assign any legacy positional arguments, permitting explicit nils
+    unless args.empty?
+      index_opts[:skip_resources] = args[0] if args.length > 0
+      index_opts[:verbose_output] = args[1] if args.length > 1
+      index_opts[:softcommit] = args[2] if args.length > 2
+    end
+    index_opts
+  end
+
+  def self.index_pid(pid, *args)
     # We found an object with the desired PID. Let's reindex it
+    index_opts = extract_index_opts(args)
     begin
       active_fedora_object = nil
 
@@ -77,19 +102,19 @@ module Cul::Hydra::Indexer
           if skip_generic_resources && active_fedora_object.is_a?(GenericResource)
             puts 'Object was skipped because GenericResources are being skipped and it is a GenericResource.'
           else
-            if softcommit
+            if index_opts[:softcommit]
               active_fedora_object.update_index
             else
               # Using direct solr query to update document without soft commiting
               ActiveFedora::SolrService.add(active_fedora_object.to_solr)
             end
-            puts 'done.' if verbose_output
+            puts 'done.' if index_opts[:verbose_output]
           end
           break
         rescue RestClient::RequestTimeout, Errno::EHOSTUNREACH => e
           remaining_attempts = (NUM_FEDORA_RETRY_ATTEMPTS-1) - i
           if remaining_attempts == 0
-            raise e
+            raise
           else
             Rails.logger.error "Error: Could not connect to fedora. (#{e.class.to_s + ': ' + e.message}).  Will retry #{remaining_attempts} more #{remaining_attempts == 1 ? 'time' : 'times'} (after a #{DELAY_BETWEEN_FEDORA_RETRY_ATTEMPTS} second delay)."
             sleep DELAY_BETWEEN_FEDORA_RETRY_ATTEMPTS
@@ -102,15 +127,18 @@ module Cul::Hydra::Indexer
             sleep 5
           else
             # Other RuntimeErrors should be passed on
-            raise e
+            raise
           end
         end
       end
     rescue SystemExit, Interrupt => e
       # Allow system interrupt (ctrl+c)
-      raise e
+      raise
     rescue Exception => e
       puts "Encountered problem with #{pid}.  Skipping record.  Exception class: #{e.class.name}.  Message: #{e.message}"
+      if index_opts[:reraise]
+        raise
+      end
     end
   end
 end
