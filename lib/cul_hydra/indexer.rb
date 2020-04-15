@@ -68,8 +68,12 @@ module Cul::Hydra::Indexer
     end
   end
 
+  # this is a compatibility method for bridging the previously used postional arguments to
+  # keyword arguments by extracting an opts hash from varargs
   # legacy positional opts signature: skip_resources = false, verbose_output = false, softcommit = true
-  # 
+  # keyword defaults are in DEFAULT_INDEX_OPTS
+  # @param args [Array] a list of arguments ending with an options hash
+  # @return options hash
   def self.extract_index_opts(args)
     args = args.dup # do not modify the original list
     # extract opts hash
