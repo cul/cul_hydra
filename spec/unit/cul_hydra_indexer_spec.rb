@@ -10,7 +10,7 @@ describe Cul::Hydra::Indexer, type: :unit do
 			end
 		end
 		context 'with legacy positional arguments' do
-			let(:args) { [:skip_resources, :verbose_output, :softcommit] }
+			let(:args) { [:skip_generic_resources, :verbose_output, :softcommit] }
 			let(:extracted_opts) { described_class.extract_index_opts(args) }
 			it 'retains legacy positional arguments' do
 				expected_opts = args.map {|arg| [arg, arg] }.to_h.merge(reraise: false)
@@ -22,6 +22,25 @@ describe Cul::Hydra::Indexer, type: :unit do
 			let(:extracted_opts) { described_class.extract_index_opts(args) }
 			it 'extracts merges into defaults' do
 				expect(extracted_opts).to eq(described_class::DEFAULT_INDEX_OPTS.merge(args.first))
+			end
+		end
+	end
+	describe '#index_pid' do
+		let(:index_opts) { { skip_generic_resources: false, softcommit: true, reraise: true } }
+		let(:mock_object) { GenericResource.new }
+		let(:pid) { 'abc:123' }
+		before do
+			expect(ActiveFedora::Base).to receive(:find).with(pid, any_args).and_return(mock_object)
+		end
+		it "looks up an object and calls update_index" do
+			expect(mock_object).to receive(:update_index)
+			described_class.index_pid(pid, index_opts)
+		end
+		context 'skipping generic resources' do
+			let(:index_opts) { { skip_generic_resources: true, softcommit: true, reraise: true } }
+			it "does not index a generic resource" do
+				expect(mock_object).not_to receive(:update_index)
+				described_class.index_pid(pid, index_opts)
 			end
 		end
 	end

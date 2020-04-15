@@ -1,9 +1,11 @@
+require "active-fedora"
+
 module Cul::Hydra::Indexer
 
   NUM_FEDORA_RETRY_ATTEMPTS = 3
   DELAY_BETWEEN_FEDORA_RETRY_ATTEMPTS = 5.seconds
   DEFAULT_INDEX_OPTS = {
-    skip_resources: false, verbose_output: false, softcommit: true, reraise: false
+    skip_generic_resources: false, verbose_output: false, softcommit: true, reraise: false
   }.freeze
   def self.descend_from(pid, pids_to_omit=nil, verbose_output=false)
     if pid.blank?
@@ -83,7 +85,7 @@ module Cul::Hydra::Indexer
     index_opts = DEFAULT_INDEX_OPTS.merge(index_opts)
     # assign any legacy positional arguments, permitting explicit nils
     unless args.empty?
-      index_opts[:skip_resources] = args[0] if args.length > 0
+      index_opts[:skip_generic_resources] = args[0] if args.length > 0
       index_opts[:verbose_output] = args[1] if args.length > 1
       index_opts[:softcommit] = args[2] if args.length > 2
     end
@@ -99,7 +101,7 @@ module Cul::Hydra::Indexer
       NUM_FEDORA_RETRY_ATTEMPTS.times do |i|
         begin
           active_fedora_object = ActiveFedora::Base.find(pid, :cast => true)
-          if skip_generic_resources && active_fedora_object.is_a?(GenericResource)
+          if index_opts[:skip_generic_resources] && active_fedora_object.is_a?(GenericResource)
             puts 'Object was skipped because GenericResources are being skipped and it is a GenericResource.'
           else
             if index_opts[:softcommit]
