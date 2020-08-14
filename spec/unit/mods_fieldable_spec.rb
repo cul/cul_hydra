@@ -51,7 +51,7 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
     end
 
     it "should have a single sortable title" do
-      expect(@solr_doc).to include("title_si" => 'Manuscript, unidentified')
+      expect(@solr_doc).to include("title_si" => 'MANUSCRIPT UNIDENTIFIED')
       # title_display_ssm is assigned in the ModsDocument OM selector
       expect(@solr_doc).to include("title_ssm" => ['The Manuscript, unidentified'])
     end
@@ -284,6 +284,16 @@ describe Cul::Hydra::Solrizer::ModsFieldable, type: :unit do
       test = ModsIndexDatastream.new(@all_ng)
       expect(test.search_scope).to eql [expected]
       expect(test.to_solr['search_scope_ssi']).to eql expected
+    end
+  end
+  describe ".sort_title" do
+    before :all do
+      @all_ng = Nokogiri::XML::Document.parse(fixture( File.join("CUL_MODS", "mods-titles-extended.xml")))
+    end
+    let(:expected) { 'GHOTOGRAPHS ゐ' }
+    it "should index a sort title without diacritics, punctuation or case sensitivity" do
+      test = ModsIndexDatastream.new(@all_ng)
+      expect(test.to_solr['title_si']).to eql expected
     end
   end
 end

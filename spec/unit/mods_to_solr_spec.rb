@@ -297,7 +297,7 @@ describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
       context "copied" do
         it "should include nonSort text in display title and exclude it from index title" do
           expect(subject["title_display_ssm"]).to include('The Manuscript, unidentified')
-          expect(subject["title_si"]).to eql "Manuscript, unidentified"
+          expect(subject["title_si"]).to eql "MANUSCRIPT UNIDENTIFIED"
         end
         it "should create the expected Solr hash for mapped project values" do
           # check the mapped facet value
@@ -441,7 +441,7 @@ describe "Cul::Hydra::Datastreams::ModsDocument", type: :unit do
     context "has document title elements in the MODS source" do
       let(:mods_src) { fixture( File.join("CUL_MODS", "mods-titles.xml") ) }
       it "should have the expected main sort title" do
-        expect(subject["title_si"]).to include("Photographs")
+        expect(subject["title_si"]).to include("PHOTOGRAPHS")
       end
       context "include alternative titles" do
         it "should have all forms of alternative titles in the relevant field" do

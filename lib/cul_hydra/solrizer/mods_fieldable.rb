@@ -39,7 +39,11 @@ module Cul::Hydra::Solrizer
           n_t = n_t.sub(/^"(.*)"$/, "\\1")
           n_t = n_t.sub(/^'(.*)'$/, "\\1")
           is_negative_number = n_t =~ /^-\d+$/
-          n_t = n_t.sub(/^[[:punct:]]+/, '')
+          if strip_punctuation == :all
+            n_t = n_t.gsub(/[[:punct:]]/, '')
+          else
+            n_t = n_t.sub(/^[[:punct:]]+/, '')
+          end
           # this may have 'created' leading/trailing space, so strip
           n_t.strip!
           n_t = '-' + n_t if is_negative_number
@@ -92,7 +96,13 @@ module Cul::Hydra::Solrizer
           base_text << child.text unless child.name == 'nonSort'
         end
       end
-      base_text = ModsFieldable.normalize(base_text, true)
+      base_text = ModsFieldable.normalize(base_text, :all)
+      # decompose and strip unicode combining characters
+      base_text = base_text.unicode_normalize(:nfd)
+      base_text.gsub!(/[\u0300-\u036F]/,'')
+      # uppercase per Unicode, for ASCII/Latin
+      # TODO: decide whether to use full Unicode case, other language options (Turkish, Lithuanian, etc.)
+      base_text = base_text.upcase(:ascii)
       base_text = nil if base_text.empty?
       base_text
     end

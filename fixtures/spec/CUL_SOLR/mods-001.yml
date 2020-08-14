@@ -19,7 +19,7 @@ lib_collection_sim: ['Pulitzer Prizes']
 lib_collection_ssm: ['Pulitzer Prizes']
 lib_project_short_ssim: ['Pres Orders']
 lib_project_full_ssim: ['Customer Order Collection']
-title_si: 'Photographs'
+title_si: 'PHOTOGRAPHS'
 title_display_ssm: ['The Photographs']
 lib_format_sim: ['photographs']
 lib_format_ssm: ['photographs']
