@@ -1,6 +1,6 @@
 module Cul
   module Hydra
-    VERSION = '1.9.5'
+    VERSION = '1.9.6'
     def self.version
       VERSION
     end

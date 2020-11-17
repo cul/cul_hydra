@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.summary = "ActiveFedora, OM, and Solrizer implementations for CUL repository apps"
 
   s.add_dependency("rails", "~>4.2.10")
-  s.add_dependency("bootstrap-sass", "~>3.3.7")
+  s.add_dependency("bootstrap-sass", "~>3.4.1")
   s.add_dependency("blacklight", "~>6.0")
   s.add_dependency('httpclient')
   # AF 8.7.0 removes ActiveFedora::RDF::Indexing
