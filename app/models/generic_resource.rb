@@ -1,4 +1,3 @@
-require "cul_image_props"
 require "mime/types"
 require "uri"
 require "open-uri"
@@ -53,15 +52,6 @@ class GenericResource < ::ActiveFedora::Base
       end
     end
 
-    if self.zooming?
-      fz = rels_int.relationships(datastreams['content'], :foaf_zooming).first.object.to_s.split('/')[-1]
-      ds = datastreams[fz]
-      unless ds.nil?
-        rft_id = ds.controlGroup == 'E' ? datastreams[fz].dsLocation : legacy_content_path(ds,'info:fedora/datastreams/')
-        solr_doc['rft_id_ss'] = rft_id
-      end
-    end
-
     if (service_ds = self.service_datastream)
       solr_doc['service_dslocation_ss'] = service_ds.dsLocation
     end
@@ -80,22 +70,6 @@ class GenericResource < ::ActiveFedora::Base
     solr_doc['access_control_levels_ssim'] ||= [Cul::Hydra::AccessLevels::ACCESS_LEVEL_PUBLIC]
     solr_doc['access_control_permissions_bsi'] = !!solr_doc['access_control_permissions_bsi']
     solr_doc
-  end
-
-  def thumbnail_info
-    thumb = rels_int.relationships(datastreams['content'],:foaf_thumbnail).first
-    if thumb
-      t_dsid = thumb.object.to_s.split('/')[-1]
-      t_url = "#{ActiveFedora.fedora_config.credentials[:url]}/objects/#{pid}/datastreams/#{t_dsid}/content"
-      return {:url=>t_url,:mime=>datastreams[t_dsid].mimeType}
-    elsif self.zooming?
-      t_dsid = rels_int.relationships(dsuri, :foaf_zooming).first.object.to_s.split('/')[-1]
-      t_parms = DJATOKA_THUMBNAIL_PARMS.merge({"rft_id" => datastreams[t_dsid].dsLocation})
-      url = "#{DJATOKA_BASE_URL}?#{options.map { |key, value|  "#{CGI::escape(key.to_s)}=#{CGI::escape(value.to_s)}"}.join("&")  }"
-      {:url => url, :mime => t_parms["svc.format"]}
-    else
-      return {:asset => "cul_hydra/crystal/file.png",:mime=>'image/png'}
-    end
   end
 
   def linkable_resources
@@ -133,17 +107,6 @@ class GenericResource < ::ActiveFedora::Base
       end
     end
     results
-  end
-
-  def zooming?
-    content = datastreams['content']
-    return false unless content
-    zr = rels_int.relationships(content, :foaf_zooming)
-    if (zr && zr.first)
-      return !zr.first.blank?
-    else
-      false
-    end
   end
 
   def closed?

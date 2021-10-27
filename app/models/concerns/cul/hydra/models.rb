@@ -17,7 +17,6 @@ module Hydra
     autoload :Aggregator, 'cul/hydra/models/aggregator'
     autoload :Common, 'cul/hydra/models/common'
     autoload :ImageResource, 'cul/hydra/models/image_resource'
-    autoload :LinkableResources, 'cul/hydra/models/linkable_resources'
     autoload :RelsInt, 'cul/hydra/models/rels_int'
     autoload :Resource, 'cul/hydra/models/resource'
   end

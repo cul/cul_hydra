@@ -8,19 +8,6 @@ module Cul::Hydra::Models::ImageResource
   FORMAT_OF_PREDICATE = ActiveFedora::Predicates.short_predicate("http://purl.org/dc/terms/isFormatOf").to_s
   FORMAT_URI = RDF::URI("http://purl.org/dc/terms/format")
 
-  DJATOKA_THUMBNAIL_PARMS = {
-    "url_ver" => "Z39.88-2004",
-    "svc_id" => "info:lanl-repo/svc/getRegion",
-    "svc_val_fmt" => "info:ofi/fmt:kev:mtx:jpeg2000",
-    "svc.format" => "image/jpeg",
-    "svc.level" => "",
-    "svc.rotate" => "0",
-    "svc.scale" => "200",
-    "svc.clayers" => ""
-  }
-
-  DJATOKA_BASE_URL = "http://iris.cul.columbia.edu:8888/resolve"
-
   EXIF_ORIENTATION_TO_DEGREES = {
     'top-left' => 0,
     'left-bottom' => 90,
@@ -57,33 +44,6 @@ module Cul::Hydra::Models::ImageResource
     end
   end
 
-  def zooming?
-    zoom = rels_int.relationships(datastreams['content'],:foaf_zooming).first
-    return zoom.object.to_s if zoom
-    datastreams.each do |k,v|
-      if v.mimeType =~ /image\/jp2$/i
-        zoom = "info:fedora/#{k.dsid}"
-      end
-    end
-    return zoom
-  end
-
-  def thumbnail_info
-    thumb = rels_int.relationships(datastreams['content'],:foaf_thumbnail).first
-    if thumb
-      t_dsid = thumb.object.to_s.split('/')[-1]
-      t_url = "#{ActiveFedora.fedora_config.credentials[:url]}/objects/#{pid}/datastreams/#{t_dsid}/content"
-      return {:url=>t_url,:mime=>datastreams[t_dsid].mimeType}
-    elsif (zoom = self.zooming?)
-      t_dsid = zoom.split('/')[-1]
-      t_parms = DJATOKA_THUMBNAIL_PARMS.merge({"rft_id" => datastreams[t_dsid].dsLocation})
-      url = "#{DJATOKA_BASE_URL}?#{options.map { |key, value|  "#{CGI::escape(key.to_s)}=#{CGI::escape(value.to_s)}"}.join("&")  }"
-      {:url => url, :mime => t_parms["svc.format"]}
-    else
-      return {:asset=>"cul_hydra/crystal/file.png",:mime=>'image/png'}
-    end
-  end
-
   # The number of rotational degrees required to display this image as upright
   def required_rotation_for_upright_display
     required_rotation_orientation_in_degrees = (360 - self.orientation) % 360
@@ -102,5 +62,4 @@ module Cul::Hydra::Models::ImageResource
   def orientation
     self.relationships(:orientation).present? ? EXIF_ORIENTATION_TO_DEGREES[self.relationships(:orientation).first.to_s] : 0
   end
-
 end

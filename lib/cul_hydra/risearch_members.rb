@@ -13,8 +13,7 @@ module ClassMethods
       recursive_member_query += ' and $cmodel <mulgara:is> <info:fedora/ldpd:' + cmodel_type + '>'
     end
 
-    puts 'Performing query:' if verbose_output
-    puts recursive_member_query if verbose_output
+    log_risearch_query(recursive_member_query, verbose_output)
 
     search_response = JSON(Cul::Hydra::Fedora.repository.find_by_itql(recursive_member_query, {
       :type => 'tuples',
@@ -35,8 +34,7 @@ module ClassMethods
       'select $pid from <#ri>
       where $pid <http://purl.oclc.org/NET/CUL/memberOf> <fedora:' + pid + '>'
 
-    puts 'Performing query:' if verbose_output
-    puts direct_member_query if verbose_output
+    log_risearch_query(direct_member_query, verbose_output)
 
     search_response = JSON(Cul::Hydra::Fedora.repository.find_by_itql(direct_member_query, {
       :type => 'tuples',
@@ -72,8 +70,7 @@ module ClassMethods
       where $pid <http://purl.oclc.org/NET/CUL/memberOf> <info:fedora/#{pid}>
       having $k0 <http://mulgara.org/mulgara#occursMoreThan> '0.0'^^<http://www.w3.org/2001/XMLSchema#double>;"
 
-      puts 'Performing query:' if verbose_output
-      puts direct_members_with_ds_query if verbose_output
+      log_risearch_query(direct_members_with_ds_query, verbose_output)
 
       search_response = JSON.parse(Cul::Hydra::Fedora.repository.find_by_itql(direct_members_with_ds_query, {
         :type => 'tuples',
@@ -99,8 +96,7 @@ module ClassMethods
       'select $pid from <#ri>
       where $pid <info:fedora/fedora-system:def/relations-external#isConstituentOf> <fedora:' + pid + '>'
 
-    puts 'Performing query:' if verbose_output
-    puts project_constituent_query if verbose_output
+    log_risearch_query(project_constituent_query, verbose_output)
 
     search_response = JSON(Cul::Hydra::Fedora.repository.find_by_itql(project_constituent_query, {
       :type => 'tuples',
@@ -130,8 +126,7 @@ module ClassMethods
       'select $pid from <#ri>
       where $pid <http://purl.org/dc/terms/publisher> <fedora:' + pid + '>'
 
-    puts 'Performing query:' if verbose_output
-    puts project_constituent_query if verbose_output
+    log_risearch_query(project_constituent_query, verbose_output)
 
     search_response = JSON(Cul::Hydra::Fedora.repository.find_by_itql(project_constituent_query, {
       :type => 'tuples',
@@ -199,6 +194,9 @@ module ClassMethods
     return pids_to_return
   end
 
+  def log_risearch_query(query, verbose_output = false)
+    puts "Performing query:\n#{query}" if verbose_output
+  end
 end
 extend ClassMethods
 end

@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.description = "Hydra implementations for CUL repository apps"
   s.summary = "ActiveFedora, OM, and Solrizer implementations for CUL repository apps"
 
-  s.add_dependency("rails", "~>4.2.10")
+  s.add_dependency("rails", '>= 5.2', '< 6.0')
   s.add_dependency("bootstrap-sass", "~>3.4.1")
   s.add_dependency("blacklight", "~>6.0")
   s.add_dependency('httpclient')
@@ -23,14 +23,13 @@ Gem::Specification.new do |s|
   s.add_dependency('active-fedora', '>= 8.0', '< 8.7.0')
   s.add_dependency('active-triples', '~> 0.4.0')
   s.add_dependency('active_fedora_finders', '>=0.5.0')
-  s.add_dependency('cul_image_props')
   s.add_dependency('mods')
   s.add_dependency('thread')
   s.add_dependency('rdf', '>=1.1.5')
   s.add_dependency('sparql') # 1.1.5 breaks Ruby 1.9.3 compatibility
   s.add_dependency('json', '>=1.8.3')
   s.add_dependency('rake', '<= 11.3') # Rake >= 11.3 breaks tests
-  s.add_dependency('rubydora', '~> 2.0.0') # rubydora 2.1.0 breaks tests
+  s.add_dependency('rubydora', '~> 2.1.0')
   s.add_dependency('sprockets', '~>3.0') # sprockets 4 breaks tests
   s.add_development_dependency "sqlite3", "~> 1.3.9"
   s.add_development_dependency 'rspec-rails', '~> 3.5.0'

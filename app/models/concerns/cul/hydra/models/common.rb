@@ -284,10 +284,6 @@ module Cul::Hydra::Models::Common
     return result
   end
 
-  def thumbnail_info
-    {:asset=>("cul_hydra/crystal/kmultiple.png"),:mime_type=>"image/png"}
-  end
-
   def get_singular_rel(predicate)
     property = relationships(predicate).first
     return nil unless property
