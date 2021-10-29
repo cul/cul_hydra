@@ -4,10 +4,10 @@ module Cul::Hydra::Resolver
   extend ActiveSupport::Concern
 
   included do 
-    # Whenever an action raises SolrHelper::InvalidSolrID, this block gets executed.
+    # Whenever an action raises SolrHelper::RecordNotFound, this block gets executed.
     # Hint: the SolrHelper #get_solr_response_for_doc_id method raises this error,
     # which is used in the #show action here.
-    self.rescue_from Blacklight::Exceptions::InvalidSolrID, :with => :invalid_solr_id_error
+    self.rescue_from Blacklight::Exceptions::RecordNotFound, :with => :invalid_solr_id_error
     # When RSolr::RequestError is raised, the rsolr_request_error method is executed.
     # The index action will more than likely throw this one.
     # Example, when the standard query parser is used, and a user submits a "bad" query.
@@ -19,7 +19,7 @@ module Cul::Hydra::Resolver
     solr_params = blacklight_config.default_document_solr_params.merge!(extra_controller_params)
     solr_params[:fq] = "identifier_ssim:#{(id)}"
     solr_response = find((blacklight_config.document_solr_request_handler || blacklight_config.qt), solr_params)
-    raise Blacklight::Exceptions::InvalidSolrID.new if solr_response.docs.empty?
+    raise Blacklight::Exceptions::RecordNotFound.new if solr_response.docs.empty?
     document = SolrDocument.new(solr_response.docs.first, solr_response)
     @response, @document = [solr_response, document]
   end
@@ -51,7 +51,7 @@ module Cul::Hydra::Resolver
       end
     end
   end
-  
+
   # when a request for /resolve/:action/BAD_SOLR_ID is made, this method is executed...
   def invalid_solr_id_error
     id = params.delete(:id)
@@ -60,10 +60,6 @@ module Cul::Hydra::Resolver
   end
 
   def blacklight_solr
-    @solr ||=  RSolr.connect(blacklight_solr_config)
-  end
-
-  def blacklight_solr_config
-    Blacklight.solr_config
+    @solr ||=  Blacklight.default_index
   end
 end

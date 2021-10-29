@@ -3,7 +3,7 @@ module Cul::Hydra::ApplicationIdBehavior
 
   def find_for_params(path,solr_params)
     res = blacklight_config.repository.send_and_receive(path, {key=>solr_params.to_hash, method:blacklight_config.http_method})
-    Blacklight::SolrResponse.new(res, solr_params, solr_document_model: blacklight_config.solr_document_model)
+    Blacklight::SolrResponse.new(res, solr_params, blacklight_config: blacklight_config)
   end
 
   def get_solr_response_for_app_id(id=nil, extra_controller_params={})
@@ -18,7 +18,7 @@ module Cul::Hydra::ApplicationIdBehavior
     #p[:qt] ||= blacklight_config.document_solr_request_handler
     repository = blacklight_config.repository_class.new(blacklight_config)
     solr_response = repository.search(p)
-    raise Blacklight::Exceptions::InvalidSolrID.new(id) if solr_response.docs.empty?
+    raise Blacklight::Exceptions::RecordNotFound.new(id) if solr_response.docs.empty?
     document = SolrDocument.new(solr_response.docs.first, solr_response)
     @response, @document = [solr_response, document]
   end
@@ -35,7 +35,7 @@ module Cul::Hydra::ApplicationIdBehavior
     #p[:qt] ||= blacklight_config.document_solr_request_handler
     repository = blacklight_config.repository_class.new(blacklight_config)
     solr_response = repository.search(p)
-    raise Blacklight::Exceptions::InvalidSolrID.new(id) if solr_response.docs.empty?
+    raise Blacklight::Exceptions::RecordNotFound.new(id) if solr_response.docs.empty?
     document = SolrDocument.new(solr_response.docs.first, solr_response)
     @response, @document = [solr_response, document]
   end

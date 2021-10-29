@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency("rails", '>= 5.2', '< 6.0')
   s.add_dependency("bootstrap-sass", "~>3.4.1")
-  s.add_dependency("blacklight", "~>6.0")
+  s.add_dependency("blacklight", "~>7.0")
   s.add_dependency('httpclient')
   # AF 8.7.0 removes ActiveFedora::RDF::Indexing
   s.add_dependency('active-fedora', '>= 8.0', '< 8.7.0')
