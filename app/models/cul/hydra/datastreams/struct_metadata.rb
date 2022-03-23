@@ -2,7 +2,7 @@ module Cul
 module Hydra
 module Datastreams
 class StructMetadata < ::ActiveFedora::Datastream
-  include ::ActiveFedora::Datastreams::NokogiriDatastreams
+  include ::Cul::Hydra::Datastreams::NokogiriDatastreams
 
   def self.default_attributes
     super.merge(:controlGroup => 'M', :mimeType => 'text/xml')

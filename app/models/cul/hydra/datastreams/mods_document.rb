@@ -5,6 +5,7 @@ module Cul
 module Hydra
 module Datastreams
 class ModsDocument < ::ActiveFedora::OmDatastream
+  include ::Cul::Hydra::Datastreams::NokogiriDatastreams
   include ::OM::XML::TerminologyBasedSolrizer
   include Cul::Hydra::Solrizer::TerminologyBasedSolrizer
   include Cul::Hydra::Solrizer::ModsFieldable

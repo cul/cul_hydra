@@ -3,6 +3,7 @@ module Cul
 module Hydra
 module Datastreams
 class DCMetadata < ::ActiveFedora::OmDatastream
+  include ::Cul::Hydra::Datastreams::NokogiriDatastreams
 
   after_save :action_after_save
   set_terminology do |t|
