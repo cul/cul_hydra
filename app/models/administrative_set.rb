@@ -8,7 +8,7 @@ class AdministrativeSet < ::ActiveFedora::Base
 
   has_and_belongs_to_many :members, :property => :ldp_contains, :class_name=>'ActiveFedora::Base'
 
-  rdf_types(RDF::CUL.Aggregator)
+  rdf_types(RDF::Cul.Aggregator)
   rdf_types(RDF::PCDM.AdministrativeSet)
 
   def route_as

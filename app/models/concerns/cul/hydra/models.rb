@@ -5,9 +5,9 @@ require 'rdf'
 module Cul
 module Hydra
   module Models
-    AGGREGATOR_TYPE = RDF::CUL.Aggregator
-    RESOURCE_TYPE = RDF::CUL.Resource
-    MEMBER_OF = RDF::CUL.memberOf
+    AGGREGATOR_TYPE = RDF::Cul.Aggregator
+    RESOURCE_TYPE = RDF::Cul.Resource
+    MEMBER_OF = RDF::Cul.memberOf
     MEMBER_SPARQL = <<-SPARQL
       SELECT ?pid WHERE { ?pid <http://purl.oclc.org/NET/CUL/memberOf> <info:fedora/%PID%> }
     SPARQL

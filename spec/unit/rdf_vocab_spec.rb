@@ -1,10 +1,10 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 class VocabHarness
   def self.cul
-    [RDF::CUL,
-      RDF::CUL::RESOURCE::STILLIMAGE::ASSESSMENT, 
-      RDF::CUL::RESOURCE::STILLIMAGE::BASIC,
-      RDF::CUL::FOAF]
+    [RDF::Cul,
+      RDF::Cul::RESOURCE::STILLIMAGE::ASSESSMENT, 
+      RDF::Cul::RESOURCE::STILLIMAGE::BASIC,
+      RDF::Cul::FOAF]
   end
   def self.fcrepo3
     [RDF::FCREPO3::SYSTEM,
@@ -31,7 +31,7 @@ class VocabHarness
 end
 
 describe "RDF Vocabularies" do
-  describe RDF::CUL do
+  describe RDF::Cul do
     it "should include all the CUL vocabularies" do
       VocabHarness.cul.each do |v|
         expect(v.superclass).to be RDF::StrictVocabulary

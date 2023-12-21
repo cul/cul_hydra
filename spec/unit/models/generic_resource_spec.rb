@@ -18,10 +18,10 @@ describe GenericResource, type: :unit do
   describe '#rdf_types!' do
     subject { o.rdf_types! }
     it do
-      expect(subject.relationships(:rdf_type)).to include(RDF::CUL.Resource.to_s)
+      expect(subject.relationships(:rdf_type)).to include(RDF::Cul.Resource.to_s)
       expect(subject.relationships(:rdf_type)).to include(RDF::PCDM.Object.to_s)
       expect(subject.relationships(:rdf_type)).not_to include(RDF::PCDM.Collection.to_s)
-      expect(subject.relationships(:rdf_type)).not_to include(RDF::CUL.Aggregator.to_s)
+      expect(subject.relationships(:rdf_type)).not_to include(RDF::Cul.Aggregator.to_s)
     end
   end
   context '#to_solr' do

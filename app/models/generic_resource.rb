@@ -21,12 +21,12 @@ class GenericResource < ::ActiveFedora::Base
   has_datastream :name => "content", :type=>::ActiveFedora::Datastream, :versionable => true
   has_metadata :name => "accessControlMetadata", :type=>Cul::Hydra::Datastreams::AccessControlMetadata, :versionable => false
 
-  rdf_types(RDF::CUL.Resource)
+  rdf_types(RDF::Cul.Resource)
   rdf_types(RDF::PCDM.Object)
 
   def assert_content_model
     super
-    add_relationship(:rdf_type, RDF::CUL.Resource.to_s)
+    add_relationship(:rdf_type, RDF::Cul.Resource.to_s)
   end
 
   def route_as

@@ -32,7 +32,7 @@ describe AdministrativeSet, type: :unit do
     }
     subject { aggregator.rdf_types! }
     it do
-      expect(subject.relationships(:rdf_type)).to include(RDF::CUL.Aggregator.to_s)
+      expect(subject.relationships(:rdf_type)).to include(RDF::Cul.Aggregator.to_s)
       expect(subject.relationships(:rdf_type)).to include(RDF::PCDM.AdministrativeSet.to_s)
       expect(subject.relationships(:rdf_type)).not_to include(RDF::PCDM.Object.to_s)
     end

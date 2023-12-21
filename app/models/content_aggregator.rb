@@ -1,5 +1,5 @@
 class ContentAggregator < GenericAggregator
-  rdf_types(RDF::CUL.Aggregator)
+  rdf_types(RDF::Cul.Aggregator)
   rdf_types(RDF::PCDM.Object)
   def to_solr(solr_doc = Hash.new, opts={})
     solr_doc = super
