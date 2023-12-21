@@ -32,7 +32,7 @@ module Cul::Hydra::Models::Resource
 
   def resource!
     add_relationship(:rdf_type, RDF::Cul.Resource.to_s)
-    add_relationship(:rdf_type, RDF::PCDM.Object.to_s)
+    add_relationship(:rdf_type, RDF::Pcdm.Object.to_s)
     @metadata_is_dirty = true
     update
   end

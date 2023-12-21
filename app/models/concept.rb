@@ -7,7 +7,7 @@ class Concept < GenericAggregator
   include Cul::Hydra::Models::Aggregator
 
   rdf_types(RDF::Cul.Aggregator)
-  rdf_types(RDF::PCDM.Object)
+  rdf_types(RDF::Pcdm.Object)
 
   has_file_datastream :name => "descriptionText", :type=>Cul::Hydra::Datastreams::EncodedTextDatastream,
                  :versionable => false, :label => 'Textual Description of Concept',

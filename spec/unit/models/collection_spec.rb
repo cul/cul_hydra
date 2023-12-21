@@ -33,8 +33,8 @@ describe Collection, type: :unit do
     subject { aggregator.rdf_types! }
     it do
       expect(subject.relationships(:rdf_type)).to include(RDF::Cul.Aggregator.to_s)
-      expect(subject.relationships(:rdf_type)).to include(RDF::PCDM.Collection.to_s)
-      expect(subject.relationships(:rdf_type)).not_to include(RDF::PCDM.Object.to_s)
+      expect(subject.relationships(:rdf_type)).to include(RDF::Pcdm.Collection.to_s)
+      expect(subject.relationships(:rdf_type)).not_to include(RDF::Pcdm.Object.to_s)
     end
   end
   describe '#to_solr' do

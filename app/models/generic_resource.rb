@@ -22,7 +22,7 @@ class GenericResource < ::ActiveFedora::Base
   has_metadata :name => "accessControlMetadata", :type=>Cul::Hydra::Datastreams::AccessControlMetadata, :versionable => false
 
   rdf_types(RDF::Cul.Resource)
-  rdf_types(RDF::PCDM.Object)
+  rdf_types(RDF::Pcdm.Object)
 
   def assert_content_model
     super

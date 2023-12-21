@@ -2,7 +2,7 @@
 # This file generated automatically using vocab-fetch from https://raw.githubusercontent.com/duraspace/pcdm/master/models.rdf
 require 'rdf'
 module RDF
-  class PCDM < RDF::StrictVocabulary('http://pcdm.org/models#')
+  class Pcdm < RDF::StrictVocabulary('http://pcdm.org/models#')
     # Class definitions
     term :AdministrativeSet,
          comment: %(
