@@ -5,7 +5,7 @@ $:.unshift lib unless $:.include?(lib)
 require 'cul_hydra/version'
 
 Gem::Specification.new do |s|
-  s.required_ruby_version = '>= 2.2'
+  s.required_ruby_version = '>= 2.6'
   s.name = "cul_hydra"
   s.version = Cul::Hydra::VERSION
   s.platform = Gem::Platform::RUBY
@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.description = "Hydra implementations for CUL repository apps"
   s.summary = "ActiveFedora, OM, and Solrizer implementations for CUL repository apps"
 
-  s.add_dependency("rails", '>= 5.2.3', '< 6.1')
+  s.add_dependency("rails", '>= 6.0', '< 6.2')
   s.add_dependency('httpclient')
   # AF 8.7.0 removes ActiveFedora::RDF::Indexing
   s.add_dependency('active-fedora', '>= 8.0', '< 8.7.0')
@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
   s.add_dependency('rake', '<= 11.3') # Rake >= 11.3 breaks tests
   s.add_dependency('rubydora', '~> 2.1.0')
   s.add_development_dependency "sqlite3", "~> 1.4.2"
-  s.add_development_dependency 'rspec-rails', '~> 3.5.0'
+  s.add_development_dependency 'rspec-rails', '~> 4.0'
   s.add_development_dependency 'rspec-json_expectations'
   s.add_development_dependency "jettywrapper", ">=1.4.0"
   s.add_development_dependency "equivalent-xml", ">= 0.2.4"
