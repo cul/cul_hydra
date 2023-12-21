@@ -16,7 +16,6 @@ Gem::Specification.new do |s|
   s.summary = "ActiveFedora, OM, and Solrizer implementations for CUL repository apps"
 
   s.add_dependency("rails", '>= 5.2.3', '< 6.1')
-  s.add_dependency("blacklight", "~>7.0")
   s.add_dependency('httpclient')
   # AF 8.7.0 removes ActiveFedora::RDF::Indexing
   s.add_dependency('active-fedora', '>= 8.0', '< 8.7.0')
