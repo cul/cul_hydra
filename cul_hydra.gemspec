@@ -34,6 +34,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec-json_expectations'
   s.add_development_dependency "jettywrapper", ">=1.4.0"
   s.add_development_dependency "equivalent-xml", ">= 0.2.4"
+  s.add_development_dependency 'rainbow', '~> 3.0'
 
   s.files = Dir.glob("{bin,lib,app,config,fixtures}/**/*")
   s.require_paths = ['app','config','lib', 'fixtures']

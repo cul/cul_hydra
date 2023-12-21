@@ -8,11 +8,12 @@ describe ActiveFedora::Datastream, type: :integration do
     ActiveFedora::Base.new(pid:"test:ds")
   }
   let(:ds_location) {
-    'file:' + absolute_fixture_path(File.join("CUL_MODS", "mods-001.xml"))
+    'file:/opt/allowed/external-file-content.xml'
   }
   let(:ds_content) {
     dsc = ''
-    fixture(File.join("CUL_MODS", "mods-001.xml")).read(nil,dsc)
+    fixture_path = File.expand_path(File.dirname(__FILE__) + '/../../docker/fedora/external-file-content.xml')
+    open(fixture_path) {|io| io.read(nil,dsc) }
     dsc
   }
   let(:ds_checksum) {

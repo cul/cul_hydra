@@ -2,16 +2,13 @@ APP_ROOT = File.expand_path("#{File.dirname(__FILE__)}/../../") unless defined?(
 
 namespace :cul_hydra do
   desc "CI build"
-  task :ci do
+  task ci: ['cul_hydra:docker:setup_config_files'] do
     ENV['environment'] = "test"
-    #Rake::Task["active_fedora:configure_jetty"].invoke
-    jetty_params = Jettywrapper.load_config
-    Rake::Task["jetty:clean"].invoke
-    error = Jettywrapper.wrap(jetty_params) do
+    ENV['RAILS_ENV'] = "test"
+    docker_wrapper do
       Rake::Task["cul_hydra:cmodel:reload_all"].invoke
       Rake::Task['cul_hydra:coverage'].invoke
     end
-    raise "test failures: #{error}" if error
   end
 
   desc "Execute specs with coverage"

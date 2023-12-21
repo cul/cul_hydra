@@ -1,10 +1,10 @@
-default: &default
-  :url: http://127.0.0.1:8983/fedora
+development:
   :user: fedoraAdmin
   :password: fedoraAdmin
-development:
-  <<: *default
+  :url: http://localhost:8080/fedora
+  :time_zone: America/New_York
 test:
-  <<: *default
-production:
-  <<: *default
+  :user: fedoraAdmin
+  :password: fedoraAdmin
+  :url: http://localhost:9080/fedora
+  :time_zone: America/New_York

@@ -1,5 +1,7 @@
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'lib'))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'app','models'))
+APP_ROOT = File.expand_path("#{File.dirname(__FILE__)}") unless defined?(APP_ROOT)
+
 require 'rake/clean'
 require 'rubygems'
 require 'bundler'
@@ -9,11 +11,7 @@ begin
 # This code is in a begin/rescue block so that the Rakefile is usable
 # in an environment where RSpec is unavailable (i.e. production).
 
-require 'jettywrapper'
-JETTY_ZIP_BASENAME = 'fedora-3.8.1-with-risearch'
-Jettywrapper.url = "https://github.com/cul/hydra-jetty/archive/#{JETTY_ZIP_BASENAME}.zip"
-
-require 'rspec/core/rake_task'
+  require 'rspec/core/rake_task'
 
   namespace :cul_hydra do
     RSpec::Core::RakeTask.new(:rspec) do |spec|
@@ -29,11 +27,15 @@ require 'rspec/core/rake_task'
     end
   end
 rescue LoadError => e
-puts "[Warning] Exception creating rspec rake tasks or loading jettywrapper.  This message can be ignored in environments that intentionally do not pull in the RSpec gem (i.e. production)."
-puts e
+  puts "[Warning] Exception creating rspec rake tasks or loading jettywrapper.  This message can be ignored in environments that intentionally do not pull in the RSpec gem (i.e. production)."
+  puts e
 end
 
 Bundler::GemHelper.install_tasks
+
+require 'tasks/docker' # this is a support module, not the taskfile
+include Tasks::Docker
+
 Dir.glob("lib/tasks/*.rake").each do |rakefile|
   load rakefile
 end
@@ -44,6 +46,9 @@ task :ci => ['jetty:clean', 'cul_hydra:ci']
 task :spec => ['cul_hydra:rspec']
 task :rcov => ['cul_hydra:rcov']
 
+task :environment do
+  # TBD
+end
 
 task :default => [:ci]
 
