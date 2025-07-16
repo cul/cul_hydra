@@ -17,17 +17,16 @@ Gem::Specification.new do |s|
 
   s.add_dependency("rails", '>= 6.0', '< 6.2')
   s.add_dependency('httpclient')
-  # AF 8.7.0 removes ActiveFedora::RDF::Indexing
-  s.add_dependency('active-fedora', '>= 8.0', '< 8.7.0')
-  s.add_dependency('active-triples', '~> 0.4.0')
+  s.add_dependency('active-triples', '~> 0.6.0')
   s.add_dependency('active_fedora_finders', '>=0.5.0')
+  s.add_dependency('concurrent-ruby', '1.3.4') # logger fiasco
   s.add_dependency('mods')
   s.add_dependency('thread')
   s.add_dependency('rdf', '>=1.1.5')
   s.add_dependency('sparql') # 1.1.5 breaks Ruby 1.9.3 compatibility
   s.add_dependency('json', '>=1.8.3')
   s.add_dependency('rubydora', '~> 2.1.0')
-  s.add_development_dependency "sqlite3", "~> 1.4.2"
+  s.add_development_dependency "sqlite3", "~> 1.6.9"
   s.add_development_dependency 'rspec-rails', '~> 4.0'
   s.add_development_dependency 'rspec-json_expectations'
   s.add_development_dependency "jettywrapper", ">=1.4.0"
