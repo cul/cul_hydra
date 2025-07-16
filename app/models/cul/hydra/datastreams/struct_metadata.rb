@@ -186,8 +186,8 @@ class StructMetadata < ::ActiveFedora::Datastream
     current = node
     labels = []
     while (current.name == 'div')
-      label = URI.escape(current['LABEL'])
-      label = URI.escape(current['ORDER']) if label.blank?
+      label = URI::DEFAULT_PARSER.escape(current['LABEL'])
+      label = URI::DEFAULT_PARSER.escape(current['ORDER']) if label.blank?
       labels.unshift label
       current = current.parent
     end
