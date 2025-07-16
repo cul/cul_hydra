@@ -6,6 +6,7 @@ class Proxy < ActiveTriples::Resource
   include Digest
   include Solrizer::Common
   include ActiveFedora::RDF::Indexing
+  include Cul::Hydra::SingleValueProperties
 
   module Id
     class Descriptor < Solrizer::Descriptor
@@ -22,35 +23,35 @@ class Proxy < ActiveTriples::Resource
   def self.type
     RDF::ORE.Proxy
   end
-  property :id_node, predicate: RDF.nodeID, multivalue: false do |ix|
+  single_value_property :id_node, predicate: RDF.nodeID do |ix|
     ix.as Id::Descriptor.new
   end
-  property :isAggregatedBy, predicate: RDF::ORE.isAggregatedBy, multivalue: false do |ix|
+  single_value_property :isAggregatedBy, predicate: RDF::ORE.isAggregatedBy do |ix|
     ix.as :stored_sortable
   end
-  property :lineage, predicate: RDF::ORE.lineage, multivalue: false do |ix|
+  single_value_property :lineage, predicate: RDF::ORE.lineage do |ix|
     ix.as :stored_sortable
   end
-  property :proxyFor, predicate: RDF::ORE.proxyFor, multivalue: false do |ix|
+  single_value_property :proxyFor, predicate: RDF::ORE.proxyFor do |ix|
     ix.as :stored_sortable
   end
-  property :proxyIn, predicate: RDF::ORE.proxyIn, multivalue: false do |ix|
+  single_value_property :proxyIn, predicate: RDF::ORE.proxyIn do |ix|
     ix.as :stored_sortable
   end
-  property :index, predicate: RDF::OLO.index, multivalue: false do |ix|
+  single_value_property :index, predicate: RDF::OLO.index do |ix|
     ix.as :stored_sortable
     ix.type :integer
   end
-  property :format, predicate: RDF::DC.format, multivalue: false do |ix|
+  single_value_property :format, predicate: RDF::DC.format, multivalue: false do |ix|
     ix.as :stored_sortable
   end
-  property :extent, predicate: RDF::DC.extent, multivalue: false do |ix|
+  single_value_property :extent, predicate: RDF::DC.extent, multivalue: false do |ix|
     ix.as :displayable
   end
-  property :label, predicate: RDF::RDFS.label, multivalue: false do |ix|
+  single_value_property :label, predicate: RDF::RDFS.label, multivalue: false do |ix|
     ix.as :stored_sortable
   end
-  property :hasModel, predicate: RDF::FCREPO3::MODEL.hasModel, multivalue: false do |ix|
+  single_value_property :hasModel, predicate: RDF::FCREPO3::MODEL.hasModel, multivalue: false do |ix|
     ix.as :stored_sortable
   end
 
