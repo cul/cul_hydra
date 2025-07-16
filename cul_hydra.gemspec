@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.description = "Hydra implementations for CUL repository apps"
   s.summary = "ActiveFedora, OM, and Solrizer implementations for CUL repository apps"
 
-  s.add_dependency("rails", '>= 6.0', '< 6.2')
+  s.add_dependency("rails", '>= 7.0', '< 7.1')
   s.add_dependency('httpclient')
   s.add_dependency('active-triples', '~> 0.6.0')
   s.add_dependency('active_fedora_finders', '>=0.5.0')
