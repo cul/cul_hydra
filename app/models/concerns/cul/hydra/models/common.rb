@@ -33,7 +33,7 @@ module Cul::Hydra::Models::Common
         end
         def validate(record)
           self.class.symbols.each do |rel|
-            record.errors[rel] << "#{rel} must have 0 or 1 values" unless record.relationships(rel).length < 2
+            record.errors.add(rel, "#{rel} must have 0 or 1 values") unless record.relationships(rel).length < 2
           end
         end
       end
