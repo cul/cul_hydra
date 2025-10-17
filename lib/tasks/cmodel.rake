@@ -31,7 +31,7 @@ def config_subs
   @subs ||= begin
     cfile = File.join(APP_ROOT,'config','subs.yml')
     subs = {}
-    if File.exists? cfile
+    if File.exist? cfile
       open(cfile) {|blob| subs = YAML::load(blob)[ENV['RAILS_ENV'] || 'test'] }
     else
       logger.warn("No subs.yml found; CModels will be loaded without inline substitutions")

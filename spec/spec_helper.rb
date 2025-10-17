@@ -39,7 +39,7 @@ def absolute_fixture_path(file)
 end
 def fixture(file)
   path = absolute_fixture_path(file)
-  raise "No fixture file at #{path}" unless File.exists? path
+  raise "No fixture file at #{path}" unless File.exist? path
   File.new(path)
 end
 
@@ -238,8 +238,8 @@ end
 
 def fedora_config
   @config ||= begin
-    fc = File.exists?('config/fedora.yml') ? 'config/fedora.yml' : 'spec/dummy/config/fedora.yml'
-    sc = File.exists?('config/solr.yml') ? 'config/solr.yml' : 'spec/dummy/config/solr.yml'
+    fc = File.exist?('config/fedora.yml') ? 'config/fedora.yml' : 'spec/dummy/config/fedora.yml'
+    sc = File.exist?('config/solr.yml') ? 'config/solr.yml' : 'spec/dummy/config/solr.yml'
     {fedora_config_path: fc, solr_config_path: sc}
   end
 end
