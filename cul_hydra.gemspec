@@ -5,7 +5,7 @@ $:.unshift lib unless $:.include?(lib)
 require 'cul_hydra/version'
 
 Gem::Specification.new do |s|
-  s.required_ruby_version = '>= 3.1.0', '< 3.3.0' # We haven't tested this with Ruby 3.3 or later yet
+  s.required_ruby_version = '>= 3.1.0', '< 3.4.0' # We haven't tested this with Ruby 3.4 or later yet
   s.name = "cul_hydra"
   s.version = Cul::Hydra::VERSION
   s.platform = Gem::Platform::RUBY
