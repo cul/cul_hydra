@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.description = "Hydra implementations for CUL repository apps"
   s.summary = "ActiveFedora, OM, and Solrizer implementations for CUL repository apps"
 
-  s.add_dependency("rails", '>= 7.0', '< 7.1')
+  s.add_dependency("rails", '~> 7.0')
   s.add_dependency('httpclient')
   s.add_dependency('active-triples', '~> 0.6.0')
   s.add_dependency('active_fedora_finders', '>=0.5.0')
@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_dependency('json', '>=1.8.3')
   s.add_dependency('rubydora', '~> 2.2.0')
   s.add_development_dependency "sqlite3", "~> 1.6.9"
-  s.add_development_dependency 'rspec-rails', '~> 4.0'
+  s.add_development_dependency 'rspec-rails', '~> 7.0'
   s.add_development_dependency 'rspec-json_expectations'
   s.add_development_dependency "jettywrapper", ">=1.4.0"
   s.add_development_dependency "equivalent-xml", ">= 0.2.4"

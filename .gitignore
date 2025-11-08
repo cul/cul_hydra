@@ -8,6 +8,7 @@ fedora.yml
 solr.yml
 subs.yml
 spec/dummy/log/*
+spec/dummy/db/*
 jetty
 .DS_Store
 *~

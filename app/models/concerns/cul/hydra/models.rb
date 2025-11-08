@@ -14,11 +14,11 @@ module Hydra
     MEMBER_ITQL = <<-ITQL
       select $pid from <#ri> where $pid <http://purl.oclc.org/NET/CUL/memberOf> <info:fedora/%PID%>
     ITQL
-    autoload :Aggregator, 'cul/hydra/models/aggregator'
-    autoload :Common, 'cul/hydra/models/common'
-    autoload :ImageResource, 'cul/hydra/models/image_resource'
-    autoload :RelsInt, 'cul/hydra/models/rels_int'
-    autoload :Resource, 'cul/hydra/models/resource'
+    # autoload :Aggregator, 'cul/hydra/models/aggregator'
+    # autoload :Common, 'cul/hydra/models/common'
+    # autoload :ImageResource, 'cul/hydra/models/image_resource'
+    # autoload :RelsInt, 'cul/hydra/models/rels_int'
+    # autoload :Resource, 'cul/hydra/models/resource'
   end
 end
 end
